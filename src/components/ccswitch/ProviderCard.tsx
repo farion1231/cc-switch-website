@@ -12,7 +12,6 @@ interface ProviderCardProps {
   proxyEnabled: boolean;
   onSelect: () => void;
   compact?: boolean;
-  animationKey?: string;
 }
 
 export function ProviderCard({
@@ -23,7 +22,6 @@ export function ProviderCard({
   proxyEnabled,
   onSelect,
   compact = false,
-  animationKey = "default",
 }: ProviderCardProps) {
   const dragControls = useDragControls();
   const { t } = useLanguage();
@@ -305,7 +303,6 @@ export function ProviderList({
             proxyEnabled={proxyEnabled}
             onSelect={() => onSelectProvider(index)}
             compact={compact}
-            animationKey={animationKey}
           />
         ))}
       </Reorder.Group>

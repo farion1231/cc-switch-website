@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Github, Download, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -53,12 +54,12 @@ export function SiteNavbar() {
         <div className="container">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo - Fixed width to prevent layout shift */}
-            <a href="/" className="flex items-center gap-2 md:gap-3 min-w-[140px] md:min-w-[180px]">
+            <Link to="/" className="flex items-center gap-2 md:gap-3 min-w-[140px] md:min-w-[180px]">
               <img src={ccSwitchLogo} alt="CC Switch Logo" className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0" />
               <span className="font-bold text-lg md:text-xl text-foreground whitespace-nowrap">
                 CC Switch
               </span>
-            </a>
+            </Link>
 
             {/* Desktop Navigation - Left aligned after logo */}
             <div className="hidden md:flex items-center ml-8">
