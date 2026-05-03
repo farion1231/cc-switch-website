@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "check": "npm run lint && npm run typecheck && npm run build",
     "preview": "vite preview"
   },

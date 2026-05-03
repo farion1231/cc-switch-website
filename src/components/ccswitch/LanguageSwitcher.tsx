@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, Check } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
 import { Language } from '@/i18n/translations';
+import { getLocalizedPath } from '@/i18n/routes';
 import { cn } from '@/lib/utils';
 
 const languages: { code: Language; label: string; flag: string }[] = [
@@ -13,6 +15,8 @@ const languages: { code: Language; label: string; flag: string }[] = [
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLang = languages.find((l) => l.code === language) || languages[0];
@@ -51,6 +55,7 @@ export function LanguageSwitcher() {
                   key={lang.code}
                   onClick={() => {
                     setLanguage(lang.code);
+                    navigate(`${getLocalizedPath(location.pathname, lang.code)}${location.search}${location.hash}`);
                     setIsOpen(false);
                   }}
                   className={cn(

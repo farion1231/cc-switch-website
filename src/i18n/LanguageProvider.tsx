@@ -1,16 +1,14 @@
 import { type ReactNode, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   LANGUAGE_STORAGE_KEY,
   LanguageContext,
   type LanguageContextValue,
 } from './language-context';
 import { type Language, translations } from './translations';
+import { DEFAULT_LANGUAGE, getLanguageFromPathname, isSupportedLanguage } from './routes';
 
-function isSupportedLanguage(language: string | null): language is Language {
-  return language === 'zh' || language === 'en' || language === 'ja';
-}
-
-function getInitialLanguage(): Language {
+function getStoredOrBrowserLanguage(): Language {
   if (typeof window === 'undefined') return 'zh';
 
   const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
@@ -20,11 +18,13 @@ function getInitialLanguage(): Language {
   if (browserLanguage.startsWith('ja')) return 'ja';
   if (browserLanguage.startsWith('en')) return 'en';
 
-  return 'zh';
+  return DEFAULT_LANGUAGE;
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(getInitialLanguage);
+  const location = useLocation();
+  const pathLanguage = getLanguageFromPathname(location.pathname);
+  const [language, setLanguageState] = useState<Language>(() => pathLanguage ?? getStoredOrBrowserLanguage());
 
   const setLanguage = (nextLanguage: Language) => {
     setLanguageState(nextLanguage);
@@ -34,8 +34,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    document.documentElement.lang = language;
-  }, [language]);
+    if (!pathLanguage || pathLanguage === language) return;
+
+    setLanguageState(pathLanguage);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, pathLanguage);
+  }, [language, pathLanguage]);
 
   const value: LanguageContextValue = {
     language,

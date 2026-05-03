@@ -1,1 +1,6 @@
-/* /index.html 200
+# Default-language landing for the bare root path. Avoids "/" and "/zh/"
+# returning the same canonical-mapped HTML to crawlers.
+/  /zh/  302
+
+# SPA fallback for client-side routing
+/*  /index.html  200

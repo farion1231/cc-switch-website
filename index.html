@@ -3,10 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CC Switch - AI CLI 配置管理工具</title>
-    <meta name="description" content="统一管理 Claude Code、Codex 和 Gemini CLI 配置。内置代理服务器，支持多 Provider 自动故障转移。" />
-    <meta name="keywords" content="AI CLI, Claude Code, Codex, Gemini, 配置管理, 故障转移, 开源, CC Switch" />
+    <title>CC Switch 官方网站 - AI 编程 CLI 统一管理工具</title>
+    <meta name="description" content="CC Switch 官方网站。统一管理 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置、本地路由、MCP、Skills、会话与用量统计。" />
+    <meta name="keywords" content="CC Switch 官方网站, AI CLI, Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, Hermes Agent, MCP, Skills, 本地路由, 供应商切换" />
     <meta name="author" content="CC Switch Team" />
+    <meta name="application-name" content="CC Switch" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#101828" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href="https://ccswitch.ai/zh/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://ccswitch.ai/zh/" />
+    <link rel="alternate" hreflang="en" href="https://ccswitch.ai/en/" />
+    <link rel="alternate" hreflang="ja" href="https://ccswitch.ai/ja/" />
+    <link rel="alternate" hreflang="x-default" href="https://ccswitch.ai/zh/" />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,22 +24,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="CC Switch - AI CLI 配置管理工具" />
-    <meta property="og:description" content="统一管理你的 AI CLI 配置，支持多 Provider 自动故障转移" />
+    <meta property="og:title" content="CC Switch 官方网站 - AI 编程 CLI 统一管理工具" />
+    <meta property="og:description" content="统一管理 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置、本地路由、MCP、Skills、会话与用量统计。" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://ccswitch.ai/zh/" />
+    <meta property="og:site_name" content="CC Switch" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <meta property="og:image" content="https://ccswitch.ai/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CC Switch" />
-    <meta name="twitter:description" content="AI CLI 配置管理工具" />
-    <meta name="twitter:image" content="/og-image.png" />
+    <meta name="twitter:title" content="CC Switch 官方网站 - AI 编程 CLI 统一管理工具" />
+    <meta name="twitter:description" content="统一管理 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的 AI 编程 CLI 工作流。" />
+    <meta name="twitter:image" content="https://ccswitch.ai/og-image.png" />
     
     <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
   </head>
 
   <body>
+    <noscript>
+      <main>
+        <h1>CC Switch 官方网站</h1>
+        <p>CC Switch 是开源的 AI 编程 CLI 统一管理工具，支持 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent。</p>
+        <p>
+          <a href="https://github.com/farion1231/cc-switch">GitHub 官方仓库</a>
+          ·
+          <a href="/zh/docs">官方文档</a>
+          ·
+          <a href="/zh/changelog">更新日志</a>
+        </p>
+      </main>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

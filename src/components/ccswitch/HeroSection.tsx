@@ -3,6 +3,7 @@ import { Download, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/i18n/useLanguage';
+import { getLocalizedPath } from '@/i18n/routes';
 import ccSwitchLogo from '@/assets/cc-switch-logo.png';
 import { ProviderContent } from './demo/ProviderDemo';
 import { useGitHubStats } from '@/hooks/useGitHubStars';
@@ -30,7 +31,7 @@ function AppPreview() {
 
 export function HeroSection() {
   const { version } = useGitHubStats();
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-12 lg:pb-0">
@@ -65,7 +66,7 @@ export function HeroSection() {
               {/* Main Title with Logo */}
               <div className="flex items-center justify-center lg:justify-start gap-5 mb-8">
                 <img src={ccSwitchLogo} alt="CC Switch" className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16" />
-                <span className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground">CC Switch</span>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground">CC Switch</h1>
               </div>
 
               {/* Slogan */}
@@ -94,7 +95,7 @@ export function HeroSection() {
                     {t.hero.downloadBtn}
                   </Button>
                 </a>
-                <Link to="/docs">
+                <Link to={getLocalizedPath('/docs', language)}>
                   <Button
                     size="lg"
                     variant="outline"

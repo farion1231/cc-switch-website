@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
 import { useLanguage } from '@/i18n/useLanguage';
+import { getLocalizedPath } from '@/i18n/routes';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import ccSwitchLogo from '@/assets/cc-switch-logo.png';
 
@@ -14,7 +15,7 @@ export function SiteNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -29,9 +30,9 @@ export function SiteNavbar() {
   }, []);
 
   const navLinks = [
-    { label: t.nav.home, href: '/' },
-    { label: t.nav.docs, href: '/docs' },
-    { label: t.nav.changelog, href: '/changelog' },
+    { label: t.nav.home, href: getLocalizedPath('/', language) },
+    { label: t.nav.docs, href: getLocalizedPath('/docs', language) },
+    { label: t.nav.changelog, href: getLocalizedPath('/changelog', language) },
   ];
 
   const toggleTheme = () => {
@@ -54,7 +55,7 @@ export function SiteNavbar() {
         <div className="container">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo - Fixed width to prevent layout shift */}
-            <Link to="/" className="flex items-center gap-2 md:gap-3 min-w-[140px] md:min-w-[180px]">
+            <Link to={getLocalizedPath('/', language)} className="flex items-center gap-2 md:gap-3 min-w-[140px] md:min-w-[180px]">
               <img src={ccSwitchLogo} alt="CC Switch Logo" className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0" />
               <span className="font-bold text-lg md:text-xl text-foreground whitespace-nowrap">
                 CC Switch
@@ -65,13 +66,13 @@ export function SiteNavbar() {
             <div className="hidden md:flex items-center ml-8">
               <div className="flex items-center gap-8">
                 {navLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.href}
-                    href={link.href}
+                    to={link.href}
                     className="text-muted-foreground hover:text-foreground transition-colors font-medium whitespace-nowrap"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -161,17 +162,20 @@ export function SiteNavbar() {
           >
             <nav className="container flex flex-col gap-6 py-8">
               {navLinks.map((link, index) => (
-                <motion.a
+                <motion.div
                   key={link.href}
-                  href={link.href}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="text-2xl font-semibold text-foreground"
-                  onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {link.label}
-                </motion.a>
+                  <Link
+                    to={link.href}
+                    className="text-2xl font-semibold text-foreground"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               ))}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

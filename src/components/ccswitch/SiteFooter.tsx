@@ -1,6 +1,7 @@
 import { Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/i18n/useLanguage';
+import { getLocalizedPath } from '@/i18n/routes';
 import ccSwitchLogo from '@/assets/cc-switch-logo.png';
 
 const socialLinks = [
@@ -19,7 +20,7 @@ type FooterSection = {
 };
 
 export function SiteFooter() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   const footerSections: FooterSection[] = [
     {
@@ -86,7 +87,7 @@ export function SiteFooter() {
                   <li key={link.label}>
                     {link.internal ? (
                       <Link
-                        to={link.href}
+                        to={getLocalizedPath(link.href, language)}
                         className="text-muted-foreground hover:text-foreground transition-colors text-sm"
                       >
                         {link.label}
