@@ -11,6 +11,14 @@ export const translations = {
       changelog: '更新日志',
       download: '免费下载',
     },
+    // Common UI strings (loading states, 404 page, etc.)
+    common: {
+      loading: '加载中...',
+      notFound: {
+        title: '页面未找到',
+        backHome: '返回首页',
+      },
+    },
     // Hero Section
     hero: {
       versionBadge: '正式发布',
@@ -375,6 +383,14 @@ export const translations = {
       changelog: 'Changelog',
       download: 'Download Free',
     },
+    // Common UI strings (loading states, 404 page, etc.)
+    common: {
+      loading: 'Loading...',
+      notFound: {
+        title: 'Page Not Found',
+        backHome: 'Back to home',
+      },
+    },
     // Hero Section
     hero: {
       versionBadge: 'Released',
@@ -738,6 +754,14 @@ export const translations = {
       docs: 'ドキュメント',
       changelog: '更新履歴',
       download: '無料ダウンロード',
+    },
+    // Common UI strings (loading states, 404 page, etc.)
+    common: {
+      loading: '読み込み中...',
+      notFound: {
+        title: 'ページが見つかりません',
+        backHome: 'ホームへ戻る',
+      },
     },
     // Hero Section
     hero: {
