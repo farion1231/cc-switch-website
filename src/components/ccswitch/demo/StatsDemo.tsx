@@ -13,7 +13,8 @@ import {
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 
-type StatsPeriod = 'hours24' | 'days7' | 'days30';
+type StatsPeriod = 'hours24' | 'days1' | 'days7' | 'days14' | 'days30';
+type ChartDataSetKey = 'hours24' | 'days7' | 'days30';
 type MetricKey = 'requests' | 'cost' | 'inputToken' | 'outputToken' | 'writeCache' | 'hitCache';
 type NormalizedMetricKey = `${MetricKey}Normalized`;
 
@@ -46,7 +47,7 @@ const normalizedMetricKeys: Record<MetricKey, NormalizedMetricKey> = {
   hitCache: 'hitCacheNormalized',
 };
 
-const chartDataSets: Record<StatsPeriod, ChartDataPoint[]> = {
+const chartDataSets: Record<ChartDataSetKey, ChartDataPoint[]> = {
   hours24: [
     { date: '00:00', requests: 28, cost: 0.82, inputToken: 980, outputToken: 28, writeCache: 620, hitCache: 2850 },
     { date: '01:00', requests: 22, cost: 0.65, inputToken: 780, outputToken: 22, writeCache: 580, hitCache: 2680 },
@@ -214,13 +215,22 @@ export function StatsContent() {
   const { t } = useLanguage();
   const [period, setPeriod] = useState<StatsPeriod>('days7');
 
-  const periodLabels = {
+  const periodLabels: Record<StatsPeriod, string> = {
     hours24: t.demo.stats.periods.hours24,
+    days1: t.demo.stats.periods.days1,
     days7: t.demo.stats.periods.days7,
+    days14: t.demo.stats.periods.days14,
     days30: t.demo.stats.periods.days30,
   };
+  const periodDataSet: Record<StatsPeriod, ChartDataSetKey> = {
+    hours24: 'hours24',
+    days1: 'hours24',
+    days7: 'days7',
+    days14: 'days7',
+    days30: 'days30',
+  };
 
-  const currentData = chartDataSets[period];
+  const currentData = chartDataSets[periodDataSet[period]];
   const totals = useMemo(() => getMetricTotals(currentData), [currentData]);
   const maxValues = useMemo(() => getMaxValues(currentData), [currentData]);
   const chartData = useMemo(() => normalizeChartData(currentData, maxValues), [currentData, maxValues]);
@@ -251,7 +261,7 @@ export function StatsContent() {
           <p className="text-sm text-muted-foreground">{t.demo.stats.subtitle}</p>
         </div>
         <div className="flex items-center gap-1 p-1 rounded-lg bg-muted">
-          {(['hours24', 'days7', 'days30'] as const).map((nextPeriod) => (
+          {(['hours24', 'days1', 'days7', 'days14', 'days30'] as const).map((nextPeriod) => (
             <motion.button
               key={nextPeriod}
               type="button"
@@ -317,7 +327,7 @@ export function StatsContent() {
         <div className="flex items-center justify-between mb-6">
           <h4 className="font-semibold text-foreground">{t.demo.stats.trend}</h4>
           <motion.span key={period} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-muted-foreground">
-            {t.demo.stats.past} {periodLabels[period]}
+            {periodLabels[period]}
           </motion.span>
         </div>
 
@@ -329,7 +339,7 @@ export function StatsContent() {
                 dataKey="date"
                 tickLine={false}
                 axisLine={false}
-                interval={period === 'days30' ? 2 : 1}
+                interval={periodDataSet[period] === 'days30' ? 2 : 1}
                 tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
               />
               <Tooltip content={(props) => <StatsTooltip {...props} lines={lines} />} cursor={{ strokeDasharray: '4 4', opacity: 0.3 }} />

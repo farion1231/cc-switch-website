@@ -14,7 +14,7 @@ export const translations = {
     // Hero Section
     hero: {
       versionBadge: '正式发布',
-      slogan: '统一管理你的 AI CLI 配置',
+      slogan: '统一管理你的 AI 编程 CLI 工作流',
       downloadBtn: '免费下载',
       docsBtn: '查看文档',
       platforms: '支持 macOS 12+ · Windows 10+ · Linux',
@@ -25,27 +25,27 @@ export const translations = {
     // Features Section
     features: {
       title: '为什么选择 CC Switch?',
-      subtitle: '一个应用解决所有 AI CLI 配置管理难题',
+      subtitle: '一个应用管理供应商、路由、用量、会话和技能',
       items: [
         {
-          title: '统一管理三大 CLI',
-          description: '一个界面管理 Claude Code、Codex 和 Gemini CLI 的所有配置，无需频繁切换终端和配置文件。',
+          title: '统一管理六大 CLI',
+          description: '一个界面管理 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置。',
         },
         {
           title: '自动故障转移',
-          description: '内置熔断器机制，当主 Provider 失败时自动切换到备用 Provider，保障服务高可用。',
+          description: '本地路由内置熔断器、健康监控和故障转移队列，主 Provider 异常时自动切换到备用 Provider。',
         },
         {
-          title: '成本追踪',
-          description: '实时统计 Token 使用量和成本，支持自定义成本倍率，帮助开发者精确控制预算。',
+          title: '用量与额度可见',
+          description: '实时追踪请求、Token、缓存命中、成本和订阅额度，支持日期范围筛选与自定义模型价格。',
         },
         {
           title: '安全本地存储',
           description: '所有配置和 API Key 安全存储在本地 SQLite 数据库，支持完整的 Schema 迁移。',
         },
         {
-          title: 'MCP/Skills 管理',
-          description: '可视化管理 MCP 服务器、Skills 和 Prompts 配置，无需手动编辑 JSON 文件。',
+          title: 'MCP / Skills / 会话',
+          description: '统一管理 MCP、Skills、Prompts、Hermes Memory 和跨应用会话恢复，无需手动编辑配置文件。',
         },
         {
           title: '开源免费',
@@ -57,7 +57,7 @@ export const translations = {
     tech: {
       badge: '开发者友好',
       title: '零配置，开箱即用',
-      description: '无需修改代码，只需开启按钮自动代理地址，即可享受多 Provider 故障转移、成本追踪等高级功能。',
+      description: '无需修改代码，开启本地路由即可获得格式转换、热切换、故障转移、请求日志和用量统计。',
       features: [
         {
           title: 'SQLite 数据持久化',
@@ -68,8 +68,8 @@ export const translations = {
           description: '基于 Tauri 2.x 构建，结合 Rust 的性能和 React 的灵活性。',
         },
         {
-          title: '智能成本追踪',
-          description: '实时监控 Token 消耗与费用，按 Provider 分类统计分析。',
+          title: '智能用量追踪',
+          description: '实时监控 Token、缓存、订阅额度和费用，按应用与 Provider 分类统计分析。',
         },
       ],
     },
@@ -84,25 +84,38 @@ export const translations = {
     // Demo Section
     demo: {
       title: '直观的操作界面',
-      subtitle: '所见即所得，零学习成本',
+      subtitle: '主界面、工具栏和本地路由状态一眼可见',
+      localRouting: '路由',
+      toolbar: {
+        skills: 'Skills',
+        prompts: 'Prompts',
+        sessions: 'Sessions',
+        mcp: 'MCP',
+        workspace: 'Workspace',
+        env: 'Env',
+        tools: 'Tools',
+        agents: 'Agents',
+        memory: 'Memory',
+        dashboard: 'Dashboard',
+      },
       tabs: {
         provider: 'Provider 管理',
-        proxy: '代理服务器',
+        proxy: '本地路由',
         stats: '使用统计',
       },
       proxy: {
-        localProxy: '本地代理',
-        proxyDescription: '控制代理服务开关、查看状态与端口信息',
+        localProxy: '本地路由',
+        proxyDescription: '控制路由服务开关、查看状态与端口信息',
         running: '运行中',
         stopped: '已停止',
         serviceAddress: '服务地址',
         copy: '复制',
-        addressNote: '修改监听地址/端口需要先停止代理服务',
+        addressNote: '修改监听地址/端口需要先停止路由服务',
         currentProvider: '当前 Provider',
         waitingRequest: '等待首次请求...',
-        proxyEnable: '代理启用',
+        proxyEnable: '应用路由',
         enableLogging: '启用日志记录',
-        loggingNote: '记录所有代理请求，便于排查问题',
+        loggingNote: '记录所有路由请求，便于排查问题',
         failoverQueue: '故障转移队列',
         normal: '正常',
         activeConnections: '活跃连接',
@@ -112,10 +125,12 @@ export const translations = {
       },
       stats: {
         title: '使用统计',
-        subtitle: '查看 AI 模型的使用情况和成本统计',
+        subtitle: '按日期范围查看请求、Token、缓存和成本',
         periods: {
-          hours24: '24小时',
+          hours24: '今天',
+          days1: '1天',
           days7: '7天',
+          days14: '14天',
           days30: '30天',
         },
         totalRequests: '总请求数',
@@ -145,10 +160,11 @@ export const translations = {
       contactUs: '联系我们',
       features: [
         '无限 Provider 配置',
-        '本地代理服务器',
+        '本地路由与热切换',
         '自动故障转移',
-        '使用统计与成本追踪',
-        'MCP/Skills/Prompts 管理',
+        '用量、额度与成本追踪',
+        'MCP/Skills/Prompts/会话管理',
+        'Hermes Memory 与 OpenClaw 工作区',
         '跨平台支持 (macOS/Win/Linux)',
         '社区支持',
         '开源代码访问',
@@ -165,15 +181,15 @@ export const translations = {
         },
         {
           question: '支持哪些 AI CLI 工具？',
-          answer: '目前支持 Claude Code、OpenAI Codex CLI 和 Google Gemini CLI。我们正在积极开发对更多 CLI 工具的支持。',
+          answer: '目前支持 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent，并为不同应用提供对应的供应商预设、配置写入和会话管理能力。',
         },
         {
           question: '我的 API Key 安全吗？',
           answer: '绝对安全。所有 API Key 和配置信息都存储在您本地的 SQLite 数据库中，不会上传到任何服务器。',
         },
         {
-          question: '代理服务器会影响请求速度吗？',
-          answer: '影响微乎其微。代理服务器基于 Rust 构建，性能极高，通常只会增加不到 1ms 的延迟。',
+          question: '本地路由服务会影响请求速度吗？',
+          answer: '影响微乎其微。本地路由服务基于 Rust 构建，性能很高，并额外提供格式转换、请求日志、健康监控和故障转移。',
         },
         {
           question: '如何参与贡献？',
@@ -201,7 +217,7 @@ export const translations = {
           role: '独立开发者',
         },
         {
-          content: '开源免费还这么强大，感谢作者的无私奉献！代理服务器功能稳定可靠，团队里每个人都在用。',
+          content: '开源免费还这么强大，感谢作者的无私奉献！本地路由功能稳定可靠，团队里每个人都在用。',
           author: '荀彧',
           role: 'AI 产品经理',
         },
@@ -221,7 +237,7 @@ export const translations = {
           role: '运维工程师',
         },
         {
-          content: '统一管理三个 CLI 工具真的太方便了，一个界面搞定所有配置。省去了在不同配置文件之间来回切换的麻烦。',
+          content: '统一管理六个 CLI 工具真的太方便了，一个界面搞定所有配置。省去了在不同配置文件之间来回切换的麻烦。',
           author: '念佝',
           role: '前端开发工程师',
         },
@@ -236,14 +252,14 @@ export const translations = {
     cta: {
       title: '准备好体验更高效的',
       titleLine2: 'AI 工作流了吗?',
-      subtitle: '下载 CC Switch，开启统一管理 AI CLI 配置的新方式',
+      subtitle: '下载 CC Switch，开启统一管理 AI 编程 CLI 工作流的新方式',
       downloadBtn: '立即下载',
       githubBtn: '查看 GitHub',
       platforms: '支持 macOS · Windows · Linux',
     },
     // Footer
     footer: {
-      tagline: '统一管理你的 AI CLI 配置',
+      tagline: '统一管理你的 AI 编程 CLI 工作流',
       product: {
         title: '产品',
         features: '功能',
@@ -304,7 +320,7 @@ export const translations = {
           'getting-started': '快速入门',
           providers: '供应商管理',
           extensions: '扩展功能',
-          proxy: '代理与高可用',
+          proxy: '本地路由与高可用',
           faq: '常见问题',
         },
         items: {
@@ -321,8 +337,8 @@ export const translations = {
           mcp: 'MCP 服务器',
           prompts: 'Prompts 提示词',
           skills: 'Skills 技能',
-          service: '代理服务',
-          takeover: '应用接管',
+          service: '路由服务',
+          takeover: '应用路由',
           failover: '故障转移',
           usage: '用量统计',
           'model-test': '模型检查',
@@ -357,7 +373,7 @@ export const translations = {
     // Hero Section
     hero: {
       versionBadge: 'Released',
-      slogan: 'Unified Management for Your AI CLI Configuration',
+      slogan: 'Unified Management for Your AI Coding CLI Workflow',
       downloadBtn: 'Download Free',
       docsBtn: 'View Docs',
       platforms: 'macOS 12+ · Windows 10+ · Linux',
@@ -368,27 +384,27 @@ export const translations = {
     // Features Section
     features: {
       title: 'Why Choose CC Switch?',
-      subtitle: 'One app to solve all AI CLI configuration challenges',
+      subtitle: 'One app for providers, routing, usage, sessions, and skills',
       items: [
         {
-          title: 'Unified CLI Management',
-          description: 'Manage all configurations for Claude Code, Codex, and Gemini CLI in one interface, no more switching between terminals.',
+          title: 'Six CLI Tools, One App',
+          description: 'Manage providers for Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent from one interface.',
         },
         {
           title: 'Automatic Failover',
-          description: 'Built-in circuit breaker automatically switches to backup providers when the primary fails, ensuring high availability.',
+          description: 'Local Routing combines circuit breakers, health checks, and failover queues so requests can move to a backup provider automatically.',
         },
         {
-          title: 'Cost Tracking',
-          description: 'Real-time token usage and cost statistics with custom cost multipliers to help developers control budgets precisely.',
+          title: 'Usage & Quota Visibility',
+          description: 'Track requests, tokens, cache activity, costs, and subscription quota with date ranges and custom model pricing.',
         },
         {
           title: 'Secure Local Storage',
           description: 'All configurations and API keys are securely stored in a local SQLite database with full schema migration support.',
         },
         {
-          title: 'MCP/Skills Management',
-          description: 'Visual management for MCP servers, Skills, and Prompts configuration without manual JSON editing.',
+          title: 'MCP, Skills & Sessions',
+          description: 'Manage MCP, Skills, Prompts, Hermes Memory, and cross-app session restore without editing config files by hand.',
         },
         {
           title: 'Open Source & Free',
@@ -400,7 +416,7 @@ export const translations = {
     tech: {
       badge: 'Developer Friendly',
       title: 'Zero Configuration, Ready to Use',
-      description: 'No code changes required. Simply enable the auto-proxy button to enjoy multi-provider failover, cost tracking, and more advanced features.',
+      description: 'No code changes required. Enable Local Routing to get format conversion, hot switching, failover, request logs, and usage analytics.',
       features: [
         {
           title: 'SQLite Data Persistence',
@@ -411,8 +427,8 @@ export const translations = {
           description: 'Built on Tauri 2.x, combining Rust performance with React flexibility.',
         },
         {
-          title: 'Smart Cost Tracking',
-          description: 'Real-time monitoring of token consumption and costs, with per-provider analytics.',
+          title: 'Smart Usage Tracking',
+          description: 'Real-time monitoring for tokens, cache, subscription quota, and costs across apps and providers.',
         },
       ],
     },
@@ -427,25 +443,38 @@ export const translations = {
     // Demo Section
     demo: {
       title: 'Intuitive Interface',
-      subtitle: 'What you see is what you get, zero learning curve',
+      subtitle: 'Main UI, toolbar actions, and Local Routing status at a glance',
+      localRouting: 'Routing',
+      toolbar: {
+        skills: 'Skills',
+        prompts: 'Prompts',
+        sessions: 'Sessions',
+        mcp: 'MCP',
+        workspace: 'Workspace',
+        env: 'Env',
+        tools: 'Tools',
+        agents: 'Agents',
+        memory: 'Memory',
+        dashboard: 'Dashboard',
+      },
       tabs: {
         provider: 'Provider Management',
-        proxy: 'Proxy Server',
+        proxy: 'Local Routing',
         stats: 'Usage Stats',
       },
       proxy: {
-        localProxy: 'Local Proxy',
-        proxyDescription: 'Control proxy service toggle, view status and port info',
+        localProxy: 'Local Routing',
+        proxyDescription: 'Control routing service toggle, view status and port info',
         running: 'Running',
         stopped: 'Stopped',
         serviceAddress: 'Service Address',
         copy: 'Copy',
-        addressNote: 'Stop proxy service before modifying address/port',
+        addressNote: 'Stop routing service before modifying address/port',
         currentProvider: 'Current Provider',
         waitingRequest: 'Waiting for first request...',
-        proxyEnable: 'Proxy Enable',
+        proxyEnable: 'App Routing',
         enableLogging: 'Enable Logging',
-        loggingNote: 'Log all proxy requests for troubleshooting',
+        loggingNote: 'Log all routed requests for troubleshooting',
         failoverQueue: 'Failover Queue',
         normal: 'Normal',
         activeConnections: 'Active Connections',
@@ -455,10 +484,12 @@ export const translations = {
       },
       stats: {
         title: 'Usage Statistics',
-        subtitle: 'View AI model usage and cost statistics',
+        subtitle: 'View requests, tokens, cache, and costs by date range',
         periods: {
-          hours24: '24 Hours',
+          hours24: 'Today',
+          days1: '1 Day',
           days7: '7 Days',
+          days14: '14 Days',
           days30: '30 Days',
         },
         totalRequests: 'Total Requests',
@@ -488,10 +519,11 @@ export const translations = {
       contactUs: 'Contact Us',
       features: [
         'Unlimited Provider Configurations',
-        'Local Proxy Server',
+        'Local Routing & Hot Switching',
         'Automatic Failover',
-        'Usage Statistics & Cost Tracking',
-        'MCP/Skills/Prompts Management',
+        'Usage, Quota & Cost Tracking',
+        'MCP/Skills/Prompts/Session Management',
+        'Hermes Memory & OpenClaw Workspace',
         'Cross-platform (macOS/Win/Linux)',
         'Community Support',
         'Open Source Access',
@@ -508,15 +540,15 @@ export const translations = {
         },
         {
           question: 'Which AI CLI tools are supported?',
-          answer: 'Currently supports Claude Code, OpenAI Codex CLI, and Google Gemini CLI. We are actively developing support for more CLI tools.',
+          answer: 'CC Switch supports Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent, with app-specific provider presets, config writing, and session workflows.',
         },
         {
           question: 'Is my API Key secure?',
           answer: 'Absolutely. All API keys and configurations are stored in your local SQLite database and are never uploaded to any server.',
         },
         {
-          question: 'Does the proxy server affect request speed?',
-          answer: 'Negligibly. The proxy server is built with Rust for high performance, typically adding less than 1ms of latency.',
+          question: 'Does Local Routing affect request speed?',
+          answer: 'Only negligibly. Local Routing is built with Rust for high performance, while adding format conversion, request logs, health checks, and failover.',
         },
         {
           question: 'How can I contribute?',
@@ -544,7 +576,7 @@ export const translations = {
           role: 'Independent Developer',
         },
         {
-          content: "Open source, free, and this powerful - thanks to the author's generous contribution! The proxy server is stable and reliable, everyone on our team uses it.",
+          content: "Open source, free, and this powerful - thanks to the author's generous contribution! Local Routing is stable and reliable, everyone on our team uses it.",
           author: '荀彧',
           role: 'AI Product Manager',
         },
@@ -564,7 +596,7 @@ export const translations = {
           role: 'DevOps Engineer',
         },
         {
-          content: "Managing three CLI tools in one place is so convenient. One interface for all configurations. No more switching between different config files.",
+          content: "Managing six CLI tools in one place is so convenient. One interface for all configurations. No more switching between different config files.",
           author: '念佝',
           role: 'Frontend Engineer',
         },
@@ -579,14 +611,14 @@ export const translations = {
     cta: {
       title: 'Ready to Experience',
       titleLine2: 'a More Efficient AI Workflow?',
-      subtitle: 'Download CC Switch and start managing your AI CLI configuration the unified way',
+      subtitle: 'Download CC Switch and start managing your AI coding CLI workflow the unified way',
       downloadBtn: 'Download Now',
       githubBtn: 'View GitHub',
       platforms: 'macOS · Windows · Linux',
     },
     // Footer
     footer: {
-      tagline: 'Unified management for your AI CLI configuration',
+      tagline: 'Unified management for your AI coding CLI workflow',
       product: {
         title: 'Product',
         features: 'Features',
@@ -647,7 +679,7 @@ export const translations = {
           'getting-started': 'Getting Started',
           providers: 'Provider Management',
           extensions: 'Extensions',
-          proxy: 'Proxy & HA',
+          proxy: 'Local Routing & HA',
           faq: 'FAQ',
         },
         items: {
@@ -664,8 +696,8 @@ export const translations = {
           mcp: 'MCP Server',
           prompts: 'Prompts',
           skills: 'Skills',
-          service: 'Proxy Service',
-          takeover: 'App Takeover',
+          service: 'Routing Service',
+          takeover: 'App Routing',
           failover: 'Failover',
           usage: 'Usage Statistics',
           'model-test': 'Model Test',
@@ -700,7 +732,7 @@ export const translations = {
     // Hero Section
     hero: {
       versionBadge: '正式リリース',
-      slogan: 'AI CLI 設定を統一管理',
+      slogan: 'AI コーディング CLI ワークフローを統一管理',
       downloadBtn: '無料ダウンロード',
       docsBtn: 'ドキュメントを見る',
       platforms: 'macOS 12+ · Windows 10+ · Linux 対応',
@@ -711,27 +743,27 @@ export const translations = {
     // Features Section
     features: {
       title: 'なぜ CC Switch を選ぶのか？',
-      subtitle: '1つのアプリで全ての AI CLI 設定管理の課題を解決',
+      subtitle: 'プロバイダー、ルーティング、使用量、セッション、Skills を1つに',
       items: [
         {
-          title: '3大 CLI を統一管理',
-          description: '1つのインターフェースで Claude Code、Codex、Gemini CLI の全設定を管理。ターミナルの切り替えが不要に。',
+          title: '6つの CLI を統一管理',
+          description: 'Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent のプロバイダーを1つの画面で管理できます。',
         },
         {
           title: '自動フェイルオーバー',
-          description: '組み込みサーキットブレーカーで、プライマリプロバイダーが失敗した際に自動的にバックアップに切り替え、高可用性を実現。',
+          description: 'Local Routing はサーキットブレーカー、ヘルスチェック、フェイルオーバーキューを備え、障害時にバックアップへ自動切替できます。',
         },
         {
-          title: 'コスト追跡',
-          description: 'リアルタイムのトークン使用量とコスト統計。カスタム料金倍率で開発者の予算管理を正確にサポート。',
+          title: '使用量とクォータを可視化',
+          description: 'リクエスト、トークン、キャッシュ、コスト、サブスクリプション枠を期間別に追跡し、モデル価格も調整できます。',
         },
         {
           title: 'セキュアなローカルストレージ',
           description: '全ての設定と API キーはローカル SQLite データベースに安全に保存。完全なスキーママイグレーションをサポート。',
         },
         {
-          title: 'MCP/Skills 管理',
-          description: 'MCP サーバー、Skills、Prompts の設定を視覚的に管理。手動での JSON 編集が不要に。',
+          title: 'MCP / Skills / セッション',
+          description: 'MCP、Skills、Prompts、Hermes Memory、アプリ横断のセッション復元を手動編集なしで管理できます。',
         },
         {
           title: 'オープンソース＆無料',
@@ -743,7 +775,7 @@ export const translations = {
     tech: {
       badge: '開発者フレンドリー',
       title: 'ゼロ設定、すぐに使える',
-      description: 'コード変更不要。自動プロキシボタンをオンにするだけで、マルチプロバイダーフェイルオーバー、コスト追跡などの高度な機能を利用できます。',
+      description: 'コード変更不要。Local Routing をオンにするだけで、形式変換、ホットスイッチ、フェイルオーバー、リクエストログ、使用量分析を利用できます。',
       features: [
         {
           title: 'SQLite データ永続化',
@@ -754,8 +786,8 @@ export const translations = {
           description: 'Tauri 2.x をベースに構築され、Rust のパフォーマンスと React の柔軟性を組み合わせ。',
         },
         {
-          title: 'スマートコスト追跡',
-          description: 'トークン消費とコストをリアルタイム監視し、プロバイダーごとの分析をサポート。',
+          title: 'スマート使用量追跡',
+          description: 'トークン、キャッシュ、サブスクリプション枠、コストをアプリとプロバイダー別にリアルタイム監視します。',
         },
       ],
     },
@@ -770,25 +802,38 @@ export const translations = {
     // Demo Section
     demo: {
       title: '直感的なインターフェース',
-      subtitle: '見たままを操作、学習コストゼロ',
+      subtitle: 'メイン画面、ツールバー操作、Local Routing 状態をひと目で確認',
+      localRouting: 'Routing',
+      toolbar: {
+        skills: 'Skills',
+        prompts: 'Prompts',
+        sessions: 'Sessions',
+        mcp: 'MCP',
+        workspace: 'Workspace',
+        env: 'Env',
+        tools: 'Tools',
+        agents: 'Agents',
+        memory: 'Memory',
+        dashboard: 'Dashboard',
+      },
       tabs: {
         provider: 'プロバイダー管理',
-        proxy: 'プロキシサーバー',
+        proxy: 'Local Routing',
         stats: '使用統計',
       },
       proxy: {
-        localProxy: 'ローカルプロキシ',
-        proxyDescription: 'プロキシサービスの切り替え、ステータスとポート情報の確認',
+        localProxy: 'Local Routing',
+        proxyDescription: 'ルーティングサービスの切り替え、ステータスとポート情報の確認',
         running: '実行中',
         stopped: '停止中',
         serviceAddress: 'サービスアドレス',
         copy: 'コピー',
-        addressNote: 'アドレス/ポートを変更する前にプロキシサービスを停止してください',
+        addressNote: 'アドレス/ポートを変更する前にルーティングサービスを停止してください',
         currentProvider: '現在のプロバイダー',
         waitingRequest: '最初のリクエストを待機中...',
-        proxyEnable: 'プロキシ有効化',
+        proxyEnable: 'アプリルーティング',
         enableLogging: 'ログ記録を有効化',
-        loggingNote: 'トラブルシューティングのために全てのプロキシリクエストを記録',
+        loggingNote: 'トラブルシューティングのために全てのルーティングリクエストを記録',
         failoverQueue: 'フェイルオーバーキュー',
         normal: '正常',
         activeConnections: 'アクティブ接続',
@@ -798,10 +843,12 @@ export const translations = {
       },
       stats: {
         title: '使用統計',
-        subtitle: 'AIモデルの使用状況とコスト統計を確認',
+        subtitle: '期間別にリクエスト、トークン、キャッシュ、コストを確認',
         periods: {
-          hours24: '24時間',
+          hours24: '今日',
+          days1: '1日',
           days7: '7日間',
+          days14: '14日間',
           days30: '30日間',
         },
         totalRequests: '総リクエスト数',
@@ -831,10 +878,11 @@ export const translations = {
       contactUs: 'お問い合わせ',
       features: [
         '無制限のプロバイダー設定',
-        'ローカルプロキシサーバー',
+        'Local Routing とホットスイッチ',
         '自動フェイルオーバー',
-        '使用統計＆コスト追跡',
-        'MCP/Skills/Prompts 管理',
+        '使用量・クォータ・コスト追跡',
+        'MCP/Skills/Prompts/セッション管理',
+        'Hermes Memory と OpenClaw Workspace',
         'クロスプラットフォーム対応 (macOS/Win/Linux)',
         'コミュニティサポート',
         'オープンソースへのアクセス',
@@ -851,15 +899,15 @@ export const translations = {
         },
         {
           question: 'どの AI CLI ツールに対応していますか？',
-          answer: '現在、Claude Code、OpenAI Codex CLI、Google Gemini CLI をサポートしています。より多くの CLI ツールへの対応を積極的に開発中です。',
+          answer: 'Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent に対応し、それぞれにプロバイダープリセット、設定書き込み、セッション機能を提供します。',
         },
         {
           question: 'API キーは安全ですか？',
           answer: '絶対に安全です。全ての API キーと設定はローカルの SQLite データベースに保存され、サーバーにアップロードされることはありません。',
         },
         {
-          question: 'プロキシサーバーはリクエスト速度に影響しますか？',
-          answer: 'ほとんど影響しません。プロキシサーバーは Rust で構築されており、通常 1ms 未満の遅延しか追加されません。',
+          question: 'Local Routing はリクエスト速度に影響しますか？',
+          answer: '影響はごくわずかです。Local Routing は Rust で構築されており、形式変換、リクエストログ、ヘルスチェック、フェイルオーバーも提供します。',
         },
         {
           question: 'どうすれば貢献できますか？',
@@ -887,7 +935,7 @@ export const translations = {
           role: '独立開発者',
         },
         {
-          content: 'オープンソースで無料なのにこれほど強力 - 作者の寛大な貢献に感謝！プロキシサーバーは安定して信頼性が高く、チーム全員が使っています。',
+          content: 'オープンソースで無料なのにこれほど強力 - 作者の寛大な貢献に感謝！Local Routing は安定して信頼性が高く、チーム全員が使っています。',
           author: '荀彧',
           role: 'AI プロダクトマネージャー',
         },
@@ -907,7 +955,7 @@ export const translations = {
           role: 'DevOps エンジニア',
         },
         {
-          content: '3つの CLI ツールを一箇所で管理できるのは本当に便利です。1つのインターフェースですべての設定ができます。異なる設定ファイル間を行き来する必要がなくなりました。',
+          content: '6つの CLI ツールを一箇所で管理できるのは本当に便利です。1つのインターフェースですべての設定ができます。異なる設定ファイル間を行き来する必要がなくなりました。',
           author: '念佝',
           role: 'フロントエンドエンジニア',
         },
@@ -922,14 +970,14 @@ export const translations = {
     cta: {
       title: 'より効率的な',
       titleLine2: 'AI ワークフローを体験する準備はできましたか？',
-      subtitle: 'CC Switch をダウンロードして、AI CLI 設定の統一管理を始めましょう',
+      subtitle: 'CC Switch をダウンロードして、AI コーディング CLI ワークフローの統一管理を始めましょう',
       downloadBtn: '今すぐダウンロード',
       githubBtn: 'GitHub を見る',
       platforms: 'macOS · Windows · Linux',
     },
     // Footer
     footer: {
-      tagline: 'AI CLI 設定を統一管理',
+      tagline: 'AI コーディング CLI ワークフローを統一管理',
       product: {
         title: '製品',
         features: '機能',
@@ -990,7 +1038,7 @@ export const translations = {
           'getting-started': 'クイックスタート',
           providers: 'プロバイダー管理',
           extensions: '拡張機能',
-          proxy: 'プロキシ＆高可用性',
+          proxy: 'Local Routing & HA',
           faq: 'よくある質問',
         },
         items: {
@@ -1007,8 +1055,8 @@ export const translations = {
           mcp: 'MCP サーバー',
           prompts: 'プロンプト',
           skills: 'スキル',
-          service: 'プロキシサービス',
-          takeover: 'アプリ接管',
+          service: 'ルーティングサービス',
+          takeover: 'アプリルーティング',
           failover: 'フェイルオーバー',
           usage: '使用統計',
           'model-test': 'モデルテスト',

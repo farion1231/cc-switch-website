@@ -83,12 +83,12 @@ export function DemoSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative max-w-5xl mx-auto"
+          className="relative mx-auto w-full max-w-[1000px]"
         >
           <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-purple/20 rounded-3xl blur-3xl opacity-50" />
 
-          <div className="relative bg-card rounded-2xl shadow-2xl border border-border overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-muted/50 border-b border-border">
+          <div className="relative flex h-[650px] flex-col bg-card rounded-2xl shadow-2xl border border-border overflow-hidden">
+            <div className="flex h-11 shrink-0 items-center gap-2 px-4 bg-muted/50 border-b border-border">
               <div className="flex gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-500" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
@@ -103,9 +103,9 @@ export function DemoSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="min-h-[500px] md:min-h-[600px] overflow-auto"
+                className="min-h-0 flex-1 overflow-auto"
               >
-                <Suspense fallback={<div className="flex min-h-[500px] items-center justify-center text-sm text-muted-foreground" />}>
+                <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-muted-foreground" />}>
                   <ActivePanel />
                 </Suspense>
               </motion.div>

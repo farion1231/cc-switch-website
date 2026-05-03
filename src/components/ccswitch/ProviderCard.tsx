@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence, LayoutGroup, Reorder, useDragControls } from "framer-motion";
-import { RefreshCw, Play, Check, Copy, Pencil, BarChart3, Trash2, SquarePen } from "lucide-react";
+import { motion, LayoutGroup, Reorder, useDragControls } from "framer-motion";
+import { RefreshCw, Play, Check, Copy, Pencil, BarChart3, Trash2, SquarePen, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/useLanguage";
 import type { Provider } from "@/content/providers";
@@ -26,7 +25,6 @@ export function ProviderCard({
   compact = false,
   animationKey = "default",
 }: ProviderCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
   const dragControls = useDragControls();
   const { t } = useLanguage();
   const stopClick = (event: React.MouseEvent) => event.stopPropagation();
@@ -58,11 +56,9 @@ export function ProviderCard({
         ease: [0.25, 0.46, 0.45, 0.94],
         layout: { duration: 0.28 },
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onClick={onSelect}
       className={cn(
-        "relative flex items-center gap-3 bg-muted/30 rounded-xl border-2 cursor-pointer transition-colors hover:bg-muted/50",
+        "group relative flex items-center gap-3 bg-muted/30 rounded-xl border-2 cursor-pointer transition-colors hover:bg-muted/50",
         getBorderColor(),
         compact ? "p-2.5" : "p-4",
       )}
@@ -140,84 +136,135 @@ export function ProviderCard({
         )}
       </div>
 
-      {/* Usage Stats - with smooth layout animation */}
-      {provider.used && (
-        <motion.div
-          layout
-          transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          className={cn("text-right hidden sm:block shrink-0", compact ? "text-[10px]" : "text-xs")}
-        >
-          <motion.div layout className="flex items-center gap-2 text-muted-foreground mb-0.5">
-            <span>⏱ {timeLabel}</span>
-            <RefreshCw className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
-          </motion.div>
-          <motion.div layout className="text-muted-foreground">
-            {t.provider.used}: {provider.used} {t.provider.remaining}: <span className="text-emerald-500 font-semibold">{provider.remaining}</span>{" "}
-            USD
-          </motion.div>
-        </motion.div>
-      )}
+      <div className="ml-auto flex min-w-0 items-center gap-3">
+        <div className="ml-auto">
+          {provider.quota ? (
+            <QuotaSummary provider={provider} compact={compact} />
+          ) : provider.used ? (
+            <UsageSummary provider={provider} compact={compact} timeLabel={timeLabel} />
+          ) : null}
+        </div>
 
-      {/* Action Button & Icons - Show on hover with smooth animation */}
-      <AnimatePresence mode="wait">
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, x: 20, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 10, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="flex items-center gap-2 shrink-0"
-          >
-            {/* Status/Action Button with layout animation */}
-            <motion.div layout>
-              {isActive ? (
-                <motion.div
-                  layoutId={`active-badge-${animationKey}`}
-                  className={cn(
-                    "flex items-center gap-1.5 bg-muted rounded-lg text-muted-foreground",
-                    compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
-                  )}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                >
-                  <Check className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
-                  {t.provider.inUse}
-                </motion.div>
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={cn(
-                    "flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-medium transition-colors",
-                    compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
-                  )}
-                >
-                  <Play className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
-                  {t.provider.enable}
-                </motion.button>
-              )}
-            </motion.div>
+        {/* Action Button & Icons - fixed in layout, opacity only on hover */}
+        <div className="flex shrink-0 items-center gap-2 opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100 group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+          <div className={cn("flex justify-end", compact ? "w-[58px]" : "w-[78px]")}>
+            {isActive ? (
+              <div
+                className={cn(
+                  "flex items-center gap-1.5 bg-muted rounded-lg text-muted-foreground",
+                  compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
+                )}
+              >
+                <Check className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
+                {t.provider.inUse}
+              </div>
+            ) : (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={cn(
+                  "flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-medium transition-colors",
+                  compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
+                )}
+              >
+                <Play className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
+                {t.provider.enable}
+              </motion.button>
+            )}
+          </div>
 
-            {/* Action Icons with staggered animation */}
-            <div className="flex items-center gap-0.5">
-              {[SquarePen, Copy, Pencil, BarChart3, Trash2].map((Icon, i) => (
-                <motion.button
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.03, duration: 0.15 }}
-                  whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--muted))" }}
-                  whileTap={{ scale: 0.9 }}
-                  className={cn("rounded-md transition-colors", compact ? "p-1" : "p-1.5")}
-                  onClick={stopClick}
-                >
-                  <Icon className={cn("text-muted-foreground", compact ? "w-3 h-3" : "w-4 h-4")} />
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div className="flex items-center gap-0.5">
+            {[SquarePen, Copy, Pencil, BarChart3, Trash2].map((Icon) => (
+              <motion.button
+                key={Icon.displayName ?? Icon.name}
+                whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--muted))" }}
+                whileTap={{ scale: 0.9 }}
+                className={cn("rounded-md transition-colors", compact ? "p-1" : "p-1.5")}
+                onClick={stopClick}
+              >
+                <Icon className={cn("text-muted-foreground", compact ? "w-3 h-3" : "w-4 h-4")} />
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      </div>
     </Reorder.Item>
+  );
+}
+
+function quotaColor(utilization: number) {
+  if (utilization >= 90) return "text-red-500";
+  if (utilization >= 70) return "text-orange-500";
+  return "text-emerald-500";
+}
+
+function UsageSummary({
+  provider,
+  compact,
+  timeLabel,
+}: {
+  provider: Provider;
+  compact: boolean;
+  timeLabel: string;
+}) {
+  const { t } = useLanguage();
+
+  return (
+    <motion.div
+      layout
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className={cn("hidden sm:block shrink-0 text-right", compact ? "text-[10px]" : "text-xs")}
+    >
+      <motion.div layout className="flex items-center justify-end gap-2 text-muted-foreground mb-0.5">
+        <span>⏱ {timeLabel}</span>
+        <RefreshCw className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
+      </motion.div>
+      <motion.div layout className="text-muted-foreground">
+        {t.provider.used}: {provider.used} {t.provider.remaining}:{" "}
+        <span className="text-emerald-500 font-semibold">{provider.remaining}</span> USD
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function QuotaSummary({ provider, compact }: { provider: Provider; compact: boolean }) {
+  const { t } = useLanguage();
+
+  if (!provider.quota) return null;
+
+  return (
+    <motion.div
+      layout
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className={cn(
+        "hidden sm:flex flex-col items-end gap-1 shrink-0 text-right whitespace-nowrap",
+        compact ? "text-[10px]" : "text-xs",
+      )}
+    >
+      <motion.div layout className="flex items-center justify-end gap-2 text-muted-foreground">
+        <span className="flex items-center gap-1 text-[10px] text-muted-foreground/70">
+          <Clock className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
+          {provider.quota.updatedMinutes} {t.provider.minutesAgo}
+        </span>
+        <RefreshCw className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
+      </motion.div>
+      <motion.div layout className="flex flex-wrap items-center justify-end gap-x-2 gap-y-1">
+        {provider.quota.tiers.map((tier) => (
+          <span key={tier.label} className="inline-flex items-center gap-0.5 text-muted-foreground">
+            <span>{tier.label}:</span>
+            <span className={cn("font-semibold tabular-nums", quotaColor(tier.utilization))}>
+              {Math.round(tier.utilization)}%
+            </span>
+            {tier.resetsIn && (
+              <span className="ml-0.5 inline-flex items-center gap-px text-muted-foreground/60">
+                <Clock className="w-2.5 h-2.5" />
+                {tier.resetsIn}
+              </span>
+            )}
+          </span>
+        ))}
+      </motion.div>
+    </motion.div>
   );
 }
 

@@ -3,9 +3,9 @@ import { useLanguage } from '@/i18n/useLanguage';
 
 // Import the same icons as ProviderCard
 import packyCodeIcon from '@/assets/icons/packycode.svg';
-import cubenceIcon from '@/assets/icons/cubence.svg';
+import minimaxIcon from '@/assets/icons/minimax.svg';
 
-// Only PackyAPI and Cubence sponsors
+// Only PackyAPI and MiniMax sponsors
 const sponsors = [
     {
         name: 'PackyAPI',
@@ -15,11 +15,11 @@ const sponsors = [
         descriptionEn: 'AI API Aggregation Service'
     },
     {
-        name: 'Cubence',
-        icon: cubenceIcon,
-        url: 'https://cubence.com',
-        description: 'AI 开发工具平台',
-        descriptionEn: 'AI Development Platform'
+        name: 'MiniMax',
+        icon: minimaxIcon,
+        url: 'https://platform.minimaxi.com',
+        description: 'AI 编程套餐平台',
+        descriptionEn: 'AI Coding Plan Platform'
     },
 ];
 

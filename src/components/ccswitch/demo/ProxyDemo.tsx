@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Activity, ChevronUp, Clock, ListOrdered, Server, TrendingUp } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { claudeProviders, geminiProviders } from '@/content/providers';
+import { claudeProviders, codexProviders, geminiProviders } from '@/content/providers';
 import { useLanguage } from '@/i18n/useLanguage';
 
 import claudeIcon from '@/assets/icons/claude.svg';
@@ -28,6 +28,10 @@ export function ProxyContent() {
     Claude: [
       { rank: 1, name: claudeProviders[0].name, subtitle: claudeProviders[0].subtitle, status: t.demo.proxy.normal },
       { rank: 2, name: claudeProviders[1].name, subtitle: claudeProviders[1].subtitle, status: t.demo.proxy.normal },
+    ],
+    Codex: [
+      { rank: 1, name: codexProviders[0].name, subtitle: codexProviders[0].subtitle, status: t.demo.proxy.normal },
+      { rank: 2, name: codexProviders[2].name, subtitle: codexProviders[2].subtitle, status: t.demo.proxy.normal },
     ],
     Gemini: [
       { rank: 1, name: geminiProviders[0].name, subtitle: geminiProviders[0].subtitle, status: t.demo.proxy.normal },
@@ -104,7 +108,7 @@ export function ProxyContent() {
         <div className="text-sm text-muted-foreground mb-1">{t.provider.inUse}</div>
         <p className={proxyRunning ? 'text-emerald-500' : 'text-amber-500'}>
           {proxyRunning
-            ? `${t.demo.proxy.currentProvider}：PackyCode (Claude Opus 4.5)`
+            ? `${t.demo.proxy.currentProvider}：PackyCode (Claude Opus 4.7)`
             : `${t.demo.proxy.currentProvider}：${t.demo.proxy.waitingRequest}`}
         </p>
       </div>
