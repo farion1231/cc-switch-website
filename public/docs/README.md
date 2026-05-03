@@ -1,6 +1,6 @@
 # CC Switch 用户手册
 
-> Claude Code / Codex / Gemini CLI 全方位辅助工具
+> Claude Code / Codex / Gemini CLI / OpenCode / OpenClaw / Hermes Agent 全方位管理工具
 
 ## 目录结构
 
@@ -26,9 +26,9 @@
 │   ├── 3.2 Prompts 提示词管理
 │   └── 3.3 Skills 技能管理
 │
-├── 4. 代理与高可用
-│   ├── 4.1 代理服务
-│   ├── 4.2 应用接管
+├── 4. 本地路由与高可用
+│   ├── 4.1 路由服务
+│   ├── 4.2 应用路由
 │   ├── 4.3 故障转移
 │   ├── 4.4 用量统计
 │   └── 4.5 模型检查
@@ -70,12 +70,12 @@
 | [3.2-prompts.md](./3-extensions/3.2-prompts.md) | 创建预设、激活切换、智能回填 |
 | [3.3-skills.md](./3-extensions/3.3-skills.md) | 发现技能、安装卸载、仓库管理 |
 
-### 4. 代理与高可用
+### 4. 本地路由与高可用
 
 | 文件 | 内容 |
 |------|------|
-| [4.1-service.md](./4-proxy/4.1-service.md) | 启动代理、配置项、运行状态 |
-| [4.2-takeover.md](./4-proxy/4.2-takeover.md) | 应用接管、配置修改、状态指示 |
+| [4.1-service.md](./4-proxy/4.1-service.md) | 启动本地路由、配置项、运行状态 |
+| [4.2-takeover.md](./4-proxy/4.2-takeover.md) | 应用路由、配置修改、状态指示 |
 | [4.3-failover.md](./4-proxy/4.3-failover.md) | 故障转移队列、熔断器、健康状态 |
 | [4.4-usage.md](./4-proxy/4.4-usage.md) | 用量统计、趋势图表、定价配置 |
 | [4.5-model-test.md](./4-proxy/4.5-model-test.md) | 模型检查、健康检测、延迟测试 |
@@ -94,14 +94,14 @@
 - **新用户**：从 [1.1 软件介绍](./1-getting-started/1.1-introduction.md) 开始
 - **安装问题**：查看 [1.2 安装指南](./1-getting-started/1.2-installation.md)
 - **配置供应商**：查看 [2.1 添加供应商](./2-providers/2.1-add.md)
-- **使用代理**：查看 [4.1 代理服务](./4-proxy/4.1-service.md)
+- **使用本地路由**：查看 [4.1 路由服务](./4-proxy/4.1-service.md)
 - **遇到问题**：查看 [5.2 FAQ](./5-faq/5.2-questions.md)
 
 ## 版本信息
 
-- 文档版本：v3.9.1
-- 最后更新：2025-12-30
-- 适用于 CC Switch v3.9.0+
+- 文档版本：v3.14.1
+- 最后更新：2026-05-03
+- 适用于 CC Switch v3.14.0+
 
 ## 贡献
 
