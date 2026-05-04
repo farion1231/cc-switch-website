@@ -9,6 +9,7 @@ import {
   Star,
   Download,
   Terminal,
+  Trophy,
   type LucideIcon
 } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
@@ -72,6 +73,10 @@ export function FeaturesSection() {
               <span className="font-semibold">6</span>
               <span className="text-muted-foreground">{t.hero.supportedCli}</span>
             </div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-warm/10 border border-accent-warm/30 text-accent-warm text-sm font-medium">
+              <Trophy className="w-4 h-4" />
+              {t.hero.rustBadge}
+            </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
               Built with Tauri 2
             </span>

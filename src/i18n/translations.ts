@@ -30,6 +30,7 @@ export const translations = {
       stars: 'Stars',
       downloads: '下载',
       supportedCli: '支持 CLI',
+      rustBadge: 'Rust #1',
     },
     // Features Section
     features: {
@@ -503,6 +504,7 @@ export const translations = {
       stars: 'Stars',
       downloads: 'Downloads',
       supportedCli: 'CLI Supported',
+      rustBadge: 'Rust #1',
     },
     // Features Section
     features: {
@@ -976,6 +978,7 @@ export const translations = {
       stars: 'Stars',
       downloads: 'ダウンロード',
       supportedCli: '対応 CLI',
+      rustBadge: 'Rust #1',
     },
     // Features Section
     features: {
