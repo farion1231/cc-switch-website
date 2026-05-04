@@ -116,6 +116,7 @@ export function SiteNavbar() {
                 href="https://github.com/farion1231/cc-switch"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub repository (opens in new tab)"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Github className="w-5 h-5" />
@@ -142,6 +143,9 @@ export function SiteNavbar() {
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="site-mobile-menu"
+                aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
                 className="p-2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -155,6 +159,10 @@ export function SiteNavbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            id="site-mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -194,6 +202,7 @@ export function SiteNavbar() {
                   href="https://github.com/farion1231/cc-switch"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="GitHub repository (opens in new tab)"
                   className="flex items-center justify-center gap-2 text-muted-foreground"
                 >
                   <Github className="w-5 h-5" />
