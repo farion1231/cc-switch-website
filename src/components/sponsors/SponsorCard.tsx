@@ -1,15 +1,16 @@
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
-import type { Sponsor } from '@/content/sponsors';
+import type { Sponsor, SponsorTier } from '@/content/sponsors';
 import { fadeInUpItem } from '@/lib/motion';
 import { displayDomain } from '@/lib/utils';
 
 interface SponsorCardProps {
   sponsor: Sponsor;
+  variant?: SponsorTier;
 }
 
-export function SponsorCard({ sponsor }: SponsorCardProps) {
+export function SponsorCard({ sponsor, variant }: SponsorCardProps) {
   const { language, t } = useLanguage();
   const tagline = sponsor.tagline[language];
   const description = sponsor.description[language];
@@ -17,8 +18,9 @@ export function SponsorCard({ sponsor }: SponsorCardProps) {
   const sinceLabel = sponsor.since
     ? t.sponsorsPage.card.since.replace('{date}', sponsor.since)
     : null;
+  const tier = variant ?? sponsor.tier;
 
-  if (sponsor.tier === 'flagship') {
+  if (tier === 'flagship') {
     return (
       <motion.a
         id={sponsor.id}
@@ -56,7 +58,7 @@ export function SponsorCard({ sponsor }: SponsorCardProps) {
     );
   }
 
-  if (sponsor.tier === 'gold') {
+  if (tier === 'gold') {
     return (
       <motion.a
         id={sponsor.id}
