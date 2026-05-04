@@ -6,20 +6,14 @@ import { useLanguage } from '@/i18n/useLanguage';
 import { getLocalizedPath } from '@/i18n/routes';
 import ccSwitchLogo from '@/assets/cc-switch-logo.png';
 import { ProviderContent } from './demo/ProviderDemo';
+import { MacOsWindowBar } from './MacOsWindowBar';
 import { useGitHubStats } from '@/hooks/useGitHubStars';
 
 function AppPreview() {
   return (
     <div className="relative h-[468px] w-[720px] xl:h-[546px] xl:w-[840px] 2xl:h-[598px] 2xl:w-[920px]">
       <div className="relative flex h-[650px] w-[1000px] origin-top-left scale-[0.72] xl:scale-[0.84] 2xl:scale-[0.92] flex-col bg-card/95 backdrop-blur-2xl rounded-2xl border border-border/50 shadow-2xl overflow-hidden">
-        {/* macOS Window Bar */}
-        <div className="flex h-11 shrink-0 items-center gap-2 px-4 bg-muted/50 border-b border-border">
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <div className="w-3 h-3 rounded-full bg-green-500" />
-          </div>
-        </div>
+        <MacOsWindowBar className="h-11 shrink-0 border-b border-border bg-muted/50 px-4" />
 
         <div className="min-h-0 flex-1 overflow-hidden">
           <ProviderContent />

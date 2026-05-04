@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Database, Code, TestTube } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
+import { MacOsWindowBar } from './MacOsWindowBar';
 
 const techIcons = [Database, Code, TestTube];
 const techColors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500'];
@@ -39,14 +40,9 @@ export function TechSection() {
 
             {/* Code Block - Always dark background */}
             <div className="max-w-full overflow-hidden rounded-xl bg-[#1a1a1a]">
-              <div className="flex items-center gap-2 px-4 py-3 bg-[#252525] border-b border-white/10">
-                <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
-                </div>
+              <MacOsWindowBar size="sm" className="px-4 py-3 bg-[#252525] border-b border-white/10">
                 <span className="text-xs text-white/50 ml-2">~/.claude/settings.json</span>
-              </div>
+              </MacOsWindowBar>
               <pre className="p-4 md:p-6 overflow-x-auto text-xs md:text-sm">
                 <code className="text-green-400 font-mono">
                   {`{

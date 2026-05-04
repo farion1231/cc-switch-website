@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import { ProviderContent } from './demo/ProviderDemo';
 import { ProxyContent } from './demo/ProxyDemo';
+import { MacOsWindowBar } from './MacOsWindowBar';
 
 type DemoTabId = 'provider' | 'proxy' | 'stats';
 
@@ -88,13 +89,10 @@ export function DemoSection() {
           <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-primary/20 to-purple/20 rounded-3xl blur-3xl opacity-50" />
 
           <div className="relative flex h-[590px] sm:h-[620px] md:h-[650px] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-2xl sm:rounded-2xl">
-            <div className="flex h-9 shrink-0 items-center gap-2 border-b border-border bg-muted/50 px-3 sm:h-11 sm:px-4">
-              <div className="flex gap-2">
-                <div className="h-2.5 w-2.5 rounded-full bg-red-500 sm:h-3 sm:w-3" />
-                <div className="h-2.5 w-2.5 rounded-full bg-yellow-500 sm:h-3 sm:w-3" />
-                <div className="h-2.5 w-2.5 rounded-full bg-green-500 sm:h-3 sm:w-3" />
-              </div>
-            </div>
+            <MacOsWindowBar
+              responsive
+              className="h-9 shrink-0 border-b border-border bg-muted/50 px-3 sm:h-11 sm:px-4"
+            />
 
             <AnimatePresence mode="wait">
               <motion.div
