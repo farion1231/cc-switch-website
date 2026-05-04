@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
 import { getLocalizedPath } from '@/i18n/routes';
-import { featuredSponsors } from '@/content/sponsors';
-import { fadeInUpStaggerContainer } from '@/lib/motion';
-import { SPONSOR_CONTACT_URL } from '@/lib/seo';
-import { SponsorCard } from '@/components/sponsors/SponsorCard';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SectionHeader } from './SectionHeader';
@@ -14,8 +10,6 @@ import { SectionHeader } from './SectionHeader';
 export function SponsorsSection() {
     const { language, t } = useLanguage();
     const copy = t.sponsorsPage.section;
-
-    if (featuredSponsors.length === 0) return null;
 
     return (
         <section className="section-y bg-muted/30">
@@ -28,23 +22,11 @@ export function SponsorsSection() {
                 />
 
                 <motion.div
-                    variants={fadeInUpStaggerContainer}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-50px' }}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-3xl mx-auto"
-                >
-                    {featuredSponsors.map((sponsor) => (
-                        <SponsorCard key={sponsor.id} sponsor={sponsor} variant="gold" />
-                    ))}
-                </motion.div>
-
-                <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                    className="mt-12 md:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3"
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="mt-8 flex justify-center md:mt-10"
                 >
                     <Link
                         to={getLocalizedPath('/sponsors', language)}
@@ -56,17 +38,6 @@ export function SponsorsSection() {
                         <span>{copy.viewAll}</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <a
-                        href={SPONSOR_CONTACT_URL}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full
-                            bg-card border border-border
-                            hover:border-primary/50 hover:bg-accent
-                            text-foreground hover:text-primary
-                            transition-all duration-300 group"
-                    >
-                        <span className="text-primary">♥</span>
-                        <span>{copy.becomeSponsor}</span>
-                    </a>
                 </motion.div>
             </div>
         </section>

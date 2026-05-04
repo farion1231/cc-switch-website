@@ -3,21 +3,22 @@ import { useLanguage } from '@/i18n/useLanguage';
 import { sponsorsByTier, type SponsorTier } from '@/content/sponsors';
 import { fadeInUpStaggerContainer } from '@/lib/motion';
 import { SponsorCard } from './SponsorCard';
+import { SponsorFlagshipBanner } from './SponsorFlagshipBanner';
 
 interface SponsorTierSectionProps {
   tier: SponsorTier;
 }
 
 const tierGridClass: Record<SponsorTier, string> = {
-  flagship: 'grid grid-cols-1 gap-6 md:gap-8',
-  gold: 'grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8',
-  supporter: 'grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-5',
+  flagship: 'flex flex-col gap-6 md:gap-8',
+  gold: 'grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 md:gap-6 lg:gap-7',
+  standard: 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-5',
 };
 
 const tierMaxWidth: Record<SponsorTier, string> = {
-  flagship: 'max-w-4xl',
-  gold: 'max-w-3xl',
-  supporter: 'max-w-5xl',
+  flagship: 'max-w-5xl',
+  gold: 'max-w-5xl',
+  standard: 'max-w-6xl',
 };
 
 export function SponsorTierSection({ tier }: SponsorTierSectionProps) {
@@ -29,7 +30,7 @@ export function SponsorTierSection({ tier }: SponsorTierSectionProps) {
   const copy = t.sponsorsPage.tiers[tier];
 
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 md:py-12">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -53,9 +54,13 @@ export function SponsorTierSection({ tier }: SponsorTierSectionProps) {
           viewport={{ once: true, margin: '-50px' }}
           className={`mx-auto ${tierMaxWidth[tier]} ${tierGridClass[tier]}`}
         >
-          {items.map((sponsor) => (
-            <SponsorCard key={sponsor.id} sponsor={sponsor} />
-          ))}
+          {items.map((sponsor) =>
+            tier === 'flagship' && sponsor.banner ? (
+              <SponsorFlagshipBanner key={sponsor.id} sponsor={sponsor} />
+            ) : (
+              <SponsorCard key={sponsor.id} sponsor={sponsor} />
+            ),
+          )}
         </motion.div>
       </div>
     </section>

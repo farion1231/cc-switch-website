@@ -304,7 +304,7 @@ export const translations = {
     sponsorsPage: {
       section: {
         title: '感谢赞助商的支持',
-        subtitle: 'CC Switch 得到了优秀合作伙伴的支持，让我们能够持续开发和维护这个项目。',
+        subtitle: '如果您需要稳定、高性价比的 API 中转服务，欢迎了解一下 CC Switch 的赞助商。',
         viewAll: '查看全部赞助商',
         becomeSponsor: '成为赞助商',
       },
@@ -323,14 +323,30 @@ export const translations = {
           title: '黄金赞助商',
           subtitle: '感谢长期支持 CC Switch 持续发展的伙伴',
         },
-        supporter: {
-          title: '支持者',
-          subtitle: '所有为 CC Switch 应援的朋友',
+        standard: {
+          title: '更多赞助商',
+          subtitle: '感谢这些持续支持 CC Switch、并为用户提供专属优惠的赞助商',
         },
       },
       card: {
         visit: '访问网站',
         since: '赞助自 {date}',
+        perk: '专属福利',
+        coupon: '优惠码',
+        copyCoupon: '复制优惠码',
+        copied: '已复制到剪贴板',
+        visitWithCoupon: '使用专属优惠访问',
+      },
+      perksTable: {
+        badge: '一目了然',
+        title: '专属福利汇总',
+        subtitle: '使用 CC Switch 专属链接 / 优惠码即可享受下列福利。点击优惠码可一键复制。',
+        headers: {
+          sponsor: '赞助商',
+          perk: '专属福利',
+          coupon: '优惠码',
+          link: '前往',
+        },
       },
       faq: {
         title: '常见问题',
@@ -343,7 +359,39 @@ export const translations = {
             q: '有哪些合作方案？',
             a: '目前提供两种合作方案。两种方案都包含官网赞助商页展示、应用内预设接入与高亮推荐，以及优先技术支持。完整方案在此基础上额外提供 GitHub README 广告位，支持中/日/英三语展示。具体合作细节欢迎邮件沟通。',
           },
+          {
+            q: '完成洽谈后多久可以上线？',
+            a: '在确认合作细节并收到素材后，通常 1–3 个工作日内即可完成上线。具体时间会根据展示位置和素材准备情况略有不同。',
+          },
+          {
+            q: '需要准备哪些素材？',
+            a: '通常包括 Logo、一段产品简介（中/英/日可选）、专属优惠链接，以及可选的 GitHub README 横幅图。合作确认后我们会同步详细的尺寸与格式要求，并协助审核素材。',
+          },
         ],
+      },
+      benefits: {
+        badge: '与 CC Switch 一起成长',
+        title: '成为赞助商可以获得什么？',
+        subtitle: '深度合作展示位 + 应用内推荐 + 优先技术支持，让您的服务高效触达全球开发者。',
+        perks: [
+          {
+            title: 'GitHub README 广告位',
+            description: '中、日、英三语展示，覆盖 GitHub 上的中外开发者。',
+          },
+          {
+            title: '应用内预设接入',
+            description: '获得高亮推荐，用户从您站点复制 Key 即可一键导入，显著降低配置门槛。',
+          },
+          {
+            title: '官网赞助商页展示',
+            description: '在 ccswitch.io 赞助商页面获得长期独立展示，带去精准开发者流量。',
+          },
+          {
+            title: '优先技术支持',
+            description: '专属对接通道，第一时间协助数据调整、参数适配等技术需求。',
+          },
+        ],
+        cta: '成为赞助商',
       },
     },
     // Docs Page
@@ -724,7 +772,7 @@ export const translations = {
     sponsorsPage: {
       section: {
         title: 'Supported by the best',
-        subtitle: 'CC Switch is supported by amazing partners who make it possible to maintain this project.',
+        subtitle: 'Looking for a stable, value-priced API relay? Take a look at the sponsors who back CC Switch.',
         viewAll: 'View all sponsors',
         becomeSponsor: 'Become a sponsor',
       },
@@ -743,14 +791,30 @@ export const translations = {
           title: 'Gold sponsors',
           subtitle: 'Thank you for continuously supporting CC Switch',
         },
-        supporter: {
-          title: 'Supporters',
-          subtitle: 'Friends who cheer CC Switch on',
+        standard: {
+          title: 'More sponsors',
+          subtitle: 'Sponsors who keep CC Switch going and bring exclusive perks to our users',
         },
       },
       card: {
         visit: 'Visit website',
         since: 'Sponsoring since {date}',
+        perk: 'Exclusive perk',
+        coupon: 'Coupon code',
+        copyCoupon: 'Copy coupon',
+        copied: 'Copied to clipboard',
+        visitWithCoupon: 'Claim exclusive offer',
+      },
+      perksTable: {
+        badge: 'At a glance',
+        title: 'Exclusive perks at a glance',
+        subtitle: 'Use the CC Switch referral link or coupon code to unlock these perks. Click any code to copy.',
+        headers: {
+          sponsor: 'Sponsor',
+          perk: 'Exclusive perk',
+          coupon: 'Coupon',
+          link: 'Visit',
+        },
       },
       faq: {
         title: 'Frequently asked questions',
@@ -763,7 +827,39 @@ export const translations = {
             q: 'What sponsorship tiers are available?',
             a: 'We offer two sponsorship tiers. Both tiers include placement on this sponsors page, in-app preset provider integration with a highlighted recommendation, and priority technical support. The full tier additionally features a GitHub README banner with English, Chinese, and Japanese variants. Reach out by email for partnership details.',
           },
+          {
+            q: 'How long does it take to go live?',
+            a: 'Typically 1–3 business days after we confirm the partnership details and receive your assets. The exact timing depends on the placement type and how soon the assets are ready.',
+          },
+          {
+            q: 'What materials do you need from us?',
+            a: 'Usually a logo, a short product description (English / Chinese / Japanese versions optional), an exclusive referral link, and an optional GitHub README banner image. Once the partnership is confirmed we will share the exact dimensions and format requirements, and help review the assets.',
+          },
         ],
+      },
+      benefits: {
+        badge: 'Grow with CC Switch',
+        title: 'What sponsors get',
+        subtitle: 'Featured placements, in-app recommendations, and priority technical support — reach developers around the world efficiently.',
+        perks: [
+          {
+            title: 'GitHub README banner',
+            description: 'Featured banner with English, Chinese, and Japanese variants — reaches global developers on GitHub.',
+          },
+          {
+            title: 'In-app preset integration',
+            description: 'Highlighted recommendation. Users copy a key on your site and import it in one click, slashing onboarding cost.',
+          },
+          {
+            title: 'Sponsor page placement',
+            description: 'A dedicated long-term spot on ccswitch.io that drives targeted developer traffic to your service.',
+          },
+          {
+            title: 'Priority technical support',
+            description: 'A direct channel for fast data updates, parameter tuning, and any integration needs.',
+          },
+        ],
+        cta: 'Become a sponsor',
       },
     },
     // Docs Page
@@ -1144,7 +1240,7 @@ export const translations = {
     sponsorsPage: {
       section: {
         title: 'スポンサーの皆さまに感謝',
-        subtitle: 'CC Switch は素晴らしいパートナーの支援を受けて、開発と運営を続けています。',
+        subtitle: '安定でコスパに優れた API 中継サービスをお探しなら、CC Switch のスポンサーもぜひご検討ください。',
         viewAll: 'すべてのスポンサーを見る',
         becomeSponsor: 'スポンサーになる',
       },
@@ -1163,14 +1259,30 @@ export const translations = {
           title: 'ゴールドスポンサー',
           subtitle: 'CC Switch の継続的な発展を支える皆さま',
         },
-        supporter: {
-          title: 'サポーター',
-          subtitle: 'CC Switch を応援してくださるすべての方々',
+        standard: {
+          title: 'その他のスポンサー',
+          subtitle: 'CC Switch を支え、ユーザーに専用特典を提供してくれるスポンサーの皆さま',
         },
       },
       card: {
         visit: 'サイトを見る',
         since: '{date} よりサポート',
+        perk: '専用特典',
+        coupon: 'クーポンコード',
+        copyCoupon: 'クーポンをコピー',
+        copied: 'クリップボードにコピーしました',
+        visitWithCoupon: '専用特典を利用する',
+      },
+      perksTable: {
+        badge: '一覧で確認',
+        title: '専用特典まとめ',
+        subtitle: 'CC Switch 専用リンクまたはクーポンコードで以下の特典を受けられます。コードをクリックでコピーできます。',
+        headers: {
+          sponsor: 'スポンサー',
+          perk: '専用特典',
+          coupon: 'クーポン',
+          link: 'サイトへ',
+        },
       },
       faq: {
         title: 'よくある質問',
@@ -1183,7 +1295,39 @@ export const translations = {
             q: 'どのような提携プランがありますか？',
             a: '2 つの提携プランをご用意しています。両プランとも、公式サイトのスポンサーページ掲載、アプリ内プリセットプロバイダー連携とハイライト推薦、優先技術サポートが含まれます。フルプランではこれに加えて、GitHub README バナー掲載（英語・中国語・日本語の 3 言語対応）が含まれます。提携の詳細についてはメールでお問い合わせください。',
           },
+          {
+            q: '提携が決まってから掲載までどのくらいかかりますか？',
+            a: '詳細の確認と素材のお預かりが完了してから、通常 1〜3 営業日で掲載を開始します。所要時間は掲載位置や素材の準備状況によって多少前後します。',
+          },
+          {
+            q: 'どのような素材を準備すればよいですか？',
+            a: '通常、ロゴ、短い製品紹介文（中国語・英語・日本語の各バージョン任意）、専用リファラルリンク、オプションで GitHub README 用バナー画像をご用意いただきます。提携確定後に詳細な寸法・フォーマット要件をお送りし、素材レビューもサポートいたします。',
+          },
         ],
+      },
+      benefits: {
+        badge: 'CC Switch とともに成長',
+        title: 'スポンサー特典',
+        subtitle: '注目度の高い掲載枠、アプリ内レコメンド、優先技術サポートで、世界中の開発者に効率的にリーチします。',
+        perks: [
+          {
+            title: 'GitHub README バナー',
+            description: '英語・中国語・日本語の 3 言語に対応し、GitHub のグローバル開発者にリーチ。',
+          },
+          {
+            title: 'アプリ内プリセット連携',
+            description: 'ハイライト推薦付き。ユーザーはサイトでキーをコピーし、ワンクリックでインポートでき導入コストを大幅削減。',
+          },
+          {
+            title: '公式サイトのスポンサー枠',
+            description: 'ccswitch.io のスポンサーページに長期掲載され、関心の高い開発者を呼び込みます。',
+          },
+          {
+            title: '優先技術サポート',
+            description: 'データ調整やパラメータ最適化など、専用窓口で迅速に対応します。',
+          },
+        ],
+        cta: 'スポンサーになる',
       },
     },
     // Docs Page
