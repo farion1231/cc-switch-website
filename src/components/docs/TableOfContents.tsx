@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, scrollToAnchor, slugify } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 
 interface TocItem {
@@ -26,16 +26,9 @@ export function TableOfContents({ content, className }: TableOfContentsProps) {
     while ((match = regex.exec(content)) !== null) {
       const level = match[1].length;
       const text = match[2].trim();
-      // Support Chinese and other Unicode characters in IDs
-      const id = text
-        .toLowerCase()
-        .replace(/[^\p{L}\p{N}\s-]/gu, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
-      
+
       if (level <= 3) {
-        items.push({ id, text, level });
+        items.push({ id: slugify(text), text, level });
       }
     }
 
@@ -69,19 +62,7 @@ export function TableOfContents({ content, className }: TableOfContentsProps) {
     return () => observer.disconnect();
   }, [headings]);
 
-  const handleClick = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }
-  };
+  const handleClick = (id: string) => scrollToAnchor(id);
 
   if (headings.length === 0) {
     return null;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { cn } from '@/lib/utils';
+import { cn, slugify } from '@/lib/utils';
 import { Copy, Check } from 'lucide-react';
 
 interface MarkdownRendererProps {
@@ -138,23 +138,13 @@ function CodeBlock({ className, children }: { className?: string; children: stri
 }
 
 export function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
-  // Generate heading IDs for TOC linking - supports Chinese and other Unicode characters
-  const generateId = (text: string) => {
-    return text
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N}\s-]/gu, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-  };
-
   return (
     <div className={cn('prose-docs max-w-full [overflow-wrap:anywhere]', className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ children }) => {
-            const id = generateId(String(children));
+            const id = slugify(String(children));
             return (
               <h1 id={id} className="mb-6 mt-8 scroll-mt-24 border-b border-border pb-4 text-3xl font-bold text-foreground first:mt-0 md:text-4xl">
                 {children}
@@ -162,7 +152,7 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
             );
           },
           h2: ({ children }) => {
-            const id = generateId(String(children));
+            const id = slugify(String(children));
             return (
               <h2 id={id} className="mb-4 mt-10 scroll-mt-24 text-2xl font-semibold text-foreground md:text-3xl">
                 {children}
@@ -170,7 +160,7 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
             );
           },
           h3: ({ children }) => {
-            const id = generateId(String(children));
+            const id = slugify(String(children));
             return (
               <h3 id={id} className="mb-3 mt-8 scroll-mt-24 text-xl font-semibold text-foreground md:text-2xl">
                 {children}
@@ -178,7 +168,7 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
             );
           },
           h4: ({ children }) => {
-            const id = generateId(String(children));
+            const id = slugify(String(children));
             return (
               <h4 id={id} className="text-lg font-semibold text-foreground mb-2 mt-6 scroll-mt-24">
                 {children}

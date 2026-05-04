@@ -1,3 +1,5 @@
+import { slugify } from './utils';
+
 export interface ChangelogVersion {
   version: string;
   date: string;
@@ -71,14 +73,7 @@ export function getVersionTocItems(content: string): ChangelogTocItem[] {
     const lowerText = text.toLowerCase();
     if (sectionTitleExclusions.has(lowerText)) continue;
 
-    const id = text
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N}\s-]/gu, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-
-    items.push({ text, id });
+    items.push({ text, id: slugify(text) });
   }
 
   return items;

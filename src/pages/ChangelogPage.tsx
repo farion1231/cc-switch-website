@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Tag, ChevronRight, Menu, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, scrollToAnchor } from '@/lib/utils';
 import { SiteNavbar } from '@/components/ccswitch/SiteNavbar';
 import { SiteFooter } from '@/components/ccswitch/SiteFooter';
 import { MarkdownRenderer } from '@/components/docs/MarkdownRenderer';
@@ -50,17 +50,7 @@ export default function ChangelogPage() {
 
   const handleVersionClick = (version: string) => {
     setActiveVersion(version);
-
-    const element = document.getElementById(`version-${version}`);
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }
+    scrollToAnchor(`version-${version}`);
   };
 
   // Track scroll position to highlight active version
@@ -293,22 +283,13 @@ function VersionToc({ content }: { content: string }) {
 
   if (headings.length === 0) return null;
 
-  const handleClick = (id: string) => {
-    const element = document.getElementById(id);
-    if (!element) return;
-    const offset = 100;
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - offset;
-    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-  };
-
   return (
     <ul className="space-y-2 text-sm">
       {headings.map((heading) => (
         <li key={heading.id}>
           <button
             type="button"
-            onClick={() => handleClick(heading.id)}
+            onClick={() => scrollToAnchor(heading.id)}
             className="text-left w-full py-1 text-muted-foreground hover:text-foreground transition-colors"
           >
             {heading.text}
