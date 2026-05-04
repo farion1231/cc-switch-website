@@ -8,7 +8,6 @@ interface ProviderCardProps {
   provider: Provider;
   index: number;
   isActive: boolean;
-  isSelected: boolean;
   proxyEnabled: boolean;
   onSelect: () => void;
   compact?: boolean;
@@ -18,7 +17,6 @@ export function ProviderCard({
   provider,
   index,
   isActive,
-  isSelected,
   proxyEnabled,
   onSelect,
   compact = false,
@@ -28,7 +26,7 @@ export function ProviderCard({
   const stopClick = (event: React.MouseEvent) => event.stopPropagation();
 
   const getBorderColor = () => {
-    if (!isSelected) return "border-border/50";
+    if (!isActive) return "border-border/50";
     return proxyEnabled ? "border-success" : "border-info";
   };
 
@@ -172,11 +170,18 @@ export function ProviderCard({
           </div>
 
           <div className="flex items-center gap-0.5">
-            {[SquarePen, Copy, Pencil, BarChart3, Trash2].map((Icon) => (
+            {[
+              { Icon: SquarePen, label: "Add provider" },
+              { Icon: Copy, label: "Copy config" },
+              { Icon: Pencil, label: "Edit" },
+              { Icon: BarChart3, label: "View stats" },
+              { Icon: Trash2, label: "Delete" },
+            ].map(({ Icon, label }) => (
               <motion.button
-                key={Icon.displayName ?? Icon.name}
+                key={label}
                 whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--muted))" }}
                 whileTap={{ scale: 0.9 }}
+                aria-label={label}
                 className={cn("rounded-md transition-colors", compact ? "p-1" : "p-1.5")}
                 onClick={stopClick}
               >
@@ -299,7 +304,6 @@ export function ProviderList({
             provider={provider}
             index={index}
             isActive={index === activeProvider}
-            isSelected={index === activeProvider}
             proxyEnabled={proxyEnabled}
             onSelect={() => onSelectProvider(index)}
             compact={compact}
