@@ -4,7 +4,7 @@ import { useLanguage } from '@/i18n/useLanguage';
 import { MacOsWindowBar } from './MacOsWindowBar';
 
 const techIcons = [Database, Code, TestTube];
-const techColors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500'];
+const techColors = ['bg-info', 'bg-primary', 'bg-success'];
 
 export function TechSection() {
   const { t } = useLanguage();

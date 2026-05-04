@@ -29,7 +29,7 @@ export function ProviderCard({
 
   const getBorderColor = () => {
     if (!isSelected) return "border-border/50";
-    return proxyEnabled ? "border-emerald-500" : "border-blue-500";
+    return proxyEnabled ? "border-success" : "border-info";
   };
 
   const timeLabel = (() => {
@@ -116,7 +116,7 @@ export function ProviderCard({
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              "truncate block text-emerald-500 hover:text-emerald-400 hover:underline transition-colors cursor-pointer",
+              "truncate block text-success hover:text-success/80 hover:underline transition-colors cursor-pointer",
               compact ? "text-xs" : "text-sm",
             )}
           >
@@ -161,7 +161,7 @@ export function ProviderCard({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={cn(
-                  "flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-medium transition-colors",
+                  "flex items-center gap-1.5 bg-success hover:bg-success/90 rounded-lg text-success-foreground font-medium transition-colors",
                   compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
                 )}
               >
@@ -191,9 +191,9 @@ export function ProviderCard({
 }
 
 function quotaColor(utilization: number) {
-  if (utilization >= 90) return "text-red-500";
-  if (utilization >= 70) return "text-orange-500";
-  return "text-emerald-500";
+  if (utilization >= 90) return "text-destructive";
+  if (utilization >= 70) return "text-warning";
+  return "text-success";
 }
 
 function UsageSummary({
@@ -219,7 +219,7 @@ function UsageSummary({
       </motion.div>
       <motion.div layout className="text-muted-foreground">
         {t.provider.used}: {provider.used} {t.provider.remaining}:{" "}
-        <span className="text-emerald-500 font-semibold">{provider.remaining}</span> USD
+        <span className="text-success font-semibold">{provider.remaining}</span> USD
       </motion.div>
     </motion.div>
   );
