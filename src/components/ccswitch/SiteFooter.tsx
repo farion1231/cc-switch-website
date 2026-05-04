@@ -43,6 +43,7 @@ export function SiteFooter() {
         { label: t.footer.community.github, href: 'https://github.com/farion1231/cc-switch' },
         { label: t.footer.community.contributing, href: 'https://github.com/farion1231/cc-switch#contributing' },
         { label: t.footer.community.issues, href: 'https://github.com/farion1231/cc-switch/issues' },
+        { label: t.footer.community.sponsors, href: '/sponsors', internal: true },
       ],
     },
   ];

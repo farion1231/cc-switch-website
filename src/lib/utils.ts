@@ -24,3 +24,7 @@ export function scrollToAnchor(id: string, offset = 100): void {
   const offsetPosition = elementPosition + window.pageYOffset - offset;
   window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
 }
+
+export function displayDomain(url: string): string {
+  return url.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
+}

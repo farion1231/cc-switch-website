@@ -3,6 +3,8 @@ import type { Language } from '@/i18n/translations';
 export const SITE_NAME = 'CC Switch';
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://ccswitch.io').replace(/\/+$/, '');
 export const GITHUB_REPO_URL = 'https://github.com/farion1231/cc-switch';
+export const SPONSOR_CONTACT_EMAIL = 'support@ccswitch.io';
+export const SPONSOR_CONTACT_URL = `mailto:${SPONSOR_CONTACT_EMAIL}`;
 export const RELEASES_URL = 'https://github.com/farion1231/cc-switch/releases';
 export const OG_IMAGE_PATH = '/og-image.png';
 
@@ -30,7 +32,7 @@ type SeoCopy = {
   keywords?: string;
 };
 
-export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'notFound', SeoCopy>> = {
+export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'sponsors' | 'notFound', SeoCopy>> = {
   zh: {
     home: {
       title: 'CC Switch 官方网站 - AI 编程 CLI 统一管理工具',
@@ -46,6 +48,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'n
       title: 'CC Switch 更新日志 - 官方版本记录',
       description: '查看 CC Switch 官方更新日志，跟踪最新功能、改进、修复、安装方式和版本发布说明。',
       keywords: 'CC Switch 更新日志,CC Switch release notes,CC Switch 版本,AI CLI 工具更新',
+    },
+    sponsors: {
+      title: 'CC Switch 赞助商 - 感谢支持开源的合作伙伴',
+      description: '了解支持 CC Switch 持续开发的赞助商与合作伙伴，查看赞助级别、合作详情，以及如何成为 CC Switch 赞助商。',
+      keywords: 'CC Switch 赞助商,CC Switch 合作伙伴,开源赞助,GitHub Sponsors,AI CLI 工具赞助',
     },
     notFound: {
       title: '页面未找到 - CC Switch',
@@ -68,6 +75,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'n
       description: 'Track official CC Switch release notes, new features, improvements, fixes, installation changes, and version history.',
       keywords: 'CC Switch changelog,CC Switch release notes,CC Switch versions,AI CLI tool updates',
     },
+    sponsors: {
+      title: 'CC Switch Sponsors - Partners Powering the Project',
+      description: 'Meet the sponsors and partners who keep CC Switch growing. Explore sponsor tiers, partnership details, and how to become a CC Switch sponsor.',
+      keywords: 'CC Switch sponsors,CC Switch partners,open source sponsorship,GitHub Sponsors,AI CLI tool sponsorship',
+    },
     notFound: {
       title: 'Page Not Found - CC Switch',
       description: 'This CC Switch page does not exist. Return to the official website or open the official documentation.',
@@ -88,6 +100,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'n
       title: 'CC Switch 更新履歴 - 公式リリースノート',
       description: 'CC Switch の公式更新履歴。最新機能、改善、修正、インストール変更、バージョン情報を確認できます。',
       keywords: 'CC Switch 更新履歴,CC Switch release notes,CC Switch バージョン,AI CLI ツール更新',
+    },
+    sponsors: {
+      title: 'CC Switch スポンサー - プロジェクトを支えるパートナー',
+      description: 'CC Switch の開発を支えるスポンサーとパートナーをご紹介します。スポンサー階層、提携の詳細、スポンサーになる方法を確認できます。',
+      keywords: 'CC Switch スポンサー,CC Switch パートナー,オープンソース支援,GitHub Sponsors,AI CLI ツール支援',
     },
     notFound: {
       title: 'ページが見つかりません - CC Switch',

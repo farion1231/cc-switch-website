@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 const CCSwitchHome = lazy(() => import("./pages/CCSwitchHome"));
 const DocsPage = lazy(() => import("./pages/DocsPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
+const SponsorsPage = lazy(() => import("./pages/SponsorsPage"));
 
 function RouteFallback() {
   const { t } = useLanguage();
@@ -45,6 +46,10 @@ const App = () => (
           <Route path="/en/changelog/:version" element={<ChangelogPage />} />
           <Route path="/ja/changelog" element={<ChangelogPage />} />
           <Route path="/ja/changelog/:version" element={<ChangelogPage />} />
+          <Route path="/sponsors" element={<SponsorsPage />} />
+          <Route path="/zh/sponsors" element={<SponsorsPage />} />
+          <Route path="/en/sponsors" element={<SponsorsPage />} />
+          <Route path="/ja/sponsors" element={<SponsorsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

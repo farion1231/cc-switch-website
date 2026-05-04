@@ -33,6 +33,7 @@ export function SiteNavbar() {
     { label: t.nav.home, href: getLocalizedPath('/', language) },
     { label: t.nav.docs, href: getLocalizedPath('/docs', language) },
     { label: t.nav.changelog, href: getLocalizedPath('/changelog', language) },
+    { label: t.nav.sponsors, href: getLocalizedPath('/sponsors', language) },
   ];
 
   const toggleTheme = () => {

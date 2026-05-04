@@ -9,6 +9,7 @@ export const translations = {
       pricing: '定价',
       docs: '文档',
       changelog: '更新日志',
+      sponsors: '赞助商',
       download: '免费下载',
     },
     // Common UI strings (loading states, 404 page, etc.)
@@ -288,6 +289,7 @@ export const translations = {
         discord: 'Discord',
         contributing: '贡献指南',
         issues: '问题反馈',
+        sponsors: '赞助商',
       },
       legal: {
         title: '法律',
@@ -297,6 +299,52 @@ export const translations = {
       },
       copyright: '© 2025 CC Switch. 基于 MIT 协议开源。',
       madeWith: 'Made with ❤️ by CC Switch Team',
+    },
+    // Sponsors Page
+    sponsorsPage: {
+      section: {
+        title: '感谢赞助商的支持',
+        subtitle: 'CC Switch 得到了优秀合作伙伴的支持，让我们能够持续开发和维护这个项目。',
+        viewAll: '查看全部赞助商',
+        becomeSponsor: '成为赞助商',
+      },
+      hero: {
+        badge: '开源 · 社区驱动',
+        title: '感谢每一位支持者',
+        subtitle: 'CC Switch 是一个面向开发者的开源项目，由社区与赞助商共同支撑。我们将每一份支持都视作让项目走得更远的力量。',
+        becomeSponsor: '成为赞助商',
+      },
+      tiers: {
+        flagship: {
+          title: '旗舰赞助商',
+          subtitle: '深度合作伙伴，长期为项目提供关键支持',
+        },
+        gold: {
+          title: '黄金赞助商',
+          subtitle: '感谢长期支持 CC Switch 持续发展的伙伴',
+        },
+        supporter: {
+          title: '支持者',
+          subtitle: '所有为 CC Switch 应援的朋友',
+        },
+      },
+      card: {
+        visit: '访问网站',
+        since: '赞助自 {date}',
+      },
+      faq: {
+        title: '常见问题',
+        items: [
+          {
+            q: '如何成为 CC Switch 的赞助商？',
+            a: '欢迎通过 GitHub Sponsors 直接支持，或通过页面底部的链接联系我们的团队，洽谈合作详情。我们会根据合作内容确认赞助级别与展示位置。',
+          },
+          {
+            q: '有哪些合作方案？',
+            a: '目前提供两种合作方案。两种方案都包含官网赞助商页展示、应用内预设接入与高亮推荐，以及优先技术支持。完整方案在此基础上额外提供 GitHub README 广告位，支持中/日/英三语展示。具体合作细节欢迎邮件沟通。',
+          },
+        ],
+      },
     },
     // Docs Page
     docs: {
@@ -381,6 +429,7 @@ export const translations = {
       pricing: 'Pricing',
       docs: 'Docs',
       changelog: 'Changelog',
+      sponsors: 'Sponsors',
       download: 'Download Free',
     },
     // Common UI strings (loading states, 404 page, etc.)
@@ -660,6 +709,7 @@ export const translations = {
         discord: 'Discord',
         contributing: 'Contributing',
         issues: 'Issue Tracker',
+        sponsors: 'Sponsors',
       },
       legal: {
         title: 'Legal',
@@ -669,6 +719,52 @@ export const translations = {
       },
       copyright: '© 2025 CC Switch. Open source under MIT license.',
       madeWith: 'Made with ❤️ by CC Switch Team',
+    },
+    // Sponsors Page
+    sponsorsPage: {
+      section: {
+        title: 'Supported by the best',
+        subtitle: 'CC Switch is supported by amazing partners who make it possible to maintain this project.',
+        viewAll: 'View all sponsors',
+        becomeSponsor: 'Become a sponsor',
+      },
+      hero: {
+        badge: 'Open source · Community driven',
+        title: 'Powered by amazing supporters',
+        subtitle: 'CC Switch is an open source project for developers, kept alive by our community and sponsors. Every contribution helps the project go further.',
+        becomeSponsor: 'Become a sponsor',
+      },
+      tiers: {
+        flagship: {
+          title: 'Flagship sponsors',
+          subtitle: 'Deep partners providing long-term, mission-critical support',
+        },
+        gold: {
+          title: 'Gold sponsors',
+          subtitle: 'Thank you for continuously supporting CC Switch',
+        },
+        supporter: {
+          title: 'Supporters',
+          subtitle: 'Friends who cheer CC Switch on',
+        },
+      },
+      card: {
+        visit: 'Visit website',
+        since: 'Sponsoring since {date}',
+      },
+      faq: {
+        title: 'Frequently asked questions',
+        items: [
+          {
+            q: 'How do I become a CC Switch sponsor?',
+            a: 'You can support us directly via GitHub Sponsors, or reach out through the link below to discuss a partnership. We will confirm the sponsor tier and placement based on the agreement.',
+          },
+          {
+            q: 'What sponsorship tiers are available?',
+            a: 'We offer two sponsorship tiers. Both tiers include placement on this sponsors page, in-app preset provider integration with a highlighted recommendation, and priority technical support. The full tier additionally features a GitHub README banner with English, Chinese, and Japanese variants. Reach out by email for partnership details.',
+          },
+        ],
+      },
     },
     // Docs Page
     docs: {
@@ -753,6 +849,7 @@ export const translations = {
       pricing: '価格',
       docs: 'ドキュメント',
       changelog: '更新履歴',
+      sponsors: 'スポンサー',
       download: '無料ダウンロード',
     },
     // Common UI strings (loading states, 404 page, etc.)
@@ -1032,6 +1129,7 @@ export const translations = {
         discord: 'Discord',
         contributing: '貢献ガイド',
         issues: '問題報告',
+        sponsors: 'スポンサー',
       },
       legal: {
         title: '法的情報',
@@ -1041,6 +1139,52 @@ export const translations = {
       },
       copyright: '© 2025 CC Switch. MIT ライセンスでオープンソース。',
       madeWith: 'Made with ❤️ by CC Switch Team',
+    },
+    // Sponsors Page
+    sponsorsPage: {
+      section: {
+        title: 'スポンサーの皆さまに感謝',
+        subtitle: 'CC Switch は素晴らしいパートナーの支援を受けて、開発と運営を続けています。',
+        viewAll: 'すべてのスポンサーを見る',
+        becomeSponsor: 'スポンサーになる',
+      },
+      hero: {
+        badge: 'オープンソース · コミュニティ駆動',
+        title: 'すべてのサポーターに感謝',
+        subtitle: 'CC Switch は開発者向けのオープンソースプロジェクトで、コミュニティとスポンサーの支援によって支えられています。すべてのご支援が、プロジェクトをさらに前へ進める力になります。',
+        becomeSponsor: 'スポンサーになる',
+      },
+      tiers: {
+        flagship: {
+          title: 'フラッグシップスポンサー',
+          subtitle: 'プロジェクトを長期的に支える中核パートナー',
+        },
+        gold: {
+          title: 'ゴールドスポンサー',
+          subtitle: 'CC Switch の継続的な発展を支える皆さま',
+        },
+        supporter: {
+          title: 'サポーター',
+          subtitle: 'CC Switch を応援してくださるすべての方々',
+        },
+      },
+      card: {
+        visit: 'サイトを見る',
+        since: '{date} よりサポート',
+      },
+      faq: {
+        title: 'よくある質問',
+        items: [
+          {
+            q: 'CC Switch のスポンサーになるには？',
+            a: 'GitHub Sponsors から直接ご支援いただけます。または下部のリンクからご連絡いただければ、提携内容に応じてスポンサー階層と掲載位置を決定します。',
+          },
+          {
+            q: 'どのような提携プランがありますか？',
+            a: '2 つの提携プランをご用意しています。両プランとも、公式サイトのスポンサーページ掲載、アプリ内プリセットプロバイダー連携とハイライト推薦、優先技術サポートが含まれます。フルプランではこれに加えて、GitHub README バナー掲載（英語・中国語・日本語の 3 言語対応）が含まれます。提携の詳細についてはメールでお問い合わせください。',
+          },
+        ],
+      },
     },
     // Docs Page
     docs: {

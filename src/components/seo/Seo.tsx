@@ -18,9 +18,9 @@ import {
 import type { Language } from '@/i18n/translations';
 
 const JSON_LD_ID = 'cc-switch-jsonld';
-const INDEXABLE_PATHS = new Set(['/', '/docs', '/changelog']);
+const INDEXABLE_PATHS = new Set(['/', '/docs', '/changelog', '/sponsors']);
 
-type RouteKey = 'home' | 'docs' | 'changelog' | 'notFound';
+type RouteKey = 'home' | 'docs' | 'changelog' | 'sponsors' | 'notFound';
 
 function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {
   let element = document.head.querySelector(`meta[${attribute}="${key}"]`) as HTMLMetaElement | null;
@@ -92,6 +92,7 @@ function getRouteKey(basePath: string): RouteKey {
   if (basePath === '/') return 'home';
   if (basePath === '/docs') return 'docs';
   if (basePath === '/changelog') return 'changelog';
+  if (basePath === '/sponsors') return 'sponsors';
   return 'notFound';
 }
 
