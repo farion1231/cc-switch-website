@@ -1,8 +1,8 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "./i18n/LanguageProvider";
 import { useLanguage } from "./i18n/useLanguage";
 import { Seo } from "./components/seo/Seo";
@@ -13,6 +13,14 @@ const CCSwitchHome = lazy(() => import("./pages/CCSwitchHome"));
 const DocsPage = lazy(() => import("./pages/DocsPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const SponsorsPage = lazy(() => import("./pages/SponsorsPage"));
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 function RouteFallback() {
   const { t } = useLanguage();
@@ -27,6 +35,7 @@ const App = () => (
   <LanguageProvider>
     <TooltipProvider>
       <Seo />
+      <ScrollToTop />
       <Toaster />
       <Sonner />
       <SiteNavbar />
