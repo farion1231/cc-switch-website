@@ -337,7 +337,7 @@ export const translations = {
         items: [
           {
             q: '如何成为 CC Switch 的赞助商？',
-            a: '欢迎通过 GitHub Sponsors 直接支持，或通过页面底部的链接联系我们的团队，洽谈合作详情。我们会根据合作内容确认赞助级别与展示位置。',
+            a: '通过 support@ccswitch.io 邮件联系我们，告知您希望的合作方案与展示需求。确认细节后即可安排展示位置与上线时间。',
           },
           {
             q: '有哪些合作方案？',
@@ -757,7 +757,7 @@ export const translations = {
         items: [
           {
             q: 'How do I become a CC Switch sponsor?',
-            a: 'You can support us directly via GitHub Sponsors, or reach out through the link below to discuss a partnership. We will confirm the sponsor tier and placement based on the agreement.',
+            a: 'Email us at support@ccswitch.io with the tier you are interested in and any placement preferences. Once the details are confirmed, we will arrange the placement and go-live timing.',
           },
           {
             q: 'What sponsorship tiers are available?',
@@ -1177,7 +1177,7 @@ export const translations = {
         items: [
           {
             q: 'CC Switch のスポンサーになるには？',
-            a: 'GitHub Sponsors から直接ご支援いただけます。または下部のリンクからご連絡いただければ、提携内容に応じてスポンサー階層と掲載位置を決定します。',
+            a: 'support@ccswitch.io までメールでご連絡のうえ、ご希望のプランや掲載に関するご要望をお知らせください。詳細を確認次第、掲載位置と公開時期を調整します。',
           },
           {
             q: 'どのような提携プランがありますか？',
