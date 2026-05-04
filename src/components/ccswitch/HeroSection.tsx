@@ -11,7 +11,7 @@ import { useGitHubStats } from '@/hooks/useGitHubStars';
 
 function AppPreview() {
   return (
-    <div className="relative h-[468px] w-[720px] xl:h-[546px] xl:w-[840px] 2xl:h-[598px] 2xl:w-[920px]">
+    <div className="relative h-[468px] w-full max-w-[720px] overflow-hidden xl:h-[546px] xl:max-w-[840px] 2xl:h-[598px] 2xl:max-w-[920px]">
       <div className="relative flex h-[650px] w-[1000px] origin-top-left scale-[0.72] xl:scale-[0.84] 2xl:scale-[0.92] flex-col bg-card/95 backdrop-blur-2xl rounded-2xl border border-border/50 shadow-2xl overflow-hidden">
         <MacOsWindowBar className="h-11 shrink-0 border-b border-border bg-muted/50 px-4" />
 
