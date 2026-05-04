@@ -46,7 +46,7 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 container px-4 py-4 sm:py-6 md:py-12 max-w-[1600px] mx-auto">
-        <div className="grid lg:grid-cols-[5fr,7fr] gap-6 lg:gap-4 items-center">
+        <div className="grid lg:grid-cols-[1fr,1fr] xl:grid-cols-[5fr,7fr] gap-6 lg:gap-4 items-center">
           {/* Left: Text Content */}
           <div className="text-center lg:text-left lg:pl-4 xl:pl-8 lg:pr-4 mx-auto lg:mx-0">
             {/* Upper Section: Badge + Title + Slogan */}
@@ -66,7 +66,7 @@ export function HeroSection() {
               {/* Main Title with Logo */}
               <div className="flex items-center justify-center lg:justify-start gap-4 sm:gap-5 mb-6 sm:mb-8">
                 <img src={ccSwitchLogo} alt="CC Switch" className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16" />
-                <h1 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground">CC Switch</h1>
+                <h1 className="whitespace-nowrap text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground">CC Switch</h1>
               </div>
 
               {/* Slogan */}
