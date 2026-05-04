@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Calendar, Tag, ChevronRight, Menu, X } from 'lucide-react';
-import { cn, scrollToAnchor } from '@/lib/utils';
+import { Menu } from 'lucide-react';
 import { SiteNavbar } from '@/components/ccswitch/SiteNavbar';
 import { SiteFooter } from '@/components/ccswitch/SiteFooter';
-import { MarkdownRenderer } from '@/components/docs/MarkdownRenderer';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { ErrorBlock } from '@/components/ui/error-block';
+import { VersionSidebar } from '@/components/changelog/VersionSidebar';
+import { MobileVersionDrawer } from '@/components/changelog/MobileVersionDrawer';
+import { VersionCard } from '@/components/changelog/VersionCard';
+import { VersionToc } from '@/components/changelog/VersionToc';
 import {
   type ChangelogIndex,
-  type ChangelogIndexEntry,
-  getVersionTocItems,
   parseSingleVersion,
-  stripChangelogVersionHeading,
 } from '@/lib/changelog';
 import { getLocalizedPath } from '@/i18n/routes';
 import { useLanguage } from '@/i18n/useLanguage';
@@ -165,10 +165,7 @@ export default function ChangelogPage() {
                 ) : versionError || !versionData ? (
                   <ErrorBlock title={t.changelog.error} description={t.changelog.description} />
                 ) : (
-                  <VersionCard
-                    entry={versionData}
-                    betaLabel={t.changelog.betaRelease}
-                  />
+                  <VersionCard entry={versionData} betaLabel={t.changelog.betaRelease} />
                 )}
               </div>
 
@@ -209,224 +206,5 @@ export default function ChangelogPage() {
 
       <SiteFooter />
     </div>
-  );
-}
-
-function LoadingSpinner() {
-  return (
-    <div className="flex items-center justify-center py-12">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-    </div>
-  );
-}
-
-function ErrorBlock({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="rounded-xl border border-border p-6 text-center">
-      <h2 className="text-xl font-semibold text-foreground mb-2">{title}</h2>
-      <p className="text-muted-foreground text-sm">{description}</p>
-    </div>
-  );
-}
-
-interface VersionListProps {
-  versions: ChangelogIndexEntry[];
-  activeVersion: string | undefined;
-  onSelect: (version: string) => void;
-  betaLabel: string;
-}
-
-function VersionList({ versions, activeVersion, onSelect, betaLabel }: VersionListProps) {
-  return (
-    <div className="space-y-1">
-      {versions.map((entry) => {
-        const isActive = activeVersion === entry.version;
-        return (
-          <button
-            key={entry.version}
-            onClick={() => onSelect(entry.version)}
-            className={cn(
-              'w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-all duration-200',
-              isActive
-                ? 'bg-primary/10 text-primary font-medium'
-                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-            )}
-          >
-            <ChevronRight
-              className={cn('w-3 h-3 transition-transform', isActive && 'rotate-90')}
-            />
-            <span className="flex-1">v{entry.version}</span>
-            {entry.isPreRelease && (
-              <span className="text-xs px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400">
-                {betaLabel}
-              </span>
-            )}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-interface SidebarProps extends VersionListProps {
-  versionsLabel: string;
-}
-
-function VersionSidebar({ versions, activeVersion, onSelect, versionsLabel, betaLabel }: SidebarProps) {
-  return (
-    <aside className="hidden lg:block w-64 shrink-0">
-      <nav className="sticky top-24 space-y-1">
-        <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-          <Tag className="w-4 h-4" />
-          {versionsLabel}
-        </h4>
-        <div className="max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
-          <VersionList
-            versions={versions}
-            activeVersion={activeVersion}
-            onSelect={onSelect}
-            betaLabel={betaLabel}
-          />
-        </div>
-      </nav>
-    </aside>
-  );
-}
-
-interface MobileDrawerProps extends VersionListProps {
-  open: boolean;
-  onClose: () => void;
-  versionsLabel: string;
-  closeLabel: string;
-}
-
-function MobileVersionDrawer({
-  open,
-  onClose,
-  versions,
-  activeVersion,
-  onSelect,
-  versionsLabel,
-  closeLabel,
-  betaLabel,
-}: MobileDrawerProps) {
-  return (
-    <AnimatePresence>
-      {open && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="lg:hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
-            onClick={onClose}
-          />
-          <motion.div
-            initial={{ x: '-100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="lg:hidden fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] bg-background border-r border-border shadow-xl overflow-y-auto"
-          >
-            <div className="flex items-center justify-between p-4 border-b border-border">
-              <span className="font-semibold text-foreground flex items-center gap-2">
-                <Tag className="w-4 h-4" />
-                {versionsLabel}
-              </span>
-              <button
-                onClick={onClose}
-                className="p-2 rounded-lg hover:bg-muted transition-colors"
-                aria-label={closeLabel}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-4">
-              <VersionList
-                versions={versions}
-                activeVersion={activeVersion}
-                onSelect={onSelect}
-                betaLabel={betaLabel}
-              />
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-}
-
-interface VersionCardProps {
-  entry: { version: string; date: string; content: string; isPreRelease: boolean };
-  betaLabel: string;
-}
-
-function VersionCard({ entry, betaLabel }: VersionCardProps) {
-  return (
-    <motion.div
-      key={entry.version}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-      className={cn(
-        'overflow-hidden rounded-xl border border-border ring-2 ring-primary/30 shadow-lg shadow-primary/5',
-      )}
-    >
-      <div
-        className={cn(
-          'flex flex-col gap-3 border-b border-border px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6',
-          entry.isPreRelease ? 'bg-amber-500/5' : 'bg-muted/50',
-        )}
-      >
-        <div className="flex min-w-0 flex-wrap items-center gap-3">
-          <span
-            className={cn(
-              'text-xl font-bold',
-              entry.isPreRelease ? 'text-amber-600 dark:text-amber-400' : 'text-foreground',
-            )}
-          >
-            v{entry.version}
-          </span>
-          {entry.isPreRelease && (
-            <span className="text-xs px-2 py-1 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 font-medium">
-              {betaLabel}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Calendar className="h-4 w-4 shrink-0" />
-          <span>{entry.date}</span>
-        </div>
-      </div>
-
-      <div className="p-4 sm:p-6">
-        <MarkdownRenderer
-          content={stripChangelogVersionHeading(entry.content)}
-          className="changelog-content"
-        />
-      </div>
-    </motion.div>
-  );
-}
-
-function VersionToc({ content }: { content: string }) {
-  const headings = useMemo(() => getVersionTocItems(content), [content]);
-
-  if (headings.length === 0) return null;
-
-  return (
-    <ul className="space-y-2 text-sm">
-      {headings.map((heading) => (
-        <li key={heading.id}>
-          <button
-            type="button"
-            onClick={() => scrollToAnchor(heading.id)}
-            className="text-left w-full py-1 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {heading.text}
-          </button>
-        </li>
-      ))}
-    </ul>
   );
 }
