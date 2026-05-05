@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
 const siteUrl = (process.env.VITE_SITE_URL || 'https://ccswitch.io').replace(/\/+$/, '');
@@ -67,10 +67,36 @@ const routePaths = [
   '/',
   '/docs',
   '/changelog',
+  '/tutorials',
   ...docSections.flatMap((section) => (
     section.items.map((item) => `/docs?section=${section.id}&item=${item}`)
   )),
 ];
+
+// Tutorials: each in-site article gets a per-language entry only when the
+// markdown file actually exists for that language. External-only tutorials
+// (no markdown) are skipped — their card just links out.
+function loadTutorialSlugsByLanguage() {
+  const result = new Map();
+  for (const language of languages) {
+    try {
+      const files = readdirSync(`public/docs/tutorials/${language.code}`);
+      const slugs = files
+        .filter((name) => name.endsWith('.md'))
+        .map((name) => name.replace(/\.md$/, ''));
+      result.set(language.code, new Set(slugs));
+    } catch {
+      result.set(language.code, new Set());
+    }
+  }
+  return result;
+}
+
+const tutorialSlugsByLang = loadTutorialSlugsByLanguage();
+const allTutorialSlugs = new Set();
+for (const slugs of tutorialSlugsByLang.values()) {
+  for (const slug of slugs) allTutorialSlugs.add(slug);
+}
 
 // Per-language changelog version paths. A version is only included for a
 // language whose split index actually contains it — old versions sometimes
@@ -117,7 +143,20 @@ for (const version of allChangelogVersions) {
   }
 }
 
-const urls = [...sharedUrls, ...changelogUrls];
+const tutorialUrls = [];
+for (const slug of allTutorialSlugs) {
+  const supportedLangs = languages.filter((lang) => tutorialSlugsByLang.get(lang.code)?.has(slug));
+  if (supportedLangs.length === 0) continue;
+  for (const language of supportedLangs) {
+    tutorialUrls.push({
+      path: `/tutorials/${slug}`,
+      language: language.code,
+      alternates: supportedLangs.map((lang) => lang.code),
+    });
+  }
+}
+
+const urls = [...sharedUrls, ...changelogUrls, ...tutorialUrls];
 
 function alternateLinks(alternates, path) {
   const tags = alternates.map((code) => {

@@ -8,6 +8,7 @@ export const translations = {
       features: '功能',
       pricing: '定价',
       docs: '文档',
+      tutorials: '攻略',
       changelog: '更新日志',
       sponsors: '赞助商',
       download: '免费下载',
@@ -316,6 +317,7 @@ export const translations = {
       resources: {
         title: '资源',
         docs: '文档',
+        tutorials: '攻略',
         changelog: '更新日志',
         api: 'API 参考',
         examples: '示例',
@@ -505,6 +507,59 @@ export const translations = {
       openVersions: '打开版本列表',
       closeVersions: '关闭版本列表',
     },
+    // Tutorials Page
+    tutorials: {
+      hero: {
+        badge: '官方 + 社区',
+        title: '玩转 CC Switch',
+        subtitle: '装好软件之后还能怎么玩？这里收集了官方和社区写的攻略文章，从 5 分钟入门到生产部署一网打尽。',
+        contribute: '投稿你的攻略',
+      },
+      filters: {
+        category: '分类',
+        source: '来源',
+        all: '全部',
+        clear: '重置筛选',
+      },
+      categories: {
+        'getting-started': '入门',
+        practice: '实战',
+        integration: '集成',
+        troubleshooting: '排错',
+        video: '视频',
+      },
+      sources: {
+        official: '官方',
+        community: '社区',
+      },
+      card: {
+        readMin: '{n} 分钟阅读',
+        external: '外站',
+        unavailable: '当前语言暂未翻译',
+      },
+      empty: {
+        title: '没有匹配的攻略',
+        subtitle: '试试清空筛选条件，或者切换到其他分类。',
+      },
+      detail: {
+        back: '返回攻略列表',
+        readMin: '{n} 分钟阅读',
+        published: '发布于 {date}',
+        bySource: '由 {source} 提供',
+        notAvailable: {
+          title: '这篇攻略暂时没有当前语言的版本',
+          subtitle: '你可以切换到其他语言查看，或返回攻略列表浏览其他文章。',
+        },
+        prev: '上一篇',
+        next: '下一篇',
+        edit: '在 GitHub 编辑此页',
+      },
+      cta: {
+        title: '想分享你的 CC Switch 攻略？',
+        subtitle: '欢迎把你的实战经验整理成文章发给我们。被收录的作者会在文章上署名，并获得独立的展示位。',
+        action: '通过邮件投稿',
+      },
+    },
   },
   en: {
     // Navbar
@@ -513,6 +568,7 @@ export const translations = {
       features: 'Features',
       pricing: 'Pricing',
       docs: 'Docs',
+      tutorials: 'Tutorials',
       changelog: 'Changelog',
       sponsors: 'Sponsors',
       download: 'Download Free',
@@ -821,6 +877,7 @@ export const translations = {
       resources: {
         title: 'Resources',
         docs: 'Documentation',
+        tutorials: 'Tutorials',
         changelog: 'Changelog',
         api: 'API Reference',
         examples: 'Examples',
@@ -1010,6 +1067,59 @@ export const translations = {
       openVersions: 'Open version list',
       closeVersions: 'Close version list',
     },
+    // Tutorials Page
+    tutorials: {
+      hero: {
+        badge: 'Official + Community',
+        title: 'Get more out of CC Switch',
+        subtitle: 'Past the install step? Here\'s a curated set of articles from the team and community — 5-minute starters all the way to production setups.',
+        contribute: 'Submit your tutorial',
+      },
+      filters: {
+        category: 'Category',
+        source: 'Source',
+        all: 'All',
+        clear: 'Clear filters',
+      },
+      categories: {
+        'getting-started': 'Getting started',
+        practice: 'Practice',
+        integration: 'Integration',
+        troubleshooting: 'Troubleshooting',
+        video: 'Video',
+      },
+      sources: {
+        official: 'Official',
+        community: 'Community',
+      },
+      card: {
+        readMin: '{n} min read',
+        external: 'External',
+        unavailable: 'Not yet translated',
+      },
+      empty: {
+        title: 'No tutorials match',
+        subtitle: 'Try clearing filters or switching to another category.',
+      },
+      detail: {
+        back: 'Back to tutorials',
+        readMin: '{n} min read',
+        published: 'Published {date}',
+        bySource: 'by {source}',
+        notAvailable: {
+          title: 'This article isn\'t available in your language yet',
+          subtitle: 'Try switching languages, or head back to browse other tutorials.',
+        },
+        prev: 'Previous',
+        next: 'Next',
+        edit: 'Edit this page on GitHub',
+      },
+      cta: {
+        title: 'Have a CC Switch tutorial to share?',
+        subtitle: 'Send us a write-up of your real-world workflow. Accepted submissions are credited and get their own showcase slot.',
+        action: 'Submit by email',
+      },
+    },
   },
   ja: {
     // Navbar
@@ -1018,6 +1128,7 @@ export const translations = {
       features: '機能',
       pricing: '価格',
       docs: 'ドキュメント',
+      tutorials: 'チュートリアル',
       changelog: '更新履歴',
       sponsors: 'スポンサー',
       download: '無料ダウンロード',
@@ -1326,6 +1437,7 @@ export const translations = {
       resources: {
         title: 'リソース',
         docs: 'ドキュメント',
+        tutorials: 'チュートリアル',
         changelog: '更新履歴',
         api: 'API リファレンス',
         examples: 'サンプル',
@@ -1514,6 +1626,59 @@ export const translations = {
       betaRelease: 'ベータリリース',
       openVersions: 'バージョン一覧を開く',
       closeVersions: 'バージョン一覧を閉じる',
+    },
+    // Tutorials Page
+    tutorials: {
+      hero: {
+        badge: '公式 + コミュニティ',
+        title: 'CC Switch をもっと使いこなす',
+        subtitle: 'インストールの先へ。公式とコミュニティが書いた CC Switch 活用記事を集めました。5 分入門から本番運用まで。',
+        contribute: 'チュートリアルを投稿',
+      },
+      filters: {
+        category: 'カテゴリ',
+        source: '出典',
+        all: 'すべて',
+        clear: 'フィルタをクリア',
+      },
+      categories: {
+        'getting-started': '入門',
+        practice: '実践',
+        integration: '連携',
+        troubleshooting: 'トラブルシュート',
+        video: '動画',
+      },
+      sources: {
+        official: '公式',
+        community: 'コミュニティ',
+      },
+      card: {
+        readMin: '読了 {n} 分',
+        external: '外部',
+        unavailable: 'この言語版は未翻訳',
+      },
+      empty: {
+        title: '該当する記事がありません',
+        subtitle: 'フィルタをクリアするか、別のカテゴリに切り替えてみてください。',
+      },
+      detail: {
+        back: 'チュートリアル一覧に戻る',
+        readMin: '読了 {n} 分',
+        published: '公開日：{date}',
+        bySource: '{source} 提供',
+        notAvailable: {
+          title: 'この記事は現在の言語ではまだ提供されていません',
+          subtitle: '他の言語に切り替えてご覧ください。または一覧に戻って他の記事を探せます。',
+        },
+        prev: '前の記事',
+        next: '次の記事',
+        edit: 'GitHub でこのページを編集',
+      },
+      cta: {
+        title: 'CC Switch のチュートリアルを共有しませんか？',
+        subtitle: 'あなたの実運用ノウハウを記事にしてお寄せください。掲載時はクレジット表記と専用枠が付きます。',
+        action: 'メールで投稿',
+      },
     },
   },
 } as const;

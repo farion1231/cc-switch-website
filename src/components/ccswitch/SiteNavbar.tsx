@@ -32,6 +32,7 @@ export function SiteNavbar() {
   const navLinks = [
     { label: t.nav.home, href: getLocalizedPath('/', language) },
     { label: t.nav.docs, href: getLocalizedPath('/docs', language) },
+    { label: t.nav.tutorials, href: getLocalizedPath('/tutorials', language) },
     { label: t.nav.changelog, href: getLocalizedPath('/changelog', language) },
     { label: t.nav.sponsors, href: getLocalizedPath('/sponsors', language) },
   ];

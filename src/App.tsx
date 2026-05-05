@@ -13,6 +13,8 @@ const CCSwitchHome = lazy(() => import("./pages/CCSwitchHome"));
 const DocsPage = lazy(() => import("./pages/DocsPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const SponsorsPage = lazy(() => import("./pages/SponsorsPage"));
+const TutorialsPage = lazy(() => import("./pages/TutorialsPage"));
+const TutorialDetailPage = lazy(() => import("./pages/TutorialDetailPage"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -61,6 +63,14 @@ const App = () => (
           <Route path="/zh/sponsors" element={<SponsorsPage />} />
           <Route path="/en/sponsors" element={<SponsorsPage />} />
           <Route path="/ja/sponsors" element={<SponsorsPage />} />
+          <Route path="/tutorials" element={<TutorialsPage />} />
+          <Route path="/tutorials/:slug" element={<TutorialDetailPage />} />
+          <Route path="/zh/tutorials" element={<TutorialsPage />} />
+          <Route path="/zh/tutorials/:slug" element={<TutorialDetailPage />} />
+          <Route path="/en/tutorials" element={<TutorialsPage />} />
+          <Route path="/en/tutorials/:slug" element={<TutorialDetailPage />} />
+          <Route path="/ja/tutorials" element={<TutorialsPage />} />
+          <Route path="/ja/tutorials/:slug" element={<TutorialDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

@@ -32,7 +32,7 @@ type SeoCopy = {
   keywords?: string;
 };
 
-export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'sponsors' | 'notFound', SeoCopy>> = {
+export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound', SeoCopy>> = {
   zh: {
     home: {
       title: 'CC Switch 官方网站 - AI 编程 CLI 统一管理工具',
@@ -53,6 +53,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 's
       title: 'CC Switch 赞助商 - 感谢支持开源的合作伙伴',
       description: '了解支持 CC Switch 持续开发的赞助商与合作伙伴，查看赞助级别、合作详情，以及如何成为 CC Switch 赞助商。',
       keywords: 'CC Switch 赞助商,CC Switch 合作伙伴,开源赞助,GitHub Sponsors,AI CLI 工具赞助',
+    },
+    tutorials: {
+      title: 'CC Switch 攻略 - 官方与社区教程合集',
+      description: '官方与社区精选的 CC Switch 攻略，涵盖入门、实战、集成、排错与视频教程，帮助你把 AI 编程 CLI 工作流玩得更顺。',
+      keywords: 'CC Switch 攻略,CC Switch 教程,Claude Code 攻略,Codex 教程,故障转移,本地路由,社区教程',
     },
     notFound: {
       title: '页面未找到 - CC Switch',
@@ -80,6 +85,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 's
       description: 'Meet the sponsors and partners who keep CC Switch growing. Explore sponsor tiers, partnership details, and how to become a CC Switch sponsor.',
       keywords: 'CC Switch sponsors,CC Switch partners,open source sponsorship,GitHub Sponsors,AI CLI tool sponsorship',
     },
+    tutorials: {
+      title: 'CC Switch Tutorials - Official and Community Guides',
+      description: 'Curated tutorials for CC Switch covering getting started, practice setups, integrations, troubleshooting, and video walkthroughs from the team and community.',
+      keywords: 'CC Switch tutorials,CC Switch guides,Claude Code tutorial,Codex tutorial,failover guide,local routing,community tutorial',
+    },
     notFound: {
       title: 'Page Not Found - CC Switch',
       description: 'This CC Switch page does not exist. Return to the official website or open the official documentation.',
@@ -105,6 +115,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 's
       title: 'CC Switch スポンサー - プロジェクトを支えるパートナー',
       description: 'CC Switch の開発を支えるスポンサーとパートナーをご紹介します。スポンサー階層、提携の詳細、スポンサーになる方法を確認できます。',
       keywords: 'CC Switch スポンサー,CC Switch パートナー,オープンソース支援,GitHub Sponsors,AI CLI ツール支援',
+    },
+    tutorials: {
+      title: 'CC Switch チュートリアル - 公式とコミュニティの活用ガイド',
+      description: '公式とコミュニティが厳選した CC Switch のチュートリアル。入門・実践・連携・トラブルシュート・動画まで、AI コーディング CLI ワークフローを使いこなす情報を集約。',
+      keywords: 'CC Switch チュートリアル,CC Switch 使い方,Claude Code チュートリアル,Codex チュートリアル,フェイルオーバー,Local Routing,コミュニティ',
     },
     notFound: {
       title: 'ページが見つかりません - CC Switch',

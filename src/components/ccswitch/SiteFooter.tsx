@@ -34,6 +34,7 @@ export function SiteFooter() {
       title: t.footer.resources.title,
       links: [
         { label: t.footer.resources.docs, href: '/docs', internal: true },
+        { label: t.footer.resources.tutorials, href: '/tutorials', internal: true },
         { label: t.footer.resources.changelog, href: '/changelog', internal: true },
       ],
     },
