@@ -287,6 +287,11 @@ export const translations = {
           author: 'saladday',
           role: '知名开发者',
         },
+        {
+          content: '录 AI 编程教程要演示不同 Provider，CC Switch 一键切换太省事，粉丝照着抄也不会出错。',
+          author: '左岚',
+          role: '哔哩哔哩 UP 主',
+        },
       ],
     },
     // CTA Section
@@ -787,6 +792,11 @@ export const translations = {
           author: 'saladday',
           role: 'Renowned Developer',
         },
+        {
+          content: "Recording AI coding tutorials means demoing different providers all the time. CC Switch's one-click switching keeps my screencasts smooth and viewers can follow along easily.",
+          author: '左岚',
+          role: 'Bilibili Content Creator',
+        },
       ],
     },
     // CTA Section
@@ -1286,6 +1296,11 @@ export const translations = {
           content: 'これまで多くの Claude Code 周辺ツールを試してきましたが、Dock に常駐させたいと思える数少ないツールが CC Switch です。プロバイダーのワンクリック切り替え、設定のビジュアル管理、コスト追跡、どれも完成度が高く、チームの非エンジニアでもすぐ使いこなせました。',
           author: 'saladday',
           role: '著名な開発者',
+        },
+        {
+          content: 'AI コーディングのチュートリアルで毎回いろんなプロバイダーを実演しますが、CC Switch のワンクリック切り替えのおかげで収録がスムーズで、視聴者もそのまま真似できます。',
+          author: '左岚',
+          role: 'bilibili 動画クリエイター',
         },
       ],
     },
