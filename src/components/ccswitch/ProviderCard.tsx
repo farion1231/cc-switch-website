@@ -1,5 +1,6 @@
 import { motion, LayoutGroup, Reorder, useDragControls } from "framer-motion";
-import { RefreshCw, Play, Check, Copy, Pencil, BarChart3, Trash2, SquarePen, Clock } from "lucide-react";
+import { RefreshCw, Play, Check, Copy, BarChart3, Trash2, SquarePen, Clock, TestTube2 } from "lucide-react";
+import type { MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/useLanguage";
 import type { Provider } from "@/content/providers";
@@ -10,6 +11,8 @@ interface ProviderCardProps {
   isActive: boolean;
   proxyEnabled: boolean;
   onSelect: () => void;
+  onAction?: (name: string, event: MouseEvent<HTMLElement>) => void;
+  onActionEnd?: () => void;
   compact?: boolean;
 }
 
@@ -19,11 +22,22 @@ export function ProviderCard({
   isActive,
   proxyEnabled,
   onSelect,
+  onAction,
+  onActionEnd,
   compact = false,
 }: ProviderCardProps) {
   const dragControls = useDragControls();
   const { t } = useLanguage();
-  const stopClick = (event: React.MouseEvent) => event.stopPropagation();
+  const handleSelect = () => {
+    onSelect();
+  };
+  const handleButtonAction = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+  };
+  const getActionHoverProps = (name: string) => ({
+    onMouseEnter: (event: MouseEvent<HTMLElement>) => onAction?.(name, event),
+    onMouseLeave: onActionEnd,
+  });
 
   const getBorderColor = () => {
     if (!isActive) return "border-border/50";
@@ -52,7 +66,7 @@ export function ProviderCard({
         ease: [0.25, 0.46, 0.45, 0.94],
         layout: { duration: 0.28 },
       }}
-      onClick={onSelect}
+      onClick={handleSelect}
       className={cn(
         "group relative flex items-center gap-2.5 bg-muted/30 rounded-xl border-2 cursor-pointer transition-colors hover:bg-muted/50 sm:gap-3",
         getBorderColor(),
@@ -64,6 +78,7 @@ export function ProviderCard({
         className="flex flex-col gap-0.5 cursor-grab active:cursor-grabbing"
         onPointerDown={(e) => {
           e.stopPropagation();
+          onActionEnd?.();
           dragControls.start(e);
         }}
       >
@@ -146,6 +161,7 @@ export function ProviderCard({
           <div className={cn("flex justify-end", compact ? "w-[58px]" : "w-[78px]")}>
             {isActive ? (
               <div
+                {...getActionHoverProps(t.provider.inUse)}
                 className={cn(
                   "flex items-center gap-1.5 bg-muted rounded-lg text-muted-foreground",
                   compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
@@ -158,6 +174,11 @@ export function ProviderCard({
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onSelect();
+                }}
+                {...getActionHoverProps(t.demo.actionNames.activateProvider)}
                 className={cn(
                   "flex items-center gap-1.5 bg-success hover:bg-success/90 rounded-lg text-success-foreground font-medium transition-colors",
                   compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
@@ -171,11 +192,11 @@ export function ProviderCard({
 
           <div className="flex items-center gap-0.5">
             {[
-              { Icon: SquarePen, label: "Add provider" },
-              { Icon: Copy, label: "Copy config" },
-              { Icon: Pencil, label: "Edit" },
-              { Icon: BarChart3, label: "View stats" },
-              { Icon: Trash2, label: "Delete" },
+              { Icon: SquarePen, label: t.demo.actionNames.editProvider },
+              { Icon: Copy, label: t.demo.actionNames.duplicateProvider },
+              { Icon: TestTube2, label: t.demo.actionNames.testProvider },
+              { Icon: BarChart3, label: t.demo.actionNames.configureUsage },
+              { Icon: Trash2, label: t.demo.actionNames.deleteProvider },
             ].map(({ Icon, label }) => (
               <motion.button
                 key={label}
@@ -183,7 +204,8 @@ export function ProviderCard({
                 whileTap={{ scale: 0.9 }}
                 aria-label={label}
                 className={cn("rounded-md transition-colors", compact ? "p-1" : "p-1.5")}
-                onClick={stopClick}
+                onClick={handleButtonAction}
+                {...getActionHoverProps(label)}
               >
                 <Icon className={cn("text-muted-foreground", compact ? "w-3 h-3" : "w-4 h-4")} />
               </motion.button>
@@ -277,6 +299,8 @@ interface ProviderListProps {
   proxyEnabled: boolean;
   onSelectProvider: (index: number) => void;
   onReorderProviders: (providers: Provider[]) => void;
+  onAction?: (name: string, event: MouseEvent<HTMLElement>) => void;
+  onActionEnd?: () => void;
   compact?: boolean;
   animationKey?: string;
 }
@@ -287,6 +311,8 @@ export function ProviderList({
   proxyEnabled,
   onSelectProvider,
   onReorderProviders,
+  onAction,
+  onActionEnd,
   compact = false,
   animationKey = "default",
 }: ProviderListProps) {
@@ -306,6 +332,8 @@ export function ProviderList({
             isActive={index === activeProvider}
             proxyEnabled={proxyEnabled}
             onSelect={() => onSelectProvider(index)}
+            onAction={onAction}
+            onActionEnd={onActionEnd}
             compact={compact}
           />
         ))}
