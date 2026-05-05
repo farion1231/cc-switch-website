@@ -18,7 +18,6 @@ import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
 import micuIcon from '@/assets/icons/sponsors/micu.svg';
 import lemondataIcon from '@/assets/icons/sponsors/lemondata-app.png';
 import ctokIcon from '@/assets/icons/sponsors/ctok.svg';
-import chefshopIcon from '@/assets/icons/sponsors/chefshop.png';
 import lionccIcon from '@/assets/icons/sponsors/lioncc.svg';
 import ddsIcon from '@/assets/icons/sponsors/dds.svg';
 
@@ -476,30 +475,6 @@ export const sponsors: Sponsor[] = [
       zh: 'Claude Code 专业套餐 + 技术社群',
       en: 'Pro Claude Code plans + dev community',
       ja: 'Claude Code プロプラン + 開発者コミュニティ',
-    },
-  },
-  {
-    id: 'chefshop',
-    name: { zh: '厨师长 AI 小铺', en: 'ChefShop', ja: 'ChefShop' },
-    icon: chefshopIcon,
-    url: 'https://chefshop.ai',
-    tier: 'standard',
-    category: 'account-service',
-    since: '2025-10',
-    tagline: {
-      zh: 'AI 重度订阅账号服务',
-      en: 'Premium AI account reseller',
-      ja: 'AI ヘビーユーザー向けアカウント',
-    },
-    description: {
-      zh: '专为 AI 重度订阅用户量身定制的优质账号服务商。提供 ChatGPT Plus/Pro、Claude Max、Grok Super/Heavy 以及 Gemini 等主流大模型的官方代充与稳定成品账号服务。',
-      en: 'Account service for heavy AI subscribers — official top-ups and ready-to-use premium accounts for ChatGPT Plus/Pro, Claude Max, Grok Super/Heavy, Gemini, and more.',
-      ja: 'AI ヘビーユーザー向けの高品質アカウントサービス。ChatGPT Plus/Pro、Claude Max、Grok Super/Heavy、Gemini など主要モデルの公式代行チャージと完成品アカウントを提供。',
-    },
-    perk: {
-      zh: 'ChatGPT / Claude / Grok / Gemini 官方代充',
-      en: 'Official top-ups for major AI subscriptions',
-      ja: '主要 AI サブスク公式チャージ',
     },
   },
   {
