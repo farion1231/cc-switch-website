@@ -239,6 +239,11 @@ export const translations = {
       subtitle: '来自开发者社区的反馈',
       items: [
         {
+          content: '配置切换神器！UI颜值超高，界面清爽无冗余，一键切换配置特别方便，是我用过最顺手的工具，强烈推荐！',
+          author: '蛮吉',
+          role: 'Vibe Coding 爱好者',
+        },
+        {
           content: 'CC Switch 彻底改变了我的 AI 开发工作流。多 Provider 故障转移功能让我再也不用担心 API 限流问题，成本追踪功能帮我节省了 30% 的开支。',
           author: '愚者',
           role: '前字节跳动开发工程师',
@@ -799,6 +804,11 @@ export const translations = {
       subtitle: 'Feedback from the developer community',
       items: [
         {
+          content: "A must-have config switching tool! The UI looks fantastic, the interface is clean with no clutter, and one-click configuration switching is incredibly convenient. It's the smoothest tool I've used - highly recommended!",
+          author: '蛮吉',
+          role: 'Vibe Coding Enthusiast',
+        },
+        {
           content: "CC Switch completely transformed my AI development workflow. The multi-provider failover means I never worry about API rate limits, and cost tracking saved me 30% on expenses.",
           author: '愚者',
           role: 'Ex-ByteDance Engineer',
@@ -1358,6 +1368,11 @@ export const translations = {
       title: 'ユーザーの声',
       subtitle: '開発者コミュニティからのフィードバック',
       items: [
+        {
+          content: '設定切り替えの必携ツールです！UI の完成度が高く、画面はすっきりして無駄がなく、ワンクリックで設定を切り替えられるのがとても便利です。これまで使った中で一番手になじむツールで、強くおすすめします！',
+          author: '蛮吉',
+          role: 'Vibe Coding 愛好者',
+        },
         {
           content: 'CC Switch は私の AI 開発ワークフローを完全に変えました。マルチプロバイダーフェイルオーバーで API レート制限の心配がなくなり、コスト追跡で 30% の経費削減ができました。',
           author: '愚者',
