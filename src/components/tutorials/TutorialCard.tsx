@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Clock, ExternalLink, User } from 'lucide-react';
+import { Clock, ExternalLink, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/i18n/useLanguage';
 import { getLocalizedPath } from '@/i18n/routes';
@@ -99,7 +99,6 @@ export function TutorialCard({ tutorial }: TutorialCardProps) {
       </div>
 
       <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-primary/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      <ArrowUpRight className="absolute right-5 top-[148px] h-4 w-4 -translate-y-2 text-muted-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:text-primary group-hover:opacity-100" />
     </>
   );
 
