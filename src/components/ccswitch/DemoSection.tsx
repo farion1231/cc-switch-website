@@ -78,12 +78,12 @@ export function DemoSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative mx-auto w-full max-w-[1000px]"
         >
-          <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-primary/20 to-purple/20 rounded-3xl blur-3xl opacity-50" />
+          <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-blue-500/15 to-sky-500/10 opacity-50 blur-3xl sm:-inset-4" />
 
-          <div className="relative flex h-[590px] sm:h-[620px] md:h-[650px] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-2xl sm:rounded-2xl">
+          <div className="ccswitch-app-demo relative flex h-[590px] flex-col overflow-hidden rounded-xl border border-border bg-background text-foreground shadow-2xl sm:h-[620px] sm:rounded-2xl md:h-[650px]">
             <MacOsWindowBar
               responsive
-              className="h-9 shrink-0 border-b border-border bg-muted/50 px-3 sm:h-11 sm:px-4"
+              className="h-9 shrink-0 border-b border-border bg-background px-3 sm:h-11 sm:px-4"
             />
 
             <AnimatePresence mode="wait">

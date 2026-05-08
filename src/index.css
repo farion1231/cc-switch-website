@@ -154,6 +154,72 @@
 }
 
 @layer utilities {
+  /* Locally mirror the desktop app's neutral shadcn tokens inside homepage demos. */
+  .ccswitch-app-demo {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 210 100% 56%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 210 100% 56%;
+    --radius: 0.5rem;
+    --success: 142 71% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 45%;
+    --warning-foreground: 0 0% 100%;
+    --info: 210 100% 56%;
+    --info-foreground: 0 0% 100%;
+    color-scheme: light;
+  }
+
+  .dark .ccswitch-app-demo {
+    --background: 240 5% 12%;
+    --foreground: 0 0% 98%;
+    --card: 240 5% 16%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 5% 16%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 210 100% 54%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 5% 18%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 5% 18%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5% 24%;
+    --input: 240 5% 24%;
+    --ring: 210 100% 54%;
+    --success: 142 60% 50%;
+    --warning: 38 90% 58%;
+    --warning-foreground: 0 0% 10%;
+    --info: 210 100% 54%;
+    color-scheme: dark;
+  }
+
+  .ccswitch-app-demo * {
+    scrollbar-width: none;
+  }
+
+  .ccswitch-app-demo *::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Glass Effect */
   .glass {
     @apply bg-background/80 backdrop-blur-xl border border-border/50;
@@ -319,4 +385,3 @@ pre[class*="language-"] {
 .token.entity {
   cursor: help;
 }
-

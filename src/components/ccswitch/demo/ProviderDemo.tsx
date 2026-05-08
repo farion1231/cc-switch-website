@@ -10,10 +10,10 @@ import {
   KeyRound,
   LayoutDashboard,
   Plus,
+  Radio,
   Server,
   Settings,
   Shield,
-  Wifi,
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
@@ -29,11 +29,13 @@ import {
   opencodeProviders,
   type Provider,
 } from '@/content/providers';
+import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 
 import claudeIcon from '@/assets/icons/claude.svg';
 import geminiIcon from '@/assets/icons/gemini.svg';
 import hermesIcon from '@/assets/icons/hermes.png';
 import openaiIcon from '@/assets/icons/openai.svg';
+import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import openClawIcon from '@/assets/icons/openclaw.svg';
 import openCodeIcon from '@/assets/icons/opencode.svg';
 
@@ -41,12 +43,12 @@ type CliTabId = 'claude' | 'codex' | 'gemini' | 'opencode' | 'openclaw' | 'herme
 
 const cliTabs = [
   { id: 'claude', label: 'Claude', icon: claudeIcon },
-  { id: 'codex', label: 'Codex', icon: openaiIcon },
+  { id: 'codex', label: 'Codex', icon: openaiIcon, iconSvg: openaiIconSvg, iconColor: 'currentColor' },
   { id: 'gemini', label: 'Gemini', icon: geminiIcon },
   { id: 'opencode', label: 'OpenCode', icon: openCodeIcon },
   { id: 'openclaw', label: 'OpenClaw', icon: openClawIcon },
   { id: 'hermes', label: 'Hermes', icon: hermesIcon },
-] satisfies Array<{ id: CliTabId; label: string; icon: string }>;
+] satisfies Array<{ id: CliTabId; label: string; icon: string; iconSvg?: string; iconColor?: string }>;
 
 const initialProviderLists: Record<CliTabId, Provider[]> = {
   claude: claudeProviders,
@@ -91,7 +93,7 @@ const toolbarActionsByApp: Record<CliTabId, ToolbarAction[]> = {
 
 export function ProviderContent() {
   const { t } = useLanguage();
-  const [proxyEnabled, setProxyEnabled] = useState(true);
+  const [proxyEnabled, setProxyEnabled] = useState(false);
   const [activeTab, setActiveTab] = useState<CliTabId>('claude');
   const [activeProvider, setActiveProvider] = useState(0);
   const [providerLists, setProviderLists] = useState(initialProviderLists);
@@ -160,33 +162,34 @@ export function ProviderContent() {
           document.body,
         )}
 
-      <div className="p-3 sm:p-4 md:p-6">
-        <div className="mb-4 flex flex-col gap-3 border-b border-border pb-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-h-full bg-background text-foreground">
+        <div className="flex min-h-[4.5rem] flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
-            <span className="text-base font-semibold text-emerald-500">CC Switch</span>
+            <span
+              className={cn(
+                'text-xl font-semibold transition-colors',
+                proxyEnabled
+                  ? 'text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300'
+                  : 'text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300',
+              )}
+            >
+              CC Switch
+            </span>
             <button
               type="button"
               {...getActionHoverProps(t.demo.actionNames.settings)}
               aria-label={t.demo.actionNames.settings}
-              className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-black/5 hover:text-foreground dark:hover:bg-white/5"
             >
               <Settings className="h-4 w-4" />
             </button>
-            <div className="flex min-w-0 items-center gap-2">
-              <Wifi
+            <div className="flex h-8 min-w-0 items-center gap-1 rounded-lg bg-muted/50 px-1.5">
+              <Radio
                 className={cn(
                   'h-4 w-4 shrink-0 transition-colors',
                   proxyEnabled ? 'text-emerald-500 animate-pulse' : 'text-muted-foreground',
                 )}
               />
-              <span
-                className={cn(
-                  'truncate text-sm transition-colors',
-                  proxyEnabled ? 'text-emerald-500' : 'text-muted-foreground',
-                )}
-              >
-                {t.demo.localRouting}
-              </span>
               <button
                 type="button"
                 onClick={() => setProxyEnabled((enabled) => !enabled)}
@@ -197,6 +200,7 @@ export function ProviderContent() {
                 )}
                 aria-pressed={proxyEnabled}
                 aria-label={t.demo.actionNames.localRouting}
+                title={t.demo.localRouting}
               >
                 <motion.div
                   animate={{ x: proxyEnabled ? 18 : 0 }}
@@ -208,7 +212,7 @@ export function ProviderContent() {
           </div>
           <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:gap-3">
 
-            <div className="inline-flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-xl bg-muted/80 p-1 sm:flex-none">
+            <div className="inline-flex min-w-0 flex-1 items-center gap-1 overflow-x-auto rounded-xl bg-muted p-1 sm:flex-none">
               {cliTabs.map((tab) => (
                 <motion.button
                   key={tab.id}
@@ -221,34 +225,27 @@ export function ProviderContent() {
                   className={cn(
                     'relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-sm font-medium transition-all duration-200',
                     activeTab === tab.id
-                      ? 'text-foreground'
+                      ? 'bg-background text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground hover:bg-background/50',
                   )}
                 >
-                  {activeTab === tab.id && (
-                    <motion.div
-                      layoutId="demo-tab-bg"
-                      className="absolute inset-0 bg-background rounded-md shadow-sm"
-                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                    />
-                  )}
-                  <img src={tab.icon} alt={tab.label} className="relative z-10 w-5 h-5" />
+                  <DemoAppIcon tab={tab} />
                 </motion.button>
               ))}
             </div>
 
             <div className="flex shrink-0 items-center gap-2">
-              <div className="hidden items-center gap-3 rounded-lg bg-muted/80 px-3.5 py-2 sm:flex">
+              <div className="hidden items-center gap-1 rounded-xl bg-muted p-1 sm:flex">
                 {toolbarActions.map(({ key, icon: Icon }) => (
                   <motion.button
                     key={`${activeTab}-${key}`}
                     type="button"
                     {...getActionHoverProps(t.demo.actionNames[key as keyof typeof t.demo.actionNames])}
                     whileHover={{ scale: 1.15, color: 'hsl(var(--primary))' }}
-                    className="cursor-pointer rounded-md"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-black/5 hover:text-foreground dark:hover:bg-white/5"
                     aria-label={t.demo.actionNames[key as keyof typeof t.demo.actionNames]}
                   >
-                    <Icon className="w-4 h-4 text-muted-foreground transition-colors" />
+                    <Icon className="h-4 w-4 transition-colors" />
                   </motion.button>
                 ))}
               </div>
@@ -257,27 +254,52 @@ export function ProviderContent() {
                 {...getActionHoverProps(t.demo.actionNames.addProvider)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 transition-colors hover:bg-orange-600 sm:h-6 sm:w-6"
+                className="ml-0 flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 text-white shadow-lg shadow-orange-500/30 transition-colors hover:bg-orange-600 dark:bg-orange-500 dark:shadow-orange-500/40 dark:hover:bg-orange-600"
                 aria-label={t.demo.actionNames.addProvider}
               >
-                <Plus className="h-4 w-4 text-white sm:h-3.5 sm:w-3.5" />
+                <Plus className="h-5 w-5" />
               </motion.button>
             </div>
           </div>
         </div>
 
-        <ProviderList
-          providers={providerLists[activeTab]}
-          activeProvider={activeProvider}
-          proxyEnabled={proxyEnabled}
-          onSelectProvider={setActiveProvider}
-          onReorderProviders={setCurrentProviders}
-          onAction={showActionName}
-          onActionEnd={hideActionName}
-          compact={false}
-          animationKey={`demo-${activeTab}`}
-        />
+        <div className="px-4 pb-6 sm:px-6">
+          <ProviderList
+            providers={providerLists[activeTab]}
+            activeProvider={activeProvider}
+            proxyEnabled={proxyEnabled}
+            onSelectProvider={setActiveProvider}
+            onReorderProviders={setCurrentProviders}
+            onAction={showActionName}
+            onActionEnd={hideActionName}
+            compact={false}
+            animationKey={`demo-${activeTab}`}
+          />
+        </div>
       </div>
     </>
   );
+}
+
+function DemoAppIcon({ tab }: { tab: (typeof cliTabs)[number] }) {
+  if (tab.iconSvg) {
+    return <InlineSvgIcon svg={tab.iconSvg} label={tab.label} color={tab.iconColor} className="h-5 w-5" />;
+  }
+
+  if (tab.iconColor) {
+    return (
+      <span
+        className="h-5 w-5 shrink-0 bg-current"
+        style={{
+          color: tab.iconColor === 'currentColor' ? undefined : tab.iconColor,
+          WebkitMask: `url(${tab.icon}) center / contain no-repeat`,
+          mask: `url(${tab.icon}) center / contain no-repeat`,
+        }}
+        aria-label={tab.label}
+        role="img"
+      />
+    );
+  }
+
+  return <img src={tab.icon} alt={tab.label} className="h-5 w-5 shrink-0 object-contain" />;
 }

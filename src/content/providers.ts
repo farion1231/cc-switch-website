@@ -1,17 +1,28 @@
 import anthropicIcon from '@/assets/icons/anthropic.svg';
+import anthropicIconSvg from '@/assets/icons/anthropic.svg?raw';
 import geminiIcon from '@/assets/icons/gemini-2.svg';
 import hermesIcon from '@/assets/icons/hermes.png';
 import minimaxIcon from '@/assets/icons/minimax.svg';
 import openaiIcon from '@/assets/icons/openai.svg';
+import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import openClawIcon from '@/assets/icons/openclaw.svg';
 import openCodeIcon from '@/assets/icons/opencode.svg';
 import openRouterIcon from '@/assets/icons/openrouter.svg';
+import openRouterIconSvg from '@/assets/icons/openrouter.svg?raw';
 import packyCodeIcon from '@/assets/icons/packycode.svg';
+import packyCodeIconSvg from '@/assets/icons/packycode.svg?raw';
+import stepFunIcon from '@/assets/icons/stepfun.svg';
+import stepFunIconSvg from '@/assets/icons/stepfun.svg?raw';
+import lionccIcon from '@/assets/icons/sponsors/lioncc.svg';
+import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
 import zhipuIcon from '@/assets/icons/zhipu.svg';
+import zhipuIconSvg from '@/assets/icons/zhipu.svg?raw';
 
 export interface Provider {
   icon: string;
+  iconSvg?: string;
   iconBg: string;
+  iconColor?: string;
   name: string;
   subtitle: string;
   time?: string;
@@ -33,7 +44,9 @@ export interface Provider {
 export const claudeProviders: Provider[] = [
   {
     icon: packyCodeIcon,
+    iconSvg: packyCodeIconSvg,
     iconBg: 'bg-emerald-500/20',
+    iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.com',
     time: '10',
@@ -60,7 +73,9 @@ export const claudeProviders: Provider[] = [
   },
   {
     icon: anthropicIcon,
+    iconSvg: anthropicIconSvg,
     iconBg: 'bg-blue-500/20',
+    iconColor: '#D4915D',
     name: 'Anthropic',
     subtitle: 'https://www.anthropic.com/claude-code',
     time: '1',
@@ -76,7 +91,9 @@ export const claudeProviders: Provider[] = [
   },
   {
     icon: openRouterIcon,
+    iconSvg: openRouterIconSvg,
     iconBg: 'bg-orange-500/20',
+    iconColor: '#6566F1',
     name: 'OpenRouter',
     subtitle: 'https://openrouter.ai',
     isUrl: true,
@@ -87,7 +104,9 @@ export const claudeProviders: Provider[] = [
 export const codexProviders: Provider[] = [
   {
     icon: packyCodeIcon,
+    iconSvg: packyCodeIconSvg,
     iconBg: 'bg-emerald-500/20',
+    iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.com',
     time: '5',
@@ -114,7 +133,9 @@ export const codexProviders: Provider[] = [
   },
   {
     icon: openRouterIcon,
+    iconSvg: openRouterIconSvg,
     iconBg: 'bg-orange-500/20',
+    iconColor: '#6566F1',
     name: 'OpenRouter',
     subtitle: 'https://openrouter.ai',
     isUrl: true,
@@ -122,7 +143,9 @@ export const codexProviders: Provider[] = [
   },
   {
     icon: openaiIcon,
+    iconSvg: openaiIconSvg,
     iconBg: 'bg-slate-500/20',
+    iconColor: 'currentColor',
     name: 'OpenAI',
     subtitle: 'https://chatgpt.com/codex',
     isUrl: true,
@@ -133,7 +156,9 @@ export const codexProviders: Provider[] = [
 export const geminiProviders: Provider[] = [
   {
     icon: packyCodeIcon,
+    iconSvg: packyCodeIconSvg,
     iconBg: 'bg-emerald-500/20',
+    iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.com',
     time: '2',
@@ -168,7 +193,9 @@ export const geminiProviders: Provider[] = [
   },
   {
     icon: openRouterIcon,
+    iconSvg: openRouterIconSvg,
     iconBg: 'bg-orange-500/20',
+    iconColor: '#6566F1',
     name: 'OpenRouter',
     subtitle: 'https://openrouter.ai',
     isUrl: true,
@@ -190,7 +217,9 @@ export const opencodeProviders: Provider[] = [
   },
   {
     icon: openRouterIcon,
+    iconSvg: openRouterIconSvg,
     iconBg: 'bg-orange-500/20',
+    iconColor: '#6566F1',
     name: 'TheRouter',
     subtitle: 'https://therouter.ai',
     isUrl: true,
@@ -198,19 +227,23 @@ export const opencodeProviders: Provider[] = [
   },
   {
     icon: packyCodeIcon,
+    iconSvg: packyCodeIconSvg,
     iconBg: 'bg-emerald-500/20',
+    iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.com',
     isUrl: true,
     isSvgUrl: true,
   },
   {
-    icon: 'SF',
+    icon: stepFunIcon,
+    iconSvg: stepFunIconSvg,
     iconBg: 'bg-cyan-500/15',
+    iconColor: '#005AFF',
     name: 'StepFun',
     subtitle: 'https://platform.stepfun.com/step-plan',
     isUrl: true,
-    isText: true,
+    isSvgUrl: true,
   },
 ];
 
@@ -227,12 +260,12 @@ export const openClawProviders: Provider[] = [
     isSvgUrl: true,
   },
   {
-    icon: 'L',
+    icon: lionccIcon,
     iconBg: 'bg-lime-500/15',
     name: 'LionCCAPI',
     subtitle: 'https://vibecodingapi.ai',
     isUrl: true,
-    isText: true,
+    isSvgUrl: true,
   },
   {
     icon: minimaxIcon,
@@ -251,12 +284,12 @@ export const openClawProviders: Provider[] = [
     isSvgUrl: true,
   },
   {
-    icon: '胜',
+    icon: shengsuanyunIcon,
     iconBg: 'bg-amber-500/15',
     name: 'Shengsuanyun',
     subtitle: 'https://www.shengsuanyun.com',
     isUrl: true,
-    isText: true,
+    isSvgUrl: true,
   },
 ];
 
@@ -274,7 +307,9 @@ export const hermesProviders: Provider[] = [
   },
   {
     icon: zhipuIcon,
+    iconSvg: zhipuIconSvg,
     iconBg: 'bg-blue-500/20',
+    iconColor: '#0F62FE',
     name: 'Zhipu GLM',
     subtitle: 'https://open.bigmodel.cn',
     isUrl: true,
@@ -282,19 +317,21 @@ export const hermesProviders: Provider[] = [
   },
   {
     icon: openRouterIcon,
+    iconSvg: openRouterIconSvg,
     iconBg: 'bg-orange-500/20',
+    iconColor: '#6566F1',
     name: 'OpenRouter',
     subtitle: 'https://openrouter.ai',
     isUrl: true,
     isSvgUrl: true,
   },
   {
-    icon: 'N',
+    icon: hermesIcon,
     iconBg: 'bg-purple-500/15',
     name: 'Nous Research',
     subtitle: 'https://nousresearch.com',
     isUrl: true,
-    isText: true,
+    isSvgUrl: true,
   },
 ];
 

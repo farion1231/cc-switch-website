@@ -1,6 +1,7 @@
 import { motion, LayoutGroup, Reorder, useDragControls } from "framer-motion";
-import { RefreshCw, Play, Check, Copy, BarChart3, Trash2, SquarePen, Clock, TestTube2 } from "lucide-react";
+import { RefreshCw, Play, Check, Copy, BarChart3, Trash2, SquarePen, Clock, TestTube2, GripVertical } from "lucide-react";
 import type { MouseEvent } from "react";
+import { InlineSvgIcon } from "@/components/ccswitch/InlineSvgIcon";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/useLanguage";
 import type { Provider } from "@/content/providers";
@@ -39,10 +40,9 @@ export function ProviderCard({
     onMouseLeave: onActionEnd,
   });
 
-  const getBorderColor = () => {
-    if (!isActive) return "border-border/50";
-    return proxyEnabled ? "border-success" : "border-info";
-  };
+  const activeBorderClass = proxyEnabled
+    ? "border-emerald-500/60 shadow-sm shadow-emerald-500/10"
+    : "border-blue-500/60 shadow-sm shadow-blue-500/10";
 
   const timeLabel = (() => {
     if (!provider.time) return "";
@@ -68,60 +68,44 @@ export function ProviderCard({
       }}
       onClick={handleSelect}
       className={cn(
-        "group relative flex items-center gap-2.5 bg-muted/30 rounded-xl border-2 cursor-pointer transition-colors hover:bg-muted/50 sm:gap-3",
-        getBorderColor(),
+        "group relative flex cursor-pointer items-center gap-2 overflow-hidden rounded-xl border border-border bg-card text-card-foreground transition-all duration-300 hover:shadow-sm sm:gap-3",
+        isActive ? activeBorderClass : "hover:border-primary/40",
         compact ? "p-2.5" : "p-3 sm:p-4",
       )}
     >
-      {/* Drag Handle - 6 dots */}
       <div
-        className="flex flex-col gap-0.5 cursor-grab active:cursor-grabbing"
+        className={cn(
+          "pointer-events-none absolute inset-0 bg-gradient-to-r to-transparent transition-opacity duration-500",
+          proxyEnabled ? "from-emerald-500/10" : "from-blue-500/10",
+          isActive ? "opacity-100" : "opacity-0",
+        )}
+      />
+
+      {/* Drag Handle */}
+      <div
+        className="-ml-1.5 flex shrink-0 cursor-grab p-1.5 text-muted-foreground/50 transition-colors hover:text-muted-foreground active:cursor-grabbing"
         onPointerDown={(e) => {
           e.stopPropagation();
           onActionEnd?.();
           dragControls.start(e);
         }}
       >
-        <div className="flex gap-0.5">
-          <div className={cn("rounded-full bg-muted-foreground/40", compact ? "w-0.5 h-0.5" : "w-1 h-1")} />
-          <div className={cn("rounded-full bg-muted-foreground/40", compact ? "w-0.5 h-0.5" : "w-1 h-1")} />
-        </div>
-        <div className="flex gap-0.5">
-          <div className={cn("rounded-full bg-muted-foreground/40", compact ? "w-0.5 h-0.5" : "w-1 h-1")} />
-          <div className={cn("rounded-full bg-muted-foreground/40", compact ? "w-0.5 h-0.5" : "w-1 h-1")} />
-        </div>
-        <div className="flex gap-0.5">
-          <div className={cn("rounded-full bg-muted-foreground/40", compact ? "w-0.5 h-0.5" : "w-1 h-1")} />
-          <div className={cn("rounded-full bg-muted-foreground/40", compact ? "w-0.5 h-0.5" : "w-1 h-1")} />
-        </div>
+        <GripVertical className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
       </div>
 
       {/* Provider Icon */}
       <div
         className={cn(
-          "rounded-xl flex items-center justify-center shrink-0",
-          provider.iconBg,
-          compact ? "w-8 h-8" : "w-10 h-10",
+          "flex shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-card-foreground transition-transform duration-300 group-hover:scale-105",
+          compact ? "h-8 w-8" : "h-8 w-8",
         )}
       >
-        {provider.isSvgUrl ? (
-          <img
-            src={provider.icon}
-            alt={provider.name}
-            className={cn("text-foreground", compact ? "w-4 h-4" : "w-5 h-5")}
-          />
-        ) : provider.isText ? (
-          <span className={cn("font-medium text-muted-foreground", compact ? "text-xs" : "text-sm")}>
-            {provider.icon}
-          </span>
-        ) : (
-          <span className={compact ? "text-sm" : "text-lg"}>{provider.icon}</span>
-        )}
+        <ProviderLogo provider={provider} compact={compact} />
       </div>
 
       {/* Provider Info */}
       <div className="flex-1 min-w-0">
-        <div className={cn("font-semibold text-foreground", compact ? "text-sm" : "text-base")}>{provider.name}</div>
+        <div className={cn("font-semibold leading-none text-foreground", compact ? "text-sm" : "text-base")}>{provider.name}</div>
         {provider.isUrl ? (
           <a
             href={provider.subtitle}
@@ -129,7 +113,7 @@ export function ProviderCard({
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              "truncate block text-success hover:text-success/80 hover:underline transition-colors cursor-pointer",
+              "mt-1 block truncate text-blue-500 transition-colors hover:underline dark:text-blue-400",
               compact ? "text-xs" : "text-sm",
             )}
           >
@@ -180,7 +164,10 @@ export function ProviderCard({
                 }}
                 {...getActionHoverProps(t.demo.actionNames.activateProvider)}
                 className={cn(
-                  "flex items-center gap-1.5 bg-success hover:bg-success/90 rounded-lg text-success-foreground font-medium transition-colors",
+                  "flex items-center gap-1.5 rounded-lg font-medium text-primary-foreground transition-colors",
+                  proxyEnabled
+                    ? "bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+                    : "bg-primary hover:bg-primary/90",
                   compact ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
                 )}
               >
@@ -223,6 +210,46 @@ function quotaColor(utilization: number) {
   return "text-success";
 }
 
+function ProviderLogo({ provider, compact }: { provider: Provider; compact: boolean }) {
+  const sizeClass = compact ? "h-4 w-4" : "h-5 w-5";
+
+  if (provider.isText) {
+    return (
+      <span
+        className={cn("font-semibold", compact ? "text-xs" : "text-sm")}
+        style={{ color: provider.iconColor === "currentColor" ? undefined : provider.iconColor }}
+      >
+        {provider.icon}
+      </span>
+    );
+  }
+
+  if (provider.iconSvg) {
+    return <InlineSvgIcon svg={provider.iconSvg} label={provider.name} color={provider.iconColor} className={sizeClass} />;
+  }
+
+  if (provider.isSvgUrl && provider.iconColor) {
+    return (
+      <span
+        className={cn("inline-block shrink-0 bg-current", sizeClass)}
+        style={{
+          color: provider.iconColor === "currentColor" ? undefined : provider.iconColor,
+          WebkitMask: `url(${provider.icon}) center / contain no-repeat`,
+          mask: `url(${provider.icon}) center / contain no-repeat`,
+        }}
+        aria-label={provider.name}
+        role="img"
+      />
+    );
+  }
+
+  if (provider.isSvgUrl) {
+    return <img src={provider.icon} alt={provider.name} className={cn("object-contain", sizeClass)} />;
+  }
+
+  return <span className={compact ? "text-sm" : "text-lg"}>{provider.icon}</span>;
+}
+
 function UsageSummary({
   provider,
   compact,
@@ -240,13 +267,16 @@ function UsageSummary({
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
       className={cn("hidden sm:block shrink-0 text-right", compact ? "text-[10px]" : "text-xs")}
     >
-      <motion.div layout className="flex items-center justify-end gap-2 text-muted-foreground mb-0.5">
-        <span>⏱ {timeLabel}</span>
-        <RefreshCw className={compact ? "w-2.5 h-2.5" : "w-3 h-3"} />
+      <motion.div layout className="mb-0.5 flex items-center justify-end gap-2 text-muted-foreground">
+        <span className="flex items-center gap-1 text-[10px] text-muted-foreground/70">
+          <Clock className={compact ? "h-2.5 w-2.5" : "h-3 w-3"} />
+          {timeLabel}
+        </span>
+        <RefreshCw className={compact ? "h-2.5 w-2.5" : "h-3 w-3"} />
       </motion.div>
       <motion.div layout className="text-muted-foreground">
         {t.provider.used}: {provider.used} {t.provider.remaining}:{" "}
-        <span className="text-success font-semibold">{provider.remaining}</span> USD
+        <span className="font-semibold text-green-600 dark:text-green-400">{provider.remaining}</span> USD
       </motion.div>
     </motion.div>
   );

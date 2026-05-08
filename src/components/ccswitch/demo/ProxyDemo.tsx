@@ -4,10 +4,11 @@ import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { claudeProviders, codexProviders, geminiProviders } from '@/content/providers';
 import { useLanguage } from '@/i18n/useLanguage';
+import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 
 import claudeIcon from '@/assets/icons/claude.svg';
 import geminiIcon from '@/assets/icons/gemini.svg';
-import openaiIcon from '@/assets/icons/openai.svg';
+import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 
 interface ProxyToggle {
   name: string;
@@ -48,7 +49,7 @@ export function ProxyContent() {
     },
     {
       name: 'Codex',
-      icon: <img src={openaiIcon} alt="Codex" className="w-5 h-5" />,
+      icon: <InlineSvgIcon svg={openaiIconSvg} label="Codex" className="h-5 w-5" />,
       enabled: codexEnabled,
       setEnabled: setCodexEnabled,
     },
