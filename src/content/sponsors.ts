@@ -6,6 +6,7 @@ import aigocodeIcon from '@/assets/icons/sponsors/aigocode.svg';
 import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
 import aicodemirrorIcon from '@/assets/icons/sponsors/aicodemirror.svg';
 import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
+import byteplusIcon from '@/assets/icons/sponsors/byteplus.png';
 import siliconflowIcon from '@/assets/icons/sponsors/siliconflow.svg';
 import cubenceIcon from '@/assets/icons/sponsors/cubence.svg';
 import dmxZhIcon from '@/assets/icons/sponsors/dmx-zh.jpeg';
@@ -208,6 +209,30 @@ export const sponsors: Sponsor[] = [
       zh: '注册即送 $3，充值低至 6 折',
       en: 'Free $3 on signup, recharge as low as 40% off',
       ja: '登録で $3、最大 60% オフ',
+    },
+  },
+  {
+    id: 'byteplus',
+    name: { zh: '火山方舟', en: 'Dola Seed', ja: 'Dola Seed' },
+    icon: byteplusIcon,
+    url: 'https://www.volcengine.com/activity/agentplan?utm_campaign=hw&utm_content=ccswitch&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
+    tier: 'standard',
+    category: 'native-platform',
+    since: '2025-10',
+    tagline: {
+      zh: '字节自研全模态大模型平台',
+      en: 'ByteDance full-modal LLM platform',
+      ja: 'ByteDance のフルモーダル LLM プラットフォーム',
+    },
+    description: {
+      zh: '方舟 Agent Plan 模型订阅套餐集成了 Doubao-Seed、Doubao-Seedance、Doubao-Seedream 等字节跳动自研 SOTA 级模型，覆盖文本、代码、图像、视频等多模态任务。同时支持一站式接入 DeepSeek V4、GLM 5.1 等主流大模型，深度支持 Agent 框架与 AI 编程工具。',
+      en: 'Dola Seed 2.0 is a full-modal general large model by ByteDance. Built on a unified multimodal architecture, it supports text, images, audio, and video. It natively enables agent collaboration with strong reasoning, long-task execution, tool integration, and coding capabilities. Accessible via the ModelArk platform.',
+      ja: 'Dola Seed 2.0 は ByteDance がグローバル市場向けに独自開発したフルモーダル汎用大規模モデルです。統一マルチモーダルアーキテクチャを基盤に、テキスト・画像・音声・動画の統合的な理解と生成をサポート。エージェント連携をネイティブに実現し、強力な推論・コーディング能力を備えています。ModelArk プラットフォームから利用可能。',
+    },
+    perk: {
+      zh: '新客户首月 40 元起',
+      en: '500K free tokens per model on signup',
+      ja: '登録でモデルごとに 50 万トークン無料',
     },
   },
   {
