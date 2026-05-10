@@ -7,6 +7,7 @@ import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
 import aicodemirrorIcon from '@/assets/icons/sponsors/aicodemirror.svg';
 import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
 import byteplusIcon from '@/assets/icons/sponsors/byteplus.png';
+import huoshanIcon from '@/assets/icons/sponsors/huoshan.png';
 import siliconflowIcon from '@/assets/icons/sponsors/siliconflow.svg';
 import cubenceIcon from '@/assets/icons/sponsors/cubence.svg';
 import dmxZhIcon from '@/assets/icons/sponsors/dmx-zh.jpeg';
@@ -214,7 +215,7 @@ export const sponsors: Sponsor[] = [
   {
     id: 'byteplus',
     name: { zh: '火山方舟', en: 'Dola Seed', ja: 'Dola Seed' },
-    icon: byteplusIcon,
+    icon: { zh: huoshanIcon, en: byteplusIcon, ja: byteplusIcon, default: byteplusIcon },
     url: 'https://www.volcengine.com/activity/agentplan?utm_campaign=hw&utm_content=ccswitch&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
     tier: 'standard',
     category: 'native-platform',
