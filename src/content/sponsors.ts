@@ -22,6 +22,8 @@ import lemondataIcon from '@/assets/icons/sponsors/lemondata-app.png';
 import ctokIcon from '@/assets/icons/sponsors/ctok.svg';
 import lionccIcon from '@/assets/icons/sponsors/lioncc.svg';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
+import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
+import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
 import ddsIcon from '@/assets/icons/sponsors/dds.svg';
 
 import minimaxBannerZh from '@/assets/banners/sponsors/minimax-zh.jpeg';
@@ -575,6 +577,56 @@ export const sponsors: Sponsor[] = [
       zh: '首单充值额外 +10% 额度',
       en: '+10% bonus on first recharge',
       ja: '初回チャージ +10% ボーナス',
+    },
+  },
+  {
+    id: 'claudecn',
+    name: 'ClaudeCN',
+    icon: claudecnIcon,
+    url: 'https://claudecn.top',
+    tier: 'standard',
+    category: 'relay',
+    since: '2025-10',
+    iconBg: 'light',
+    tagline: {
+      zh: '企业级 AI 中转平台',
+      en: 'Enterprise-grade AI gateway',
+      ja: 'エンタープライズ向け AI ゲートウェイ',
+    },
+    description: {
+      zh: '实体企业运营的企业级 AI 中转平台，提供 Claude、GPT、DeepSeek 等热门模型的高可用商用 API 服务。支持企业采购流程，可对公打款、签约，服务合规有保障。',
+      en: 'Enterprise-grade AI gateway operated by a registered company. High-availability commercial API access to Claude, GPT, and DeepSeek with corporate bank transfers, signed contracts, and full compliance.',
+      ja: '実体企業が運営するエンタープライズ向け AI ゲートウェイ。Claude、GPT、DeepSeek など主要モデルへの高可用な商用 API を提供し、法人振込・正式契約・コンプライアンスに対応。',
+    },
+    perk: {
+      zh: '企业采购流程，合规有保障',
+      en: 'Enterprise procurement with full compliance',
+      ja: '法人調達・コンプライアンス対応',
+    },
+  },
+  {
+    id: 'runapi',
+    name: 'RunAPI',
+    icon: runapiIcon,
+    url: 'https://runapi.co',
+    tier: 'standard',
+    category: 'aggregator',
+    since: '2025-10',
+    iconBg: 'dark',
+    tagline: {
+      zh: '150+ 模型低至 1 折',
+      en: '150+ models from 10% of official price',
+      ja: '150+ モデルを公式価格の 10% から',
+    },
+    description: {
+      zh: '高效稳定的 AI 模型 API 中转平台，一个 API Key 即可访问 OpenAI、Claude、Gemini、DeepSeek、Grok 等 150+ 主流模型，低至 1 折，可无缝兼容 Claude Code、OpenClaw 等工具。',
+      en: 'High-performance AI model API gateway — one API key for 150+ models including OpenAI, Claude, Gemini, DeepSeek, and Grok at as low as 10% of official pricing. Seamless with Claude Code and OpenClaw.',
+      ja: '高効率で安定した AI モデル API ゲートウェイ。1 つの API Key で OpenAI、Claude、Gemini、DeepSeek、Grok など 150 以上のモデルに公式価格の 10% からアクセス可能。Claude Code や OpenClaw とシームレス連携。',
+    },
+    perk: {
+      zh: '注册联系客服领 ¥14 额度',
+      en: 'Free ¥14 credit (contact support)',
+      ja: 'カスタマー窓口連絡で ¥14 クレジット',
     },
   },
 ];
