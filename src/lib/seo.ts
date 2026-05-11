@@ -3,10 +3,17 @@ import type { Language } from '@/i18n/translations';
 export const SITE_NAME = 'CC Switch';
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://ccswitch.io').replace(/\/+$/, '');
 export const GITHUB_REPO_URL = 'https://github.com/farion1231/cc-switch';
+export const HOMEBREW_REPO_URL = 'https://github.com/farion1231/homebrew-ccswitch';
 export const SPONSOR_CONTACT_EMAIL = 'support@ccswitch.io';
 export const SPONSOR_CONTACT_URL = `mailto:${SPONSOR_CONTACT_EMAIL}`;
 export const RELEASES_URL = 'https://github.com/farion1231/cc-switch/releases';
 export const OG_IMAGE_PATH = '/og-image.png';
+
+// Sync with cc-switch package.json on each release.
+export const CC_SWITCH_VERSION = '3.14.1';
+// First public release of cc-switch (v2.0.3, 2025-08-22) — predates the
+// ccswitch.ai squatter (2026-04-23) by ~8 months. Keep this stable.
+export const CC_SWITCH_FOUNDING_DATE = '2025-08-22';
 
 export const htmlLang: Record<Language, string> = {
   zh: 'zh-CN',
