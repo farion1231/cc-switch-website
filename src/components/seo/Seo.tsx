@@ -94,7 +94,7 @@ function upsertJsonLd(jsonLd: unknown) {
 function getRouteKey(basePath: string): RouteKey {
   if (basePath === '/') return 'home';
   if (basePath === '/docs') return 'docs';
-  if (basePath === '/changelog') return 'changelog';
+  if (basePath === '/changelog' || basePath.startsWith('/changelog/')) return 'changelog';
   if (basePath === '/sponsors') return 'sponsors';
   if (basePath === '/tutorials' || basePath.startsWith('/tutorials/')) return 'tutorials';
   return 'notFound';
@@ -275,7 +275,7 @@ export function Seo() {
     const description = routeKey === 'docs' && section
       ? `${docsTitle}: ${copy.description}`
       : copy.description;
-    const isCanonical = INDEXABLE_PATHS.has(basePath) || basePath.startsWith('/tutorials/');
+    const isCanonical = INDEXABLE_PATHS.has(basePath) || basePath.startsWith('/tutorials/') || basePath.startsWith('/changelog/');
     const canonicalUrl = absoluteUrl(`${getLocalizedPath(isCanonical ? basePath : '/', language)}${normalizedSearch}`);
     const robots = routeKey === 'notFound' ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 
