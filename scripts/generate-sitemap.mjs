@@ -68,6 +68,7 @@ const routePaths = [
   '/docs',
   '/changelog',
   '/tutorials',
+  '/sponsors',
   ...docSections.flatMap((section) => (
     section.items.map((item) => `/docs?section=${section.id}&item=${item}`)
   )),
