@@ -77,9 +77,6 @@ export function FeaturesSection() {
               <Trophy className="w-4 h-4" />
               {t.hero.rustBadge}
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
-              Built with Tauri 2
-            </span>
           </div>
         </SectionHeader>
 
