@@ -24,7 +24,6 @@ import lionccIcon from '@/assets/icons/sponsors/lioncc.svg';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
-import ddsIcon from '@/assets/icons/sponsors/dds.svg';
 
 import minimaxBannerZh from '@/assets/banners/sponsors/minimax-zh.jpeg';
 import minimaxBannerEn from '@/assets/banners/sponsors/minimax-en.jpeg';
@@ -553,30 +552,6 @@ export const sponsors: Sponsor[] = [
       zh: '新用户可领取免费测试额度',
       en: 'Free trial credit for new users',
       ja: '新規ユーザーに無料テストクレジット',
-    },
-  },
-  {
-    id: 'dds',
-    name: { zh: 'DDS 呆呆兽', en: 'DDS', ja: 'DDS' },
-    icon: ddsIcon,
-    url: 'https://ddshub.short.gy/ccswitch',
-    tier: 'standard',
-    category: 'relay',
-    since: '2025-10',
-    tagline: {
-      zh: '专注 Claude 的国内直连',
-      en: 'Claude-focused domestic relay',
-      ja: 'Claude 特化の国内直結中継',
-    },
-    description: {
-      zh: '专注 Claude 的可靠高效 API 中转站，提供国内 Claude 直连加速服务。支持 Claude Haiku / Opus / Sonnet 满血模型，充值满 1000 元可开发票，企业可享定制化分组。',
-      en: 'Claude-focused, reliable, and fast API relay with mainland China direct connections. Full Claude Haiku / Opus / Sonnet support, invoices for ¥1000+ recharges, custom enterprise grouping.',
-      ja: 'Claude に特化した安定・高速 API 中継。中国本土からの直結アクセスを提供し、Claude Haiku / Opus / Sonnet をフル機能でサポート。¥1000 以上でインボイス発行、法人向けカスタムグループ化に対応。',
-    },
-    perk: {
-      zh: '首单充值额外 +10% 额度',
-      en: '+10% bonus on first recharge',
-      ja: '初回チャージ +10% ボーナス',
     },
   },
   {
