@@ -45,6 +45,28 @@ export interface Tutorial {
 
 export const tutorials: Tutorial[] = [
   {
+    slug: 'claude-desktop-provider-management',
+    title: {
+      zh: '使用 CC Switch 一键配置、管理和切换 Claude 桌面版供应商',
+      en: 'Configure, Manage, and Switch Claude Desktop Providers with CC Switch',
+      ja: 'CC Switch で Claude Desktop の Provider を設定・管理・切り替える',
+    },
+    summary: {
+      zh: 'Jason Young 的实操帖，介绍如何用 CC Switch 管理 Claude Desktop 的多个供应商配置，并快速完成配置、切换和日常维护。',
+      en: 'A hands-on post by Jason Young showing how to manage multiple Claude Desktop provider configurations with CC Switch, including setup, switching, and day-to-day maintenance.',
+      ja: 'Jason Young による実践メモ。CC Switch で Claude Desktop の複数 Provider 設定を管理し、セットアップ、切り替え、日常運用を行う方法を紹介します。',
+    },
+    author: { name: 'Jason Young', url: 'https://x.com/Jason_Young1231' },
+    date: '2026-05-16',
+    category: 'practice',
+    source: 'official',
+    readMinutes: 3,
+    externalUrl: 'https://x.com/Jason_Young1231/status/2055610762257949105',
+    accent: 'blue',
+    emoji: '🧰',
+    featured: true,
+  },
+  {
     slug: 'codex-oauth-claude-code-local-routing',
     title: {
       zh: '用本地路由把 Codex 模型接到 Claude Code',
