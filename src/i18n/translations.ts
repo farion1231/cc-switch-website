@@ -24,13 +24,13 @@ export const translations = {
     // Hero Section
     hero: {
       versionBadge: '正式发布',
-      slogan: '统一管理你的 AI 编程 CLI 工作流',
+      slogan: '统一管理你的 AI 编程工具工作流',
       downloadBtn: '免费下载',
       docsBtn: '查看文档',
       platforms: '支持 macOS 12+ · Windows 10+ · Linux',
       stars: 'Stars',
       downloads: '下载',
-      supportedCli: '支持 CLI',
+      supportedCli: '支持应用',
       rustBadge: 'Rust #1',
     },
     // Features Section
@@ -39,8 +39,8 @@ export const translations = {
       subtitle: '一个应用管理供应商、路由、用量、会话和技能',
       items: [
         {
-          title: '统一管理六大 CLI',
-          description: '一个界面管理 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置。',
+          title: '统一管理七大应用',
+          description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置。',
         },
         {
           title: '自动故障转移',
@@ -95,7 +95,7 @@ export const translations = {
     // Demo Section
     demo: {
       title: '直观的操作界面',
-      subtitle: '主界面、工具栏和本地路由状态一眼可见',
+      subtitle: '七应用切换、工具栏和本地路由状态一眼可见',
       localRouting: '路由',
       toolbar: {
         skills: 'Skills',
@@ -108,6 +108,10 @@ export const translations = {
         agents: 'Agents',
         memory: 'Memory',
         dashboard: 'Dashboard',
+        importProviders: 'Import',
+        modelMapping: 'Mapping',
+        officialMode: 'Official',
+        restartDesktop: 'Restart',
       },
       actionNames: {
         settings: '设置',
@@ -129,6 +133,10 @@ export const translations = {
         agents: 'Agents 配置',
         memory: '记忆管理',
         dashboard: '打开 Hermes Web UI',
+        importProviders: '从 Claude Code 导入',
+        modelMapping: '模型映射',
+        officialMode: '官方模式',
+        restartDesktop: '重启 Claude Desktop 后生效',
       },
       tabs: {
         provider: 'Provider 管理',
@@ -212,8 +220,8 @@ export const translations = {
           answer: '是的，CC Switch 完全免费且开源。基于 MIT 协议发布，您可以自由使用、修改和分发。',
         },
         {
-          question: '支持哪些 AI CLI 工具？',
-          answer: '目前支持 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent，并为不同应用提供对应的供应商预设、配置写入和会话管理能力。',
+          question: '支持哪些 AI 编程工具？',
+          answer: '目前支持 Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent，并为不同应用提供对应的供应商预设、配置写入和会话管理能力。',
         },
         {
           question: '我的 API Key 安全吗？',
@@ -274,7 +282,7 @@ export const translations = {
           role: '运维工程师',
         },
         {
-          content: '统一管理六个 CLI 工具真的太方便了，一个界面搞定所有配置。省去了在不同配置文件之间来回切换的麻烦。',
+          content: '统一管理这些 AI 编程工具真的太方便了，一个界面搞定所有配置。省去了在不同配置文件之间来回切换的麻烦。',
           author: '念佝',
           role: '前端开发工程师',
         },
@@ -304,14 +312,14 @@ export const translations = {
     cta: {
       title: '准备好体验更高效的',
       titleLine2: 'AI 工作流了吗?',
-      subtitle: '下载 CC Switch，开启统一管理 AI 编程 CLI 工作流的新方式',
+      subtitle: '下载 CC Switch，开启统一管理 AI 编程工具工作流的新方式',
       downloadBtn: '立即下载',
       githubBtn: '查看 GitHub',
       platforms: '支持 macOS · Windows · Linux',
     },
     // Footer
     footer: {
-      tagline: '统一管理你的 AI 编程 CLI 工作流',
+      tagline: '统一管理你的 AI 编程工具工作流',
       product: {
         title: '产品',
         features: '功能',
@@ -590,13 +598,13 @@ export const translations = {
     // Hero Section
     hero: {
       versionBadge: 'Released',
-      slogan: 'Unified Management for Your AI Coding CLI Workflow',
+      slogan: 'Unified Management for Your AI Coding Tool Workflow',
       downloadBtn: 'Download Free',
       docsBtn: 'View Docs',
       platforms: 'macOS 12+ · Windows 10+ · Linux',
       stars: 'Stars',
       downloads: 'Downloads',
-      supportedCli: 'CLI Supported',
+      supportedCli: 'Apps Supported',
       rustBadge: 'Rust #1',
     },
     // Features Section
@@ -605,8 +613,8 @@ export const translations = {
       subtitle: 'One app for providers, routing, usage, sessions, and skills',
       items: [
         {
-          title: 'Six CLI Tools, One App',
-          description: 'Manage providers for Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent from one interface.',
+          title: 'Seven Apps, One Control Surface',
+          description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent from one interface.',
         },
         {
           title: 'Automatic Failover',
@@ -661,7 +669,7 @@ export const translations = {
     // Demo Section
     demo: {
       title: 'Intuitive Interface',
-      subtitle: 'Main UI, toolbar actions, and Local Routing status at a glance',
+      subtitle: 'Seven-app switching, toolbar actions, and Local Routing status at a glance',
       localRouting: 'Routing',
       toolbar: {
         skills: 'Skills',
@@ -674,6 +682,10 @@ export const translations = {
         agents: 'Agents',
         memory: 'Memory',
         dashboard: 'Dashboard',
+        importProviders: 'Import',
+        modelMapping: 'Mapping',
+        officialMode: 'Official',
+        restartDesktop: 'Restart',
       },
       actionNames: {
         settings: 'Settings',
@@ -695,6 +707,10 @@ export const translations = {
         agents: 'Agents configuration',
         memory: 'Memory management',
         dashboard: 'Open Hermes Web UI',
+        importProviders: 'Import from Claude Code',
+        modelMapping: 'Model mapping',
+        officialMode: 'Official mode',
+        restartDesktop: 'Restart Claude Desktop to apply',
       },
       tabs: {
         provider: 'Provider Management',
@@ -778,8 +794,8 @@ export const translations = {
           answer: 'Yes, CC Switch is completely free and open source. Released under MIT license, you can freely use, modify, and distribute it.',
         },
         {
-          question: 'Which AI CLI tools are supported?',
-          answer: 'CC Switch supports Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent, with app-specific provider presets, config writing, and session workflows.',
+          question: 'Which AI coding tools are supported?',
+          answer: 'CC Switch supports Claude Code, Claude Desktop, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent, with app-specific provider presets, config writing, and session workflows.',
         },
         {
           question: 'Is my API Key secure?',
@@ -840,7 +856,7 @@ export const translations = {
           role: 'DevOps Engineer',
         },
         {
-          content: "Managing six CLI tools in one place is so convenient. One interface for all configurations. No more switching between different config files.",
+          content: "Managing these AI coding tools in one place is so convenient. One interface for all configurations. No more switching between different config files.",
           author: '念佝',
           role: 'Frontend Engineer',
         },
@@ -870,14 +886,14 @@ export const translations = {
     cta: {
       title: 'Ready to Experience',
       titleLine2: 'a More Efficient AI Workflow?',
-      subtitle: 'Download CC Switch and start managing your AI coding CLI workflow the unified way',
+      subtitle: 'Download CC Switch and start managing your AI coding tool workflow the unified way',
       downloadBtn: 'Download Now',
       githubBtn: 'View GitHub',
       platforms: 'macOS · Windows · Linux',
     },
     // Footer
     footer: {
-      tagline: 'Unified management for your AI coding CLI workflow',
+      tagline: 'Unified management for your AI coding tool workflow',
       product: {
         title: 'Product',
         features: 'Features',
@@ -1156,13 +1172,13 @@ export const translations = {
     // Hero Section
     hero: {
       versionBadge: '正式リリース',
-      slogan: 'AI コーディング CLI ワークフローを統一管理',
+      slogan: 'AI コーディングツールのワークフローを統一管理',
       downloadBtn: '無料ダウンロード',
       docsBtn: 'ドキュメントを見る',
       platforms: 'macOS 12+ · Windows 10+ · Linux 対応',
       stars: 'Stars',
       downloads: 'ダウンロード',
-      supportedCli: '対応 CLI',
+      supportedCli: '対応アプリ',
       rustBadge: 'Rust #1',
     },
     // Features Section
@@ -1171,8 +1187,8 @@ export const translations = {
       subtitle: 'プロバイダー、ルーティング、使用量、セッション、Skills を1つに',
       items: [
         {
-          title: '6つの CLI を統一管理',
-          description: 'Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent のプロバイダーを1つの画面で管理できます。',
+          title: '7つのアプリを統一管理',
+          description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent のプロバイダーを1つの画面で管理できます。',
         },
         {
           title: '自動フェイルオーバー',
@@ -1227,7 +1243,7 @@ export const translations = {
     // Demo Section
     demo: {
       title: '直感的なインターフェース',
-      subtitle: 'メイン画面、ツールバー操作、Local Routing 状態をひと目で確認',
+      subtitle: '7アプリ切り替え、ツールバー操作、Local Routing 状態をひと目で確認',
       localRouting: 'Routing',
       toolbar: {
         skills: 'Skills',
@@ -1240,6 +1256,10 @@ export const translations = {
         agents: 'Agents',
         memory: 'Memory',
         dashboard: 'Dashboard',
+        importProviders: 'Import',
+        modelMapping: 'Mapping',
+        officialMode: 'Official',
+        restartDesktop: 'Restart',
       },
       actionNames: {
         settings: '設定',
@@ -1261,6 +1281,10 @@ export const translations = {
         agents: 'Agents 設定',
         memory: '記憶管理',
         dashboard: 'Hermes Web UI を開く',
+        importProviders: 'Claude Code からインポート',
+        modelMapping: 'モデルマッピング',
+        officialMode: '公式モード',
+        restartDesktop: 'Claude Desktop 再起動で反映',
       },
       tabs: {
         provider: 'プロバイダー管理',
@@ -1344,8 +1368,8 @@ export const translations = {
           answer: 'はい、CC Switch は完全に無料でオープンソースです。MIT ライセンスで公開されており、自由に使用、修正、配布できます。',
         },
         {
-          question: 'どの AI CLI ツールに対応していますか？',
-          answer: 'Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent に対応し、それぞれにプロバイダープリセット、設定書き込み、セッション機能を提供します。',
+          question: 'どの AI コーディングツールに対応していますか？',
+          answer: 'Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent に対応し、それぞれにプロバイダープリセット、設定書き込み、セッション機能を提供します。',
         },
         {
           question: 'API キーは安全ですか？',
@@ -1406,7 +1430,7 @@ export const translations = {
           role: 'DevOps エンジニア',
         },
         {
-          content: '6つの CLI ツールを一箇所で管理できるのは本当に便利です。1つのインターフェースですべての設定ができます。異なる設定ファイル間を行き来する必要がなくなりました。',
+          content: 'これらの AI コーディングツールを一箇所で管理できるのは本当に便利です。1つのインターフェースですべての設定ができます。異なる設定ファイル間を行き来する必要がなくなりました。',
           author: '念佝',
           role: 'フロントエンドエンジニア',
         },
@@ -1436,14 +1460,14 @@ export const translations = {
     cta: {
       title: 'より効率的な',
       titleLine2: 'AI ワークフローを体験する準備はできましたか？',
-      subtitle: 'CC Switch をダウンロードして、AI コーディング CLI ワークフローの統一管理を始めましょう',
+      subtitle: 'CC Switch をダウンロードして、AI コーディングツールのワークフロー統一管理を始めましょう',
       downloadBtn: '今すぐダウンロード',
       githubBtn: 'GitHub を見る',
       platforms: 'macOS · Windows · Linux',
     },
     // Footer
     footer: {
-      tagline: 'AI コーディング CLI ワークフローを統一管理',
+      tagline: 'AI コーディングツールのワークフローを統一管理',
       product: {
         title: '製品',
         features: '機能',

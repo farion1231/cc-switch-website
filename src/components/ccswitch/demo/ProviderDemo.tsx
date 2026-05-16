@@ -2,18 +2,24 @@ import { useState, type MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import {
+  BadgeCheck,
   BookOpen,
   Brain,
   Cpu,
+  DownloadCloud,
   FolderOpen,
   History,
   KeyRound,
   LayoutDashboard,
+  Monitor,
   Plus,
   Radio,
+  RefreshCw,
+  Route,
   Server,
   Settings,
   Shield,
+  Terminal,
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
@@ -21,6 +27,7 @@ import { ProviderList } from '@/components/ccswitch/ProviderCard';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import {
+  claudeDesktopProviders,
   claudeProviders,
   codexProviders,
   geminiProviders,
@@ -39,19 +46,31 @@ import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import openClawIcon from '@/assets/icons/openclaw.svg';
 import openCodeIcon from '@/assets/icons/opencode.svg';
 
-type CliTabId = 'claude' | 'codex' | 'gemini' | 'opencode' | 'openclaw' | 'hermes';
+type CliTabId = 'claude' | 'claude-desktop' | 'codex' | 'gemini' | 'opencode' | 'openclaw' | 'hermes';
+
+interface CliTab {
+  id: CliTabId;
+  label: string;
+  icon: string;
+  iconSvg?: string;
+  iconColor?: string;
+  badgeIcon?: LucideIcon;
+  badgeOffsetY?: number;
+}
 
 const cliTabs = [
-  { id: 'claude', label: 'Claude', icon: claudeIcon },
+  { id: 'claude', label: 'Claude Code', icon: claudeIcon, badgeIcon: Terminal },
+  { id: 'claude-desktop', label: 'Claude Desktop', icon: claudeIcon, badgeIcon: Monitor, badgeOffsetY: 0.5 },
   { id: 'codex', label: 'Codex', icon: openaiIcon, iconSvg: openaiIconSvg, iconColor: 'currentColor' },
   { id: 'gemini', label: 'Gemini', icon: geminiIcon },
   { id: 'opencode', label: 'OpenCode', icon: openCodeIcon },
   { id: 'openclaw', label: 'OpenClaw', icon: openClawIcon },
   { id: 'hermes', label: 'Hermes', icon: hermesIcon },
-] satisfies Array<{ id: CliTabId; label: string; icon: string; iconSvg?: string; iconColor?: string }>;
+] satisfies CliTab[];
 
 const initialProviderLists: Record<CliTabId, Provider[]> = {
   claude: claudeProviders,
+  'claude-desktop': claudeDesktopProviders,
   codex: codexProviders,
   gemini: geminiProviders,
   opencode: opencodeProviders,
@@ -73,6 +92,12 @@ const defaultToolbarActions: ToolbarAction[] = [
 
 const toolbarActionsByApp: Record<CliTabId, ToolbarAction[]> = {
   claude: defaultToolbarActions,
+  'claude-desktop': [
+    { key: 'importProviders', icon: DownloadCloud },
+    { key: 'modelMapping', icon: Route },
+    { key: 'officialMode', icon: BadgeCheck },
+    { key: 'restartDesktop', icon: RefreshCw },
+  ],
   codex: defaultToolbarActions,
   gemini: defaultToolbarActions,
   opencode: defaultToolbarActions,
@@ -223,13 +248,13 @@ export function ProviderContent() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={cn(
-                    'relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-sm font-medium transition-all duration-200',
+                    'group relative inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-sm font-medium transition-all duration-200',
                     activeTab === tab.id
                       ? 'bg-background text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground hover:bg-background/50',
                   )}
                 >
-                  <DemoAppIcon tab={tab} />
+                  <DemoAppIcon tab={tab} active={activeTab === tab.id} />
                 </motion.button>
               ))}
             </div>
@@ -281,7 +306,34 @@ export function ProviderContent() {
   );
 }
 
-function DemoAppIcon({ tab }: { tab: (typeof cliTabs)[number] }) {
+function DemoAppIcon({ tab, active }: { tab: CliTab; active: boolean }) {
+  const BadgeIcon = tab.badgeIcon;
+
+  return (
+    <span className="relative inline-flex h-5 w-5 shrink-0 items-center justify-center">
+      <DemoAppBaseIcon tab={tab} />
+      {BadgeIcon && (
+        <span
+          className={cn(
+            'absolute -bottom-0.5 -right-0.5 flex h-[11px] w-[11px] items-center justify-center rounded-[3px] border',
+            active
+              ? 'border-border bg-background text-foreground'
+              : 'border-background bg-muted text-muted-foreground group-hover:bg-background group-hover:text-foreground',
+          )}
+          aria-hidden="true"
+        >
+          <BadgeIcon
+            className="h-[8px] w-[8px]"
+            strokeWidth={2.5}
+            style={tab.badgeOffsetY ? { transform: `translateY(${tab.badgeOffsetY}px)` } : undefined}
+          />
+        </span>
+      )}
+    </span>
+  );
+}
+
+function DemoAppBaseIcon({ tab }: { tab: CliTab }) {
   if (tab.iconSvg) {
     return <InlineSvgIcon svg={tab.iconSvg} label={tab.label} color={tab.iconColor} className="h-5 w-5" />;
   }

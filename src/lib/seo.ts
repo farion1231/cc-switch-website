@@ -42,9 +42,9 @@ type SeoCopy = {
 export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound', SeoCopy>> = {
   zh: {
     home: {
-      title: 'CC Switch 官方网站 - AI 编程 CLI 统一管理工具',
-      description: 'CC Switch 官方网站。统一管理 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置、本地路由、MCP、Skills、会话与用量统计。',
-      keywords: 'CC Switch 官方网站,AI CLI,Claude Code,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,本地路由,供应商切换',
+      title: 'CC Switch 官方网站 - AI 编程工具统一管理平台',
+      description: 'CC Switch 官方网站。统一管理 Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置、本地路由、MCP、Skills、会话与用量统计。',
+      keywords: 'CC Switch 官方网站,AI 编程工具,Claude Code,Claude Desktop,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,本地路由,供应商切换',
     },
     docs: {
       title: 'CC Switch 文档 - 安装、配置与使用指南',
@@ -73,9 +73,9 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 's
   },
   en: {
     home: {
-      title: 'CC Switch Official Website - AI Coding CLI Control Surface',
-      description: 'The official CC Switch website. Manage providers, local routing, MCP, Skills, sessions, and usage for Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent.',
-      keywords: 'CC Switch official website,AI CLI,Claude Code,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,local routing,provider switcher',
+      title: 'CC Switch Official Website - AI Coding Tool Control Surface',
+      description: 'The official CC Switch website. Manage providers, local routing, MCP, Skills, sessions, and usage for Claude Code, Claude Desktop, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent.',
+      keywords: 'CC Switch official website,AI coding tools,Claude Code,Claude Desktop,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,local routing,provider switcher',
     },
     docs: {
       title: 'CC Switch Docs - Installation, Configuration, and User Guide',
@@ -104,9 +104,9 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 's
   },
   ja: {
     home: {
-      title: 'CC Switch 公式サイト - AI コーディング CLI 統合管理ツール',
-      description: 'CC Switch 公式サイト。Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent のプロバイダー、Local Routing、MCP、Skills、セッション、使用量を統合管理します。',
-      keywords: 'CC Switch 公式サイト,AI CLI,Claude Code,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,Local Routing,プロバイダー切替',
+      title: 'CC Switch 公式サイト - AI コーディングツール統合管理',
+      description: 'CC Switch 公式サイト。Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent のプロバイダー、Local Routing、MCP、Skills、セッション、使用量を統合管理します。',
+      keywords: 'CC Switch 公式サイト,AI コーディングツール,Claude Code,Claude Desktop,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,Local Routing,プロバイダー切替',
     },
     docs: {
       title: 'CC Switch ドキュメント - インストール、設定、使い方',

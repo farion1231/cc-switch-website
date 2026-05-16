@@ -13,7 +13,9 @@ import packyCodeIcon from '@/assets/icons/packycode.svg';
 import packyCodeIconSvg from '@/assets/icons/packycode.svg?raw';
 import stepFunIcon from '@/assets/icons/stepfun.svg';
 import stepFunIconSvg from '@/assets/icons/stepfun.svg?raw';
+import claudeApiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import lionccIcon from '@/assets/icons/sponsors/lioncc.svg';
+import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
 import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
 import zhipuIcon from '@/assets/icons/zhipu.svg';
 import zhipuIconSvg from '@/assets/icons/zhipu.svg?raw';
@@ -97,6 +99,52 @@ export const claudeProviders: Provider[] = [
     name: 'OpenRouter',
     subtitle: 'https://openrouter.ai',
     isUrl: true,
+    isSvgUrl: true,
+  },
+];
+
+export const claudeDesktopProviders: Provider[] = [
+  {
+    icon: anthropicIcon,
+    iconSvg: anthropicIconSvg,
+    iconBg: 'bg-amber-500/20',
+    iconColor: '#D4915D',
+    name: 'Official',
+    subtitle: 'https://claude.ai/download',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: patewayIcon,
+    iconBg: 'bg-sky-500/15',
+    name: 'PatewayAI',
+    subtitle: 'https://pateway.ai',
+    time: '4',
+    quota: {
+      updatedMinutes: 4,
+      tiers: [
+        { label: '5h', utilization: 31, resetsIn: '3h15m' },
+        { label: '7d', utilization: 18, resetsIn: '6d4h' },
+      ],
+    },
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: claudeApiIcon,
+    iconBg: 'bg-orange-500/15',
+    name: 'ClaudeAPI',
+    subtitle: 'https://claudeapi.com',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: openaiIcon,
+    iconSvg: openaiIconSvg,
+    iconBg: 'bg-slate-500/20',
+    iconColor: 'currentColor',
+    name: 'Codex OAuth',
+    subtitle: 'Account provider via Local Routing',
     isSvgUrl: true,
   },
 ];
