@@ -20,7 +20,6 @@ import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
 import micuIcon from '@/assets/icons/sponsors/micu.svg';
 import lemondataIcon from '@/assets/icons/sponsors/lemondata-app.png';
 import ctokIcon from '@/assets/icons/sponsors/ctok.svg';
-import lionccIcon from '@/assets/icons/sponsors/lioncc.svg';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
@@ -504,31 +503,6 @@ export const sponsors: Sponsor[] = [
       en: 'Pro Claude Code plans + dev community',
       ja: 'Claude Code プロプラン + 開発者コミュニティ',
     },
-  },
-  {
-    id: 'lioncc',
-    name: { zh: 'LionCC 狮子 API', en: 'LionCC', ja: 'LionCC' },
-    icon: lionccIcon,
-    url: 'https://vibecodingapi.ai',
-    tier: 'standard',
-    category: 'relay',
-    since: '2025-10',
-    tagline: {
-      zh: '为 Vibe Coders 而生的 API',
-      en: 'API for Vibe Coders',
-      ja: 'Vibe Coders のための API',
-    },
-    description: {
-      zh: '专为追求极致开发体验的 Vibe Coders 而生，提供稳定、低延迟、优惠价格的 Claude Code、Codex 及 OpenClaw 算力服务，可节约 50% 成本。',
-      en: 'Made for Vibe Coders — stable, low-latency, discounted Claude Code, Codex, and OpenClaw compute saving up to 50%.',
-      ja: '最高の開発体験を求める Vibe Coders 向け。Claude Code、Codex、OpenClaw を低遅延・低価格で提供し、最大 50% のコスト削減を実現。',
-    },
-    perk: {
-      zh: '注册联系客服送 $10 额度',
-      en: 'Free $10 credit (contact support)',
-      ja: 'カスタマー窓口連絡で $10 クレジット',
-    },
-    couponCode: 'cc-switch',
   },
   {
     id: 'claudeapi',
