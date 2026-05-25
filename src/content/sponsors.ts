@@ -13,7 +13,6 @@ import cubenceIcon from '@/assets/icons/sponsors/cubence.svg';
 import dmxZhIcon from '@/assets/icons/sponsors/dmx-zh.jpeg';
 import dmxEnIcon from '@/assets/icons/sponsors/dmx-en.jpg';
 import ucloudIcon from '@/assets/icons/sponsors/ucloud.svg';
-import aicodingIcon from '@/assets/icons/sponsors/aicoding.svg';
 import crazyrouterIcon from '@/assets/icons/sponsors/crazyrouter.svg';
 import rightcodeIcon from '@/assets/icons/sponsors/rightcode.svg';
 import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
@@ -332,30 +331,6 @@ export const sponsors: Sponsor[] = [
       zh: '注册送 ¥5 平台体验金',
       en: '¥5 free credit on signup',
       ja: '登録で ¥5 のクレジット',
-    },
-  },
-  {
-    id: 'aicoding',
-    name: 'AICoding.sh',
-    icon: aicodingIcon,
-    url: 'https://aicoding.sh/i/CCSWITCH',
-    tier: 'standard',
-    category: 'aggregator',
-    since: '2025-07',
-    tagline: {
-      zh: '全球大模型 API 超值中转',
-      en: 'Value-priced global LLM relay',
-      ja: 'コスパに優れた LLM 中継',
-    },
-    description: {
-      zh: '全球大模型 API 超值中转服务，已为数百家企业提供高性价比 AI 服务。Claude Code 1.9 折，GPT 0.1 折，支持企业级高并发与极速开票。',
-      en: 'Value-priced global LLM API relay used by hundreds of companies. Claude Code from 81% off, GPT from 99% off, with enterprise concurrency and instant invoices.',
-      ja: '世界中の LLM API をお得に中継するサービス。数百社の法人実績、Claude Code は 81% オフ、GPT は 99% オフ、法人向け並列処理と即時インボイスに対応。',
-    },
-    perk: {
-      zh: '首充 9 折优惠',
-      en: '10% off first recharge',
-      ja: '初回 10% オフ',
     },
   },
   {
