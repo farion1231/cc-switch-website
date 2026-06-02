@@ -22,6 +22,9 @@ import ctokIcon from '@/assets/icons/sponsors/ctok.svg';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
+import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
+import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
+import atlascloudIcon from '@/assets/icons/sponsors/atlascloud_icon.png';
 
 import minimaxBannerZh from '@/assets/banners/sponsors/minimax-zh.jpeg';
 import minimaxBannerEn from '@/assets/banners/sponsors/minimax-en.jpeg';
@@ -551,6 +554,79 @@ export const sponsors: Sponsor[] = [
       zh: '注册联系客服领 ¥14 额度',
       en: 'Free ¥14 credit (contact support)',
       ja: 'カスタマー窓口連絡で ¥14 クレジット',
+    },
+  },
+  {
+    id: 'apikey-fun',
+    name: 'APIKEY.FUN',
+    icon: apikeyFunIcon,
+    url: 'https://apikey.fun/register?aff=CCSwitch',
+    tier: 'standard',
+    category: 'relay',
+    iconBg: 'light',
+    tagline: {
+      zh: '企业级稳定性，低至 0.7 折',
+      en: 'Enterprise-grade stability, as low as 7%',
+      ja: 'エンタープライズ級の安定性、公式価格の 7% から',
+    },
+    description: {
+      zh: 'APIKEY.FUN 是一家专业的企业级 AI 中转站，为企业和个人开发者提供稳定、高效、低成本的 AI 模型 API 接入服务。平台支持 Claude、OpenAI、Gemini 等主流热门模型，价格低至官方原价的 7%。',
+      en: 'APIKEY.FUN is a professional enterprise-grade AI relay platform for stable, efficient, and low-cost model API access. It supports popular models such as Claude, OpenAI, and Gemini, with prices as low as 7% of official rates.',
+      ja: 'APIKEY.FUN は、企業および個人開発者向けに安定・高効率・低コストな AI モデル API 接続を提供するエンタープライズ級 AI リレープラットフォームです。Claude、OpenAI、Gemini などの主要モデルに対応し、公式価格の 7% から利用できます。',
+    },
+    perk: {
+      zh: '专属链接注册，充值永久最高 95 折',
+      en: 'Exclusive link: up to permanent 5% off top-ups',
+      ja: '専用リンク登録でチャージ永久最大 5% オフ',
+    },
+  },
+  {
+    id: 'apinebula',
+    name: 'APINEBULA',
+    icon: apinebulaIcon,
+    url: 'https://apinebula.com/02rw5X',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    tagline: {
+      zh: '银河录像局旗下 AI 聚合平台',
+      en: 'AI aggregator by Galaxy Video Bureau',
+      ja: '銀河録像局傘下の AI 統合基盤',
+    },
+    description: {
+      zh: 'APINEBULA 是银河录像局旗下的企业级 AI 聚合平台，面向开发者、团队与企业用户提供稳定、高性价比的大模型 API 接入服务。平台聚合 Claude、GPT、Gemini 等主流满血模型，支持企业级高并发、正式合同、对公打款与开票服务。',
+      en: 'APINEBULA is an enterprise-grade AI aggregation platform under Galaxy Video Bureau, providing stable, cost-effective LLM API access for developers, teams, and enterprises. It aggregates full-powered Claude, GPT, Gemini, and other leading models, with enterprise concurrency, contracts, corporate payment, and invoicing.',
+      ja: 'APINEBULA は銀河録像局傘下のエンタープライズ向け AI 統合プラットフォームです。開発者、チーム、企業ユーザーに安定性とコストパフォーマンスに優れた LLM API 接続を提供し、Claude、GPT、Gemini など主要モデルを集約。高並列処理、正式契約、法人口座振込、請求書発行にも対応します。',
+    },
+    perk: {
+      zh: '充值时填写优惠码享 9 折',
+      en: '10% off with promo code',
+      ja: 'プロモコード入力で 10% オフ',
+    },
+    couponCode: 'ccswitch',
+  },
+  {
+    id: 'atlascloud',
+    name: 'Atlas Cloud',
+    icon: atlascloudIcon,
+    url: 'https://www.atlascloud.ai/coding-plan?utm_source=github&utm_campaign=cc-switch',
+    tier: 'standard',
+    category: 'native-platform',
+    iconBg: 'light',
+    tagline: {
+      zh: '全模态 AI 推理平台',
+      en: 'Full-modal AI inference platform',
+      ja: 'フルモーダル AI 推論プラットフォーム',
+    },
+    description: {
+      zh: 'Atlas Cloud 是一个全模态 AI 推理平台，通过单一 API 为开发者提供视频生成、图像生成及 LLM 接入。一次连接即可调用 300+ 款全模态精选模型，免去多供应商对接成本。',
+      en: 'Atlas Cloud is a full-modal AI inference platform that gives developers one API for video generation, image generation, and LLM access. Connect once to use 300+ curated models across modalities without juggling multiple vendor integrations.',
+      ja: 'Atlas Cloud は、1 つの API で動画生成、画像生成、LLM 接続を提供するフルモーダル AI 推論プラットフォームです。一度の接続で 300 以上の厳選マルチモーダルモデルを利用でき、複数ベンダー連携の手間を省けます。',
+    },
+    perk: {
+      zh: '专属开发者编程计划优惠',
+      en: 'Exclusive developer coding-plan offer',
+      ja: '開発者向け限定 Coding Plan 優待',
     },
   },
 ];
