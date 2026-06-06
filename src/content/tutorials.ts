@@ -79,7 +79,6 @@ export const tutorials: Tutorial[] = [
     category: 'practice',
     source: 'community',
     readMinutes: 12,
-    languages: ['zh'],
     accent: 'emerald',
     emoji: '🖥️',
   },

@@ -1,8 +1,8 @@
 # 在没有图形界面的服务器上用好 cc-switch
 
-## TL;DR
+# TL;DR
 
-cc-switch 有几个版本:桌面 GUI 版（原版,farion1231/cc-switch,带图形界面）和 CLI 版（本文,SaladDay/cc-switch-cli,一个二进制文件）等。
+cc-switch 有几个版本:桌面 GUI 版（原版,[farion1231/cc-switch](https://github.com/farion1231/cc-switch),带图形界面）和 CLI 版（本文,[SaladDay/cc-switch-cli](https://github.com/SaladDay/cc-switch-cli),一个二进制文件）等。
 
 CLI版本适用于没有图形界面的地方,比如 SSH 连上的服务器、Docker 容器、WSL等。
 
@@ -12,7 +12,7 @@ CLI版本适用于没有图形界面的地方,比如 SSH 连上的服务器、Do
 
 
 
-## 安装
+# 安装
 
 如前所述，cc-switch-cli有两种操作模式，TUI和CLI；
 
@@ -44,10 +44,11 @@ mv cc-switch ~/.local/bin/
 cc-switch --version
 ```
 
+![cc-switch --version](/docs/assets/cc-switch-cli-headless-guide/01-version-check.png)
 
 >  后续将分为TUI和CLI两部分进行讲解，各位可按需空降。
 
-## Part 1: 我用 TUI
+# Part 1: 我用 TUI
 
 TUI 就是在终端里跑的全屏键盘界面,看起来像"终端里的 App"。只要你 SSH 连上去有交互式会话,就能直接用。
 
@@ -73,6 +74,7 @@ TUI 就是在终端里跑的全屏键盘界面,看起来像"终端里的 App"。
 
 > 注:OpenClaw 模式下侧栏多了「工作区」「环境」「工具」「智能体」四个入口;Hermes 模式多了「Hermes 记忆」。
 
+![TUI 首页](/docs/assets/cc-switch-cli-headless-guide/02-tui-home.png)
 
 ## 添加供应商 + 切换
 
@@ -90,6 +92,7 @@ cc-switch
 
 在供应商管理界面按a，进入添加供应商界面：
 
+![添加供应商](/docs/assets/cc-switch-cli-headless-guide/03-tui-add-provider.png)
 
 选择你的模板，按左右键可以切换模板，敲击回车即可选择模板。
 
@@ -97,9 +100,11 @@ cc-switch
 
 其中 Claude 模型配置项可以配置各个模型；
 
+![Claude 模型配置](/docs/assets/cc-switch-cli-headless-guide/04-tui-model-config.png)
 
 其中，右侧JSON预览面板中，标底色的为通用配置，可在左侧“添加通用配置”中添加。
 
+![JSON 预览与通用配置](/docs/assets/cc-switch-cli-headless-guide/05-tui-json-preview.png)
 
 结束之后，键入Ctrl + S进行保存。
 
@@ -107,6 +112,7 @@ cc-switch
 
 主界面里选中要切的供应商,回车。当前生效的供应商会有标记。
 
+![切换供应商后](/docs/assets/cc-switch-cli-headless-guide/06-tui-provider-switched.png)
 
 ---
 
@@ -118,6 +124,7 @@ cc-switch
 
 > 应用密码在坚果云个人中心->安全选项->第三方应用管理处生成。
 
+![WebDAV 配置](/docs/assets/cc-switch-cli-headless-guide/07-tui-webdav-config.png)
 
 这样就配置好了，就可以上传下载了。
 
@@ -129,19 +136,23 @@ cc-switch
 
 **首页** — 一眼看完当前状态:哪个供应商在用、API 地址是什么、配了几个 MCP 和 Skill、WebDAV 连没连上、各 CLI 工具就绪没。代理开着的话还能看到请求流量的小图（代理怎么玩转,我们会另出教程细讲）。
 
+![TUI 首页总览](/docs/assets/cc-switch-cli-headless-guide/08-tui-home-overview.png)
 
 **使用统计**— 可以看到各个供应商的用量统计,比如各模型的 token 消耗和请求次数。调优成本和用量的时候很有用。
 
+![使用统计页面](/docs/assets/cc-switch-cli-headless-guide/09-tui-usage-stats.png)
 
 **Skills** — 从这里发现、安装、管理、启用社区技能,一键同步到对应 app 目录。
 
+![Skills 页面](/docs/assets/cc-switch-cli-headless-guide/10-tui-skills.png)
 
 **会话** — 左边是历史会话列表,右边是消息详情,可以翻以前的对话记录。按 app 和供应商筛选。
 
+![会话页面](/docs/assets/cc-switch-cli-headless-guide/11-tui-sessions.png)
 
 ---
 
-## Part 2: 我用 CLI
+# Part 2: 我用 CLI
 
 不想用 TUI、要写脚本自动化,或者是在没有 TTY 的地方（Dockerfile / cron）,直接用命令。
 
@@ -155,6 +166,7 @@ cc-switch provider add
 
 终端一步步问你:名称 → Base URL → API Key → 模型。填完就好。
 
+![provider add](/docs/assets/cc-switch-cli-headless-guide/12-cli-provider-add.png)
 
 **查看和切换:**
 
@@ -164,7 +176,9 @@ cc-switch provider current   # 当前用哪个
 cc-switch provider switch <id>   # 切过去
 ```
 
+![provider list](/docs/assets/cc-switch-cli-headless-guide/13-cli-provider-list.png)
 
+![provider current](/docs/assets/cc-switch-cli-headless-guide/14-cli-provider-current.png)
 
 **不指定 --app 则默认管理 Claude。要管其他应用:**
 
@@ -178,19 +192,29 @@ cc-switch --app gemini provider list
 
 ## 同步配置(WebDAV)
 
-和 TUI 流程一样:
+和 TUI 流程一样。
+
+**设置 WebDAV（坚果云）:**
 
 ```bash
-# 设置 WebDAV（坚果云）
 cc-switch config webdav jianguoyun --username 你的邮箱 --password 应用专用密码
+```
 
-# 通用 WebDAV
+**通用 WebDAV:**
+
+```bash
 cc-switch config webdav set --base-url https://dav.example.com --username xxx --password xxx --enable
+```
 
-# 测连通
+**测连通:**
+
+```bash
 cc-switch config webdav check-connection
+```
 
-# 上传 / 下载
+**上传 / 下载:**
+
+```bash
 cc-switch config webdav upload
 cc-switch config webdav download
 ```
@@ -204,6 +228,7 @@ cc-switch env check   # 看有没有环境变量冲突
 cc-switch env tools   # 看各 CLI 装好没
 ```
 
+![env check + env tools](/docs/assets/cc-switch-cli-headless-guide/15-cli-env-check-tools.png)
 
 ---
 
@@ -395,7 +420,7 @@ cc-switch provider list   # 走 /opt/my-project/.cc-switch/cc-switch.db
 
 ---
 
-## cc-switch-cli 和 cc-switch 功能差异
+# cc-switch-cli 和 cc-switch 功能差异
 
 目前CLI已经支持大部分的原本功能，并持续火力开发中，有缺的功能、想要的新花样,直接来 [GitHub Issues](https://github.com/SaladDay/cc-switch-cli/issues) 开 issue,PR 更欢迎——毕竟 CLI 版就是从 PR 堆里长出来的。
 
