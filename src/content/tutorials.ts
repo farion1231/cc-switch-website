@@ -63,6 +63,27 @@ const tutorialIcons = {
 
 export const tutorials: Tutorial[] = [
   {
+    slug: 'cc-switch-cli-headless-guide',
+    title: {
+      zh: '在无图形界面的服务器上用好 cc-switch',
+      en: 'Using cc-switch on Headless Servers: TUI + CLI Guide',
+      ja: 'ヘッドレスサーバーで cc-switch を使いこなす',
+    },
+    summary: {
+      zh: '社区实战攻略：在 SSH / Docker / WSL 等没有桌面环境的地方，用 cc-switch CLI 版的 TUI 全屏界面和 CLI 命令行两种模式管理供应商、同步 WebDAV、检查环境冲突，与桌面 GUI 版无缝配合。',
+      en: 'A community guide covering cc-switch CLI on headless servers (SSH / Docker / WSL): TUI interactive mode, CLI subcommands, WebDAV sync, env checks, and how the CLI branch complements the desktop GUI.',
+      ja: 'SSH / Docker / WSL などデスクトップ環境がないサーバーで、cc-switch CLI の TUI と CLI の両モードを使い、Provider 管理、WebDAV 同期、環境チェックを行うコミュニティガイドです。',
+    },
+    author: { name: 'saladday', url: 'https://github.com/SaladDay' },
+    date: '2026-06-06',
+    category: 'practice',
+    source: 'community',
+    readMinutes: 12,
+    languages: ['zh'],
+    accent: 'emerald',
+    emoji: '🖥️',
+  },
+  {
     slug: 'codex-official-auth-preservation-guide',
     title: {
       zh: '使用第三方 API 时保留 Codex 远程操作和官方插件',
