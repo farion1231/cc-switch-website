@@ -28,17 +28,31 @@
 # Disable cache for SPA HTML routes to ensure fresh asset hashes are loaded
 /
   Cache-Control: public, max-age=0, must-revalidate
+/zh
+  Cache-Control: public, max-age=0, must-revalidate
 /zh/*
+  Cache-Control: public, max-age=0, must-revalidate
+/en
   Cache-Control: public, max-age=0, must-revalidate
 /en/*
   Cache-Control: public, max-age=0, must-revalidate
+/ja
+  Cache-Control: public, max-age=0, must-revalidate
 /ja/*
+  Cache-Control: public, max-age=0, must-revalidate
+/docs
   Cache-Control: public, max-age=0, must-revalidate
 /docs/*
   Cache-Control: public, max-age=0, must-revalidate
+/tutorials
+  Cache-Control: public, max-age=0, must-revalidate
 /tutorials/*
   Cache-Control: public, max-age=0, must-revalidate
+/changelog
+  Cache-Control: public, max-age=0, must-revalidate
 /changelog/*
+  Cache-Control: public, max-age=0, must-revalidate
+/sponsors
   Cache-Control: public, max-age=0, must-revalidate
 /sponsors/*
   Cache-Control: public, max-age=0, must-revalidate
