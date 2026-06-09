@@ -1,6 +1,46 @@
-# Long-cache hashed Vite assets (filenames already include content hashes)
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
+# SPA HTML entrypoints must revalidate so a reload can pick up the latest
+# index.html and its current hashed chunks after each deployment.
+/index.html
+  Cache-Control: no-cache
+/zh
+  Cache-Control: no-cache
+/zh/
+  Cache-Control: no-cache
+/zh/*
+  Cache-Control: no-cache
+/en
+  Cache-Control: no-cache
+/en/
+  Cache-Control: no-cache
+/en/*
+  Cache-Control: no-cache
+/ja
+  Cache-Control: no-cache
+/ja/
+  Cache-Control: no-cache
+/ja/*
+  Cache-Control: no-cache
+
+/docs
+  Cache-Control: no-cache
+/docs/
+  Cache-Control: no-cache
+/changelog
+  Cache-Control: no-cache
+/changelog/
+  Cache-Control: no-cache
+/changelog/*
+  Cache-Control: no-cache
+/sponsors
+  Cache-Control: no-cache
+/sponsors/
+  Cache-Control: no-cache
+/tutorials
+  Cache-Control: no-cache
+/tutorials/
+  Cache-Control: no-cache
+/tutorials/*
+  Cache-Control: no-cache
 
 # Static images served from /public — moderate caching, no fingerprint
 /og-image.png

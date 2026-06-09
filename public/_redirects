@@ -2,5 +2,25 @@
 # returning the same canonical-mapped HTML to crawlers.
 /  /zh/  302
 
-# SPA fallback for client-side routing
-/*  /index.html  200
+# SPA route rewrites. Keep these scoped to real client routes so missing
+# static files such as /assets/*.js return a real 404 instead of index.html.
+/zh  /index.html  200
+/zh/  /index.html  200
+/zh/*  /index.html  200
+/en  /index.html  200
+/en/  /index.html  200
+/en/*  /index.html  200
+/ja  /index.html  200
+/ja/  /index.html  200
+/ja/*  /index.html  200
+
+/docs  /index.html  200
+/docs/  /index.html  200
+/changelog  /index.html  200
+/changelog/  /index.html  200
+/changelog/*  /index.html  200
+/sponsors  /index.html  200
+/sponsors/  /index.html  200
+/tutorials  /index.html  200
+/tutorials/  /index.html  200
+/tutorials/*  /index.html  200
