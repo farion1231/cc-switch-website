@@ -1,9 +1,3 @@
-# HTML entry — never cache, so a new deploy instantly invalidates
-# previously-cached HTML pointing at stale asset hashes.
-/index.html
-  Cache-Control: public, max-age=0, must-revalidate
-  X-Content-Type-Options: nosniff
-
 # Long-cache hashed Vite assets (filenames already include content hashes)
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
@@ -31,7 +25,25 @@
 /site.webmanifest
   Cache-Control: public, max-age=86400
 
-# Defaults for everything else (HTML included): basic security hardening
+# Disable cache for SPA HTML routes to ensure fresh asset hashes are loaded
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/zh/*
+  Cache-Control: public, max-age=0, must-revalidate
+/en/*
+  Cache-Control: public, max-age=0, must-revalidate
+/ja/*
+  Cache-Control: public, max-age=0, must-revalidate
+/docs/*
+  Cache-Control: public, max-age=0, must-revalidate
+/tutorials/*
+  Cache-Control: public, max-age=0, must-revalidate
+/changelog/*
+  Cache-Control: public, max-age=0, must-revalidate
+/sponsors/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Defaults for everything else: basic security hardening
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
