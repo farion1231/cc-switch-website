@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>404 – CC Switch</title>
+    <style>
+      :root { color-scheme: dark; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: #0a0a0a;
+        color: #e5e5e5;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+      .wrap {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      h1 { font-size: 56px; margin: 0 0 8px; font-weight: 700; }
+      p { margin: 4px 0; opacity: 0.7; line-height: 1.6; }
+      .actions { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+      a.btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        border: 1px solid #333;
+        color: #e5e5e5;
+        background: #161616;
+      }
+      a.btn.primary { background: #e5e5e5; color: #0a0a0a; border-color: #e5e5e5; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>404</h1>
+      <p>请求的资源不存在 / The requested resource was not found.</p>
+      <p>如果你看到这个页面是因为站点更新，请清除缓存后刷新。</p>
+      <p>If you reached this after an update, please clear your cache and reload.</p>
+      <div class="actions">
+        <a class="btn primary" href="/zh/">返回首页 / Home</a>
+        <a class="btn" href="javascript:location.reload(true)">刷新 / Reload</a>
+      </div>
+    </div>
+  </body>
+</html>
