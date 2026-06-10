@@ -6,13 +6,19 @@
   Cache-Control: public, max-age=0, must-revalidate
 /zh/
   Cache-Control: public, max-age=0, must-revalidate
+/zh/*
+  Cache-Control: public, max-age=0, must-revalidate
 /en
   Cache-Control: public, max-age=0, must-revalidate
 /en/
   Cache-Control: public, max-age=0, must-revalidate
+/en/*
+  Cache-Control: public, max-age=0, must-revalidate
 /ja
   Cache-Control: public, max-age=0, must-revalidate
 /ja/
+  Cache-Control: public, max-age=0, must-revalidate
+/ja/*
   Cache-Control: public, max-age=0, must-revalidate
 
 /changelog
