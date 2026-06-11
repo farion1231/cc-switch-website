@@ -7,6 +7,7 @@ import { LanguageProvider } from "./i18n/LanguageProvider";
 import { useLanguage } from "./i18n/useLanguage";
 import { Seo } from "./components/seo/Seo";
 import { SiteNavbar } from "./components/ccswitch/SiteNavbar";
+import { ScrollToTopButton } from "./components/ccswitch/ScrollToTopButton";
 import NotFound from "./pages/NotFound";
 
 const CCSwitchHome = lazy(() => import("./pages/CCSwitchHome"));
@@ -41,6 +42,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <SiteNavbar />
+      <ScrollToTopButton />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<CCSwitchHome />} />
