@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.16.2",
+      "date": "2026-06-07",
+      "isPreRelease": false,
+      "summary": "Following the v3.16.1 Codex stability patch, this release mainly broadens data portability and usage observability — adding S3-compatible cloud sync, OpenCode session usage sync, and an official-subscription quota template — while continuing to harden Codex's Chat Completions routing for third-party providers, fixing a batch of Windows / macOS platform issues, adding the CherryIN and ZenMux providers, and fully refreshing the trilingual user manual."
+    },
+    {
       "version": "3.16.1",
       "date": "2026-06-01",
       "isPreRelease": false,

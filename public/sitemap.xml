@@ -721,6 +721,30 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/docs?section=faq&amp;item=env-conflict" />
   </url>
   <url>
+    <loc>https://ccswitch.io/zh/changelog/3.16.2</loc>
+    <lastmod>2026-06-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.16.2" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/changelog/3.16.2</loc>
+    <lastmod>2026-06-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.16.2" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/changelog/3.16.2</loc>
+    <lastmod>2026-06-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.16.2" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.16.2" />
+  </url>
+  <url>
     <loc>https://ccswitch.io/zh/changelog/3.16.1</loc>
     <lastmod>2026-06-02</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.16.1" />

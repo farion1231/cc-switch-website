@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.16.2",
+      "date": "2026-06-07",
+      "isPreRelease": false,
+      "summary": "v3.16.1 の Codex 安定性パッチに続き、本リリースはデータの可搬性と用量の可観測性の拡張を主眼としています。S3 互換クラウド同期、OpenCode セッション用量同期、公式サブスクリプション残量テンプレートを追加し、Codex がサードパーティプロバイダーを Chat Completions ルーティングする際の堅牢性を引き続き強化しました。あわせて Windows / macOS のプラットフォーム問題を一括修正し、CherryIN・ZenMux プロバイダーを追加し、3 言語のユーザーマニュアルを全面的に刷新しました。"
+    },
+    {
       "version": "3.16.1",
       "date": "2026-06-01",
       "isPreRelease": false,

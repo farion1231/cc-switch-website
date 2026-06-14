@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.16.2",
+      "date": "2026-06-07",
+      "isPreRelease": false,
+      "summary": "在 v3.16.1 的 Codex 稳定性补丁之后，这一版主要拓宽了数据的可携带性与用量观测能力——新增 S3 兼容云同步、OpenCode 会话用量同步、官方订阅额度模板——并继续加固 Codex 通过 Chat Completions 路由第三方供应商的稳健性，同时修复了一批 Windows / macOS 平台问题，新增 CherryIN、ZenMux 供应商，并全面刷新了三语用户手册。"
+    },
+    {
       "version": "3.16.1",
       "date": "2026-06-01",
       "isPreRelease": false,
