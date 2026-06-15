@@ -17,7 +17,6 @@ import crazyrouterIcon from '@/assets/icons/sponsors/crazyrouter.svg';
 import rightcodeIcon from '@/assets/icons/sponsors/rightcode.svg';
 import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
 import micuIcon from '@/assets/icons/sponsors/micu.svg';
-import lemondataIcon from '@/assets/icons/sponsors/lemondata-app.png';
 import ctokIcon from '@/assets/icons/sponsors/ctok.svg';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
@@ -220,7 +219,7 @@ export const sponsors: Sponsor[] = [
     id: 'byteplus',
     name: { zh: '火山方舟', en: 'Dola Seed', ja: 'Dola Seed' },
     icon: { zh: huoshanIcon, en: byteplusIcon, ja: byteplusIcon, default: byteplusIcon },
-    url: 'https://www.volcengine.com/activity/agentplan?utm_campaign=hw&utm_content=ccswitch&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
+    url: 'https://www.volcengine.com/activity/codingplan?ac=MMAP8JTTCAQ2&rc=6J6FV5N2&utm_campaign=hw&utm_content=ccswitch&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
     tier: 'standard',
     category: 'native-platform',
     since: '2025-10',
@@ -230,15 +229,16 @@ export const sponsors: Sponsor[] = [
       ja: 'ByteDance のフルモーダル LLM プラットフォーム',
     },
     description: {
-      zh: '方舟 Agent Plan 模型订阅套餐集成了 Doubao-Seed、Doubao-Seedance、Doubao-Seedream 等字节跳动自研 SOTA 级模型，覆盖文本、代码、图像、视频等多模态任务。同时支持一站式接入 DeepSeek V4、GLM 5.1 等主流大模型，深度支持 Agent 框架与 AI 编程工具。',
+      zh: '方舟 Coding Plan 集成 Doubao-Seed、Doubao-Seedance、Doubao-Seedream 等字节跳动自研模型，覆盖文本、代码、图像、视频等多模态任务。最新支持 MiniMax-M3、DeepSeek-V4 系列、GLM-5.1、Doubao-Seed-2.0 系列、Kimi-K2.6 等模型，工具不限，可为不同任务切换合适的 AI 引擎。',
       en: 'Dola Seed 2.0 is a full-modal general large model by ByteDance. Built on a unified multimodal architecture, it supports text, images, audio, and video. It natively enables agent collaboration with strong reasoning, long-task execution, tool integration, and coding capabilities. Accessible via the ModelArk platform.',
       ja: 'Dola Seed 2.0 は ByteDance がグローバル市場向けに独自開発したフルモーダル汎用大規模モデルです。統一マルチモーダルアーキテクチャを基盤に、テキスト・画像・音声・動画の統合的な理解と生成をサポート。エージェント連携をネイティブに実現し、強力な推論・コーディング能力を備えています。ModelArk プラットフォームから利用可能。',
     },
     perk: {
-      zh: '新客户首月 40 元起',
+      zh: '首两个月 2.5 折，叠加邀请码低至 9.4 元/月',
       en: '500K free tokens per model on signup',
       ja: '登録でモデルごとに 50 万トークン無料',
     },
+    couponCode: '6J6FV5N2',
   },
   {
     id: 'siliconflow',
@@ -435,30 +435,6 @@ export const sponsors: Sponsor[] = [
       ja: 'クーポンで 10% オフ',
     },
     couponCode: 'ccswitch',
-  },
-  {
-    id: 'lemondata',
-    name: 'LemonData',
-    icon: lemondataIcon,
-    url: 'https://lemondata.cc/r/FFX1ZDUP',
-    tier: 'standard',
-    category: 'aggregator',
-    since: '2025-09',
-    tagline: {
-      zh: '300+ 模型一键调用',
-      en: '300+ models, one API',
-      ja: '300+ モデルを単一 API で',
-    },
-    description: {
-      zh: '高性能 AI API 聚合平台，一个 API Key 即可访问 GPT、Claude、Gemini、DeepSeek 等 300+ 模型。所有模型定价为官方价格的 30%-70%，支持自动故障转移、智能路由和无限并发。',
-      en: 'High-performance API aggregator. One key for GPT, Claude, Gemini, DeepSeek, and 300+ more — priced at 30-70% of official rates with auto failover, smart routing, and unlimited concurrency.',
-      ja: '高性能 API アグリゲーター。1 つの Key で GPT、Claude、Gemini、DeepSeek など 300 以上のモデルを利用可能。公式価格の 30〜70% で、自動フェイルオーバー・スマートルーティング・無制限並列に対応。',
-    },
-    perk: {
-      zh: '注册即送 $1 免费额度',
-      en: 'Free $1 credit on signup',
-      ja: '登録で $1 のクレジット',
-    },
   },
   {
     id: 'ctok',
