@@ -20,9 +20,6 @@ export function SponsorFlagshipBanner({ sponsor }: SponsorFlagshipBannerProps) {
   const perk = sponsor.perk?.[language];
   const bannerSrc = resolveLocalizedAsset(sponsor.banner, language);
   const name = resolveSponsorName(sponsor.name, language);
-  const sinceLabel = sponsor.since
-    ? t.sponsorsPage.card.since.replace('{date}', sponsor.since)
-    : null;
 
   return (
     <motion.article
@@ -52,14 +49,9 @@ export function SponsorFlagshipBanner({ sponsor }: SponsorFlagshipBannerProps) {
         </div>
 
         <div className="space-y-4 p-6 sm:p-8 md:p-10">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h3 className="text-2xl font-bold text-foreground transition-colors group-hover:text-primary md:text-3xl">
-              {name}
-            </h3>
-            {sinceLabel && (
-              <span className="text-xs text-muted-foreground md:text-sm">{sinceLabel}</span>
-            )}
-          </div>
+          <h3 className="text-2xl font-bold text-foreground transition-colors group-hover:text-primary md:text-3xl">
+            {name}
+          </h3>
 
           <p className="text-sm font-medium text-primary md:text-base">{tagline}</p>
 
