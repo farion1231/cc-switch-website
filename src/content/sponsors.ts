@@ -1,6 +1,6 @@
 import type { Language } from '@/i18n/translations';
 
-import minimaxIcon from '@/assets/icons/sponsors/minimax.svg';
+import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
 import packycodeIcon from '@/assets/icons/sponsors/packycode.svg';
 import aigocodeIcon from '@/assets/icons/sponsors/aigocode.svg';
 import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
@@ -27,8 +27,7 @@ import atlascloudIcon from '@/assets/icons/sponsors/atlascloud_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import unity2Icon from '@/assets/icons/sponsors/unity2.png';
 
-import minimaxBannerZh from '@/assets/banners/sponsors/minimax-zh.jpeg';
-import minimaxBannerEn from '@/assets/banners/sponsors/minimax-en.jpeg';
+import kimiBanner from '@/assets/banners/sponsors/kimi-k2-6.png';
 
 export type SponsorTier = 'flagship' | 'gold' | 'standard';
 
@@ -62,29 +61,24 @@ export interface Sponsor {
 
 export const sponsors: Sponsor[] = [
   {
-    id: 'minimax',
-    name: 'MiniMax',
-    icon: minimaxIcon,
-    url: 'https://platform.minimaxi.com/subscribe/coding-plan?code=7kYF2VoaCn&source=link',
+    id: 'kimi-k2-6',
+    name: 'Kimi K2.6',
+    icon: kimiIcon,
+    url: 'https://platform.moonshot.cn/console?aff=cc-switch',
     tier: 'flagship',
-    category: 'subscription',
+    category: 'native-platform',
     featured: true,
-    since: '2025-03',
-    banner: { zh: minimaxBannerZh, en: minimaxBannerEn, default: minimaxBannerEn },
+    since: '2026-06',
+    banner: { default: kimiBanner },
     tagline: {
-      zh: '深度自我迭代的下一代编程模型',
-      en: 'Next-gen self-iterating coding model',
-      ja: '自己反復で進化する次世代コーディングモデル',
+      zh: '原生多模态智能体模型',
+      en: 'Native multimodal agentic model',
+      ja: 'ネイティブマルチモーダル・エージェントモデル',
     },
     description: {
-      zh: 'MiniMax M2.7 是 MiniMax 首个深度参与自我迭代的模型，可自主构建复杂 Agent Harness，并基于 Agent Teams、复杂 Skills、Tool Search Tool 等能力完成高复杂度生产力任务。在软件工程、端到端项目交付及办公场景中表现优异，多项评测接近行业领先水平。',
-      en: 'MiniMax M2.7 is the first MiniMax model that participates deeply in its own self-iteration. It autonomously builds complex Agent Harnesses and completes highly demanding productivity tasks via Agent Teams, advanced Skills, and Tool Search. It excels at software engineering, end-to-end project delivery, and office workflows.',
-      ja: 'MiniMax M2.7 は自己反復に深く関与する初のモデル。Agent Harness を自律構築し、Agent Teams・高度な Skills・Tool Search Tool を駆使して高難度なタスクをこなします。ソフトウェアエンジニアリングやプロジェクト納品、オフィス業務で業界トップ水準の評価を獲得しています。',
-    },
-    perk: {
-      zh: 'MiniMax Token Plan 专属 88 折优惠',
-      en: '12% off the MiniMax Token Plan',
-      ja: 'MiniMax Token Plan 12% オフ',
+      zh: 'Kimi K2.6 是 Moonshot AI 开源的原生多模态智能体模型，面向长程编码、代码驱动设计和智能体集群任务编排而构建。它适合处理复杂的端到端工程任务，覆盖前端开发、DevOps、性能优化和全栈工作流，并能够协调大规模专业智能体，对真实编码任务进行规划、实现、测试和迭代。',
+      en: 'Kimi K2.6 is an open-source, native multimodal agentic model from Moonshot AI, built for long-horizon coding, coding-driven design, and swarm-based task orchestration. It handles complex end-to-end engineering work across front-end, DevOps, performance optimization, and full-stack workflows while coordinating specialized agents to plan, implement, test, and iterate.',
+      ja: 'Kimi K2.6 は Moonshot AI によるオープンソースのネイティブマルチモーダル・エージェントモデルです。長期的なコーディング、コード駆動設計、スウォーム型タスクオーケストレーション向けに構築され、フロントエンド、DevOps、性能最適化、フルスタックワークフローにまたがる複雑なエンジニアリング作業を支援します。',
     },
   },
   {
