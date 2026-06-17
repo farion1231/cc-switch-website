@@ -3,7 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
 import { resolveLocalizedAsset, resolveSponsorName, type Sponsor } from '@/content/sponsors';
 import { buttonVariants } from '@/components/ui/button';
-import { cn, displayDomain } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { SponsorPerkBadge } from './SponsorPerkBadge';
 
 interface SponsorFlagshipBannerProps {
@@ -40,7 +40,7 @@ export function SponsorFlagshipBanner({ sponsor }: SponsorFlagshipBannerProps) {
         aria-label={`${name} — ${tagline}`}
         className="block"
       >
-        <div className="relative aspect-[64/17] w-full overflow-hidden bg-muted">
+        <div className="relative aspect-[4/1] w-full overflow-hidden bg-muted">
           <img
             src={bannerSrc}
             alt={`${name} banner`}
@@ -79,8 +79,6 @@ export function SponsorFlagshipBanner({ sponsor }: SponsorFlagshipBannerProps) {
               <ArrowUpRight className="h-4 w-4" />
             </span>
           </div>
-
-          <p className="text-xs text-muted-foreground">{displayDomain(sponsor.url)}</p>
         </div>
       </a>
     </motion.article>
