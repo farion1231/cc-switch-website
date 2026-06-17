@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.16.3",
+      "date": "2026-06-14",
+      "isPreRelease": false,
+      "summary": "🎉 **CC Switch has passed 100,000 Stars!** > Thank you to every user, contributor, and Star — you are the reason it has come this far. 🙏"
+    },
+    {
       "version": "3.16.2",
       "date": "2026-06-07",
       "isPreRelease": false,
