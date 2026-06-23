@@ -211,8 +211,9 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
             </blockquote>
           ),
           code: ({ className, children, ...props }) => {
-            const isBlock = className?.includes('language-');
             const codeString = String(children).replace(/\n$/, '');
+            // Block code: has a language class OR contains newlines (multi-line)
+            const isBlock = className?.includes('language-') || codeString.includes('\n');
             
             if (isBlock) {
               return <CodeBlock className={className}>{codeString}</CodeBlock>;
