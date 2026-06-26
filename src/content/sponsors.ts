@@ -27,7 +27,8 @@ import atlascloudIcon from '@/assets/icons/sponsors/atlascloud_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import unity2Icon from '@/assets/icons/sponsors/unity2.png';
 
-import kimiBanner from '@/assets/banners/sponsors/kimi-k2-6.png';
+import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
+import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
 
 export type SponsorTier = 'flagship' | 'gold' | 'standard';
 
@@ -61,24 +62,24 @@ export interface Sponsor {
 
 export const sponsors: Sponsor[] = [
   {
-    id: 'kimi-k2-6',
-    name: 'Kimi K2.6',
+    id: 'kimi-k2-7-code',
+    name: 'Kimi K2.7 Code',
     icon: kimiIcon,
     url: 'https://platform.moonshot.cn/console?aff=cc-switch',
     tier: 'flagship',
     category: 'native-platform',
     featured: true,
     since: '2026-06',
-    banner: { default: kimiBanner },
+    banner: { zh: kimiBannerZh, en: kimiBannerEn, ja: kimiBannerEn, default: kimiBannerEn },
     tagline: {
-      zh: '原生多模态智能体模型',
-      en: 'Native multimodal agentic model',
-      ja: 'ネイティブマルチモーダル・エージェントモデル',
+      zh: '编程专用开源智能体模型',
+      en: 'Open-source coding-focused agentic model',
+      ja: 'コーディング特化のオープンソース・エージェントモデル',
     },
     description: {
-      zh: 'Kimi K2.6 是 Moonshot AI 开源的原生多模态智能体模型，面向长程编码、代码驱动设计和智能体集群任务编排而构建。它适合处理复杂的端到端工程任务，覆盖前端开发、DevOps、性能优化和全栈工作流，并能够协调大规模专业智能体，对真实编码任务进行规划、实现、测试和迭代。',
-      en: 'Kimi K2.6 is an open-source, native multimodal agentic model from Moonshot AI, built for long-horizon coding, coding-driven design, and swarm-based task orchestration. It handles complex end-to-end engineering work across front-end, DevOps, performance optimization, and full-stack workflows while coordinating specialized agents to plan, implement, test, and iterate.',
-      ja: 'Kimi K2.6 は Moonshot AI によるオープンソースのネイティブマルチモーダル・エージェントモデルです。長期的なコーディング、コード駆動設計、スウォーム型タスクオーケストレーション向けに構築され、フロントエンド、DevOps、性能最適化、フルスタックワークフローにまたがる複雑なエンジニアリング作業を支援します。',
+      zh: 'Kimi K2.7 Code 是 Moonshot AI 开发的编程专用开源智能体模型。它在编程与智能体执行能力上全面增强，在真实长程编程任务中实现显著提升，带来复杂软件工程工作流中更高的端到端任务成功率。同时，K2.7 Code 优化了推理效率，相较 K2.6 平均减少约 30% 的推理 token 消耗。',
+      en: 'Kimi K2.7 Code is an open-source, coding-focused agentic model developed by Moonshot AI. It delivers stronger coding and agent performance with substantial improvements in real-world long-horizon coding tasks, translating into higher end-to-end task success rates across complex software engineering workflows. It also improves reasoning efficiency, reducing thinking-token usage by about 30% compared with K2.6.',
+      ja: 'Kimi K2.7 Code は Moonshot AI が開発した、コーディングに特化したオープンソースのエージェントモデルです。コーディング能力とエージェント性能が全面的に強化され、実世界の長程コーディングタスクで大幅に向上し、複雑なソフトウェアエンジニアリング全体でエンドツーエンドのタスク成功率を高めます。さらに K2.6 と比べて推論トークン消費を約 30% 削減します。',
     },
   },
   {
