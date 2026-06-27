@@ -17,7 +17,7 @@ import crazyrouterIcon from '@/assets/icons/sponsors/crazyrouter.svg';
 import rightcodeIcon from '@/assets/icons/sponsors/rightcode.svg';
 import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
 import micuIcon from '@/assets/icons/sponsors/micu.svg';
-import ctokIcon from '@/assets/icons/sponsors/ctok.svg';
+import etokIcon from '@/assets/icons/sponsors/etok.png';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
@@ -432,10 +432,10 @@ export const sponsors: Sponsor[] = [
     couponCode: 'ccswitch',
   },
   {
-    id: 'ctok',
-    name: 'CTok.ai',
-    icon: ctokIcon,
-    url: 'https://ctok.ai',
+    id: 'etok',
+    name: 'ETok.ai',
+    icon: etokIcon,
+    url: 'https://etok.ai',
     tier: 'standard',
     category: 'subscription',
     since: '2025-10',

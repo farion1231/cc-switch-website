@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.16.4",
+      "date": "2026-06-27",
+      "isPreRelease": false,
+      "summary": "🎉 **CC Switch 跻身 GitHub 全球 Star 排行榜前 100！** > 感谢每一位用户、贡献者与 Star —— 是你们让它走到这里。🙏"
+    },
+    {
       "version": "3.16.3",
       "date": "2026-06-14",
       "isPreRelease": false,
