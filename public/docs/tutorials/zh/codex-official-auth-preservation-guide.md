@@ -202,6 +202,7 @@ Codex 的模型目录是启动时读取的。即使 CC Switch 已经生成了新
 
 ## 参考链接
 
+- [Codex 桌面应用里看不到自定义模型？（常见问题）](/zh/tutorials/codex-desktop-custom-model-visibility)
 - [Codex DeepSeek 本地路由实战攻略](/zh/tutorials/codex-deepseek-routing-guide)
 - [添加 Codex 供应商：Chat Completions 路由与模型映射](/zh/docs?section=providers&item=add)
 - [本地代理服务](/zh/docs?section=proxy&item=service)

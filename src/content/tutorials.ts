@@ -83,6 +83,27 @@ export const tutorials: Tutorial[] = [
     emoji: '🖥️',
   },
   {
+    slug: 'codex-desktop-custom-model-visibility',
+    title: {
+      zh: 'Codex 桌面应用里看不到自定义模型？',
+      en: "Can't See Custom Models in the Codex Desktop App?",
+      ja: 'Codex デスクトップアプリでカスタムモデルが見えない？',
+    },
+    summary: {
+      zh: '官方 FAQ：解释为什么 Codex 桌面应用的模型选择器可能隐藏第三方 / 自定义模型，以及如何通过保留官方登录态让自定义模型重新出现。',
+      en: 'Official FAQ explaining why the Codex desktop app model picker may hide third-party / custom models, and how preserving the official login state can make them visible again.',
+      ja: 'Codex デスクトップアプリのモデルセレクタでサードパーティ / カスタムモデルが隠れる理由と、公式ログイン状態を保持して再表示させる方法を説明する公式 FAQ です。',
+    },
+    author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-desktop-custom-model-visibility-zh.md' },
+    date: '2026-06-27',
+    category: 'troubleshooting',
+    source: 'official',
+    readMinutes: 4,
+    accent: 'rose',
+    coverIcons: [tutorialIcons.codex, tutorialIcons.ccSwitch],
+    featured: true,
+  },
+  {
     slug: 'codex-official-auth-preservation-guide',
     title: {
       zh: '使用第三方 API 时保留 Codex 远程操作和官方插件',

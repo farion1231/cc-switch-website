@@ -1233,6 +1233,30 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-deepseek-routing-guide" />
   </url>
   <url>
+    <loc>https://ccswitch.io/zh/tutorials/codex-desktop-custom-model-visibility</loc>
+    <lastmod>2026-06-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-desktop-custom-model-visibility" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/tutorials/codex-desktop-custom-model-visibility</loc>
+    <lastmod>2026-06-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-desktop-custom-model-visibility" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/tutorials/codex-desktop-custom-model-visibility</loc>
+    <lastmod>2026-06-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/codex-desktop-custom-model-visibility" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-desktop-custom-model-visibility" />
+  </url>
+  <url>
     <loc>https://ccswitch.io/zh/tutorials/codex-oauth-claude-code-local-routing</loc>
     <lastmod>2026-06-17</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-oauth-claude-code-local-routing" />

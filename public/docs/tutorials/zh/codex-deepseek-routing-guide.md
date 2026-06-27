@@ -82,6 +82,7 @@ DeepSeek、Kimi、MiniMax、SiliconFlow 等常见 Chat 格式供应商在 CC Swi
 
 保存供应商后重启 Codex。CC Switch 会生成 `cc-switch-model-catalog.json` 并把路径写入 `model_catalog_json`，但正在运行的 Codex 进程不一定会热加载模型目录。
 目前 Codex app 不支持多模型选择，默认使用配置的第一个模型。
+如果命令行 `/model` 正常，但 Codex 桌面应用的模型选择器仍看不到自定义模型，这是 Codex 桌面应用上游自身的模型门控行为，详见 [Codex 桌面应用里看不到自定义模型？（常见问题）](/zh/tutorials/codex-desktop-custom-model-visibility)。
 
 **开了路由但请求仍走错供应商**
 

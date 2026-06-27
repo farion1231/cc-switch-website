@@ -82,6 +82,7 @@ If you are using the built-in DeepSeek preset, first confirm that the active pro
 
 Restart Codex after saving the provider. CC Switch generates `cc-switch-model-catalog.json` and writes its path to `model_catalog_json`, but a running Codex process may not hot-load the model catalog.
 The Codex app currently does not support multi-model selection, so it uses the first configured model by default.
+If the command-line `/model` menu works but the Codex desktop app model picker still cannot see custom models, that is the upstream Codex desktop app's own model-gating behavior. See [Can't See Custom Models in the Codex Desktop App? (FAQ)](/en/tutorials/codex-desktop-custom-model-visibility).
 
 **Routing is enabled, but requests still go to the wrong provider**
 

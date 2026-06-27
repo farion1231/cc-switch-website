@@ -202,6 +202,7 @@ Because Codex App Enhancements and routing takeover can create unnecessary troub
 
 ## References
 
+- [Can't see custom models in the Codex desktop app? (FAQ)](/en/tutorials/codex-desktop-custom-model-visibility)
 - [Codex DeepSeek local routing hands-on guide](/en/tutorials/codex-deepseek-routing-guide)
 - [Add a Codex provider: Chat Completions routing and model mapping](/en/docs?section=providers&item=add)
 - [Local Proxy Service](/en/docs?section=proxy&item=service)
