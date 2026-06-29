@@ -26,6 +26,7 @@ import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import atlascloudIcon from '@/assets/icons/sponsors/atlascloud_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import unity2Icon from '@/assets/icons/sponsors/unity2.png';
+import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -648,6 +649,30 @@ export const sponsors: Sponsor[] = [
       zh: '注册领 $2，加入官方群再送 $10',
       en: 'Get $2 on signup, plus $10 for joining the official group',
       ja: '登録で $2、公式グループ参加でさらに $10',
+    },
+  },
+  {
+    id: 'fenno',
+    name: 'Fenno.ai',
+    icon: fennoIcon,
+    url: 'https://api.fenno.ai/register?redirect=/purchase?tab=subscription%26group=16&aff=P9MR3D3PLCNL',
+    tier: 'standard',
+    category: 'relay',
+    iconBg: 'light',
+    tagline: {
+      zh: '专注 Codex 的稳定 API 中转',
+      en: 'Stable Codex-focused API relay',
+      ja: 'Codex に特化した安定 API リレー',
+    },
+    description: {
+      zh: 'Fenno.ai 是一家稳定、高效的 API 中转服务商，目前主要提供 Codex 中转服务，兼容 OpenAI 及 Anthropic 协议，可接入 Codex、Claude Code、OpenCode 等主流编程工具，并支持企业级高并发、对公结算与开票。',
+      en: 'Fenno.ai is a stable, efficient API relay currently focused on Codex routing. It supports OpenAI and Anthropic-compatible protocols for Codex, Claude Code, OpenCode, and other coding tools, with enterprise-grade throughput, B2B settlement, and invoicing.',
+      ja: 'Fenno.ai は安定・高効率な API リレーで、現在は Codex の中継を中心に提供しています。OpenAI / Anthropic 互換プロトコルに対応し、Codex、Claude Code、OpenCode などから利用でき、法人決済と請求書発行にも対応します。',
+    },
+    perk: {
+      zh: '9.9 元享 $150 Coding Plan，邀请最高 20% 奖励',
+      en: '¥9.9 Coding Plan with $150 credit, up to 20% referral rewards',
+      ja: '9.9 元で $150 相当の Coding Plan、紹介特典は最大 20%',
     },
   },
 ];
