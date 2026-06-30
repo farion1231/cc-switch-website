@@ -28,6 +28,7 @@ import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import unity2Icon from '@/assets/icons/sponsors/unity2.png';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
+import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -694,6 +695,31 @@ export const sponsors: Sponsor[] = [
       en: '¥9.9 Coding Plan with $150 credit, up to 20% referral rewards',
       ja: '9.9 元で $150 相当の Coding Plan、紹介特典は最大 20%',
     },
+  },
+  {
+    id: 'zetaapi',
+    name: 'ZetaAPI',
+    icon: zetaapiIcon,
+    url: 'https://zetaapi.ai/go/ccs',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    tagline: {
+      zh: '模型保真，低至官方价 35 折',
+      en: 'Real model fidelity from 35% of official pricing',
+      ja: 'モデル品質を保ち、公式価格の 35% から',
+    },
+    description: {
+      zh: 'ZetaAPI 主打模型不掺水、保真不降智，价格低至官方价 35 折，平台不混量、不暗中替换低质量模型、不做虚假路由。一个 Key 可接入 Claude Code、Codex、Gemini、ChatGPT 等主流模型，并提供企业级 SLA 稳定性、标准接口兼容与按量计费。',
+      en: 'ZetaAPI focuses on real, undegraded model access at as low as 35% of official pricing, with no traffic mixing, hidden low-quality substitutions, or fake model routing. One key connects Claude Code, Codex, Gemini, ChatGPT, and other mainstream models with SLA-backed stability, standard API compatibility, and pay-as-you-go billing.',
+      ja: 'ZetaAPI は、モデルを水増し・劣化させず、公式価格の 35% から利用できることを重視した API プラットフォームです。トラフィック混在、低品質モデルへの隠れた差し替え、虚偽ルーティングを行わず、1 つのキーで Claude Code、Codex、Gemini、ChatGPT などを利用できます。',
+    },
+    perk: {
+      zh: '首次充值 9 折，优惠码 CC-SWITCH',
+      en: '10% off first top-up with code CC-SWITCH',
+      ja: '初回チャージ 10% オフ（コード CC-SWITCH）',
+    },
+    couponCode: 'CC-SWITCH',
   },
 ];
 
