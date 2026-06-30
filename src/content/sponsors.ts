@@ -6,6 +6,7 @@ import aigocodeIcon from '@/assets/icons/sponsors/aigocode.svg';
 import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
 import aicodemirrorIcon from '@/assets/icons/sponsors/aicodemirror.svg';
 import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
+import teamorouterIcon from '@/assets/icons/sponsors/teamorouter-icon-dark.png';
 import byteplusIcon from '@/assets/icons/sponsors/byteplus.png';
 import huoshanIcon from '@/assets/icons/sponsors/huoshan.png';
 import siliconflowIcon from '@/assets/icons/sponsors/siliconflow.svg';
@@ -211,6 +212,30 @@ export const sponsors: Sponsor[] = [
       zh: '注册即送 $3，充值低至 6 折',
       en: 'Free $3 on signup, recharge as low as 40% off',
       ja: '登録で $3、最大 60% オフ',
+    },
+  },
+  {
+    id: 'teamorouter',
+    name: 'TeamoRouter',
+    icon: teamorouterIcon,
+    url: 'https://teamorouter.com/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'dark',
+    tagline: {
+      zh: '企业级 Agentic LLM 网关',
+      en: 'Enterprise Agentic LLM gateway',
+      ja: 'エンタープライズ Agentic LLM ゲートウェイ',
+    },
+    description: {
+      zh: 'TeamoRouter 是面向开发者、AI 团队和企业的企业级 Agentic LLM 网关。无需订阅即可通过统一 API 访问 Claude Code、Codex、Gemini CLI、OpenAI Codex 和其他热门 AI Agent，聚合数百家官方模型提供商与可信基础设施伙伴，提供 99.6% SLA、最高 5,000 QPM 吞吐量、智能路由、团队管理、BYOK 与用量分析。',
+      en: 'TeamoRouter is an enterprise-grade Agentic LLM gateway for developers, AI teams, and businesses. Without subscriptions, one unified API provides access to Claude Code, Codex, Gemini CLI, OpenAI Codex, and other popular AI agents, aggregating hundreds of official model providers and trusted infrastructure partners with 99.6% SLA, up to 5,000 QPM, smart routing, team management, BYOK, and usage analytics.',
+      ja: 'TeamoRouter は、開発者、AI チーム、企業向けのエンタープライズグレード Agentic LLM ゲートウェイです。サブスクリプション不要で、統一 API から Claude Code、Codex、Gemini CLI、OpenAI Codex などにアクセスでき、数百の公式モデルプロバイダーと信頼できるインフラパートナーを集約します。99.6% SLA、最大 5,000 QPM、スマートルーティング、チーム管理、BYOK、利用分析に対応します。',
+    },
+    perk: {
+      zh: '新用户首次充值 9 折',
+      en: '10% off first top-up for new users',
+      ja: '新規ユーザー初回チャージ 10% オフ',
     },
   },
   {
