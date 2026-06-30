@@ -26,6 +26,7 @@ import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import atlascloudIcon from '@/assets/icons/sponsors/atlascloud_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import unity2Icon from '@/assets/icons/sponsors/unity2.png';
+import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
@@ -649,6 +650,25 @@ export const sponsors: Sponsor[] = [
       zh: '注册领 $2，加入官方群再送 $10',
       en: 'Get $2 on signup, plus $10 for joining the official group',
       ja: '登録で $2、公式グループ参加でさらに $10',
+    },
+  },
+  {
+    id: 'qiniu',
+    name: { zh: '七牛云', en: 'Qiniu', ja: 'Qiniu' },
+    icon: qiniuIcon,
+    url: 'https://s.qiniu.com/nMvAvy',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    tagline: {
+      zh: '多协议 AI 中转平台',
+      en: 'Multi-protocol AI relay',
+      ja: 'マルチプロトコル AI リレー',
+    },
+    description: {
+      zh: '七牛云是多协议 AI 中转平台，一个 Key 即可调用原生 Claude、GPT、Gemini 模型，兼容 Anthropic、OpenAI、Gemini 多种接口，可接入 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 与 Hermes 等主流编程工具。',
+      en: 'Qiniu Cloud is a multi-protocol AI relay: one key for native Claude, GPT, and Gemini models, with Anthropic, OpenAI, and Gemini APIs supported across Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, Hermes, and other coding tools.',
+      ja: 'Qiniu Cloud（七牛云）はマルチプロトコル対応の AI リレーです。1 つのキーでネイティブの Claude、GPT、Gemini モデルを利用でき、Anthropic / OpenAI / Gemini API と Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes などに対応します。',
     },
   },
   {
