@@ -662,14 +662,19 @@ export const sponsors: Sponsor[] = [
     category: 'aggregator',
     iconBg: 'light',
     tagline: {
-      zh: '多协议 AI 中转平台',
-      en: 'Multi-protocol AI relay',
-      ja: 'マルチプロトコル AI リレー',
+      zh: '企业级大模型 MaaS 平台',
+      en: 'Enterprise LLM MaaS platform',
+      ja: 'エンタープライズ LLM MaaS プラットフォーム',
     },
     description: {
-      zh: '七牛云是多协议 AI 中转平台，一个 Key 即可调用原生 Claude、GPT、Gemini 模型，兼容 Anthropic、OpenAI、Gemini 多种接口，可接入 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 与 Hermes 等主流编程工具。',
-      en: 'Qiniu Cloud is a multi-protocol AI relay: one key for native Claude, GPT, and Gemini models, with Anthropic, OpenAI, and Gemini APIs supported across Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, Hermes, and other coding tools.',
-      ja: 'Qiniu Cloud（七牛云）はマルチプロトコル対応の AI リレーです。1 つのキーでネイティブの Claude、GPT、Gemini モデルを利用でき、Anthropic / OpenAI / Gemini API と Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes などに対応します。',
+      zh: '企业级大模型MaaS平台。七牛云(02567.HK)旗下企业级 MaaS 平台，一站式调用全球 150+ 主流模型，兼容全球主流模型厂商协议，覆盖文本、图像、音频、视频、文件处理等全模态处理能力，服务超过169万企业及开发者用户。',
+      en: 'Enterprise LLM MaaS platform by Qiniu Cloud (02567.HK). It offers one-stop access to 150+ mainstream global models, supports major model-provider protocols worldwide, covers full-modal capabilities across text, image, audio, video, and file processing, and serves over 1.69 million enterprise and developer users.',
+      ja: '七牛云（02567.HK）傘下のエンタープライズ向け大規模モデル MaaS プラットフォームです。世界の主要 150+ モデルをワンストップで呼び出せ、主要モデルベンダーのプロトコルに対応し、テキスト、画像、音声、動画、ファイル処理などのフルモーダル能力を提供します。169 万以上の企業・開発者ユーザーに利用されています。',
+    },
+    perk: {
+      zh: '企业用户免费领 1200万 Token',
+      en: 'Enterprise users can claim 12M free tokens',
+      ja: '企業ユーザーは 1,200 万 Token を無料取得可能',
     },
   },
   {
