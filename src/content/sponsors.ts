@@ -20,6 +20,7 @@ import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
 import micuIcon from '@/assets/icons/sponsors/micu.svg';
 import etokIcon from '@/assets/icons/sponsors/etok.png';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
+import code0Icon from '@/assets/icons/sponsors/code0.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
@@ -30,6 +31,7 @@ import unity2Icon from '@/assets/icons/sponsors/unity2.png';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
+import nekocodeIcon from '@/assets/icons/sponsors/nekocode-icon.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -508,6 +510,29 @@ export const sponsors: Sponsor[] = [
     },
   },
   {
+    id: 'code0',
+    name: 'code0.ai',
+    icon: code0Icon,
+    url: 'https://code0.ai?source=ccswitch',
+    tier: 'standard',
+    category: 'aggregator',
+    tagline: {
+      zh: 'AI 编程服务平台',
+      en: 'AI coding service platform',
+      ja: 'AI コーディングサービスプラットフォーム',
+    },
+    description: {
+      zh: 'code0.ai 是专为开发者打造的 AI 编程服务平台，支持 Claude Code、Codex、Gemini 等主流 AI 编程能力，帮助个人开发者和团队更稳定、更高效地使用 AI Agent 完成代码开发、调试、重构与自动化任务。',
+      en: 'code0.ai is an AI coding service platform built for developers, supporting Claude Code, Codex, Gemini, and other mainstream AI coding capabilities. It helps individual developers and teams use AI agents more stably and efficiently for coding, debugging, refactoring, and automation workflows.',
+      ja: 'code0.ai は開発者向けの AI コーディングサービスプラットフォームです。Claude Code、Codex、Gemini などの主要な AI コーディング機能に対応し、個人開発者やチームがコーディング、デバッグ、リファクタリング、自動化ワークフローで AI Agent をより安定かつ効率的に活用できるよう支援します。',
+    },
+    perk: {
+      zh: '联系客服领取测试额度',
+      en: 'Contact support to claim trial credits',
+      ja: 'サポート連絡でテストクレジットを取得',
+    },
+  },
+  {
     id: 'claudecn',
     name: 'ClaudeCN',
     icon: claudecnIcon,
@@ -750,6 +775,30 @@ export const sponsors: Sponsor[] = [
       ja: '初回チャージ 10% オフ（コード CC-SWITCH）',
     },
     couponCode: 'CC-SWITCH',
+  },
+  {
+    id: 'nekocode',
+    name: 'NekoCode',
+    icon: nekocodeIcon,
+    url: 'https://nekocode.ai?aff=CCSWITCH',
+    tier: 'standard',
+    category: 'relay',
+    tagline: {
+      zh: '稳定可靠的 AI 模型 API 中转',
+      en: 'Stable, reliable AI model relay',
+      ja: '安定・高効率な AI モデル API リレー',
+    },
+    description: {
+      zh: 'NekoCode 为开发者提供稳定、高效、可靠的 Claude、Codex 等 AI 模型 API 中转服务，价格透明，接入便捷，支持灵活的按量计费。',
+      en: 'NekoCode gives developers stable, efficient, and reliable API relay access for Claude, Codex, and other AI models, with transparent pricing, simple integration, and flexible pay-as-you-go billing.',
+      ja: 'NekoCode は Claude や Codex などの AI モデルに対応した、安定性・効率性・信頼性に優れた API 中継サービスを提供します。料金体系は明瞭で、接続も簡単、柔軟な従量課金に対応しています。',
+    },
+    perk: {
+      zh: '充值 9 折，优惠码 cc-switch',
+      en: '10% off top-ups with code cc-switch',
+      ja: 'チャージ 10% オフ（コード cc-switch）',
+    },
+    couponCode: 'cc-switch',
   },
 ];
 
