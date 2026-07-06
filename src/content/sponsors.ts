@@ -269,7 +269,7 @@ export const sponsors: Sponsor[] = [
     id: 'siliconflow',
     name: { zh: '硅基流动', en: 'SiliconFlow', ja: 'SiliconFlow' },
     icon: siliconflowIcon,
-    url: 'https://cloud.siliconflow.cn/i/drGuwc9k',
+    url: 'https://cloud.siliconflow.cn/i/YflgU2Ve',
     tier: 'standard',
     category: 'native-platform',
     since: '2025-05',
