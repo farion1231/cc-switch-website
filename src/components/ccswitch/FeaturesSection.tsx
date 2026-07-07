@@ -9,10 +9,12 @@ import {
   Star,
   Download,
   Trophy,
+  TrendingUp,
   type LucideIcon
 } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
 import { useGitHubStats } from '@/hooks/useGitHubStars';
+import { useStarHistoryRank } from '@/hooks/useStarHistoryRank';
 import { SectionHeader } from './SectionHeader';
 
 const featureIcons: LucideIcon[] = [Layers, Zap, DollarSign, Shield, Settings, GitBranch];
@@ -45,6 +47,7 @@ const itemVariants = {
 export function FeaturesSection() {
   const { t } = useLanguage();
   const { formattedStars, formattedDownloads } = useGitHubStats();
+  const globalRank = useStarHistoryRank();
 
   return (
     <section id="features" className="section-y bg-background">
@@ -56,7 +59,7 @@ export function FeaturesSection() {
           subtitleClassName="text-lg md:text-xl max-w-2xl mx-auto mb-8"
         >
           {/* Trust Bar */}
-          <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
             <div className="flex items-center gap-2 text-foreground">
               <Star className="w-5 h-5 text-warning" />
               <span className="font-semibold">{formattedStars}</span>
@@ -76,6 +79,17 @@ export function FeaturesSection() {
               <Trophy className="w-4 h-4" />
               {t.hero.rustBadge}
             </span>
+            {globalRank !== null && (
+              <a
+                href="https://www.star-history.com/#farion1231/cc-switch&Date"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-warm/10 border border-accent-warm/30 text-accent-warm text-sm font-medium transition-colors hover:bg-accent-warm/20"
+              >
+                <TrendingUp className="w-4 h-4" />
+                {t.hero.starRankBadge.replace('{rank}', String(globalRank))}
+              </a>
+            )}
           </div>
         </SectionHeader>
 

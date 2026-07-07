@@ -32,6 +32,7 @@ export const translations = {
       downloads: '下载',
       supportedCli: '支持应用',
       rustBadge: 'Rust #1',
+      starRankBadge: 'GitHub 总榜 #{rank}',
     },
     // Features Section
     features: {
@@ -606,6 +607,7 @@ export const translations = {
       downloads: 'Downloads',
       supportedCli: 'Apps Supported',
       rustBadge: 'Rust #1',
+      starRankBadge: 'GitHub Global Rank #{rank}',
     },
     // Features Section
     features: {
@@ -1180,6 +1182,7 @@ export const translations = {
       downloads: 'ダウンロード',
       supportedCli: '対応アプリ',
       rustBadge: 'Rust #1',
+      starRankBadge: 'GitHub 世界ランキング #{rank}',
     },
     // Features Section
     features: {
