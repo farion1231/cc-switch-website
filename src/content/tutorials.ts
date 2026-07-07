@@ -63,6 +63,27 @@ const tutorialIcons = {
 
 export const tutorials: Tutorial[] = [
   {
+    slug: 'codex-kimi-routing-guide',
+    title: {
+      zh: '在 Codex 中使用 Kimi：本地路由实战攻略',
+      en: 'Use Kimi in Codex with Local Routing',
+      ja: 'Codex で Kimi を使う: ローカルルーティング実践ガイド',
+    },
+    summary: {
+      zh: '官方实战攻略：Kimi 开放平台与 Kimi For Coding 都是 OpenAI Chat Completions 接口，官方并不支持 Codex。本文演示用 CC Switch 本地路由完成协议转换，把 Kimi 接入 Codex 并验证请求转发。',
+      en: 'Official hands-on guide: both the Kimi Open Platform and Kimi For Coding expose OpenAI Chat Completions APIs without official Codex support. Learn how CC Switch Local Routing converts the protocol so Kimi works inside Codex.',
+      ja: 'Kimi オープンプラットフォームと Kimi For Coding はいずれも OpenAI Chat Completions 形式で、公式には Codex に対応していません。CC Switch のローカルルーティングでプロトコル変換し、Codex で Kimi を使う手順を解説する公式実践ガイドです。',
+    },
+    author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-kimi-routing-guide-zh.md' },
+    date: '2026-07-07',
+    category: 'practice',
+    source: 'official',
+    readMinutes: 6,
+    accent: 'purple',
+    coverIcons: [tutorialIcons.kimi, tutorialIcons.codex],
+    featured: true,
+  },
+  {
     slug: 'cc-switch-cli-headless-guide',
     title: {
       zh: '在无图形界面的服务器上用好 cc-switch',
