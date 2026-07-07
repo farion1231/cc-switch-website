@@ -513,7 +513,7 @@ export const sponsors: Sponsor[] = [
     id: 'code0',
     name: 'code0.ai',
     icon: code0Icon,
-    url: 'https://code0.ai?source=ccswitch',
+    url: 'https://code0.ai/agent/register/B2XHxGjGmRvqgznY',
     tier: 'standard',
     category: 'aggregator',
     tagline: {
