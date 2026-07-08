@@ -818,6 +818,11 @@ export const sponsors: Sponsor[] = [
       en: 'new-api is an open-source AI infrastructure project from QuantumNous and one of the leading unified LLM access and distribution projects by activity and adoption. It helps developers, teams, and enterprises build manageable, scalable AI service platforms at lower cost.',
       ja: 'new-api は QuantumNous（锟腾科技）が開発したオープンソースの AI インフラプロジェクトです。活発さと利用規模の面でリードする LLM 統合アクセス・配信プロジェクトの一つで、開発者・チーム・企業が低コストで管理・拡張可能な AI サービス基盤を構築できるよう支援します。',
     },
+    perk: {
+      zh: '以更低成本构建可管理、可扩展的 AI 服务平台',
+      en: 'Build manageable, scalable AI service platforms at lower cost',
+      ja: 'より低コストで管理・拡張可能な AI サービス基盤を構築',
+    },
   },
 ];
 
