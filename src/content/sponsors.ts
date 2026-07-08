@@ -32,6 +32,7 @@ import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import nekocodeIcon from '@/assets/icons/sponsors/nekocode-icon.png';
+import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -799,6 +800,24 @@ export const sponsors: Sponsor[] = [
       ja: 'チャージ 10% オフ（コード cc-switch）',
     },
     couponCode: 'cc-switch',
+  },
+  {
+    id: 'new-api',
+    name: 'new-api',
+    icon: newapiIcon,
+    url: 'https://www.newapi.ai/',
+    tier: 'standard',
+    category: 'aggregator',
+    tagline: {
+      zh: '开源 AI 基础设施项目',
+      en: 'Open-source AI infrastructure',
+      ja: 'オープンソース AI インフラ',
+    },
+    description: {
+      zh: 'new-api 是由 QuantumNous（锟腾科技）推出的开源 AI 基础设施项目，也是活跃度与使用规模领先的大模型统一接入与分发项目之一，专注于帮助开发者、团队和企业以更低成本构建可管理、可扩展的 AI 服务平台。',
+      en: 'new-api is an open-source AI infrastructure project from QuantumNous and one of the leading unified LLM access and distribution projects by activity and adoption. It helps developers, teams, and enterprises build manageable, scalable AI service platforms at lower cost.',
+      ja: 'new-api は QuantumNous（锟腾科技）が開発したオープンソースの AI インフラプロジェクトです。活発さと利用規模の面でリードする LLM 統合アクセス・配信プロジェクトの一つで、開発者・チーム・企業が低コストで管理・拡張可能な AI サービス基盤を構築できるよう支援します。',
+    },
   },
 ];
 
