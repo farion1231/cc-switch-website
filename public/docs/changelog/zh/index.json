@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.16.5",
+      "date": "2026-07-01",
+      "isPreRelease": false,
+      "summary": "这一版的重头戏是**让原生 Responses 格式的国产模型供应商真正适配到位**——为小米 MiMo、火山豆包、千问 Qwen3-Coder、美团 LongCat、MiniMax 等具备原生 Responses 端点的供应商生成 Codex 模型目录，让 Codex 桌面能看到这些模型、内置工具也能正常工作，并对少数拒收 `web_search` 的国产网关自动禁用该工具、避免请求被硬性拒绝。另有两处重要改进：切换供应商时，你在应用内新增的插件、环境变量等会**自动回写到通用配置并带给下一个供应商**；Linux（Wayland + NVIDIA）上「标题栏能点、页面点不动、缩放黑屏」的问题，现在也能用一个环境变量开关自救。本版还带来 Claude Sonnet 5 定价与默认档升级、两级分组的会话视图，以及一批凭据安全与平台兼容修复。"
+    },
+    {
       "version": "3.16.4",
       "date": "2026-06-27",
       "isPreRelease": false,

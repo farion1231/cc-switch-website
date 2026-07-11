@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.16.5",
+      "date": "2026-07-01",
+      "isPreRelease": false,
+      "summary": "The centerpiece of this release is **getting native-Responses direct-connect properly adapted for domestic (Chinese) model providers** — generating Codex model catalogs for providers with native Responses endpoints (Xiaomi MiMo, Volcengine Doubao, Qwen3-Coder, Meituan LongCat, MiniMax) so the Codex desktop app can actually see these models and their built-in tools work, and automatically disabling `web_search` for the few domestic gateways that reject it so requests are no longer hard-rejected. Two other important improvements: when you switch providers, the plugins, environment variables, etc. you added inside the app are **automatically written back to the common config and carried over to the next provider**; and Linux (Wayland + NVIDIA) users hitting the \"title bar clicks, page is dead, black screen on resize\" problem now have an environment-variable escape hatch. This release also brings Claude Sonnet 5 pricing and a default-tier bump, a two-level grouped session view, and a batch of credential-safety and platform-compatibility fixes."
+    },
+    {
       "version": "3.16.4",
       "date": "2026-06-27",
       "isPreRelease": false,
