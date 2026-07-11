@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useId } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { cn, slugify } from '@/lib/utils';
 import { Copy, Check } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { useLanguage } from '@/i18n/useLanguage';
 
 interface MarkdownRendererProps {
   content: string;
@@ -74,6 +76,78 @@ async function loadPrism(language: string) {
   return prism;
 }
 
+// ---- Mermaid support via npm package ----
+let mermaidLoadPromise: Promise<typeof import('mermaid')> | null = null;
+
+function loadMermaid() {
+  mermaidLoadPromise ??= import('mermaid').then((mod) => {
+    mod.default.initialize({ startOnLoad: false });
+    return mod;
+  });
+  return mermaidLoadPromise;
+}
+
+function MermaidBlock({
+  children,
+  theme,
+  errorLabel,
+}: {
+  children: string;
+  theme: string | undefined;
+  errorLabel: string;
+}) {
+  const [svg, setSvg] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const uniqueId = useId().replace(/:/g, '_');
+
+  useEffect(() => {
+    let isActive = true;
+    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    loadMermaid()
+      .then(async (mod) => {
+        if (!isActive) return;
+        const mermaid = mod.default;
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: isDark ? 'dark' : 'default',
+        });
+        const { svg: rendered } = await mermaid.render(`mermaid${uniqueId}`, children);
+        if (isActive) setSvg(rendered);
+      })
+      .catch((err: unknown) => {
+        if (isActive) setError(String(err));
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [children, uniqueId, theme]);
+
+  if (error) {
+    return (
+      <div className="rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+        {errorLabel}: {error}
+      </div>
+    );
+  }
+
+  if (!svg) {
+    return (
+      <div className="flex items-center justify-center rounded-xl border border-border bg-card p-8">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="flex justify-center overflow-x-auto rounded-xl border border-border bg-card p-4 [&_svg]:max-w-full"
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
+}
+
 function CodeBlock({ className, children }: { className?: string; children: string }) {
   const [copied, setCopied] = useState(false);
   const codeRef = useRef<HTMLElement>(null);
@@ -138,6 +212,9 @@ function CodeBlock({ className, children }: { className?: string; children: stri
 }
 
 export function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
+  const { theme = 'system' } = useTheme();
+  const { t } = useLanguage();
+
   return (
     <div className={cn('prose-docs max-w-full [overflow-wrap:anywhere]', className)}>
       <ReactMarkdown
@@ -213,6 +290,15 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
           code: ({ className, children, ...props }) => {
             const isBlock = className?.includes('language-');
             const codeString = String(children).replace(/\n$/, '');
+
+            // Mermaid diagrams
+            if (className?.includes('language-mermaid')) {
+              return (
+                <MermaidBlock theme={theme} errorLabel={t.common.mermaidError}>
+                  {codeString}
+                </MermaidBlock>
+              );
+            }
             
             if (isBlock) {
               return <CodeBlock className={className}>{codeString}</CodeBlock>;
