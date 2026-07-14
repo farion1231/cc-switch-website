@@ -33,6 +33,7 @@ import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import nekocodeIcon from '@/assets/icons/sponsors/nekocode-icon.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
+import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -822,6 +823,29 @@ export const sponsors: Sponsor[] = [
       zh: '以更低成本构建可管理、可扩展的 AI 服务平台',
       en: 'Build manageable, scalable AI service platforms at lower cost',
       ja: 'より低コストで管理・拡張可能な AI サービス基盤を構築',
+    },
+  },
+  {
+    id: 'sudocode',
+    name: 'SudoCode',
+    icon: sudocodeIcon,
+    url: 'https://sudocode.chat/register?utm_source=ccswitch&utm_medium=partner',
+    tier: 'standard',
+    category: 'relay',
+    tagline: {
+      zh: '一个 Key 统一使用 Claude Opus 4.8 与 GPT-5.6',
+      en: 'One key for Claude Opus 4.8 and GPT-5.6',
+      ja: '1つのキーで Claude Opus 4.8 と GPT-5.6 を利用',
+    },
+    description: {
+      zh: 'SudoCode 让 Claude Code 与 Claude Desktop 接入 Claude Opus 4.8，Codex 接入 GPT-5.6，一个 Key 统一使用。',
+      en: 'With one SudoCode key, Claude Code and Claude Desktop use Claude Opus 4.8, while Codex uses GPT-5.6.',
+      ja: 'SudoCode の1つのキーで、Claude Code と Claude Desktop では Claude Opus 4.8、Codex では GPT-5.6 を利用できます。',
+    },
+    perk: {
+      zh: '注册并加入 QQ 群 726213516，联系群主领取 ¥10 试用额度',
+      en: 'Sign up, join QQ group 726213516, and contact the group owner for CNY ¥10 trial credit',
+      ja: '登録後 QQ グループ 726213516 に参加し、管理者へ連絡すると CNY ¥10 のトライアルクレジットを進呈',
     },
   },
 ];
