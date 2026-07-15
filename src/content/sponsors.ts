@@ -33,6 +33,7 @@ import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import nekocodeIcon from '@/assets/icons/sponsors/nekocode-icon.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
+import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
 import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
@@ -143,31 +144,6 @@ export const sponsors: Sponsor[] = [
     },
   },
   {
-    id: 'shengsuanyun',
-    name: { zh: '胜算云', en: 'Shengsuanyun', ja: 'Shengsuanyun' },
-    icon: shengsuanyunIcon,
-    url: 'https://www.shengsuanyun.com/?from=CH_4HHXMRYF',
-    tier: 'standard',
-    category: 'native-platform',
-    featured: true,
-    since: '2025-04',
-    tagline: {
-      zh: '工业级 AI 任务并行执行平台',
-      en: 'Industrial-grade parallel AI execution',
-      ja: '産業グレードの AI 並列実行プラットフォーム',
-    },
-    description: {
-      zh: '胜算云是专为 AI Native Teams 服务的超级工厂，聚合 Claude、ChatGPT、Gemini 等海内外 LLM 及多媒体模型算力。全站 SLA 高达 99.7%，提供企业级专属网关、智能路由、安全防护与 BYOK 密钥托管。',
-      en: 'Shengsuanyun is an industrial-grade super factory for AI Native Teams, aggregating Claude, ChatGPT, Gemini, and multimodal model compute. 99.7% SLA with enterprise gateways, smart routing, security, and BYOK key custody.',
-      ja: 'Shengsuanyun は AI Native Teams 向けの産業グレードな統合プラットフォーム。Claude や ChatGPT、Gemini など国内外の LLM・マルチモーダルモデルを集約し、99.7% の SLA、専用ゲートウェイ、スマートルーティング、BYOK 鍵管理を提供します。',
-    },
-    perk: {
-      zh: '新用户 10 元模力 + 首充 10% 赠送',
-      en: '¥10 credit + 10% bonus on first recharge',
-      ja: '新規 ¥10 クレジット + 初回 10% ボーナス',
-    },
-  },
-  {
     id: 'aicodemirror',
     name: 'AICodeMirror',
     icon: aicodemirrorIcon,
@@ -190,6 +166,31 @@ export const sponsors: Sponsor[] = [
       zh: '首充 8 折，企业最高 7.5 折',
       en: '20% off first recharge (up to 25% for enterprise)',
       ja: '初回 20% オフ（法人は最大 25% オフ）',
+    },
+  },
+  {
+    id: 'shengsuanyun',
+    name: { zh: '胜算云', en: 'Shengsuanyun', ja: 'Shengsuanyun' },
+    icon: shengsuanyunIcon,
+    url: 'https://www.shengsuanyun.com/?from=CH_4HHXMRYF',
+    tier: 'standard',
+    category: 'native-platform',
+    featured: true,
+    since: '2025-04',
+    tagline: {
+      zh: '工业级 AI 任务并行执行平台',
+      en: 'Industrial-grade parallel AI execution',
+      ja: '産業グレードの AI 並列実行プラットフォーム',
+    },
+    description: {
+      zh: '胜算云是专为 AI Native Teams 服务的超级工厂，聚合 Claude、ChatGPT、Gemini 等海内外 LLM 及多媒体模型算力。全站 SLA 高达 99.7%，提供企业级专属网关、智能路由、安全防护与 BYOK 密钥托管。',
+      en: 'Shengsuanyun is an industrial-grade super factory for AI Native Teams, aggregating Claude, ChatGPT, Gemini, and multimodal model compute. 99.7% SLA with enterprise gateways, smart routing, security, and BYOK key custody.',
+      ja: 'Shengsuanyun は AI Native Teams 向けの産業グレードな統合プラットフォーム。Claude や ChatGPT、Gemini など国内外の LLM・マルチモーダルモデルを集約し、99.7% の SLA、専用ゲートウェイ、スマートルーティング、BYOK 鍵管理を提供します。',
+    },
+    perk: {
+      zh: '新用户 10 元模力 + 首充 10% 赠送',
+      en: '¥10 credit + 10% bonus on first recharge',
+      ja: '新規 ¥10 クレジット + 初回 10% ボーナス',
     },
   },
   {
@@ -241,6 +242,31 @@ export const sponsors: Sponsor[] = [
       en: '10% off first top-up for new users',
       ja: '新規ユーザー初回チャージ 10% オフ',
     },
+  },
+  {
+    id: 'zetaapi',
+    name: 'ZetaAPI',
+    icon: zetaapiIcon,
+    url: 'https://zetaapi.ai/go/ccs',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    tagline: {
+      zh: '模型保真，低至官方价 35 折',
+      en: 'Real model fidelity from 35% of official pricing',
+      ja: 'モデル品質を保ち、公式価格の 35% から',
+    },
+    description: {
+      zh: 'ZetaAPI 主打模型不掺水、保真不降智，价格低至官方价 35 折，平台不混量、不暗中替换低质量模型、不做虚假路由。一个 Key 可接入 Claude Code、Codex、Gemini、ChatGPT 等主流模型，并提供企业级 SLA 稳定性、标准接口兼容与按量计费。',
+      en: 'ZetaAPI focuses on real, undegraded model access at as low as 35% of official pricing, with no traffic mixing, hidden low-quality substitutions, or fake model routing. One key connects Claude Code, Codex, Gemini, ChatGPT, and other mainstream models with SLA-backed stability, standard API compatibility, and pay-as-you-go billing.',
+      ja: 'ZetaAPI は、モデルを水増し・劣化させず、公式価格の 35% から利用できることを重視した API プラットフォームです。トラフィック混在、低品質モデルへの隠れた差し替え、虚偽ルーティングを行わず、1 つのキーで Claude Code、Codex、Gemini、ChatGPT などを利用できます。',
+    },
+    perk: {
+      zh: '首次充值 9 折，优惠码 CC-SWITCH',
+      en: '10% off first top-up with code CC-SWITCH',
+      ja: '初回チャージ 10% オフ（コード CC-SWITCH）',
+    },
+    couponCode: 'CC-SWITCH',
   },
   {
     id: 'byteplus',
@@ -754,31 +780,6 @@ export const sponsors: Sponsor[] = [
     },
   },
   {
-    id: 'zetaapi',
-    name: 'ZetaAPI',
-    icon: zetaapiIcon,
-    url: 'https://zetaapi.ai/go/ccs',
-    tier: 'standard',
-    category: 'aggregator',
-    iconBg: 'light',
-    tagline: {
-      zh: '模型保真，低至官方价 35 折',
-      en: 'Real model fidelity from 35% of official pricing',
-      ja: 'モデル品質を保ち、公式価格の 35% から',
-    },
-    description: {
-      zh: 'ZetaAPI 主打模型不掺水、保真不降智，价格低至官方价 35 折，平台不混量、不暗中替换低质量模型、不做虚假路由。一个 Key 可接入 Claude Code、Codex、Gemini、ChatGPT 等主流模型，并提供企业级 SLA 稳定性、标准接口兼容与按量计费。',
-      en: 'ZetaAPI focuses on real, undegraded model access at as low as 35% of official pricing, with no traffic mixing, hidden low-quality substitutions, or fake model routing. One key connects Claude Code, Codex, Gemini, ChatGPT, and other mainstream models with SLA-backed stability, standard API compatibility, and pay-as-you-go billing.',
-      ja: 'ZetaAPI は、モデルを水増し・劣化させず、公式価格の 35% から利用できることを重視した API プラットフォームです。トラフィック混在、低品質モデルへの隠れた差し替え、虚偽ルーティングを行わず、1 つのキーで Claude Code、Codex、Gemini、ChatGPT などを利用できます。',
-    },
-    perk: {
-      zh: '首次充值 9 折，优惠码 CC-SWITCH',
-      en: '10% off first top-up with code CC-SWITCH',
-      ja: '初回チャージ 10% オフ（コード CC-SWITCH）',
-    },
-    couponCode: 'CC-SWITCH',
-  },
-  {
     id: 'nekocode',
     name: 'NekoCode',
     icon: nekocodeIcon,
@@ -823,6 +824,29 @@ export const sponsors: Sponsor[] = [
       zh: '以更低成本构建可管理、可扩展的 AI 服务平台',
       en: 'Build manageable, scalable AI service platforms at lower cost',
       ja: 'より低コストで管理・拡張可能な AI サービス基盤を構築',
+    },
+  },
+  {
+    id: 'subrouter',
+    name: 'SubRouter',
+    icon: subrouterIcon,
+    url: 'https://subrouter.ai/register?aff=l3ri',
+    tier: 'standard',
+    category: 'aggregator',
+    tagline: {
+      zh: 'AI 服务公开市场与智能路由平台',
+      en: 'AI service marketplace and smart routing',
+      ja: 'AI サービス市場とスマートルーティング',
+    },
+    description: {
+      zh: 'SubRouter 是面向 AI 服务经营者的公开市场与智能路由平台。商家可快速开通独立经营站，发布套餐、管理用户与模型价格；用户可在市场发现服务，并通过统一 API 获得稳定高效的模型调用。',
+      en: 'SubRouter is a marketplace and smart routing platform for AI service operators. Merchants can launch operating sites, publish packages, and manage users, models, and pricing, while users discover services and access reliable AI models through one unified API.',
+      ja: 'SubRouter は、AI サービス事業者向けのマーケットプレイス兼スマートルーティングプラットフォームです。事業者は独立した運営サイトを立ち上げ、プランを公開し、ユーザー・モデル・価格を管理でき、ユーザーは統一 API を通じて安定かつ高効率なモデル呼び出しを利用できます。',
+    },
+    perk: {
+      zh: '一个 Key 接入多个模型与供应商',
+      en: 'One key for multiple models and providers',
+      ja: '1つのキーで複数のモデルとプロバイダーに接続',
     },
   },
   {
