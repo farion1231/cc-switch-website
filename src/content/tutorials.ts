@@ -1,4 +1,5 @@
 import type { Language } from '@/i18n/translations';
+import claudeApiIcon from '@/assets/icons/sponsors/claudeapi.png';
 
 export type LocalizedText = Record<Language, string>;
 
@@ -53,6 +54,7 @@ export interface Tutorial {
 const tutorialIcons = {
   ccSwitch: { src: '/docs/assets/tutorial-icons/cc-switch.png', alt: 'CC Switch' },
   claude: { src: '/docs/assets/tutorial-icons/claude.svg', alt: 'Claude' },
+  claudeApi: { src: claudeApiIcon, alt: 'Claude API' },
   codex: { src: '/docs/assets/tutorial-icons/codex.svg', alt: 'Codex' },
   deepseek: { src: '/docs/assets/tutorial-icons/deepseek.svg', alt: 'DeepSeek' },
   kimi: { src: '/docs/assets/tutorial-icons/kimi.svg', alt: 'Kimi' },
@@ -296,6 +298,28 @@ export const tutorials: Tutorial[] = [
     externalUrl: 'https://www.bilibili.com/video/BV1pQRNBsEGs/',
     accent: 'emerald',
     coverIcons: [tutorialIcons.deepseek, tutorialIcons.claude],
+    featured: true,
+  },
+  {
+    slug: 'claude-code-cc-switch-apito-guide',
+    title: {
+      zh: 'Claude API × CC Switch：Claude Code 一键接入与切换教程',
+      en: 'Claude API × CC Switch: Connect and Switch Claude Code APIs',
+      ja: 'Claude API × CC Switch: Claude Code の接続・切り替えガイド',
+    },
+    summary: {
+      zh: 'Claude API 的中文入门教程，介绍如何安装 CC Switch、导入 ClaudeAPI 配置、切换供应商、启动 Claude Code，并测试 API 连通性与查看用量。',
+      en: 'A Chinese getting-started guide from Claude API covering CC Switch installation, ClaudeAPI configuration import, provider switching, launching Claude Code, connectivity testing, and usage checks.',
+      ja: 'Claude API による中国語の入門ガイド。CC Switch のインストール、ClaudeAPI 設定のインポート、Provider の切り替え、Claude Code の起動、接続テスト、使用量確認を紹介します。',
+    },
+    author: { name: 'Claude API', url: 'https://apito.ai/zh/blog/' },
+    date: '2026-04-05',
+    category: 'getting-started',
+    source: 'community',
+    readMinutes: 8,
+    externalUrl: 'https://apito.ai/zh/blog/getting-started/claude-code-cc-switch-tutorial/',
+    accent: 'amber',
+    coverIcons: [tutorialIcons.claudeApi, tutorialIcons.ccSwitch],
     featured: true,
   },
   {
