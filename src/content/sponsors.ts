@@ -69,6 +69,47 @@ export interface Sponsor {
   featured?: boolean;
 }
 
+// Mirrors the main project's README order; website-only sponsors follow it.
+const sponsorDisplayOrder = [
+  'kimi-k2-7-code',
+  'packycode',
+  'zetaapi',
+  'apinebula',
+  'aicodemirror',
+  'pateway',
+  'fenno',
+  'runapi',
+  'shengsuanyun',
+  'aigocode',
+  'subrouter',
+  'apikey-fun',
+  'claudeapi',
+  'code0',
+  'teamorouter',
+  'unity2',
+  'new-api',
+  'claudecn',
+  'byteplus',
+  'siliconflow',
+  'nekocode',
+  'atlascloud',
+  'ucloud',
+  'ccsub',
+  'sssaicode',
+  'micu',
+  'rightcode',
+  'etok',
+  'cubence',
+  'crazyrouter',
+  'dmxapi',
+  'qiniu',
+  'sudocode',
+] as const;
+
+const sponsorDisplayRank = new Map<string, number>(
+  sponsorDisplayOrder.map((id, index) => [id, index]),
+);
+
 export const sponsors: Sponsor[] = [
   {
     id: 'kimi-k2-7-code',
@@ -872,7 +913,11 @@ export const sponsors: Sponsor[] = [
       ja: '登録後 QQ グループ 726213516 に参加し、管理者へ連絡すると CNY ¥10 のトライアルクレジットを進呈',
     },
   },
-];
+].sort(
+  (left, right) =>
+    (sponsorDisplayRank.get(left.id) ?? sponsorDisplayOrder.length) -
+    (sponsorDisplayRank.get(right.id) ?? sponsorDisplayOrder.length),
+);
 
 export const sponsorsByTier = (tier: SponsorTier): Sponsor[] =>
   sponsors.filter((sponsor) => sponsor.tier === tier);
