@@ -2,6 +2,697 @@
 
 Important release updates for CC Switch.
 
+## [3.18.0] - 2026-07-21
+
+> This release lets you do two brand-new things: **hand xAI's Grok CLI (Grok Build) over to CC Switch** — it becomes the eighth managed app, with one-click provider switching, MCP / Skills sync, proxy takeover, and usage statistics all included; and **connect Grok to Claude Code, Claude Desktop, and Codex** — either by signing in with your xAI Grok account directly (device-code authorization, no API key, running on your Grok subscription, with a strict-gateway compatibility layer on the Codex side so codex 0.142+ works too), or with an xAI API key (Codex gets a native Responses direct-connection preset; Claude Code can go through local routing). Just as important is a wave of fixes: the **Codex usage double count introduced in v3.17.0 is fixed**, with an automatic data rebuild after upgrading so the dashboard numbers become real again; **codex 0.144.5+ failing to start because of the model catalog is fixed**; and switching providers on Windows no longer flashes a console window or freezes the UI. Diagnostic logs also move from "wiped on every startup" to persistent across restarts, size-rotated, and fully redacted — and a UI crash now leaves an on-disk report instead of just a blank white window.
+
+### Highlights: What You Can Do Now
+
+- **Manage Grok Build (xAI's Grok CLI)**: add, import, and one-click switch Grok Build providers just like Claude Code / Codex; MCP servers and Skills sync bidirectionally, prompts auto-import on first launch, and session management plus the usage dashboard cover it fully; you can also route it through the local proxy for independent routing, failover, and billing.
+- **Connect Grok with your account or an API key — both paths work**: subscription users complete an xAI device-code sign-in under Settings → OAuth Auth Center (multiple accounts supported), and all three clients — Claude Code, Claude Desktop, Codex — run straight on your Grok subscription with no API key anywhere; pay-as-you-go users connect with an xAI API key instead — Codex has a ready-made "xAI (Grok)" preset connecting natively to `api.x.ai`, and Claude Code can connect through local routing following this release's new guide. The default model is `grok-4.5` throughout.
+- **Get your Codex usage numbers back to reality**: the v3.17.0 fork / sub-agent double count is rooted out at the parser level; the first launch after upgrading automatically backs up the database and rebuilds Codex usage, and the usage page gains a manual "Rebuild Codex Usage" button. Note that on first launch the history is repaired **progressively** — the dashboard numbers first shrink, then fill back in as the background re-import proceeds; this is expected (see "Upgrade Notes").
+- **Upgrade the codex CLI without fear**: the "fails to start" problem caused by codex 0.144.5's strict model-catalog parsing is fixed — generated catalogs now backfill the parser-required fields automatically.
+- **Switch smoothly on Windows**: switching providers or toggling takeover no longer flashes a black console window, and no longer freezes the UI for ~2 seconds (the freeze fix benefits all platforms).
+- **Troubleshoot and share logs with more confidence**: diagnostic logs persist across restarts (20 MB × 4 rotation) and every egress is uniformly redacted — URL credentials, request/response bodies, and sensitive headers never reach disk anymore; a UI crash shows an error card with a Reload button, with the details written to disk.
+- **Multi-turn reasoning and parallel tool calls no longer fall over**: the Responses↔Chat bridge fixes three classes of problems — reasoning content attached to the wrong message, parallel tool calls losing their IDs or their order, and tools with a null schema getting the whole request rejected by strict upstreams.
+- **Use Kimi K3**: the Kimi open-platform presets for Codex / Hermes / OpenClaw / OpenCode gain K3 (1M context), with built-in pricing seeded so its usage no longer shows $0.
+
+---
+
+### Usage Guides
+
+The new capabilities in this release land mainly in the provider presets, Settings → OAuth Auth Center, and the usage dashboard. The following docs are worth reading alongside it:
+
+- **[xAI Grok Account Sign-In (Settings → OAuth Auth Center)](/en/docs?section=getting-started&item=settings)**: the device-code login flow, multi-account management, and the integration's boundaries; please read the client-identity disclosure under "Risk Notice" below before use.
+- **[Using GPT Models in Claude Code (local routing guide)](/en/tutorials/claude-codex-routing-guide)** (now in Chinese / English / Japanese): a new step-by-step guide added in this release. Claude Code always speaks Anthropic Messages to the local `/v1/messages` route, and the local proxy converts each request to the upstream's Responses protocol — a gateway API key, a native Responses endpoint like xAI, or a ChatGPT subscription's Codex service all fit.
+- **[Using Claude Models in Codex (local routing guide)](/en/tutorials/codex-claude-routing-guide)**: a new step-by-step guide in three languages, pairing with v3.17.0's native Anthropic Messages upstream to connect Codex to any Claude-family gateway that only offers `/v1/messages`.
+- **[Usage Statistics](/en/docs?section=proxy&item=usage)**: understand the Usage Dashboard's data sources and how the statistics are counted. This release fixes the usage double count and adds the "Rebuild Codex Usage" maintenance action.
+
+---
+
+> [!WARNING]
+>
+> ## Only Official Channels (Please Read)
+>
+> CC Switch is a **fully free and open-source** desktop app, and we **do not charge users any fees**. Please only obtain the software through the official channels listed below:
+>
+> | Channel            | Only Official                                                                  |
+> | ------------------ | ------------------------------------------------------------------------------ |
+> | Website            | **[ccswitch.io](https://ccswitch.io)**                                         |
+> | Source             | **[github.com/farion1231/cc-switch](https://github.com/farion1231/cc-switch)** |
+> | Downloads          | **[GitHub Releases](https://github.com/farion1231/cc-switch/releases)**        |
+> | Author             | **[@farion1231](https://github.com/farion1231)**                               |
+> | Report an Imposter | **[GitHub Issues](https://github.com/farion1231/cc-switch/issues)**            |
+>
+> **Any "CC Switch" website or client that asks you for payment, top-ups, or login credentials is fake.** If you have been tricked into paying, stop the transaction immediately and file a report through GitHub Issues.
+
+---
+
+### Overview
+
+Both main threads of CC Switch v3.18.0 revolve around xAI Grok. The first is **Grok Build joining the managed apps**: xAI's Grok CLI (live config `~/.grok/config.toml`) becomes the eighth managed app alongside Claude Code, Claude Desktop, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes — provider add / import / one-click switch, bidirectional MCP and Skills sync, deep-link import, a standalone preset list, and proxy takeover with its own route namespace; the companion "Grok Official" entry supports official-login-state detection and import, and CC Switch never touches the official credentials. The second is **xAI Grok account OAuth sign-in**: device-code authorization replaces the API key, the local proxy injects the access token per request, and on the Claude Code / Claude Desktop side it performs the Anthropic Messages → xAI Responses conversion; the Codex side gets a managed OAuth preset with its own compatibility layer — the ChatGPT-backend-private shapes emitted by codex 0.142+ (namespace tool declarations, private fields) are deterministically flattened and stripped, so the strictly parsing xAI gateway no longer returns 422; API-key users get a separate "xAI (Grok)" native Responses direct-connection preset that goes through no conversion at all.
+
+On correctness, this release concentrates on **the Codex usage double count from v3.17.0**: the replay of the parent thread's history at the start of fork / sub-agent logs is no longer imported as new usage (the parser now only trusts explicit parent identity plus token-signature alignment), a one-time automatic usage rebuild runs after upgrading (schema v16), and the usage page gains a manual rebuild button; proxy-side usage logging becomes idempotent (replays of the same response no longer stack duplicate rows), and the usage page no longer freezes during large session imports. The **Codex conversion layer** gets four more fixes: tool schemas normalized to object type, reasoning attached forward across turns, streamed parallel tool calls keeping their IDs and order, and generated model catalogs backfilling the fields codex 0.144.5+ requires. The diagnostics story matures too: logs persist across restarts, rotate by size, and redact at every egress, and UI crashes are captured by an error boundary and written to disk. Rounding things out: Kimi K3 presets and pricing, corrected OpenClaw preset costs, SudoCode.us restored, and the first-run tray language following the system locale.
+
+**Release date**: 2026-07-21
+
+**Stats**: 52 commits | 217 files changed | +21,452 / -6,285 lines
+
+---
+
+### Added
+
+#### Grok Build: The Eighth Managed App
+
+xAI's Grok CLI ("Grok Build", live config `~/.grok/config.toml`) is now a first-class citizen in CC Switch: provider add / import / one-click switch (with a "restart Grok Build to apply" toast), app visibility and config-directory override settings, session manager and usage dashboard coverage, prompts with first-launch auto-import, `ccswitch://` deep-link provider import, and local proxy takeover — with its own `/grokbuild/v1/responses` route namespace, an independent failover queue, and per-app proxy settings; forwarding reuses Codex's Responses path but never shares Codex's provider namespace or circuit-breaker state.
+
+MCP servers sync bidirectionally with Grok's `[mcp_servers]` table, with the dialect differences smoothed over: Grok infers the transport from `command` / `url` and uses a `headers` field, so exports strip the explicit `type` and rename `http_headers` to `headers`, while imports infer the transport back. Skills gain a Grok Build enable flag too.
+
+On presets, the Codex list was deliberately **not** borrowed (an early cut leaked China-direct providers and Codex default models into the Grok form); instead Grok Build ships its own curated list: only aggregators and relays that actually carry Grok models, with the default model normalized to `grok-4.5` (`x-ai/grok-4.5` on namespaced routers). The tools panel installs Grok via the official xAI installer first (`x.ai/cli/install.sh` / `install.ps1`), with the npm package `@xai-official/grok` as fallback; installs confirmed as native self-update via `grok update`, while npm installs keep npm-anchored updates — the self-update is gated on positive native detection, so it can never touch a different kind of install. UI copy is in sync across all four locales. ([#5453](https://github.com/farion1231/cc-switch/pull/5453))
+
+#### Grok Official Login: Detection, Import, and Protection
+
+A new "Grok Official" provider entry maps to the Grok CLI's own built-in xAI OAuth login: selecting it hides the connection fields and writes an empty `~/.grok/config.toml`, and CC Switch never stores or touches the official credentials. Live-config reads, backups, and official-state writes now use syntax-only TOML validation, so an official-login (empty) config round-trips normally; importing the live config while Grok is in official login state yields "Grok Official set as current" instead of an error, matching Codex behavior. Official-state detection is deliberately wired only into the manual import command — the startup auto-importer still rejects official-state configs, so a "Grok Official" entry you deleted never comes back on the next launch. Proxy takeover of an official-login Grok config is skipped automatically, with a clear rejection on the manual path, consistent with the existing "never proxy official providers" policy.
+
+#### Sign In with Your xAI Grok Account: Claude Code and Claude Desktop
+
+Claude Code and Claude Desktop gain an "xAI (Grok)" preset that replaces the API key with an OAuth device-code login: requests go through the local proxy, which performs the Anthropic Messages → xAI Responses API conversion and injects the access token per request, with `grok-4.5` as the default model on every tier (the Claude Desktop preset maps the `claude-*`-style role IDs to `grok-4.5` upstream so it passes Desktop's third-party model validation).
+
+Settings → OAuth Auth Center gains an xAI section: device-code login (user code with a copy button, verification link, waiting / cancel / retry), multiple accounts with a default-account picker, per-account removal, and re-auth badges — an account whose refresh token was revoked stays visible as "expired" instead of disappearing, and auth status refetches every 15 seconds so a server-side revocation surfaces on its own.
+
+The integration's boundaries are pinned shut: no matter what the endpoint / format fields in the form say, the upstream is always `https://api.x.ai/v1/responses` (Responses format); OAuth endpoints are resolved via OIDC discovery but strictly validated to `auth.x.ai` over https; refresh tokens live in `~/.cc-switch/xai_oauth_auth.json` (`0600` on Unix; access tokens are memory-only); and OAuth error bodies never enter error messages or logs. Pricing for `grok-4.5` ($2 input / $6 output / $0.50 cache read per million tokens) is seeded in sync so its usage no longer records $0, with existing databases picking the row up automatically on next launch. Four-locale copy included. Please read the client-identity disclosure under "Risk Notice" before use.
+
+Not using OAuth and only have a pay-as-you-go xAI API key? You can still connect it to Claude Code: xAI's API endpoint is standard Responses protocol, so add it as an ordinary Responses provider — a custom provider with `https://api.x.ai/v1` and your API key, upstream format set to Responses, converted between Anthropic Messages ↔ Responses by local routing; it's the same recipe as the [Using GPT Models in Claude Code](/en/tutorials/claude-codex-routing-guide) guide. On the Codex side there's a ready-made API-key preset — see the next section.
+
+#### Codex Straight to xAI: Managed OAuth and Native API-Key Presets
+
+Codex gets two ways to talk to xAI directly — OAuth managed if you have a Grok subscription, native direct connection if you have an API key:
+
+- **The "xAI (Grok) OAuth" managed preset** runs Codex on a Grok subscription. The form hides the key / endpoint / format fields and shows the account picker, "fetch models" uses the signed-in account, and the provider is pinned to native Responses with the base URL and per-request token enforced by the proxy — edits are ignored, so the managed route cannot be redirected. Because codex 0.142+ emits ChatGPT-backend-private request shapes (`type:"namespace"` tool declarations make xAI's strict parser return a straight 422, plus private fields like `prompt_cache_retention`, `safety_identifier`, `external_web_access`, the `additional_tools` carrier, and sampling knobs grok-4.5 doesn't support), the OAuth route adds a compatibility layer on top of the native passthrough: namespace tools are flattened to top-level function tools (with the same sha256-truncated naming as the Chat path) and restored to namespaced form on the response side for both streaming and non-streaming, and unsupported fields are stripped — all deterministic field removals / structural lifts, never semantic rewrites, so prompt-cache prefixes stay stable. The layer is gated exclusively on the xAI OAuth provider type; no other provider's traffic is touched.
+- **The "xAI (Grok)" API-key preset** connects natively to Responses at `api.x.ai/v1`, with a 500K-context `grok-4.5` catalog entry built in. This preset does **not** receive the xAI-specific compatibility transforms above — API-key users on codex 0.142+ can still hit xAI's strict parser, and the OAuth preset is the fully compatible path.
+
+xAI OAuth token failures are classified as non-retryable, so failover never quietly moves your conversation onto a different Grok account.
+
+#### UI Crash Capture: On-Disk Reports and a Reload Screen
+
+A React error boundary now wraps the entire UI (including the database-recovery screen): a renderer crash shows a "Something went wrong in the interface" card with a Reload button instead of a blank white window, and global `error` / `unhandledrejection` handlers persist renderer errors to disk — previously a JS crash left zero on-disk evidence. Everything the frontend logs passes two redaction layers: a structured serializer that redacts by sensitive property name (`tokens` / `apiKeys` / `credentials` variants all normalized to match, hiding the entire value including nested objects) and by value shape (token prefixes, PEM headers, high-entropy opaque strings), then a single text egress whose ordered regex chain covers URL query values and credentials, auth headers and schemes, and named secret containers — even in double-encoded JSON. JSON arriving as a string is re-parsed and redacted structurally, and oversized structured input is dropped entirely rather than truncated — a truncated JSON string would fall back to the weaker text regexes and could leak. The settings toggles were also relabeled to say what they actually control: "Application Diagnostic Logs" (cc-switch.log) versus the proxy's "Record Request Usage" (the stats database, which never was a text log). Four locales in sync.
+
+#### "Rebuild Codex Usage" Maintenance Button
+
+The usage dashboard's maintenance section gains "Rebuild Codex Usage": after backing up the database, it wipes only `codex_session`-sourced detail rows, their `_codex_session` daily rollups, and the Codex sync cursors, then re-imports every rollout file from scratch with the corrected parser — the recovery path for databases already inflated by the double-count bug below, and the retry path for deferred fork files whose parent log has since been restored. The manual rebuild fails hard when the pre-rebuild backup cannot be written (the automatic migration variant only warns, since blocking startup on an unwritable backup directory would be the worse outcome after an upgrade); the whole backup → reset → re-import sequence holds the session-sync lock, so the 60-second background sync cannot interleave with the wipe; and completion always sends exactly one frontend refresh notification — including when the re-import returns zero rows or fails — so the dashboard never keeps showing pre-reset numbers. Cursor cleanup matches rollout paths purely by shape (a `rollout-{uuid}` filename under a `sessions` / `archived_sessions` segment), so cursors recorded under an old `CODEX_HOME` are cleaned too. Four locales in sync.
+
+#### Session Import Observability: Deferred Files and Suspected Duplicates
+
+Session sync results now report `filesScanned`, `deferredFiles` — fork rollouts whose parent log is missing or whose parent markers conflict are held back without writing a cursor, so a later sync or a manual rebuild retries them instead of importing on a guess — and `suspectedDuplicates`: a post-insert probe checks each imported row for a pre-existing same-fingerprint row (via the `idx_request_logs_dedup_lookup_expr` expression index) and logs a warning per hit. If the double-count bug ever regresses, it will announce itself in the logs instead of silently inflating the totals.
+
+#### Kimi K3 in Presets and Built-In Pricing
+
+The Kimi open-platform presets for Codex / Hermes / OpenClaw / OpenCode gain Kimi K3 (1M context window), appended after K2.7 Code so existing default-model behavior is unchanged. The built-in pricing table gains `kimi-k3` (official list price: $3 input / $15 output / $0.30 cache read per million tokens) plus a bare `k3` alias — the Kimi For Coding subscription reports its model under the short id `k3`, which would otherwise match no pricing row (same precedent as the existing `hunyuan-hy3` / `hy3` pair). Existing databases pick both rows up automatically on next launch, without touching user-edited pricing.
+
+#### SudoCode.us Returns, Coexisting with SudoCode.chat
+
+The two unrelated companies that happen to share the "SudoCode" name are now two separate presets: the sponsor is renamed "SudoCode.chat", and the previously replaced-in-place "SudoCode.us" returns with its original endpoints, models, and icon, plus a distinct Hermes slug so both can coexist in the additive `~/.hermes/config.yaml`. Counting the new Grok Build preset list, SudoCode.chat ships in seven apps and SudoCode.us in all eight.
+
+---
+
+### Changed
+
+#### Diagnostic Logs: Persistent Across Restarts, Size-Rotated, and Never Recording Secrets
+
+`cc-switch.log` is no longer wiped on every startup — the log that could have explained a crash used to be gone by the time the app reopened — and instead rotates at 20 MB with 4 archives kept (~100 MB cap, versus a single file that could balloon to 1 GB before); the previously unbounded `crash.log` rotates at 5 MB with 2 archives, with the check / rotate / append sequence under one lock so concurrent panics cannot lose an archive.
+
+Persistent logs make verbatim secrets a real exposure (users attach these files to public issues), so the same change scrubs every backend log egress: upstream URLs are logged with userinfo / query / fragment stripped (origin-only when no known secret is available to substitute, since a credential could be embedded in the path); request and response bodies are never logged — replaced by byte counts, a short hash, or a safe classification (`sse` / `html` / `json-like` / `binary-or-encoded`, …) that keeps the transform-debugging signal without the content; response headers go through an allowlist (unlisted headers log name-only); the secret values currently in use (API key, access token) are substituted out of any logged URL that carries them; and MCP custom-field values are omitted. The log plugin also registers earlier (updater / startup failures become diagnosable), the persisted log level applies as soon as the database opens and fails closed to Info, and the "Enable Diagnostic Logs" switch now gates frontend-originated log writes too. **Log files written by earlier versions are not retroactively scrubbed** — see "Upgrade Notes".
+
+#### Preset Picker: Sponsors Grouped, Everything Else Alphabetized
+
+The preset picker's default order becomes four tiers: official first, then the prime partner, then sponsor presets (in the same order as the README sponsor table, which the preset files were physically reordered to match), then all remaining presets sorted alphabetically by display name instead of file order. An entry matching multiple tiers lands only in the earliest one, so nothing shows up twice.
+
+#### Preset "Get API Key" Links Updated
+
+The key-application links on the RunAPI, ClaudeCN, ZetaAPI, and APINebula presets now open each provider's current registration / referral page (ClaudeCN also moved domains: claudecn.top → claudecn.ai). Referral tags remain confined to these links and the README — website links and API endpoints stay untouched.
+
+---
+
+### Fixed
+
+#### Codex Fork / Sub-Agent Replayed Parent History No Longer Counted as New Usage (the v3.17.0 Double Count)
+
+Fixes the v3.17.0 usage inflation: forking a Codex task or spawning a sub-agent in copy mode re-counted the parent conversation's token history as new usage — users reported single days jumping by billions of tokens, byte-identical parent/child rows, and empty forks carrying usage they never consumed. Fork / sub-agent rollout files begin by replaying the parent thread's history, and the old parser located the takeover boundary heuristically (the first `thread_settings_applied` event, object-shaped `subagent` source markers): the boundary landed too early when the parent's own settings changes appeared in the replay, and the current string-shaped source markers weren't recognized at all, importing the entire replayed parent history verbatim. The new parser trusts only explicit parent identity — `forked_from_id` on the child's `session_meta`, or `source.subagent.thread_spawn.parent_thread_id`, with a conflict between the two deferring the file — anchors each thread's identity to the rollout filename UUID, loads the parent rollout's own pre-fork token-count sequence, and strips the child's replayed prefix by aligning token signatures against it: replayed events only restore the cumulative baseline and are never inserted as rows. Sub-agent logs that carry no replayed history are now counted as live usage, also fixing the opposite-direction undercount where real sub-agent consumption was skipped as suspected replay. ([#5335](https://github.com/farion1231/cc-switch/issues/5335), [#5433](https://github.com/farion1231/cc-switch/issues/5433), [#5381](https://github.com/farion1231/cc-switch/issues/5381))
+
+#### Proxy Usage Logging Is Now Idempotent: Response-Scoped Stable Keys
+
+When a terminal usage event carried no message id — the norm for Codex `/responses` traffic through the local proxy — the dedup key fell back to a random UUID, so every retry / replay of the same upstream response minted a fresh key and `INSERT OR REPLACE` stacked a new row each time; one reporter's database held the same usage combination 2,078 times. The parser now takes the key from the response envelope itself — the Codex `response.completed` event's `response.id` (ids from `response.created` are discarded), Chat Completions `chatcmpl` ids, and the Gemini `responseId` — scoped as `session:{app_type}:{provider_id}:{id}`: the same response replayed against a different provider during failover still bills once per provider without cross-provider collisions (Claude keeps the bare `session:{id}` shape so proxy rows continue to converge with session-log imports). When no envelope id exists at all, the fallback is a deterministic SHA-256 over the response's usage semantics rather than a random UUID — an identical replay must collide into the same key for dedup to work — and the final database write becomes a guarded insert-if-absent within the dedup window instead of an unconditional REPLACE. ([#5496](https://github.com/farion1231/cc-switch/issues/5496))
+
+#### Usage Page No Longer Freezes During Large Session Imports
+
+Opening the usage page while a big import ran could lock the whole UI up: every inserted row fired a refresh notification, each notification made the frontend re-run all ~10 usage queries, and those queries contended with the importer for the single database connection while it parsed rollout files tens of megabytes large, line by line — on duplicate-inflated databases the three compounded each other. Session sync now notifies the frontend once per completed pass; all session importers are serialized behind a single-flight lock (a manual "sync now" queues behind the running pass instead of racing it); the blocking parse work runs on a dedicated blocking thread so it no longer starves the async runtime driving the UI's commands; and the 60-second background tick skips missed runs instead of bursting to catch up.
+
+#### codex 0.144.5+ No Longer Fails to Start on CC Switch-Generated Model Catalogs
+
+codex ≥ 0.144.5 parses external model catalogs strictly and rejects the whole file when an entry is missing `supports_reasoning_summaries` — both the Codex CLI and the desktop app failed to launch, and deleting the generated catalog didn't help because any provider save regenerated it the same way. The root cause: CC Switch clones its catalog template from the machine-shared `models_cache.json`, whose field set is whatever the last-writing codex process produced — a coexisting older codex build kept rewriting the cache without the field the newer parser requires. Generated catalogs now backfill parser-required fields from the bundled static template, and only when absent (dynamic values always win); optional capability fields whose "missing = parser default" semantics must survive are deliberately not backfilled.
+
+#### Windows: No More Console Flash or UI Freeze When Switching Providers
+
+Switching providers or toggling takeover on Windows flashed a transient console window and froze the UI for up to ~2 seconds. Three causes, three fixes: the `codex debug models --bundled` probe launches `codex.cmd` through `cmd.exe`, which in a GUI-subsystem app spawns its own console — the child process is now created with `CREATE_NO_WINDOW`; the model-catalog template was regenerated on every switch — it's now cached process-wide after the first successful load (failures stay retryable, so a bad first probe cannot poison the cache), and the Codex CLI starts at most once per app run; and `switch_provider` was a synchronous command on the main thread — it's now async with the real work on a blocking thread, still serialized by the per-app switch lock. The freeze fix benefits all platforms; the console-flash fix is Windows-specific.
+
+#### Tool Schemas with Null, Missing, or Union Parameter Types Accepted by Strict Upstreams
+
+Built-in Codex tools such as `codex_app__automation_update` declare `parameters: null` (or `type: null`), which strict OpenAI-compatible upstreams like DeepSeek reject with a 400 for the entire request — killing tool-using sessions routed through the proxy. The Responses→Chat bridge now normalizes every tool's parameters to a `type:"object"` schema: null or missing parameters (including the nested-form missing case) become `{"type":"object","properties":{}}`, a non-object `type` (including `type: null`) is corrected to `"object"` in place, and top-level `oneOf` union schemas get a root `type:"object"` added with their branches preserved untouched. The same object-type guarantee was extended to the Codex→Anthropic tool path's `input_schema`. Existing `properties` / `required` are never dropped. ([#4706](https://github.com/farion1231/cc-switch/pull/4706), [#5315](https://github.com/farion1231/cc-switch/pull/5315), fixes #4705, #4783)
+
+#### Reasoning Models Keep Their Thinking Across Multi-Turn Codex Chat Conversations
+
+With a reasoning model (e.g. kimi-k2-thinking) behind the proxy's Responses→Chat bridge, multi-turn history mangled the thinking: each turn's `reasoning` item got glued onto the tail of the **previous** assistant message, leaving the following assistant turn with no `reasoning_content` — models would visibly break off mid-conversation. Responses semantics place reasoning **before** the message it belongs to, so the bridge now attaches reasoning forward to the assistant message or tool call that follows it; genuine trailing reasoning back-attaches only at a confirmed tail (end of input, or a turn boundary such as an incoming user message — where it was previously silently discarded), appending to any embedded reasoning already present; and pending reasoning is always consumed at boundaries, so it can never leak across a user turn into a later assistant message. ([#5508](https://github.com/farion1231/cc-switch/pull/5508))
+
+#### Streamed Parallel Tool Calls Keep Their IDs and Their Order
+
+Two bugs in the Chat→Responses streaming bridge corrupted parallel tool calls from upstreams that split identity across chunks: a continuation delta carrying an empty `id` overwrote the real `call_id` (the Codex client then saw `call_id:""` and couldn't match tool results to calls), and tool calls were emitted the moment they individually became ready, so a later index whose name arrived early could jump ahead of an earlier one — reordering parallel calls. Empty ids are now ignored, and emission goes through a consecutive-index gate that releases tool calls strictly in Chat `index` order, waiting on any not-yet-identified earlier index; no fake call id is ever synthesized mid-stream (only as a last resort at stream finalization, which also skips nameless calls defensively and still emits sparse indexes). ([#5310](https://github.com/farion1231/cc-switch/pull/5310))
+
+#### Managed-OAuth Providers Reliably Flagged as "Needs Local Routing"
+
+The "needs routing" badge and switch-time warning were derived from the provider's API format — the wrong signal for managed-OAuth providers (Copilot, Codex OAuth, xAI), whose credential is injected by the proxy regardless of upstream format: a managed provider on a native format got no warning and failed silently without takeover. Routing need is now decided by a single shared predicate: official providers never need routing, managed-OAuth providers always do, and format-based rules apply only to the remaining cases. The switch-time gate also checks the right readiness signal per app: per-app takeover status for most apps (the old gate looked only at a global proxy-running flag, missing "the proxy runs but this app isn't taken over"), while Claude Desktop keeps watching the proxy process itself — the backend's takeover status has no Claude Desktop field, so a uniform per-app gate would have left Desktop warning forever. Claude Desktop provider forms now force proxy mode and lock the model-mapping toggle for every managed-OAuth type, not just xAI. Four locales in sync.
+
+#### Tool Updates Work When Node Lives in nvm / fnm / mise
+
+Anchored npm update and repair commands invoked npm by absolute path, but npm's launcher resolves `node` via its `#!/usr/bin/env node` shebang against PATH — and a GUI-launched app inherits only the system PATH, without the version-manager directories, so updates for tools installed via nvm / fnm / mise silently failed. Every anchored npm invocation now prefixes PATH with npm's own sibling `bin` directory, so npm and its shebang resolve to the same Node install; the Codex self-repair (uninstall + reinstall) path is covered too.
+
+#### Deleted Default Skill Repositories Stay Deleted
+
+Default Skill repositories were re-seeded on every startup by a "supplement missing defaults" pass, so a default repo you deleted silently returned on the next launch. Seeding is now one-time per database, tracked by a settings flag; databases that already contain repositories at upgrade time get the flag set without any re-seeding, so existing selections are untouched. ([#5356](https://github.com/farion1231/cc-switch/pull/5356))
+
+#### First-Run Tray Language Follows the System Locale
+
+Before any language was chosen in settings, the tray menu was hardcoded to Simplified Chinese — on English / Japanese / Traditional-Chinese systems the main UI correctly followed the OS locale while the tray disagreed, until the user switched language once. The tray now derives its first-run language from the OS locale with the same precedence rules as the frontend (including `zh-TW` / `zh-HK` / `zh-Hant` → Traditional Chinese); an explicitly chosen language always wins, and unreadable locales fall back to Chinese as before. ([#4355](https://github.com/farion1231/cc-switch/pull/4355))
+
+#### Failed Imports Show the Real Error and Refresh the List
+
+Every failed "import from live config" produced an empty error toast, because Tauri's `invoke` rejects with the backend's error **string** while the handler read `.message` off it. The backend's actual message is now shown (with a localized generic fallback), and the provider list refreshes even on failure, so side effects committed before the error are visible immediately.
+
+#### OpenClaw Preset Model Costs Corrected to Official List Prices
+
+Fifteen OpenClaw preset entries carried cost values in the wrong unit or unconverted currency — the `cost` field is USD per million tokens, but e.g. `glm-5.1` was listed at `0.001/0.001` (≈1000× undervalued, so its usage showed near-zero cost) while `deepseek-v4-pro` carried unconverted CNY values (overvalued). All entries now carry official list prices in $/M; subscription-plan and free-tier endpoints deliberately show list prices too, so plan users see the standard value of their usage. Providers created from these presets going forward get the corrected values; previously added providers keep the config they were created with.
+
+#### A Batch of Small UI Fixes
+
+- **AiHubMix icon**: the Codex app's AiHubMix preset was the only one missing its brand-icon fields and rendered a generic icon; it now matches the other apps.
+- **Two missing locale keys backfilled**: the reason fragment in Codex's "needs routing because it uses Anthropic Messages format" toast rendered in Chinese inside an otherwise-localized sentence (`proxyReasonAnthropicMessages` existed in no locale file), and the provider form's key-status loading label had shipped only as a hardcoded default since April; both now exist in zh / en / ja / zh-TW.
+
+---
+
+### Documentation
+
+#### Codex ↔ Claude Routing Guides, Both Directions
+
+Two new guides complete the pair — "Claude models inside the Codex client" and "Responses providers inside the Claude Code client":
+
+- **[Using Claude Models in Codex](/en/tutorials/codex-claude-routing-guide)** (Chinese / English / Japanese, with screenshots): pairs with v3.17.0's native Anthropic Messages upstream to connect Codex to a Claude-family `/v1/messages` gateway; the v3.17.0 release notes now link to it.
+- **[Using GPT Models in Claude Code](/en/tutorials/claude-codex-routing-guide)** (Chinese / English / Japanese, with screenshots): drive Claude Code with Responses-speaking providers (a gateway API key, or a ChatGPT subscription's Codex service) — Claude Code always speaks Anthropic Messages to the local `/v1/messages` route, and the proxy converts each request to the upstream's Responses protocol.
+
+#### README Sponsor Updates
+
+SubRouter joins the sponsor table across the four README languages; the pinned Kimi sponsor copy is refreshed to K3 with banners served from the Moonshot CDN; RunAPI benefit copy is refreshed, and sponsor rows are reordered to match the in-app preset order.
+
+---
+
+### Upgrade Notes
+
+#### Automatic Database Migration and the One-Time Codex Usage Rebuild
+
+Upgrading from v3.17.0 runs three schema migrations in sequence (v13 → v16): v14 rebuilds the `proxy_config` table to admit Grok Build (existing per-app proxy settings are all carried over, and a `grokbuild` row is added); v15 adds Grok Build enablement columns to the MCP-server and Skills tables; and v16 triggers the one-time automatic Codex usage rebuild — the database is first backed up under `backups/`, `codex_session` data and cursors are reset, and the normal startup sync re-imports everything with the corrected parser. Typical datasets take seconds; the heaviest dataset measured (1,801 rollout files / 1.5 GB) took about 65 seconds. Later launches are incremental as before. If you're in the habit of rolling back to older versions, back up `~/.cc-switch/cc-switch.db` yourself first.
+
+**Please note on first launch**: the history repair completes **progressively** — the rebuild proceeds in the background with the startup sync, and during that window the Codex history numbers on the usage dashboard first drop to zero and then fill back in step by step. This is expected behavior, not data loss. The post-rebuild total will usually be **smaller** than before the upgrade: the part inflated by double counting is squeezed out, and what remains is your real usage.
+
+#### Boundaries of the Rebuild
+
+- The rebuild recomputes usage from the rollout JSONL files, so **history whose source log was already deleted cannot be reconstructed**.
+- Fork files whose parent rollout is missing are deferred and reported instead of imported on a guess; restore the parent log and run "Rebuild Codex Usage" to import them later.
+- Historical proxy-source duplicate rows are permanently retained — the migration rebuilds only session-sourced data, and no cleanup pass for past proxy inflation exists; the idempotent logger only guarantees no new duplicates from this point on.
+
+#### Old Log Files Are Not Retroactively Scrubbed
+
+From this release on, diagnostic logs are no longer cleared at startup and persist across restarts (up to ~100 MB of rotated runtime logs plus ~15 MB of crash logs). **Log files written by earlier versions are not retroactively scrubbed** and may contain API keys, tokens, or URLs with credentials — review pre-upgrade logs before sharing them publicly.
+
+#### Grok Build Installs via the Official Installer Script
+
+Installing or reinstalling Grok Build now prefers the official xAI installer, fetching `x.ai/cli/install.sh` (or `install.ps1` on Windows) at install time, with npm as fallback; existing npm installs keep updating via npm.
+
+#### Built-In Pricing Rows Auto-Appended
+
+New pricing rows (`grok-4.5`, `kimi-k3`, `k3`) are appended automatically on next launch via insert-if-absent; user-edited pricing rows are never overwritten.
+
+---
+
+### Risk Notice
+
+#### xAI Grok OAuth Sign-In (New in This Release — Please Read)
+
+This release's xAI Grok OAuth integration **reuses the public OAuth client identity and scopes registered for the official Grok CLI** (`client_id b1a00492-073a-47ea-816f-4c329264a828`, scope including `grok-cli:access`), rather than an application identity registered by CC Switch. xAI may not support this use, and **it could lead to account restriction or suspension — use at your own risk**. The feature is entirely opt-in: if you don't add an xAI provider, nothing changes. On first login it creates `~/.cc-switch/xai_oauth_auth.json` (refresh tokens only, `0600` on Unix; access tokens are held in memory) and contacts `auth.x.ai` and `api.x.ai` through your configured outbound proxy, with no local callback port.
+
+#### Carried-Over Reverse-Proxy Notices
+
+**Codex OAuth reverse proxy**: using a ChatGPT subscription's Codex OAuth through a reverse proxy may violate OpenAI's terms of service. See the [v3.13.0 release notes](v3.13.0-en.md#️-risk-notice) for details.
+
+**Third-party provider routing**: when CC Switch's local proxy converts and forwards Codex, Claude Desktop, or Grok Build requests to third-party providers, each provider may have different requirements for billing, compliance, and data retention. Read the target provider's terms before use.
+
+By enabling these features, users accept the related risks. CC Switch is not responsible for account restrictions, warnings, or service suspensions caused by using these features.
+
+---
+
+### Thanks
+
+Thanks to the following contributors for the features and fixes in v3.18.0:
+
+- [#5453](https://github.com/farion1231/cc-switch/pull/5453): first-class Grok Build support (the core of the eighth managed app), thanks @YUZHEthefool.
+- [#5508](https://github.com/farion1231/cc-switch/pull/5508): attach reasoning forward across the Responses→Chat bridge, thanks @ka79376046.
+- [#5310](https://github.com/farion1231/cc-switch/pull/5310): preserve streamed parallel tool-call identity and order, thanks @SaladDay.
+- [#5315](https://github.com/farion1231/cc-switch/pull/5315): default Codex tool parameters to an object schema, thanks @Komikawayi.
+- [#4706](https://github.com/farion1231/cc-switch/pull/4706): normalize tool parameter types for strict OpenAI-compatible providers, thanks @Ryan2128.
+- [#5356](https://github.com/farion1231/cc-switch/pull/5356): keep deleted default Skill repositories deleted, thanks @allenxu09.
+- [#4355](https://github.com/farion1231/cc-switch/pull/4355): first-run tray language follows the system locale, thanks @LaiYueTing.
+- [#5138](https://github.com/farion1231/cc-switch/pull/5138): extend backend CI to Linux / Windows / macOS, thanks @zayokami.
+
+Thanks also to everyone who reported Codex usage anomalies, new-codex startup failures, and tool-call problems — this release's most important fixes came directly from reproduction clues in those real-world reports.
+
+---
+
+### Download & Install
+
+Visit [Releases](https://github.com/farion1231/cc-switch/releases/latest) and download the build for your system.
+
+#### System Requirements
+
+| System  | Minimum Version      | Architecture                        |
+| ------- | -------------------- | ----------------------------------- |
+| Windows | Windows 10 and later | x64 / ARM64                         |
+| macOS   | macOS 12 (Monterey)+ | Intel (x64) / Apple Silicon (arm64) |
+| Linux   | See table below      | x64 / ARM64                         |
+
+#### Windows
+
+| File                                     | Description                                      |
+| ---------------------------------------- | ------------------------------------------------ |
+| `CC-Switch-v3.18.0-Windows.msi`          | **Recommended** - MSI installer with auto-update |
+| `CC-Switch-v3.18.0-Windows-Portable.zip` | Portable build, unzip and run                    |
+
+Windows ARM64 devices should pick the artifact whose file name carries the `arm64` tag.
+
+#### macOS
+
+| File                             | Description                                           |
+| -------------------------------- | ----------------------------------------------------- |
+| `CC-Switch-v3.18.0-macOS.dmg`    | **Recommended** - DMG installer, drag to Applications |
+| `CC-Switch-v3.18.0-macOS.zip`    | Unzip and drag to Applications, Universal Binary      |
+| `CC-Switch-v3.18.0-macOS.tar.gz` | For Homebrew install and auto-update                  |
+
+Homebrew install:
+
+```bash
+brew install --cask cc-switch
+```
+
+Upgrade:
+
+```bash
+brew upgrade --cask cc-switch
+```
+
+#### Linux
+
+Linux assets are available for both **x86_64** and **ARM64** (`aarch64`). Choose the file whose architecture tag matches your machine's `uname -m` output:
+
+- `CC-Switch-v3.18.0-Linux-x86_64.AppImage` / `.deb` / `.rpm`
+- `CC-Switch-v3.18.0-Linux-arm64.AppImage` / `.deb` / `.rpm`
+
+| Distribution                            | Recommended Format | Install Command                                                        |
+| --------------------------------------- | ------------------ | ---------------------------------------------------------------------- |
+| Ubuntu / Debian / Linux Mint / Pop!\_OS | `.deb`             | `sudo dpkg -i CC-Switch-*.deb` or `sudo apt install ./CC-Switch-*.deb` |
+| Fedora / RHEL / CentOS / Rocky Linux    | `.rpm`             | `sudo rpm -i CC-Switch-*.rpm` or `sudo dnf install ./CC-Switch-*.rpm`  |
+| openSUSE                                | `.rpm`             | `sudo zypper install ./CC-Switch-*.rpm`                                |
+| Arch Linux / Manjaro                    | `.AppImage`        | Make executable and run directly, or use AUR                           |
+| Other distributions / unsure            | `.AppImage`        | `chmod +x CC-Switch-*.AppImage && ./CC-Switch-*.AppImage`              |
+
+## [3.17.0] - 2026-07-13
+
+> This release brings a long-awaited capability: **one-click "Projects" switching** — save your current provider, MCP, Skills, and memory files as a single named snapshot, swap the whole set for another one from the title bar or tray with a single click, and have the state of the project you're leaving automatically saved back on the way out. The Codex side gets plenty too: **your official ChatGPT subscription account can now route through the local proxy as well**, getting the same routing and usage statistics as third-party providers; the GPT-5.6 family's context window and Sol / Terra / Luna three-tier pricing land in one step; and a native Anthropic Messages upstream format is added — is Claude Code banned at your company but the Claude API isn't? You can now **use Claude-family models directly inside Codex**. On top of that comes a big wave of correctness fixes: upstream failures no longer turn into "empty replies", cache-write tokens are no longer double-billed, deleted MCP servers no longer come back from the dead, and Kimi For Coding's 256K window finally takes effect for real.
+
+### Usage Guides
+
+The new capabilities in this release land mainly in the project switcher at the top of the home page, the Codex provider form, and the usage dashboard. The following docs are worth reading alongside it:
+
+- **[Using Claude in Codex (local routing guide)](/en/tutorials/codex-claude-routing-guide)**: a new step-by-step guide for this release's native Anthropic Messages upstream. It walks through setting a Codex provider's upstream format to `anthropic` to connect to any Claude-family gateway that only offers `/v1/messages`, and use Claude-family models inside Codex.
+- **[Using Kimi inside Codex (local routing guide)](/en/tutorials/codex-kimi-routing-guide)**: a new step-by-step guide added in this release. Newer Codex CLI speaks the OpenAI Responses protocol, while the Kimi Open Platform and Kimi For Coding expose Chat Completions endpoints, so a direct connection usually 404s; the guide walks through using the built-in `Kimi` / `Kimi For Coding` presets together with local routing to handle the protocol conversion.
+- **[Codex Official Login Preservation](/en/tutorials/codex-official-auth-preservation-guide)**: understand how CC Switch preserves your official ChatGPT login when you switch to a third-party provider. This release goes a step further — the official account itself can now route through the proxy too (see "Added" below).
+- **[Usage Statistics](/en/docs?section=proxy&item=usage)**: understand the Usage Dashboard's data sources and how the statistics are counted. This release fixes cache-write billing, fills in Codex subagent session accounting, and adds GPT-5.6 and Hunyuan Hy3 pricing.
+
+---
+
+> [!WARNING]
+>
+> ## Only Official Channels (Please Read)
+>
+> CC Switch is a **fully free and open-source** desktop app, and we **do not charge users any fees**. Please only obtain the software through the official channels listed below:
+>
+> | Channel            | Only Official                                                                  |
+> | ------------------ | ------------------------------------------------------------------------------ |
+> | Website            | **[ccswitch.io](https://ccswitch.io)**                                         |
+> | Source             | **[github.com/farion1231/cc-switch](https://github.com/farion1231/cc-switch)** |
+> | Downloads          | **[GitHub Releases](https://github.com/farion1231/cc-switch/releases)**        |
+> | Author             | **[@farion1231](https://github.com/farion1231)**                               |
+> | Report an Imposter | **[GitHub Issues](https://github.com/farion1231/cc-switch/issues)**            |
+>
+> **Any "CC Switch" website or client that asks you for payment, top-ups, or login credentials is fake.** If you have been tricked into paying, stop the transaction immediately and file a report through GitHub Issues.
+
+---
+
+### Overview
+
+CC Switch v3.17.0 is a major feature release following v3.16.5, centered on **Projects**: you can save the current provider, MCP, Skills, and memory-file state of Claude Code / Claude Desktop / Codex as a named snapshot — say a "Development" set for a coding directory and a "Drawing" set for a writing-and-drawing directory — and swap the whole set with one click from the switcher at the top of the home page or the "Projects" tray submenu. Before you switch, the state of the project you're about to leave is automatically saved back, so a project always holds exactly what you last left it as. The second main thread is Codex: **your official ChatGPT subscription account can now be taken over by the local proxy route** (no API key needed — Codex's own login credentials are passed through verbatim and your official login is never overwritten); paired with a corrected client identity, the latest subscription models like `gpt-5.6-luna` no longer falsely 404; GPT-5.6's 372K context-window injection, Sol / Terra / Luna three-tier pricing (including the 1.25× cache-write rate), and preset default models all land together; and the Codex upstream format gains a native Anthropic Messages protocol — which targets a very real scenario: plenty of companies ban the Claude Code client but do **not** ban the Claude API, and those users can now point Codex directly at the Claude API (or any gateway that only offers `/v1/messages`) and keep using Claude-family models inside Codex.
+
+For everyday-use correctness, this release makes three concentrated waves of fixes. **Proxy bridge**: semantic failures returned inside a 2xx are no longer turned into an empty reply but trigger failover instead; reasoning content, tool results, and the system role round-trip losslessly across the Responses↔Anthropic bridge; prompt-cache breakpoint injection is more thorough, so long conversations no longer resend everything at full price each turn. **Usage billing**: cache-write tokens were previously billed twice — once at the input rate and once at the cache-creation rate — and are now corrected (the database is upgraded to schema v13 so historical data stays consistent); usage and quota queries automatically retry on transient network failures and no longer cache a failure body as real data. **Codex `config.toml`**: MCP servers you deleted in the app no longer come back on provider switch; when parsing a live file fails, sync errors out rather than blanking the whole file; and the "Apply Common Config" merge is moved to the backend so comments and key order are no longer scrambled. Also included: Kimi For Coding's 256K window finally taking effect, Codex subagent and free-tier quota accounting filled in, Zhipu team-plan quota queries, OpenCode form enhancements, and a batch of preset updates.
+
+**Release date**: 2026-07-13
+
+**Stats**: 69 commits | 172 files changed | +21,067 / -2,464 lines
+
+---
+
+### Highlights
+
+- **One-click "Projects" switching**: save your provider, MCP, Skills, and memory files as a single named snapshot (say one set for coding, another for writing and drawing) and swap the whole thing with one click from the top of the home page or the tray; the state of the project you leave is saved back automatically on switch. Covers three scopes — Claude Code, Claude Desktop, and Codex — that don't interfere with one another.
+- **Official Codex account can route through the proxy too**: a Codex session logged in with a ChatGPT subscription can now route through the local proxy, getting routing and usage statistics identical to third-party providers; the official login credentials are never overwritten or stored.
+- **GPT-5.6 fully in place**: a 372K context window is auto-injected when Claude Code routes through Codex takeover; Sol / Terra / Luna three-tier pricing is seeded (cache writes billed at 1.25× the input rate); the relevant presets' default models are bumped to the gpt-5.6 family; and, with the client identity corrected, `gpt-5.6-luna` no longer falsely 404s.
+- **Use Claude-family models inside Codex (native Anthropic Messages upstream)**: plenty of companies ban the Claude Code client but not the Claude API — now, by setting a Codex provider's upstream format to `anthropic`, you can connect directly to the Claude API or any gateway that only offers `/v1/messages`, with the local proxy handling the two-way Responses↔Anthropic conversion and standard 5-minute prompt-cache injection built in.
+- **Proxy bridge correctness fixes**: upstream failures fail closed and trigger failover instead of an empty reply; reasoning / tool results / the system role survive the bridge losslessly; cache writes are no longer double-billed; breakpoint injection is more thorough.
+- **Codex config.toml hardening**: deleted MCP servers no longer come back; MCP sync errors out rather than blanking the file on a parse failure; common-config merges preserve comments and key order.
+- **Kimi For Coding 256K finally works**: the previous 262144 compaction window never actually took effect (clamped back to Claude Code's 200K default); this release fills in the model-alias routing and window injection; existing providers need to re-apply the preset (see "Upgrade Notes").
+
+---
+
+### Added
+
+#### Projects: Named Snapshots of a Whole Configuration, Switched in One Click
+
+This is the headline feature of the release. You can save your current provider, MCP, Skills, and memory-file state as a named "project", then swap the whole set with one click from the project switcher at the top of the home page or the "Projects" tray submenu, instead of toggling each piece by hand.
+
+Here's a typical scenario: you have one directory for coding and another for writing or drawing. Coding wants one provider, plus MCP like filesystem / GitHub, code-review Skills, and a memory file spelling out your engineering conventions; writing or drawing often wants a different provider, a different set of MCP, and completely different prompts. Bouncing between the two used to mean switching providers, toggling MCP and Skills one by one, and then editing the memory file; now you save the two states as two projects — "Development" and "Drawing" — and when you switch directories to work, one click in CC Switch puts the whole configuration in place.
+
+Projects span three scopes — Claude Code, Claude Desktop, and Codex (the only dimension CC Switch manages for Claude Desktop is the provider, so its snapshots contain only the provider and applying one touches no other dimension).
+
+A few design points worth knowing:
+
+- **Projects are global entities, switched per scope**: the same project records its own current project and snapshot slot separately on the Claude Code / Claude Desktop / Codex sides, so switching projects on the Codex tab never touches Claude's configuration.
+- **Switching auto-saves**: before you switch projects, the state of the project you're about to leave in the current scope is first saved back automatically — so a project always holds exactly what you last left it as, with no (and no need for a) manual "update snapshot" button.
+- **Applying is best-effort**: applying a snapshot reuses the existing switch primitives (switch the provider first, then do the minimal MCP / Skills diff toggles, then enable memory files); if something a snapshot references has been deleted, it's only warned and skipped, never rolled back wholesale.
+- **Auto-disables proxy takeover**: before applying a project, proxy takeover for each app in that scope is disabled first, to avoid the snapshot state fighting with the routing state.
+
+If you don't use Projects, you can turn off "Show project switcher" under Settings → Home Display, which only hides the home-page entry — the tray submenu and project data are unaffected. It's backed by a new `profiles` table (the database migrates automatically, no manual steps), with UI copy in sync across all four locales.
+
+#### Proxy Route Takeover for the Official Codex ChatGPT Account
+
+A Codex session using a ChatGPT subscription (OAuth or API-key login) can now route through CC Switch's local proxy too — official-account traffic gets routing, format conversion, and usage statistics identical to third-party providers. Just pick the built-in "OpenAI Official" entry in the provider panel or tray to take it over (if you deleted it before, it's restored automatically when you add a provider); the card badge shows "Official account routing" while routing.
+
+The implementation deliberately achieves **zero credential storage**: instead of writing any placeholder key to `auth.json`, it projects a dedicated `model_provider` pointing at the local proxy into `config.toml`, and Codex sends its own ChatGPT authorization header to the proxy, which passes it through verbatim to the official endpoint — the credentials on the `codex-official` line are always empty. The official login itself is never overwritten: on takeover, OAuth / API-key material is preserved into the backup, and a 401 / 403 from the official side is treated as a non-retryable error, so failover never quietly moves your conversation to another account. Accordingly, the copy for the "Preserve Codex official login on switch" setting has been updated — under route takeover the official login is always preserved, so that toggle now only governs third-party direct switches that don't route through the proxy.
+
+#### GPT-5.6: Context Window, Preset Defaults, and Three-Tier Pricing
+
+Three things were done around the GPT-5.6 family:
+
+- **372K context-window injection**: when Claude Code routes to the ChatGPT Codex (Codex OAuth) backend through proxy takeover, `CLAUDE_CODE_MAX_CONTEXT_TOKENS` and `CLAUDE_CODE_AUTO_COMPACT_WINDOW` (both 372000) are auto-injected into the live `settings.json`, so Claude Code no longer auto-compacts prematurely at its default 200K window nor overflows the upstream. The injection is strictly gated: it only injects when every configured model key points at the gpt-5.6 family (gpt-5.5's catalog window swings between 272K and 372K, so it's deliberately not inherited); your manually set values always win; and it's stripped on switch-away under mirrored conditions, so a program default is never baked into your provider config.
+- **Preset default-model bump**: the Codex OAuth presets for Claude Code and Claude Desktop bump their default routes to the gpt-5.6 family (haiku → `gpt-5.6-luna`, main model / sonnet / opus → `gpt-5.6`), and the custom Codex `config.toml` template's default model follows suit.
+- **Sol / Terra / Luna three-tier pricing**: the usage dashboard seeds all three tiers at official rates — Sol 5 / 30 / 0.50, Terra 2.50 / 15 / 0.25, Luna 1 / 6 / 0.10 (USD per million tokens, input / output / cache read). Unlike 5.5 and earlier, the 5.6 family bills **prompt-cache writes at 1.25× the input rate** (Sol 6.25 / Terra 3.125 / Luna 1.25), seeded accordingly, with existing rows previously billed at 0 auto-repaired; bare `gpt-5.6` and its per-effort suffix variants align to the Sol rate.
+
+#### Use Claude-Family Models inside Codex: Native Anthropic Messages Upstream
+
+This feature comes from a very real need: **plenty of companies ban the Claude Code client for compliance reasons, but do not ban the Claude API.** For those users the model itself is available; what's missing is a permitted client — and Codex can now fill that slot. Pick the new `anthropic` option in a Codex provider's upstream-format selector, and you can connect directly to the Claude API or any gateway offering the native Anthropic Messages protocol (`/v1/messages`); the local proxy handles the two-way conversion of requests, responses, and streaming between Responses and Anthropic, and you chat and use tools inside Codex as usual while Claude-family models run behind the scenes. The form provides the supporting pieces: an auth-field selector (`ANTHROPIC_AUTH_TOKEN` sends `Authorization: Bearer`, the default; or `ANTHROPIC_API_KEY` sends `x-api-key`), an optional Claude Code client-impersonation toggle (off by default), and a per-provider max-output-token override (Codex doesn't send `model_max_output_tokens`, and when unset it falls back to a conservative 8192, which may truncate long or heavy-reasoning replies). The conversion bridge auto-injects standard 5-minute prompt-cache markers (system prompt, tools, and history go through the cache instead of being resent at full price each turn), supports the `[1m]` long-context marker with the corresponding beta header, and reports a truncated stream faithfully as incomplete rather than disguising it as success. ([#5071](https://github.com/farion1231/cc-switch/pull/5071))
+
+#### "Default Model" Field Added to the Codex Provider Form
+
+The top-level `model` key in `config.toml` is now an editable field in the form: when a new model (e.g. `gpt-5.6`) ships, you can point an existing provider at it directly without waiting for a preset update (presets only affect newly added providers). The field is two-way synced with the TOML editor, its candidate list is the union of the model-mapping catalog and the provider's `/models` endpoint, and when a value isn't in the catalog it offers a one-click "Add to mapping". An explicitly entered value always wins over the implicit backfill from the mapping's first row; model names and `base_url` are TOML-escaped on write, eliminating any chance that remote data from `/models` injects a forged config line.
+
+#### Common-Config Switch Auto-Sync Extended to Codex
+
+The "on switch-away, write shared preferences from the live config back to the common config" behavior v3.16.5 added for Claude now covers Codex: when you switch away from a Codex provider that has the common config enabled, the shareable portion is first re-extracted from its live `config.toml` to update the common config and then carried to the next provider — the preferences you edited directly in the running Codex config are no longer lost on switch, and deleted keys aren't quietly re-injected. The extractor strictly strips provider-specific and injected content (`model` / `model_provider` / `base_url` / `wire_api`, the entire `[model_providers]` table, the MCP projection, the API-key fallback field, the model-catalog pointer, and the injected `web_search` sentinel), so secrets never enter the shared snippet. All failures only warn and never block the switch.
+
+#### Claude Subagent Model Configuration
+
+The Claude provider form gains a "subagent" model row that writes `CLAUDE_CODE_SUBAGENT_MODEL`, letting subagents spawned by Claude Code run on a model you specify (usually a cheaper or faster one). It supports the `[1M]` marker; since the subagent model never appears in the `/model` menu, the row shows a "not shown in /model" placeholder with no display-name field. The proxy takeover path and the model mapper support it too: when the request model matches the configured subagent model it's passed through as-is instead of being folded to the default model; the key is also excluded from the shared common config so it doesn't leak across providers. ([#4830](https://github.com/farion1231/cc-switch/pull/4830))
+
+#### 1M Context Checkbox for the Fallback Model Field
+
+The Claude form's fallback model field (`ANTHROPIC_MODEL`) now carries the same 1M checkbox that the Sonnet / Opus / Fable tiers have long had: when the fallback model is backed by a 1M window you can declare it faithfully, instead of it being silently treated as 200K. Checking it appends the `[1M]` marker to the model id, unchecking strips it. ([#5124](https://github.com/farion1231/cc-switch/pull/5124), fixes #3679)
+
+#### Zhipu Team-Plan Quota Query
+
+Zhipu's team plan (team-edition Coding Plan) uses the same quota endpoint but requires `?type=2` and two extra request headers (`bigmodel-organization` / `bigmodel-project`), which the personal-edition query can't reach. The usage-script dialog gains a "Zhipu GLM Team" template; fill in the API key + organization ID + project ID to query team quota, and if any of the three is missing you get a clear prompt to complete it. Copy is in sync across all four locales. ([#5128](https://github.com/farion1231/cc-switch/pull/5128))
+
+#### OpenCode Form: Headers and Per-Model Token-Limit Editors
+
+The OpenCode provider form fills in two pieces of config that previously required hand-editing JSON: a **Headers editor** (provider-level `options.headers`, such as the `HTTP-Referer` / `X-Title` that OpenRouter's leaderboard wants, with add/remove rows and case-insensitive deduplication) and **per-model token limits** (`model.limit.context` / `model.limit.output` numeric inputs, cleared to remove). The "extra options" block becomes a collapsible section that auto-expands when it has content; along the way, a fix stops the old placeholder filter from wrongly deleting genuine option keys that start with `option-`. ([#2907](https://github.com/farion1231/cc-switch/pull/2907))
+
+#### New Model Pricing: Tencent Hunyuan Hy3
+
+Seeded pricing for Tencent Hunyuan Hy3 (256K context), released 2026-07-06 (converted from the launch-day list price of CNY 1 / 4 / 0.25 per million tokens); both the `hunyuan-hy3` and `hy3` ids now hit, so their usage no longer shows $0. Note that Hy3 is actually tiered by input length, and the current price table is seeded at the lowest tier, so long-context requests will underestimate cost — to be corrected once the official billing page is clear.
+
+---
+
+### Changed
+
+#### Codex Chat Routing Injects prompt_cache_key to Improve Cache Hits
+
+When Codex routes through the local proxy and converts to a Chat Completions upstream, it now injects `prompt_cache_key` in a provider-aware way: auto-enabled for Kimi Coding and the OpenAI official endpoint, explicitly on for the Kimi preset, and left off for unknown OpenAI-compatible gateways to avoid a 400 from strict-schema gateways. The key value only ever takes an explicit client value or a real client session ID, and never generates a random UUID (which would drop every request into a different cache bucket, defeating the purpose). Advanced options offer an auto / enabled / disabled tri-state override.
+
+#### Codex Image Capability Auto-Inferred, Manual Toggle Removed
+
+The generated Codex model catalog now only declares `input_modalities = ["text"]` for models on CC Switch's confirmed **exact text-only roster**; GPT, aliases, new suffix variants, and any unknown model all fail open to `["text", "image"]` — fixing GPT-family models being falsely reported as "images not supported" in the Codex IDE extension. The rectifier's "text-only model precheck" toggle continues to govern only the proxy-side active request rewriting, not the catalog declaration; catalog reverse-import also collapses the inferable capability away, so a future roster correction or a model upgrading to multimodal takes effect automatically.
+
+#### Context-Window Parameters Pinned into Presets, No Longer Form Fields
+
+The `Codex` (ChatGPT / GPT-5.6) and `Kimi For Coding` presets no longer show the "Max Context Tokens" and "Auto-Compact Window" inputs in the form; the values are pinned directly in the preset env (Codex 372000 / 372000, Kimi For Coding 262144 / 262144) — the vast majority of users never need to touch these two numbers. The two keys are kept in env on purpose: pinning them explicitly makes the local compaction trigger point immune to a remote experimental config dialing it down. The rare users who do want to change the numbers can still edit both keys directly in the provider's JSON editor.
+
+#### Provider Connectivity Configuration Simplified
+
+Removed the obsolete per-provider `testConfig` overrides (timeout, retry count, degradation delay threshold): the lightweight `base_url` probe now always uses the global connectivity-check config, while automatic failover remains fully driven by the proxy's separate timeout and circuit-breaker settings. The settings UI and interface naming also migrate from "model test" terminology to "connectivity check".
+
+#### Universal (Multi-App) Provider Auto-Synced After Adding
+
+After adding a universal (multi-app) provider through the "Add Provider" dialog, it's now immediately pushed to each live target config, no longer requiring a manual sync afterward. A sync failure doesn't block the add — the provider is saved, with a non-blocking warning shown if the sync fails. ([#2811](https://github.com/farion1231/cc-switch/pull/2811))
+
+#### Preset Updates
+
+- **LongCat-2.0**: the Meituan LongCat presets across the board (Claude Code / Claude Desktop / Codex / Hermes / OpenClaw / OpenCode) upgrade from the retired `LongCat-Flash-Chat` / `LongCat-2.0-Preview` to `LongCat-2.0`, declaring the real 1M (1048576) context window. LongCat-2.0 is a text-only model, and the proxy's media-scrub whitelist is updated in sync — images pasted into a conversation are replaced with an unsupported marker rather than hard-rejected upstream. ([#4838](https://github.com/farion1231/cc-switch/pull/4838))
+- **SudoCode**: the old `sudocode.us` preset is replaced in place by the new sponsor SudoCode at `sudocode.chat`, covering six clients (the Claude family connects directly to Anthropic passthrough; Codex / OpenCode / OpenClaw / Hermes default to `gpt-5.6-sol`).
+- **Volcengine / Doubao / BytePlus website links**: reverted v3.16.5's change of these three presets' `websiteUrl` to product homepages, restoring the attribution-parameter campaign / invite links (this is by design).
+- **Code0.ai**: the invite link is updated to the new agent signup link; the API endpoint is unchanged.
+- **Removed duplicate OpenAI Compatible presets**: the `OpenAI Compatible` custom-template entry was removed from the OpenCode and OpenClaw preset lists — the built-in `custom` provider flow already offers the same starting point, so the selector no longer shows two entries pointing at the same place. Existing providers are unaffected.
+
+---
+
+### Fixed
+
+#### Codex OAuth Client Identity Aligned: Fixes 404 on Latest ChatGPT Models
+
+When routing through local proxy takeover with an official Codex OAuth account, the latest subscription models (e.g. `gpt-5.6-luna`) previously returned a misleading `404 Model not found` — even though the account had access. The root cause is that ChatGPT's Codex backend does model-group routing by the `originator` + `version` headers, and cc-switch previously self-reported `originator: cc-switch` with no version, which routed it to a group where luna wasn't yet deployed. Takeover requests now send the same `originator: codex_cli_rs` + `version: 0.144.1` as the real Codex CLI, satisfying luna's minimum client-version requirement — confirmed fixed by A/B testing against the real backend.
+
+#### Responses Upstream Failures No Longer Turn into Empty Replies
+
+When the proxy bridges an Anthropic-format client (Claude Code / Claude Desktop) to an OpenAI Responses upstream, a semantic failure hidden inside an HTTP 2xx body (a `status:"failed"` object, an `error` envelope, or a `response.failed` SSE event before the first output) was previously converted into a silent empty turn. These failures are now recognized as real errors inside the retry loop, so failover can retry with a different provider; a stream that ends cleanly but with incomplete content is faithfully marked truncated rather than complete; a gateway that ignores `stream:true` and returns the whole JSON document is recognized and expanded into a full streaming lifecycle; and when the client history itself is malformed, it errors immediately instead of retrying a guaranteed-to-fail request against every provider.
+
+#### Reasoning, Tool Results, and the System Role Preserved Across the Responses/Anthropic Bridge
+
+Content crossing the Responses↔Anthropic bridge in multi-turn tool loops is no longer lost or corrupted: encrypted reasoning entries round-trip losslessly (also eliminating the problem where a failed round-trip got the next request rejected upstream); the streaming converter supports the official reasoning event vocabulary and recovers tool arguments from the terminal event when a gateway skips the deltas; a structured tool result's `is_error` flag, images, and PDF documents are fully preserved in both directions instead of being flattened into a single JSON string; and `system` / `developer` messages in history are correctly promoted to Anthropic `system` instead of being silently demoted to user turns. On billing, when the upstream request succeeds but the subsequent conversion fails, usage is still recorded rather than dropped.
+
+#### Cache-Write Tokens No Longer Double-Billed
+
+The `input_tokens` reported by Codex / Gemini-style providers include both cache reads and cache writes, but the cost calculation previously only subtracted cache reads — so cache-write tokens were **billed twice**, once at the input rate and once at the cache-creation rate. Both are now deducted first, and the cache-write number is no longer lost across format conversions (Chat↔Responses↔Anthropic). To keep historical data consistent, the database adds a column recording the storage semantics of each row's `input_tokens` (schema v12→v13 auto-migration): old rows are recomputed under the old semantics, new rows under the new, and Claude-style rows are unaffected.
+
+#### Stronger Prompt-Cache Breakpoint Injection
+
+On the proxy paths that inject Anthropic `cache_control` breakpoints (the Codex takeover bridge and the Bedrock native optimizer), the injector now uses the four-breakpoint budget more thoroughly: beyond the tail of tools, the tail of the system prompt, and the latest cacheable message, when budget remains it also anchors an earlier user message, keeping the stable prefix within Anthropic's 20-block lookback window — so long, tool-heavy conversations keep hitting the prompt cache instead of resending the system prompt, tools, and history at full price each turn. Caller-supplied breakpoints are preserved as-is (never removed, reordered, or rewritten); injected markers all use the standard 5-minute TTL.
+
+#### Kimi For Coding's 256K Context Window Actually Takes Effect
+
+The `CLAUDE_CODE_AUTO_COMPACT_WINDOW=262144` added to the Kimi For Coding preset in 3.16.4 in fact **never took effect**: Claude Code caps unrecognized model ids at a 200K window and takes the compaction window as `min(model window, configured value)`, so 262144 got clamped back to 200K. This release fills in the two missing pieces — the preset now also pins `CLAUDE_CODE_MAX_CONTEXT_TOKENS`, and it explicitly routes each tier's model to the endpoint's `kimi-for-coding` alias (a `claude-` prefixed id makes Claude Code ignore both window parameters; a non-Claude alias is the key to unlocking the large window). Saved providers also get these two window defaults auto-injected on switch, but **the alias routing only lives in the preset** — a provider saved from the old preset is still effectively 200K and needs a one-time re-apply of the preset (see "Upgrade Notes").
+
+#### Deleted Codex MCP Servers No Longer Come Back
+
+The authoritative MCP-server data lives in the database, and the `[mcp_servers]` in the Codex live `config.toml` is only a projection re-synced after every write — but on switch-away this projection was baked into the provider snapshot, so a server you deleted in the app came back to life the next time you activated that provider, and per-entry reconciliation could never clear the orphan. On switch-away, `[mcp_servers]` (including the legacy `[mcp.servers]`) is now stripped from the stored snapshot, and an already-polluted snapshot self-heals on its next switch-away. One visible side effect: a hand-written `[mcp_servers.*]` section in a Codex provider config is stripped out of the snapshot on its first switch-away — from now on, define Codex's MCP servers through the MCP manager (see "Upgrade Notes").
+
+#### More Robust MCP Sync: No File-Blanking on Parse Failure, Per-App Errors
+
+Two fixes. First, when writing a single MCP server to Codex, if the existing `config.toml` fails to parse, the old logic fell back to an empty document and wrote the whole thing back — **the entire file was blanked** down to that one MCP entry; it now returns a validation error and leaves the file untouched. Second, "Import from App" previously swallowed each importer's error as 0, so a broken Codex config would only show "imported 0 servers"; it now imports best-effort per app and, on failure, reports exactly which app failed. The projection on switch and save is also scoped to the target app only, so one app's live-file parse failure no longer blocks the others by association, nor falsely reports an already-successful switch as a failure.
+
+#### Codex Common-Config Merge Preserves Comments and Key Order
+
+Checking / unchecking "Apply Common Config" in the Codex provider form previously went through a front-end TOML implementation that reformatted the whole file (parse → merge → serialize): comments were dropped, keys were reordered, and empty table headers like `[model_providers]` appeared out of nowhere — the culprit behind "config.toml keeps getting reordered". The merge now goes through a backend command sharing the same merge semantics as writing the live config, so hand-written formatting fully survives the mid-edit merge; a double guard (operation sequence number + config baseline check) was also added for the fast-switch race introduced by going async, so an earlier-issued-but-later-arriving stale result doesn't overwrite newer state.
+
+#### Managed Claude Takeover Injects Only a Single Auth Placeholder
+
+When switching from a third-party endpoint to a Codex-managed provider, `~/.claude/settings.json` had both `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` placeholders written, causing Claude Code to warn "Both ANTHROPIC_AUTH_TOKEN and ANTHROPIC_API_KEY set" on every launch. It now injects only one: Codex-managed uses `ANTHROPIC_AUTH_TOKEN`, Copilot uses `ANTHROPIC_API_KEY`, and any other token key is cleared. Note: after upgrading, if the live config already carries both keys, the "skip rewrite if config unchanged" short-circuit means the warning may persist — toggle the Claude route off and on once (or switch providers once) to trigger a rewrite (see "Upgrade Notes"). ([#5095](https://github.com/farion1231/cc-switch/pull/5095), fixes #4919)
+
+#### Usage and Quota Queries: Auto-Retry on Transient Failures, No Longer Poison the Cache
+
+Usage and quota queries frequently showed a "query failed" that a manual refresh couldn't clear, because all transport-layer failures (including a mid-read timeout while reading the response body) were folded into "succeeded, but the result is a failure" — so the front-end's auto-retry never fired, and the failure body was cached as real data. Transport failures now return an error faithfully: react-query's auto-retry kicks in, HTTP 429 is treated as transient like 5xx, retained last-good data expires normally on a 10-minute window, and the footer keeps a retry entry and the real error message in the failure state. (fixes [#3820](https://github.com/farion1231/cc-switch/issues/3820))
+
+#### Codex Subagent Session Usage Counted in Local Statistics
+
+The token usage of Codex subagent (spawned agent) sessions previously never made it into local statistics: subagent logs carry the parent thread's `session_id`, so multiple subagents' records collided and were discarded as duplicates. The parser now builds a unique identity from each file's own `thread_id`, and recognizes the replay of the parent thread's history at the start of a subagent log — using it only to recover the cumulative baseline, not to double-bill; archived logs also inherit the sync cursor by filename, so re-parsing only imports the new portion. ([#5187](https://github.com/farion1231/cc-switch/pull/5187))
+
+#### Codex Free-Tier 30-Day Quota Window Displays Correctly
+
+Codex free accounts are metered on a rolling 30-day window (rather than the paid tier's weekly window), but the front-end whitelist and tray grouping didn't recognize the `30_day` tier — with a free account's only tier filtered out, the quota footer went entirely blank and the tray showed no quota at all. The 30-day tier now renders correctly in both the footer and the tray, with labels in sync across all four locales. ([#4886](https://github.com/farion1231/cc-switch/pull/4886), fixes #3651)
+
+#### Usage Dashboard Refresh Interval Persisted
+
+The usage dashboard's auto-refresh interval was previously component-local state that reset to 30 seconds on every restart. It's now persisted via a new app setting, with changes applied optimistically and rolled back automatically on save failure. ([#5057](https://github.com/farion1231/cc-switch/pull/5057))
+
+#### Fable-Tier Model Keys No Longer Leak into the Common Config
+
+Fable is the fourth Claude model-mapping tier added in v3.16.3, but its two keys `ANTHROPIC_DEFAULT_FABLE_MODEL(_NAME)` were left off the provider-specific exclusion list — so one provider's Fable model pin could leak into the shared common config and then be injected into other providers. It's now stripped like the haiku / sonnet / opus tiers, and Fable-tier proxy takeover support was filled in along the way (writing a stable role alias on takeover, cleaning up stale values on switch-away). ([#5206](https://github.com/farion1231/cc-switch/pull/5206), fixes #4272)
+
+#### Tool-Schema Default-Type Fallback and API Key Input for Uncategorized Providers
+
+Two provider-side fixes: when a client-sent tool's `input_schema` lacks a top-level `type` (or is an empty `{}`), the proxy conversion would be rejected by a strict gateway; the root schema now auto-fills `type: "object"` (only the root, leaving nested subschemas untouched); and the issue where an uncategorized provider imported from history or hand-built showed no Claude API Key input on edit is fixed — the field now shows for any provider that isn't an official / cloud-vendor category. ([#5069](https://github.com/farion1231/cc-switch/pull/5069))
+
+#### Image-Request Fallback for the Text-Only GLM 5.2 Model
+
+When the local proxy takes over Volcengine Coding Plan running GLM 5.2, image blocks in a request no longer produce an unrecoverable 400: the text-only roster exactly includes `glm-5.2` (deliberately not prefix-matching, so a future multimodal `glm-5.2v` isn't caught), and the preventive path strips images before the request goes out; the gateway's error message that doesn't contain the word image (`Model only support text input`) is also recognized by the reactive path's self-identifying-phrase roster, triggering the media fallback. (fixes [#5025](https://github.com/farion1231/cc-switch/issues/5025))
+
+#### A Batch of Small Session and Live-Config Sync Fixes
+
+- **Show renamed Codex session titles**: a session you renamed inside Codex now shows the new title in the session manager instead of falling back to the first message text; reads during concurrent writes no longer fail immediately. ([#4927](https://github.com/farion1231/cc-switch/pull/4927))
+- **OpenCode / OpenClaw / Hermes live edits synced into the store on startup**: editing a live config file directly (changing the base URL, adding a model) was previously never picked up after the first import; it's now diffed against the store on every startup and updated on difference, all non-fatal. ([#4712](https://github.com/farion1231/cc-switch/pull/4712), [#5098](https://github.com/farion1231/cc-switch/pull/5098))
+- **OpenCode session-resume command updated**: the resume command the session manager shows and copies is corrected from the outdated `opencode session resume <id>` to the current CLI's `opencode -s <id>`. ([#2359](https://github.com/farion1231/cc-switch/pull/2359))
+- **Official providers skip the connectivity probe**: the connectivity check no longer derives a guaranteed-to-fail credential-less first-party endpoint probe for official-category providers (e.g. hitting `chatgpt.com/backend-api/codex` bare); batch checks skip it, and an individual resolve reports a clear error.
+
+---
+
+### Documentation
+
+#### Codex + Kimi Local Routing Guide
+
+A new step-by-step guide (in Chinese / English / Japanese, with UI screenshots) explaining how to use Kimi inside Codex CLI via CC Switch's local routing: newer Codex CLI speaks the OpenAI Responses protocol, while the Kimi Open Platform (pay-as-you-go, `kimi-k2.7-code`) and Kimi For Coding (membership, `kimi-for-coding`) both expose Chat Completions endpoints, so a direct connection usually 404s on `/responses`. The guide covers the whole flow from adding a provider from the built-in preset to the four-step protocol-conversion chain.
+
+#### README Sponsor Update
+
+The open-source AI infrastructure project `new-api` joins the sponsor table in the four-language READMEs.
+
+---
+
+### Upgrade Notes
+
+#### Kimi For Coding Providers Need a Preset Re-Apply
+
+If you're using a provider created from the Kimi For Coding preset, please **re-pick it from the preset and save once**: the key to the 256K window — routing each tier's model to the `kimi-for-coding` alias — only lives in the new preset, so a provider saved from the old preset still compacts prematurely at 200K even after upgrading.
+
+#### Hand-Written Codex `[mcp_servers.*]` Will Be Stripped from the Snapshot
+
+To root out "deleted MCP servers coming back", switching away from a Codex provider strips the `[mcp_servers]` section from the stored snapshot. If you have an MCP server hand-written directly in a Codex provider config, it will disappear from the snapshot on the first switch-away from that provider — please instead define Codex's MCP servers through the MCP manager (MCP tab), where the entries are authoritative and get projected into the live config automatically.
+
+#### The Dual-Auth-Key Warning May Need a One-Time Manual Rewrite
+
+If Claude Code still warns "Both ANTHROPIC_AUTH_TOKEN and ANTHROPIC_API_KEY set" after upgrading, it's because the takeover logic short-circuits and skips the rewrite when the live config is unchanged. Toggle Claude's route off and on once (or switch providers once) to write the corrected single-placeholder config, and the warning goes away.
+
+#### Automatic Database Migration
+
+On the first launch of v3.17.0, the database automatically migrates from schema v11 to v13 (adding the projects table and the usage-semantics column), with no manual steps. If you're in the habit of rolling back to an older version, back up `~/.cc-switch/cc-switch.db` first.
+
+---
+
+### Risk Notice
+
+This release continues the risk notices from previous versions for reverse-proxy-style features.
+
+**Codex OAuth reverse proxy**: using a ChatGPT subscription's Codex OAuth through a reverse proxy may violate OpenAI's terms of service. See the [v3.13.0 release notes](v3.13.0-en.md#️-risk-notice) for details. The "official ChatGPT account proxy route takeover" added in this release is the same class of usage, so please be aware of the same risk.
+
+**Codex third-party provider Chat routing**: when CC Switch local proxy converts and forwards Codex requests to third-party providers, each provider may have different requirements for billing, compliance, and data retention. Read the target provider's terms before use.
+
+**Claude Desktop third-party provider proxy switching**: when CC Switch's built-in proxy gateway forwards Claude Desktop requests to third-party providers, you must also follow the target provider's billing, compliance, and data-retention terms.
+
+By enabling these features, users accept the related risks. CC Switch is not responsible for account restrictions, warnings, or service suspensions caused by using these features.
+
+---
+
+### Thanks
+
+Thanks to the following contributors for the features and fixes in v3.17.0:
+
+- [#5071](https://github.com/farion1231/cc-switch/pull/5071): add the native Anthropic Messages protocol as a Codex upstream, thanks @yeeyzy.
+- [#4830](https://github.com/farion1231/cc-switch/pull/4830): add Claude subagent model configuration, thanks @AkimioJR.
+- [#5124](https://github.com/farion1231/cc-switch/pull/5124): add the 1M checkbox to the fallback model field, thanks @salarkhannn.
+- [#5128](https://github.com/farion1231/cc-switch/pull/5128): add Zhipu team-plan quota queries, thanks @zhanxin-xu.
+- [#2907](https://github.com/farion1231/cc-switch/pull/2907): add the Headers and token-limit editors to the OpenCode form, thanks @git1677967754.
+- [#2811](https://github.com/farion1231/cc-switch/pull/2811): auto-sync universal providers after adding, thanks @hubutui.
+- [#4838](https://github.com/farion1231/cc-switch/pull/4838): upgrade the LongCat presets to LongCat-2.0, thanks @solthx.
+- [#5095](https://github.com/farion1231/cc-switch/pull/5095): inject only a single auth placeholder on managed Claude takeover, thanks @fengshao1227.
+- [#5187](https://github.com/farion1231/cc-switch/pull/5187): count Codex subagent session usage in statistics, thanks @starmiaoa.
+- [#4886](https://github.com/farion1231/cc-switch/pull/4886): fix the Codex free-tier 30-day quota window not showing, thanks @SaladDay.
+- [#5057](https://github.com/farion1231/cc-switch/pull/5057), [#4927](https://github.com/farion1231/cc-switch/pull/4927), [#2359](https://github.com/farion1231/cc-switch/pull/2359): persist the refresh interval, show renamed session titles, and correct the OpenCode resume command, thanks @makoMakoGo.
+- [#5206](https://github.com/farion1231/cc-switch/pull/5206): exclude Fable model keys from the common config, thanks @fzh365.
+- [#5069](https://github.com/farion1231/cc-switch/pull/5069): tool-schema default-type fallback and API Key input restoration, thanks @Komikawayi.
+- [#4712](https://github.com/farion1231/cc-switch/pull/4712), [#5098](https://github.com/farion1231/cc-switch/pull/5098): sync OpenCode / OpenClaw / Hermes live config on startup, thanks @allenxu09.
+
+Thanks also to everyone who reported Codex official routing, cache billing, MCP sync, and quota query issues — a good portion of this release's fixes came directly from reproduction clues in these real-world scenarios.
+
+---
+
+### Download & Install
+
+Visit [Releases](https://github.com/farion1231/cc-switch/releases/latest) and download the build for your system.
+
+#### System Requirements
+
+| System  | Minimum Version      | Architecture                        |
+| ------- | -------------------- | ----------------------------------- |
+| Windows | Windows 10 and later | x64 / ARM64                         |
+| macOS   | macOS 12 (Monterey)+ | Intel (x64) / Apple Silicon (arm64) |
+| Linux   | See table below      | x64 / ARM64                         |
+
+#### Windows
+
+| File                                     | Description                                      |
+| ---------------------------------------- | ------------------------------------------------ |
+| `CC-Switch-v3.17.0-Windows.msi`          | **Recommended** - MSI installer with auto-update |
+| `CC-Switch-v3.17.0-Windows-Portable.zip` | Portable build, unzip and run                    |
+
+Windows ARM64 devices should pick the artifact whose file name carries the `arm64` tag.
+
+#### macOS
+
+| File                             | Description                                           |
+| -------------------------------- | ----------------------------------------------------- |
+| `CC-Switch-v3.17.0-macOS.dmg`    | **Recommended** - DMG installer, drag to Applications |
+| `CC-Switch-v3.17.0-macOS.zip`    | Unzip and drag to Applications, Universal Binary      |
+| `CC-Switch-v3.17.0-macOS.tar.gz` | For Homebrew install and auto-update                  |
+
+Homebrew install:
+
+```bash
+brew install --cask cc-switch
+```
+
+Upgrade:
+
+```bash
+brew upgrade --cask cc-switch
+```
+
+#### Linux
+
+Linux assets are available for both **x86_64** and **ARM64** (`aarch64`). Choose the file whose architecture tag matches your machine's `uname -m` output:
+
+- `CC-Switch-v3.17.0-Linux-x86_64.AppImage` / `.deb` / `.rpm`
+- `CC-Switch-v3.17.0-Linux-arm64.AppImage` / `.deb` / `.rpm`
+
+| Distribution                            | Recommended Format | Install Command                                                        |
+| --------------------------------------- | ------------------ | ---------------------------------------------------------------------- |
+| Ubuntu / Debian / Linux Mint / Pop!\_OS | `.deb`             | `sudo dpkg -i CC-Switch-*.deb` or `sudo apt install ./CC-Switch-*.deb` |
+| Fedora / RHEL / CentOS / Rocky Linux    | `.rpm`             | `sudo rpm -i CC-Switch-*.rpm` or `sudo dnf install ./CC-Switch-*.rpm`  |
+| openSUSE                                | `.rpm`             | `sudo zypper install ./CC-Switch-*.rpm`                                |
+| Arch Linux / Manjaro                    | `.AppImage`        | Make executable and run directly, or use AUR                           |
+| Other distributions / unsure            | `.AppImage`        | `chmod +x CC-Switch-*.AppImage && ./CC-Switch-*.AppImage`              |
+
+</content>
+</invoke>
+
 ## [3.16.5] - 2026-07-01
 
 > The centerpiece of this release is **getting native-Responses direct-connect properly adapted for domestic (Chinese) model providers** — generating Codex model catalogs for providers with native Responses endpoints (Xiaomi MiMo, Volcengine Doubao, Qwen3-Coder, Meituan LongCat, MiniMax) so the Codex desktop app can actually see these models and their built-in tools work, and automatically disabling `web_search` for the few domestic gateways that reject it so requests are no longer hard-rejected. Two other important improvements: when you switch providers, the plugins, environment variables, etc. you added inside the app are **automatically written back to the common config and carried over to the next provider**; and Linux (Wayland + NVIDIA) users hitting the "title bar clicks, page is dead, black screen on resize" problem now have an environment-variable escape hatch. This release also brings Claude Sonnet 5 pricing and a default-tier bump, a two-level grouped session view, and a batch of credential-safety and platform-compatibility fixes.

@@ -65,6 +65,48 @@ const tutorialIcons = {
 
 export const tutorials: Tutorial[] = [
   {
+    slug: 'claude-codex-routing-guide',
+    title: {
+      zh: '通过 CC Switch 在 Claude Code 中使用 GPT 模型',
+      en: 'Using GPT Models in Claude Code with CC Switch',
+      ja: 'CC Switch を使って Claude Code で GPT モデルを利用する',
+    },
+    summary: {
+      zh: '官方实战攻略：Claude Code 使用 Anthropic Messages 协议，而 GPT / Codex 上游使用 OpenAI Responses。本文演示如何通过本地路由完成协议转换，同时支持第三方 API Key 和 ChatGPT 订阅的 Codex OAuth。',
+      en: 'Official hands-on guide for converting Claude Code\'s Anthropic Messages requests to OpenAI Responses through local routing, with both third-party API keys and ChatGPT subscription Codex OAuth covered.',
+      ja: 'Claude Code の Anthropic Messages リクエストをローカルルーティングで OpenAI Responses に変換する公式実践ガイド。サードパーティ API Key と ChatGPT サブスクリプションの Codex OAuth の両方を解説します。',
+    },
+    author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/claude-codex-routing-guide-zh.md' },
+    date: '2026-07-21',
+    category: 'practice',
+    source: 'official',
+    readMinutes: 8,
+    accent: 'blue',
+    coverIcons: [tutorialIcons.claude, tutorialIcons.codex],
+    featured: true,
+  },
+  {
+    slug: 'codex-claude-routing-guide',
+    title: {
+      zh: '通过 CC Switch 在 Codex 中使用 Claude 模型',
+      en: 'Using Claude Models in Codex with CC Switch',
+      ja: 'CC Switch を使って Codex で Claude モデルを利用する',
+    },
+    summary: {
+      zh: '官方实战攻略：Codex 使用 OpenAI Responses，而 Claude 网关使用 Anthropic Messages。本文演示如何选择 Anthropic 上游格式并启用本地路由，让 Claude 系列模型在 Codex 中正常工作。',
+      en: 'Official hands-on guide for connecting Codex to Claude-family gateways through the Anthropic Messages upstream format and local routing, including tool calls and multimodal requests.',
+      ja: 'Anthropic Messages 上流形式とローカルルーティングを使い、Codex を Claude 系ゲートウェイへ接続する公式実践ガイド。ツール呼び出しやマルチモーダルリクエストも扱います。',
+    },
+    author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-claude-routing-guide-zh.md' },
+    date: '2026-07-13',
+    category: 'practice',
+    source: 'official',
+    readMinutes: 7,
+    accent: 'amber',
+    coverIcons: [tutorialIcons.codex, tutorialIcons.claude],
+    featured: true,
+  },
+  {
     slug: 'codex-kimi-routing-guide',
     title: {
       zh: '在 Codex 中使用 Kimi：本地路由实战攻略',

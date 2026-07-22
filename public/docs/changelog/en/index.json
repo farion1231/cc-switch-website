@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "version": "3.18.0",
+      "date": "2026-07-21",
+      "isPreRelease": false,
+      "summary": "This release lets you do two brand-new things: **hand xAI's Grok CLI (Grok Build) over to CC Switch** — it becomes the eighth managed app, with one-click provider switching, MCP / Skills sync, proxy takeover, and usage statistics all included; and **connect Grok to Claude Code, Claude Desktop, and Codex** — either by signing in with your xAI Grok account directly (device-code authorization, no API key, running on your Grok subscription, with a strict-gateway compatibility layer on the Codex side so codex 0.142+ works too), or with an xAI API key (Codex gets a native Responses direct-connection preset; Claude Code can go through local routing). Just as important is a wave of fixes: the **Codex usage double count introduced in v3.17.0 is fixed**, with an automatic data rebuild after upgrading so the dashboard numbers become real again; **codex 0.144.5+ failing to start because of the model catalog is fixed**; and switching providers on Windows no longer flashes a console window or freezes the UI. Diagnostic logs also move from \"wiped on every startup\" to persistent across restarts, size-rotated, and fully redacted — and a UI crash now leaves an on-disk report instead of just a blank white window."
+    },
+    {
+      "version": "3.17.0",
+      "date": "2026-07-13",
+      "isPreRelease": false,
+      "summary": "This release brings a long-awaited capability: **one-click \"Projects\" switching** — save your current provider, MCP, Skills, and memory files as a single named snapshot, swap the whole set for another one from the title bar or tray with a single click, and have the state of the project you're leaving automatically saved back on the way out. The Codex side gets plenty too: **your official ChatGPT subscription account can now route through the local proxy as well**, getting the same routing and usage statistics as third-party providers; the GPT-5.6 family's context window and Sol / Terra / Luna three-tier pricing land in one step; and a native Anthropic Messages upstream format is added — is Claude Code banned at your company but the Claude API isn't? You can now **use Claude-family models directly inside Codex**. On top of that comes a big wave of correctness fixes: upstream failures no longer turn into \"empty replies\", cache-write tokens are no longer double-billed, deleted MCP servers no longer come back from the dead, and Kimi For Coding's 256K window finally takes effect for real."
+    },
+    {
       "version": "3.16.5",
       "date": "2026-07-01",
       "isPreRelease": false,

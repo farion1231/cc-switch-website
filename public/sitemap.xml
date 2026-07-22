@@ -721,6 +721,54 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/docs?section=faq&amp;item=env-conflict" />
   </url>
   <url>
+    <loc>https://ccswitch.io/zh/changelog/3.18.0</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.18.0" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/changelog/3.18.0</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.18.0" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/changelog/3.18.0</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.18.0" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.18.0" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/zh/changelog/3.17.0</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.17.0" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/changelog/3.17.0</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.17.0" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/changelog/3.17.0</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/changelog/3.17.0" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.17.0" />
+  </url>
+  <url>
     <loc>https://ccswitch.io/zh/changelog/3.16.5</loc>
     <lastmod>2026-07-07</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/changelog/3.16.5" />
@@ -1255,6 +1303,54 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/cc-switch-cli-headless-guide" />
     <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/cc-switch-cli-headless-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/cc-switch-cli-headless-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/zh/tutorials/claude-codex-routing-guide</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/claude-codex-routing-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/tutorials/claude-codex-routing-guide</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/claude-codex-routing-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/tutorials/claude-codex-routing-guide</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/claude-codex-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/claude-codex-routing-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/zh/tutorials/codex-claude-routing-guide</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-claude-routing-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/tutorials/codex-claude-routing-guide</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-claude-routing-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/tutorials/codex-claude-routing-guide</loc>
+    <lastmod>2026-07-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/codex-claude-routing-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-claude-routing-guide" />
   </url>
   <url>
     <loc>https://ccswitch.io/zh/tutorials/codex-deepseek-routing-guide</loc>

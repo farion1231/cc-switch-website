@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "version": "3.18.0",
+      "date": "2026-07-21",
+      "isPreRelease": false,
+      "summary": "这一版你可以做两件全新的事：**把 xAI 的 Grok CLI（Grok Build）交给 CC Switch 管理**——它成为第八个受管应用，供应商一键切换、MCP / Skills 同步、代理接管与用量统计一应俱全；以及**把 Grok 接进 Claude Code、Claude Desktop 和 Codex**——既可以直接用 xAI Grok 账号登录（设备码授权、无需 API Key，跑你的 Grok 订阅，Codex 侧自带严格网关兼容层，codex 0.142+ 也能跑通），也可以用 xAI API Key 接入（Codex 有原生 Responses 直连预设，Claude Code 可走本地路由）。同样重要的是一波修复：v3.17.0 引入的 **Codex 用量双计已修**，升级后自动重建数据，看板数字恢复真实；**codex 0.144.5+ 因模型目录无法启动的问题已修**；Windows 上切换供应商不再闪黑窗、不再卡住界面。诊断日志也从「每次启动清空」变为跨重启持久保留、按大小轮转、全面脱敏，界面崩溃会落盘留证而不再只剩一片白屏。"
+    },
+    {
+      "version": "3.17.0",
+      "date": "2026-07-13",
+      "isPreRelease": false,
+      "summary": "这一版带来一个盼了很久的能力：**「项目」一键切换**——把当前的供应商、MCP、Skills、记忆文件整套保存为命名快照，在标题栏或托盘里一键换成另一套，切换时还会自动把你离开的项目当前状态存回去。Codex 侧同样收获颇丰：**官方 ChatGPT 订阅账号现在也能走本地代理路由**，享受与第三方供应商相同的路由与用量统计；GPT-5.6 全家的上下文窗口与 Sol / Terra / Luna 三档定价一步到位；还新增了原生 Anthropic Messages 上游格式——所在企业禁用了 Claude Code、但没有禁用 Claude API？现在可以**在 Codex 里直接用上 Claude 系列模型**。此外是一大波正确性修复：上游失败不再变成「空回复」、缓存写入不再被双重计费、删掉的 MCP 服务器不再复活、Kimi For Coding 的 256K 窗口终于真正生效。"
+    },
+    {
       "version": "3.16.5",
       "date": "2026-07-01",
       "isPreRelease": false,
