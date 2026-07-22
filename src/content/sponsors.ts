@@ -56,7 +56,7 @@ export interface Sponsor {
   id: string;
   name: string | LocalizedText;
   icon: string | LocalizedAsset;
-  url: string;
+  url: string | LocalizedText;
   tier: SponsorTier;
   category?: SponsorCategory;
   tagline: LocalizedText;
@@ -113,23 +113,27 @@ const sponsorDisplayRank = new Map<string, number>(
 export const sponsors: Sponsor[] = [
   {
     id: 'kimi-k2-7-code',
-    name: 'Kimi K2.7 Code',
+    name: 'Kimi K3',
     icon: kimiIcon,
-    url: 'https://platform.moonshot.cn/console?aff=cc-switch',
+    url: {
+      zh: 'https://platform.kimi.com?aff=cc-switch',
+      en: 'https://platform.kimi.ai?aff=cc-switch',
+      ja: 'https://platform.kimi.ai?aff=cc-switch',
+    },
     tier: 'flagship',
     category: 'native-platform',
     featured: true,
-    since: '2026-06',
+    since: '2026-07',
     banner: { zh: kimiBannerZh, en: kimiBannerEn, ja: kimiBannerEn, default: kimiBannerEn },
     tagline: {
-      zh: '编程专用开源智能体模型',
-      en: 'Open-source coding-focused agentic model',
-      ja: 'コーディング特化のオープンソース・エージェントモデル',
+      zh: 'Moonshot AI 最强开源 3T 级模型',
+      en: "Moonshot AI's most capable open 3T-class model",
+      ja: 'Moonshot AI 史上最強のオープン 3T クラスモデル',
     },
     description: {
-      zh: 'Kimi K2.7 Code 是 Moonshot AI 开发的编程专用开源智能体模型。它在编程与智能体执行能力上全面增强，在真实长程编程任务中实现显著提升，带来复杂软件工程工作流中更高的端到端任务成功率。同时，K2.7 Code 优化了推理效率，相较 K2.6 平均减少约 30% 的推理 token 消耗。',
-      en: 'Kimi K2.7 Code is an open-source, coding-focused agentic model developed by Moonshot AI. It delivers stronger coding and agent performance with substantial improvements in real-world long-horizon coding tasks, translating into higher end-to-end task success rates across complex software engineering workflows. It also improves reasoning efficiency, reducing thinking-token usage by about 30% compared with K2.6.',
-      ja: 'Kimi K2.7 Code は Moonshot AI が開発した、コーディングに特化したオープンソースのエージェントモデルです。コーディング能力とエージェント性能が全面的に強化され、実世界の長程コーディングタスクで大幅に向上し、複雑なソフトウェアエンジニアリング全体でエンドツーエンドのタスク成功率を高めます。さらに K2.6 と比べて推論トークン消費を約 30% 削減します。',
+      zh: 'Kimi K3 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型。K3 拥有 2.8T 参数、原生视觉能力与 100 万 Token 上下文，在长程编码、知识工作和推理任务中展现前沿性能。使用 CC Switch，可以在各类 Agent 工具中便捷配置和切换 Kimi。',
+      en: "Kimi K3 is Moonshot AI's most capable model and the world's first open 3T-class model. With 2.8 trillion parameters, native vision, and a 1-million-token context window, K3 delivers frontier performance across long-horizon coding, knowledge work, and reasoning. CC Switch makes it easy to configure and switch to Kimi across agentic tools.",
+      ja: 'Kimi K3 は Moonshot AI がこれまでに開発した中で最も高性能なモデルであり、世界初のオープンソース 3T クラスモデルです。2.8 兆パラメータ、ネイティブな視覚能力、100 万トークンのコンテキストウィンドウを備え、長期にわたるコーディング、ナレッジワーク、推論タスクにおいてフロンティア級の性能を発揮します。CC Switch を使えば、さまざまなエージェントツールで Kimi を手軽に設定・切り替えできます。',
     },
   },
   {
@@ -264,7 +268,11 @@ export const sponsors: Sponsor[] = [
     id: 'teamorouter',
     name: 'TeamoRouter',
     icon: teamorouterIcon,
-    url: 'https://teamorouter.com/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+    url: {
+      zh: 'https://teamorouter.com/zh?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+      en: 'https://teamorouter.com/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+      ja: 'https://teamorouter.com/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+    },
     tier: 'standard',
     category: 'aggregator',
     iconBg: 'dark',
@@ -288,7 +296,7 @@ export const sponsors: Sponsor[] = [
     id: 'zetaapi',
     name: 'ZetaAPI',
     icon: zetaapiIcon,
-    url: 'https://zetaapi.ai/go/ccs',
+    url: 'https://zetaapi.ai/go/u117',
     tier: 'standard',
     category: 'aggregator',
     iconBg: 'light',
@@ -313,7 +321,11 @@ export const sponsors: Sponsor[] = [
     id: 'byteplus',
     name: { zh: '火山方舟', en: 'Dola Seed', ja: 'Dola Seed' },
     icon: { zh: huoshanIcon, en: byteplusIcon, ja: byteplusIcon, default: byteplusIcon },
-    url: 'https://www.volcengine.com/activity/codingplan?ac=MMAP8JTTCAQ2&rc=6J6FV5N2&utm_campaign=hw&utm_content=ccswitch&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
+    url: {
+      zh: 'https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
+      en: 'https://www.byteplus.com/en/product/modelark?utm_campaign=hw&utm_content=ccswitch&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
+      ja: 'https://www.byteplus.com/en/product/modelark?utm_campaign=hw&utm_content=ccswitch&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=ccswitch',
+    },
     tier: 'standard',
     category: 'native-platform',
     since: '2025-10',
@@ -605,7 +617,7 @@ export const sponsors: Sponsor[] = [
     id: 'claudecn',
     name: 'ClaudeCN',
     icon: claudecnIcon,
-    url: 'https://claudecn.top',
+    url: 'https://claudecn.ai/register?aff=HEL9',
     tier: 'standard',
     category: 'relay',
     since: '2025-10',
@@ -630,7 +642,7 @@ export const sponsors: Sponsor[] = [
     id: 'runapi',
     name: 'RunAPI',
     icon: runapiIcon,
-    url: 'https://runapi.co',
+    url: 'https://runapi.co/register?aff=iOKB',
     tier: 'standard',
     category: 'aggregator',
     since: '2025-10',
@@ -646,9 +658,9 @@ export const sponsors: Sponsor[] = [
       ja: '高効率で安定した AI モデル API ゲートウェイ。1 つの API Key で OpenAI、Claude、Gemini、DeepSeek、Grok など 150 以上のモデルに公式価格の 10% からアクセス可能。Claude Code や OpenClaw とシームレス連携。',
     },
     perk: {
-      zh: '注册联系客服领 ¥14 额度',
-      en: 'Free ¥14 credit (contact support)',
-      ja: 'カスタマー窓口連絡で ¥14 クレジット',
+      zh: '首次充值 9 折',
+      en: '10% off first top-up',
+      ja: '初回チャージ 10% オフ',
     },
   },
   {
@@ -679,7 +691,7 @@ export const sponsors: Sponsor[] = [
     id: 'apinebula',
     name: 'APINEBULA',
     icon: apinebulaIcon,
-    url: 'https://apinebula.com/02rw5X',
+    url: 'https://apinebula.com/VjM74M',
     tier: 'standard',
     category: 'aggregator',
     iconBg: 'light',
@@ -938,4 +950,12 @@ export function resolveSponsorName(
 ): string {
   if (typeof name === 'string') return name;
   return name[language];
+}
+
+export function resolveSponsorUrl(
+  url: string | LocalizedText,
+  language: Language,
+): string {
+  if (typeof url === 'string') return url;
+  return url[language];
 }

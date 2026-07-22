@@ -3,7 +3,12 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, Check, Copy, Sparkles } from 'lucide-react';
 import { toast } from '@/components/ui/sonner';
 import { useLanguage } from '@/i18n/useLanguage';
-import { resolveLocalizedAsset, resolveSponsorName, sponsors } from '@/content/sponsors';
+import {
+  resolveLocalizedAsset,
+  resolveSponsorName,
+  resolveSponsorUrl,
+  sponsors,
+} from '@/content/sponsors';
 import { cn, displayDomain } from '@/lib/utils';
 
 const lightLogoBg = 'bg-white dark:bg-white/95 p-1';
@@ -106,6 +111,7 @@ export function SponsorPerksTable() {
                   const isCopied = copiedId === sponsor.id;
                   const iconSrc = resolveLocalizedAsset(sponsor.icon, language);
                   const name = resolveSponsorName(sponsor.name, language);
+                  const url = resolveSponsorUrl(sponsor.url, language);
 
                   return (
                     <tr
@@ -156,7 +162,7 @@ export function SponsorPerksTable() {
                       </td>
                       <td className="px-5 py-4 text-right">
                         <a
-                          href={sponsor.url}
+                          href={url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
@@ -178,6 +184,7 @@ export function SponsorPerksTable() {
               const isCopied = copiedId === sponsor.id;
               const iconSrc = resolveLocalizedAsset(sponsor.icon, language);
               const name = resolveSponsorName(sponsor.name, language);
+              const url = resolveSponsorUrl(sponsor.url, language);
 
               return (
                 <li key={sponsor.id} className="space-y-3 p-4">
@@ -199,11 +206,11 @@ export function SponsorPerksTable() {
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium text-foreground">{name}</p>
                       <p className="truncate text-xs text-muted-foreground">
-                        {displayDomain(sponsor.url)}
+                        {displayDomain(url)}
                       </p>
                     </div>
                     <a
-                      href={sponsor.url}
+                      href={url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 text-primary"

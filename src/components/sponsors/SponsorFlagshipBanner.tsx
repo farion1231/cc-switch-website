@@ -1,7 +1,12 @@
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
-import { resolveLocalizedAsset, resolveSponsorName, type Sponsor } from '@/content/sponsors';
+import {
+  resolveLocalizedAsset,
+  resolveSponsorName,
+  resolveSponsorUrl,
+  type Sponsor,
+} from '@/content/sponsors';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SponsorPerkBadge } from './SponsorPerkBadge';
@@ -20,6 +25,7 @@ export function SponsorFlagshipBanner({ sponsor }: SponsorFlagshipBannerProps) {
   const perk = sponsor.perk?.[language];
   const bannerSrc = resolveLocalizedAsset(sponsor.banner, language);
   const name = resolveSponsorName(sponsor.name, language);
+  const url = resolveSponsorUrl(sponsor.url, language);
 
   return (
     <motion.article
@@ -31,7 +37,7 @@ export function SponsorFlagshipBanner({ sponsor }: SponsorFlagshipBannerProps) {
       className="group relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-border bg-card shadow-lg transition-all duration-300 hover:border-primary/50 hover:shadow-xl"
     >
       <a
-        href={sponsor.url}
+        href={url}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`${name} — ${tagline}`}
