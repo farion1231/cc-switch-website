@@ -128,6 +128,28 @@ export const tutorials: Tutorial[] = [
     featured: true,
   },
   {
+    slug: 'kimi-code-codex-cc-switch-guide',
+    title: {
+      zh: '通过 CC Switch 在 Codex 中使用 Kimi For Coding',
+      en: 'Use Kimi For Coding in Codex with CC Switch',
+      ja: 'CC Switch で Codex から Kimi For Coding を使う',
+    },
+    summary: {
+      zh: 'Kimi Code 官方文档，介绍如何通过 CC Switch 本地路由将 Codex CLI 接入 Kimi For Coding，配置 Kimi K3 / K2.7 Code 模型、上下文窗口与思考等级，并排查常见连接问题。',
+      en: 'Official Kimi Code documentation for connecting Codex CLI to Kimi For Coding through CC Switch local routing, configuring Kimi K3 / K2.7 Code models, context windows, reasoning effort, and troubleshooting.',
+      ja: 'Kimi Code 公式ドキュメント。CC Switch のローカルルーティングで Codex CLI を Kimi For Coding に接続し、Kimi K3 / K2.7 Code、コンテキストウィンドウ、思考レベル、トラブルシュートを解説します。',
+    },
+    author: { name: 'Kimi Code', url: 'https://www.kimi.com/code/docs/' },
+    date: '2026-07-22',
+    category: 'integration',
+    source: 'community',
+    readMinutes: 8,
+    externalUrl: 'https://www.kimi.com/code/docs/third-party-tools/codex.html',
+    accent: 'purple',
+    coverIcons: [tutorialIcons.kimi, tutorialIcons.codex, tutorialIcons.ccSwitch],
+    featured: true,
+  },
+  {
     slug: 'cc-switch-cli-headless-guide',
     title: {
       zh: '在无图形界面的服务器上用好 cc-switch',
