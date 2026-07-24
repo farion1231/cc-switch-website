@@ -80,7 +80,7 @@ export function HeroSection() {
             >
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start max-w-3xl mx-auto lg:mx-0">
-                <a href="https://github.com/farion1231/cc-switch/releases" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                <Link to={getLocalizedPath('/download', language)} className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     variant="hero"
@@ -89,7 +89,7 @@ export function HeroSection() {
                     <Download className="w-5 h-5" />
                     {t.hero.downloadBtn}
                   </Button>
-                </a>
+                </Link>
                 <Link to={getLocalizedPath('/docs', language)} className="w-full sm:w-auto">
                   <Button
                     size="lg"

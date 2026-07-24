@@ -21,6 +21,10 @@
 /ja/*
   Cache-Control: no-cache
 
+/download
+  Cache-Control: no-cache
+/download/
+  Cache-Control: no-cache
 /docs
   Cache-Control: no-cache
 /docs/

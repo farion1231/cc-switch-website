@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import { Download, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/i18n/useLanguage';
+import { getLocalizedPath } from '@/i18n/routes';
 
 export function CTASection() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <section className="section-y relative overflow-hidden">
@@ -49,7 +51,7 @@ export function CTASection() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
-            <a href="https://github.com/farion1231/cc-switch/releases" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+            <Link to={getLocalizedPath('/download', language)} className="w-full sm:w-auto">
               <Button
                 size="lg"
                 className="w-full gap-2 border-2 border-transparent bg-white px-8 py-6 text-base font-semibold text-primary shadow-xl transition-all hover:scale-105 hover:bg-white/90 hover:shadow-2xl sm:w-auto sm:text-lg"
@@ -57,7 +59,7 @@ export function CTASection() {
                 <Download className="w-5 h-5" />
                 {t.cta.downloadBtn}
               </Button>
-            </a>
+            </Link>
             <a href="https://github.com/farion1231/cc-switch" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button
                 size="lg"

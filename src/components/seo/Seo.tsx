@@ -13,7 +13,6 @@ import {
   hreflang,
   OG_IMAGE_PATH,
   ogLocale,
-  RELEASES_URL,
   seoCopy,
   SITE_NAME,
   SITE_URL,
@@ -21,9 +20,9 @@ import {
 import type { Language } from '@/i18n/translations';
 
 const JSON_LD_ID = 'cc-switch-jsonld';
-const INDEXABLE_PATHS = new Set(['/', '/docs', '/changelog', '/sponsors', '/tutorials']);
+const INDEXABLE_PATHS = new Set(['/', '/download', '/docs', '/changelog', '/sponsors', '/tutorials']);
 
-type RouteKey = 'home' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound';
+type RouteKey = 'home' | 'download' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound';
 
 function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {
   let element = document.head.querySelector(`meta[${attribute}="${key}"]`) as HTMLMetaElement | null;
@@ -93,6 +92,7 @@ function upsertJsonLd(jsonLd: unknown) {
 
 function getRouteKey(basePath: string): RouteKey {
   if (basePath === '/') return 'home';
+  if (basePath === '/download') return 'download';
   if (basePath === '/docs') return 'docs';
   if (basePath === '/changelog' || basePath.startsWith('/changelog/')) return 'changelog';
   if (basePath === '/sponsors') return 'sponsors';
@@ -194,45 +194,46 @@ function getJsonLd(routeKey: RouteKey, canonicalUrl: string, language: Language,
   const breadcrumb = getBreadcrumbGraph(routeKey, canonicalUrl, language, title);
   if (breadcrumb) graph.push(breadcrumb);
 
+  if (routeKey === 'home' || routeKey === 'download') {
+    graph.push({
+      '@type': 'SoftwareApplication',
+      '@id': `${SITE_URL}/#software`,
+      name: SITE_NAME,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'macOS, Windows, Linux',
+      softwareVersion: CC_SWITCH_VERSION,
+      url: canonicalUrl,
+      image: absoluteUrl(OG_IMAGE_PATH),
+      description,
+      downloadUrl: absoluteUrl(getLocalizedPath('/download', language)),
+      codeRepository: GITHUB_REPO_URL,
+      license: 'https://opensource.org/license/mit',
+      isAccessibleForFree: true,
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+      publisher: {
+        '@id': organizationId,
+      },
+      sameAs: [GITHUB_REPO_URL, HOMEBREW_REPO_URL],
+    });
+  }
+
   if (routeKey === 'home') {
-    graph.push(
-      {
-        '@type': 'SoftwareApplication',
-        '@id': `${SITE_URL}/#software`,
-        name: SITE_NAME,
-        applicationCategory: 'DeveloperApplication',
-        operatingSystem: 'macOS, Windows, Linux',
-        softwareVersion: CC_SWITCH_VERSION,
-        url: canonicalUrl,
-        image: absoluteUrl(OG_IMAGE_PATH),
-        description,
-        downloadUrl: RELEASES_URL,
-        codeRepository: GITHUB_REPO_URL,
-        license: 'https://opensource.org/license/mit',
-        isAccessibleForFree: true,
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'USD',
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${canonicalUrl}#faq`,
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
         },
-        publisher: {
-          '@id': organizationId,
-        },
-        sameAs: [GITHUB_REPO_URL, HOMEBREW_REPO_URL],
-      },
-      {
-        '@type': 'FAQPage',
-        '@id': `${canonicalUrl}#faq`,
-        mainEntity: faqItems.map((item) => ({
-          '@type': 'Question',
-          name: item.question,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: item.answer,
-          },
-        })),
-      },
-    );
+      })),
+    });
   }
 
   if (routeKey === 'docs') {

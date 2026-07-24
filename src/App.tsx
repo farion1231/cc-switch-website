@@ -10,6 +10,7 @@ import { SiteNavbar } from "./components/ccswitch/SiteNavbar";
 import NotFound from "./pages/NotFound";
 
 const CCSwitchHome = lazy(() => import("./pages/CCSwitchHome"));
+const DownloadPage = lazy(() => import("./pages/DownloadPage"));
 const DocsPage = lazy(() => import("./pages/DocsPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const SponsorsPage = lazy(() => import("./pages/SponsorsPage"));
@@ -47,6 +48,10 @@ const App = () => (
           <Route path="/zh" element={<CCSwitchHome />} />
           <Route path="/en" element={<CCSwitchHome />} />
           <Route path="/ja" element={<CCSwitchHome />} />
+          <Route path="/download" element={<DownloadPage />} />
+          <Route path="/zh/download" element={<DownloadPage />} />
+          <Route path="/en/download" element={<DownloadPage />} />
+          <Route path="/ja/download" element={<DownloadPage />} />
           <Route path="/docs" element={<DocsPage />} />
           <Route path="/zh/docs" element={<DocsPage />} />
           <Route path="/en/docs" element={<DocsPage />} />

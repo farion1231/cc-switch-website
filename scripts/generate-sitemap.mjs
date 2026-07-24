@@ -65,6 +65,7 @@ function absoluteUrl(path, language) {
 
 const routePaths = [
   '/',
+  '/download',
   '/docs',
   '/changelog',
   '/tutorials',

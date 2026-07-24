@@ -27,7 +27,7 @@ export function SiteFooter() {
       title: t.footer.product.title,
       links: [
         { label: t.footer.product.features, href: '/#features', internal: true },
-        { label: t.footer.product.download, href: 'https://github.com/farion1231/cc-switch/releases' },
+        { label: t.footer.product.download, href: '/download', internal: true },
       ],
     },
     {

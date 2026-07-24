@@ -39,12 +39,17 @@ type SeoCopy = {
   keywords?: string;
 };
 
-export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound', SeoCopy>> = {
+export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound', SeoCopy>> = {
   zh: {
     home: {
       title: 'CC Switch 官方网站 - AI 编程工具统一管理平台',
       description: 'CC Switch 官方网站。统一管理 Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置、本地路由、MCP、Skills、会话与用量统计。',
       keywords: 'CC Switch 官方网站,AI 编程工具,Claude Code,Claude Desktop,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,本地路由,供应商切换',
+    },
+    download: {
+      title: 'CC Switch 下载 - macOS / Windows / Linux 官方安装包',
+      description: '从官方渠道下载 CC Switch 最新版本。支持 macOS（Apple Silicon 与 Intel 通用）、Windows（x64 / ARM64 安装版与便携版）和 Linux（AppImage / deb / rpm）。免费开源。',
+      keywords: 'CC Switch 下载,CC Switch download,CC Switch 安装包,CC Switch 官方下载,Claude Code 工具下载,macOS,Windows,Linux',
     },
     docs: {
       title: 'CC Switch 文档 - 安装、配置与使用指南',
@@ -77,6 +82,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 's
       description: 'The official CC Switch website. Manage providers, local routing, MCP, Skills, sessions, and usage for Claude Code, Claude Desktop, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent.',
       keywords: 'CC Switch official website,AI coding tools,Claude Code,Claude Desktop,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,local routing,provider switcher',
     },
+    download: {
+      title: 'Download CC Switch - Official Installers for macOS / Windows / Linux',
+      description: 'Download the latest CC Switch release from the official source. Universal macOS build for Apple Silicon and Intel, Windows x64 / ARM64 installer and portable builds, and Linux AppImage / deb / rpm packages. Free and open source.',
+      keywords: 'CC Switch download,download CC Switch,CC Switch installer,CC Switch official download,Claude Code tool download,macOS,Windows,Linux',
+    },
     docs: {
       title: 'CC Switch Docs - Installation, Configuration, and User Guide',
       description: 'Read the official CC Switch docs for installation, provider management, local routing, failover, MCP, Skills, Prompts, sessions, and troubleshooting.',
@@ -107,6 +117,11 @@ export const seoCopy: Record<Language, Record<'home' | 'docs' | 'changelog' | 's
       title: 'CC Switch 公式サイト - AI コーディングツール統合管理',
       description: 'CC Switch 公式サイト。Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent のプロバイダー、Local Routing、MCP、Skills、セッション、使用量を統合管理します。',
       keywords: 'CC Switch 公式サイト,AI コーディングツール,Claude Code,Claude Desktop,Codex,Gemini CLI,OpenCode,OpenClaw,Hermes Agent,MCP,Skills,Local Routing,プロバイダー切替',
+    },
+    download: {
+      title: 'CC Switch ダウンロード - macOS / Windows / Linux 公式インストーラー',
+      description: 'CC Switch の最新版を公式サイトからダウンロード。macOS（Apple Silicon / Intel 両対応）、Windows（x64 / ARM64 インストーラーとポータブル版）、Linux（AppImage / deb / rpm）に対応。無料・オープンソース。',
+      keywords: 'CC Switch ダウンロード,CC Switch download,CC Switch インストーラー,CC Switch 公式ダウンロード,Claude Code ツール ダウンロード,macOS,Windows,Linux',
     },
     docs: {
       title: 'CC Switch ドキュメント - インストール、設定、使い方',

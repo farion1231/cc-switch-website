@@ -29,13 +29,18 @@ export function SiteNavbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const downloadHref = getLocalizedPath('/download', language);
+  // The download entry renders as the mobile menu's CTA button, so keep it out
+  // of the mobile link list to avoid showing it twice.
   const navLinks = [
     { label: t.nav.home, href: getLocalizedPath('/', language) },
     { label: t.nav.docs, href: getLocalizedPath('/docs', language) },
     { label: t.nav.tutorials, href: getLocalizedPath('/tutorials', language) },
     { label: t.nav.changelog, href: getLocalizedPath('/changelog', language) },
     { label: t.nav.sponsors, href: getLocalizedPath('/sponsors', language) },
+    { label: t.nav.download, href: downloadHref, mobileCta: true },
   ];
+  const mobileNavLinks = navLinks.filter((link) => !link.mobileCta);
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -168,7 +173,7 @@ export function SiteNavbar() {
             className="fixed inset-0 z-40 bg-background pt-20 md:hidden"
           >
             <nav className="container flex flex-col gap-6 py-8">
-              {navLinks.map((link, index) => (
+              {mobileNavLinks.map((link, index) => (
                 <motion.div
                   key={link.href}
                   initial={{ opacity: 0, x: -20 }}
@@ -190,12 +195,12 @@ export function SiteNavbar() {
                 transition={{ delay: 0.4 }}
                 className="pt-6 flex flex-col gap-4"
               >
-                <a href="https://github.com/farion1231/cc-switch/releases" target="_blank" rel="noopener noreferrer" className="w-full">
+                <Link to={downloadHref} className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
                   <Button variant="hero" className="w-full py-6 text-lg">
                     <Download className="w-5 h-5" />
                     {t.nav.download}
                   </Button>
-                </a>
+                </Link>
                 <a
                   href="https://github.com/farion1231/cc-switch"
                   target="_blank"
