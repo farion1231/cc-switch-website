@@ -2,6 +2,7 @@ import type { Language } from '@/i18n/translations';
 
 import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
 import packycodeIcon from '@/assets/icons/sponsors/packycode.svg';
+import aicodingIcon from '@/assets/icons/sponsors/aicoding.svg';
 import aigocodeIcon from '@/assets/icons/sponsors/aigocode.svg';
 import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
 import aicodemirrorIcon from '@/assets/icons/sponsors/aicodemirror.svg';
@@ -82,6 +83,7 @@ const sponsorDisplayOrder = [
   'unity2',
   'shengsuanyun',
   'aigocode',
+  'aicoding',
   'subrouter',
   'apikey-fun',
   'claudeapi',
@@ -140,7 +142,7 @@ export const sponsors: Sponsor[] = [
     id: 'packycode',
     name: 'PackyCode',
     icon: packycodeIcon,
-    url: 'https://www.packyapi.com/register?aff=cc-switch',
+    url: 'https://www.packyapi.ai/register?aff=cc-switch',
     tier: 'standard',
     category: 'relay',
     featured: true,
@@ -162,6 +164,30 @@ export const sponsors: Sponsor[] = [
       ja: '初回チャージ 10% オフ（お支払い時にクーポンコード「cc-switch」を入力）',
     },
     couponCode: 'cc-switch',
+  },
+  {
+    id: 'aicoding',
+    name: 'AICoding',
+    icon: aicodingIcon,
+    url: 'https://aicoding.sh/i/CCSWITCH',
+    tier: 'standard',
+    category: 'relay',
+    since: '2026-07',
+    tagline: {
+      zh: '全球大模型 API 超值中转服务',
+      en: 'Cost-effective global AI model API relay',
+      ja: '高コスパなグローバル AI モデル API 中継',
+    },
+    description: {
+      zh: 'AICoding.sh 提供 Claude Code、GPT、Gemini 及国内主流模型的 API 中转服务，Claude Code 低至 1.9 折、GPT 低至 0.1 折，并支持企业级高并发、极速开票与 7×24 专属技术支持。',
+      en: 'AICoding.sh provides API relay access to Claude Code, GPT, Gemini, and major Chinese models, with Claude Code at 19% of the original price and GPT at just 1%. It also supports enterprise-grade concurrency, fast invoicing, and dedicated 24/7 technical support.',
+      ja: 'AICoding.sh は Claude Code、GPT、Gemini、中国の主要モデルに対応する API 中継サービスです。Claude Code は 81% オフ、GPT は 99% オフで、エンタープライズ級の高同時接続、迅速な請求書発行、24 時間年中無休の専属テクニカルサポートを提供します。',
+    },
+    perk: {
+      zh: 'CC Switch 用户首充 9 折',
+      en: '10% off first top-up for CC Switch users',
+      ja: 'CC Switch ユーザーは初回チャージ 10% オフ',
+    },
   },
   {
     id: 'aigocode',
@@ -473,7 +499,7 @@ export const sponsors: Sponsor[] = [
     id: 'rightcode',
     name: 'Right Code',
     icon: rightcodeIcon,
-    url: 'https://www.right.codes/register?aff=CCSWITCH',
+    url: 'https://www.rightapi.ai/register?aff=CCSWITCH',
     tier: 'standard',
     category: 'relay',
     since: '2025-08',
@@ -570,7 +596,7 @@ export const sponsors: Sponsor[] = [
     id: 'claudeapi',
     name: 'Claude API',
     icon: claudeapiIcon,
-    url: 'https://console.claudeapi.com/register?aff=pCLD',
+    url: 'https://console.apito.ai/agent/register/pQBql2buaqiX3dDS',
     tier: 'standard',
     category: 'relay',
     since: '2025-10',
@@ -691,7 +717,7 @@ export const sponsors: Sponsor[] = [
     id: 'apinebula',
     name: 'APINEBULA',
     icon: apinebulaIcon,
-    url: 'https://apinebula.com/VjM74M',
+    url: 'https://apinebula.ai/VjM74M',
     tier: 'standard',
     category: 'aggregator',
     iconBg: 'light',
@@ -906,7 +932,7 @@ export const sponsors: Sponsor[] = [
     id: 'sudocode',
     name: 'SudoCode',
     icon: sudocodeIcon,
-    url: 'https://sudocode.chat/register?utm_source=ccswitch&utm_medium=partner',
+    url: 'https://sudocode.chat/sign-up?aff=CC-SWITCH&utm_source=cc-switch&utm_medium=sponsor&utm_campaign=ccswitch',
     tier: 'standard',
     category: 'relay',
     tagline: {
