@@ -15,6 +15,7 @@ export interface DownloadFile {
   arch: DownloadArch;
   name: string;
   size: number;
+  sha256?: string;
   url: string;
 }
 
@@ -56,7 +57,15 @@ export function parseDownloadManifest(value: unknown): DownloadManifest | null {
   if (typeof manifest.version !== 'string' || typeof manifest.tag !== 'string') return null;
   if (typeof manifest.pubDate !== 'string' || !Array.isArray(manifest.files)) return null;
 
-  const files = manifest.files.filter(isDownloadFile);
+  // sha256 is optional display metadata — a malformed value is dropped
+  // rather than rejecting the whole file entry.
+  const files = manifest.files.filter(isDownloadFile).map((file) => ({
+    ...file,
+    sha256:
+      typeof file.sha256 === 'string' && /^[0-9a-f]{64}$/i.test(file.sha256)
+        ? file.sha256.toLowerCase()
+        : undefined,
+  }));
   if (files.length === 0) return null;
 
   return { version: manifest.version, tag: manifest.tag, pubDate: manifest.pubDate, files };

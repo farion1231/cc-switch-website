@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, ArrowUpRight, Github } from 'lucide-react';
+import { Download, ArrowUpRight, Github, Check, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { cn } from '@/lib/utils';
@@ -119,6 +119,44 @@ function AssetButton({ file }: { file: DownloadFile }) {
   );
 }
 
+function HashChip({ arch, sha256 }: { arch: DownloadArch; sha256: string }) {
+  const { t } = useLanguage();
+  const [copied, setCopied] = useState(false);
+
+  const copy = () => {
+    navigator.clipboard
+      .writeText(sha256)
+      .then(() => {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {});
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      title={sha256}
+      aria-label={`${ARCH_LABELS[arch]}: ${t.downloadPage.copyHash}`}
+      className="group inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+    >
+      <span className="font-sans font-medium">{ARCH_LABELS[arch]}</span>
+      <span>
+        {sha256.slice(0, 10)}…{sha256.slice(-6)}
+      </span>
+      {copied ? (
+        <>
+          <Check className="h-3 w-3 text-primary" />
+          <span className="font-sans text-primary">{t.downloadPage.hashCopied}</span>
+        </>
+      ) : (
+        <Copy className="h-3 w-3 opacity-50 transition-opacity group-hover:opacity-100" />
+      )}
+    </button>
+  );
+}
+
 function PlatformMatrix({ manifest, initialPlatform }: { manifest: DownloadManifest; initialPlatform: DownloadPlatform }) {
   const { t } = useLanguage();
   const [activePlatform, setActivePlatform] = useState<DownloadPlatform>(initialPlatform);
@@ -160,32 +198,39 @@ function PlatformMatrix({ manifest, initialPlatform }: { manifest: DownloadManif
 
       {/* Asset rows */}
       <div className="overflow-hidden rounded-xl border border-border bg-card">
-        {rows.map((row, index) => (
-          <div
-            key={row.kind}
-            className={cn(
-              'flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between',
-              index > 0 && 'border-t border-border',
-            )}
-          >
-            <div>
-              <p className="flex items-center gap-2 font-medium text-foreground">
-                {t.downloadPage.kinds[row.kind]}
-                {index === 0 && (
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                    {t.downloadPage.recommended}
-                  </span>
-                )}
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">{t.downloadPage.kindNotes[row.kind]}</p>
+        {rows.map((row, index) => {
+          const hashes = row.files.filter((file) => file.sha256);
+          return (
+            <div key={row.kind} className={cn(index > 0 && 'border-t border-border')}>
+              <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="flex items-center gap-2 font-medium text-foreground">
+                    {t.downloadPage.kinds[row.kind]}
+                    {index === 0 && (
+                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                        {t.downloadPage.recommended}
+                      </span>
+                    )}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">{t.downloadPage.kindNotes[row.kind]}</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {row.files.map((file) => (
+                    <AssetButton key={file.name} file={file} />
+                  ))}
+                </div>
+              </div>
+              {hashes.length > 0 && (
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-5 pb-3.5 pt-0">
+                  <span className="text-xs font-medium text-muted-foreground/70">SHA-256</span>
+                  {hashes.map((file) => (
+                    <HashChip key={file.name} arch={file.arch} sha256={file.sha256!} />
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="flex flex-wrap gap-2">
-              {row.files.map((file) => (
-                <AssetButton key={file.name} file={file} />
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {activePlatform === 'windows' && (
@@ -193,6 +238,15 @@ function PlatformMatrix({ manifest, initialPlatform }: { manifest: DownloadManif
       )}
       {activePlatform === 'macos' && (
         <p className="mt-3 text-center text-sm text-muted-foreground">{t.downloadPage.macNotarized}</p>
+      )}
+      {rows.some((row) => row.files.some((file) => file.sha256)) && (
+        <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground/90">
+          {t.downloadPage.verifyIntro}{' '}
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-foreground">
+            {activePlatform === 'windows' ? 'certutil -hashfile <file> SHA256' : 'shasum -a 256 <file>'}
+          </code>
+          {t.downloadPage.verifyOutro}
+        </p>
       )}
     </div>
   );

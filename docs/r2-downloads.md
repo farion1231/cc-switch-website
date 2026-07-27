@@ -35,11 +35,14 @@ manifest.json 结构（字段变更时两边同步改）：
       "arch": "universal",          // universal | x64 | arm64
       "name": "CC-Switch-v3.18.0-macOS.dmg",
       "size": 26699423,
+      "sha256": "0f4d…（64 位十六进制，前端截断展示 + 点击复制）",
       "url": "https://dl.ccswitch.io/v3.18.0/CC-Switch-v3.18.0-macOS.dmg"
     }
   ]
 }
 ```
+
+`pubDate` 由 CI 从 GitHub release 的 `publishedAt` 取真实发布时间传入（脚本第 5 个参数）；`sha256` 供下载页展示，用户可与 GitHub Releases 页面自动显示的 digest 交叉比对——两者信任源不同（R2 vs GitHub），哈希一致即可确认镜像未被篡改。
 
 `.sig`、`.tar.gz`（Tauri updater 专用）和 `latest.json` 不进 manifest、也不上传到 R2。
 
@@ -76,7 +79,8 @@ manifest.json 结构（字段变更时两边同步改）：
 ```bash
 cd ~/Code/cc-switch
 gh release download v3.18.0 --dir r2-assets --repo farion1231/cc-switch
-node scripts/generate-download-manifest.mjs r2-assets v3.18.0 https://dl.ccswitch.io manifest.json
+pub_date=$(gh release view v3.18.0 --repo farion1231/cc-switch --json publishedAt --jq .publishedAt)
+node scripts/generate-download-manifest.mjs r2-assets v3.18.0 https://dl.ccswitch.io manifest.json "$pub_date"
 
 export AWS_ACCESS_KEY_ID=<R2_ACCESS_KEY_ID>
 export AWS_SECRET_ACCESS_KEY=<R2_SECRET_ACCESS_KEY>

@@ -350,6 +350,10 @@ export const translations = {
         rpm: '适用于 Fedora / openSUSE',
       },
       windowsArchHint: '不确定选哪个？大多数电脑选 x64。',
+      verifyIntro: '校验完整性：下载后在终端执行',
+      verifyOutro: '，输出应与此处及 GitHub Releases 页面显示的 SHA-256 一致。',
+      copyHash: '复制完整 SHA-256',
+      hashCopied: '已复制',
       history: {
         title: '历史版本',
         note: '需要旧版本？所有历史版本均可在 GitHub Releases 获取。',
@@ -969,6 +973,10 @@ export const translations = {
         rpm: 'For Fedora / openSUSE',
       },
       windowsArchHint: 'Not sure which one? Most PCs need x64.',
+      verifyIntro: 'Verify integrity: after downloading, run',
+      verifyOutro: ' — the output should match the SHA-256 shown here and on the GitHub Releases page.',
+      copyHash: 'Copy full SHA-256',
+      hashCopied: 'Copied',
       history: {
         title: 'Previous versions',
         note: 'Looking for an older release? Every version is available on GitHub Releases.',
@@ -1588,6 +1596,10 @@ export const translations = {
         rpm: 'Fedora / openSUSE 向け',
       },
       windowsArchHint: 'どれを選べばよいか分からない場合は x64 を選んでください。',
+      verifyIntro: '整合性の確認：ダウンロード後にターミナルで',
+      verifyOutro: ' を実行し、出力がこのページと GitHub Releases に表示される SHA-256 と一致することを確認してください。',
+      copyHash: '完全な SHA-256 をコピー',
+      hashCopied: 'コピーしました',
       history: {
         title: '過去のバージョン',
         note: '古いバージョンはすべて GitHub Releases から入手できます。',
