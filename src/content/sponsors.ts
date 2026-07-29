@@ -33,6 +33,7 @@ import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import nekocodeIcon from '@/assets/icons/sponsors/nekocode-icon.png';
+import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
 import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
 import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
@@ -94,6 +95,7 @@ const sponsorDisplayOrder = [
   'byteplus',
   'siliconflow',
   'nekocode',
+  'a6api',
   'atlascloud',
   'ucloud',
   'ccsub',
@@ -193,7 +195,7 @@ export const sponsors: Sponsor[] = [
     id: 'aigocode',
     name: 'AIGoCode',
     icon: aigocodeIcon,
-    url: 'https://aigocode.com/invite/CC-SWITCH',
+    url: 'https://aigocode.app/invite/CC-SWITCH',
     tier: 'standard',
     category: 'aggregator',
     featured: true,
@@ -881,6 +883,31 @@ export const sponsors: Sponsor[] = [
       ja: 'チャージ 10% オフ（コード cc-switch）',
     },
     couponCode: 'cc-switch',
+  },
+  {
+    id: 'a6api',
+    name: 'A6API',
+    icon: a6apiIcon,
+    url: 'https://a6api.com/register?aff=AqNr',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    since: '2026-07',
+    tagline: {
+      zh: '多商家竞价的 AI 模型 API 聚合平台',
+      en: 'Multi-vendor AI model API aggregation',
+      ja: '複数ベンダー対応の AI モデル API 集約基盤',
+    },
+    description: {
+      zh: 'A6API 是一站式 AI 模型 API 聚合平台，覆盖 Claude、GPT、Gemini、Codex 等主流模型。平台支持多商家供货和竞争报价，通过智能路由自动选择更稳定、更低价的线路，并在失败时自动切换。',
+      en: 'A6API is a one-stop API aggregation platform for Claude, GPT, Gemini, Codex, and other mainstream models. Multiple vendors compete on price, while smart routing selects a stable, lower-cost route and automatically fails over when needed.',
+      ja: 'A6API は Claude、GPT、Gemini、Codex などの主要モデルに対応するワンストップ API 集約プラットフォームです。複数ベンダーの競争価格とスマートルーティングにより、安定した低価格ルートを自動選択し、障害時には自動で切り替えます。',
+    },
+    perk: {
+      zh: '新用户注册即送免费体验额度',
+      en: 'Free trial credits for new users',
+      ja: '新規登録で無料トライアルクレジット',
+    },
   },
   {
     id: 'new-api',
