@@ -2,6 +2,722 @@
 
 Important release updates for CC Switch.
 
+## [3.19.1] - 2026-07-31
+
+> The through-line of this release is **tying off the loose ends of the last one**: three Chinese Codex gateways have been confirmed to support the Responses API natively, so **local routing takeover is no longer required** — the DeepSeek and Volcengine Ark Coding Plan presets move from routed to direct, and the newly added Tencent Hunyuan TokenHub is direct from the start. Four failures you could hit in daily use are fixed: **Claude Desktop usage has been counted twice since v3.18.0** (the historical numbers correct themselves after upgrading, but there is a 30-day window — see "Upgrade Notes"), switching back to the official Codex provider left you stuck on a 401 with no login screen, upgrading Grok Build from Settings failed with nothing but `os error 2`, and enabling takeover on Grok Build returned a straight 404. On top of that, eight models that had been billed at $0 gain built-in pricing, and 39 interface strings have their language problem fixed. This release has **no database migration**, and it is the first release in this project's history that deletes more than it adds.
+
+### Highlights: What You Can Do Now
+
+- **Connect DeepSeek, Volcengine Ark Coding Plan, and Tencent Hunyuan directly inside Codex**: all three vendors' official Codex documentation now confirms their endpoints serve the Responses API natively. The existing DeepSeek and Volcengine Ark Coding Plan presets move from Chat format to native format, so the "needs routing" badge on the provider card and the prompt on switching both disappear and requests no longer pass through the local proxy's protocol conversion; Tencent Hunyuan TokenHub is new in this release and is native from the start. **Note that DeepSeek V4 Pro cannot use the direct connection yet** — the vendor has not opened its Codex integration for that model. Use V4 Flash for direct connections (it is the preset default); see [Upgrade Notes](#deepseek-v4-pro-cannot-use-the-direct-connection-yet).
+- **Let DeepSeek use the model catalog DeepSeek itself publishes**: the new "official vendor catalog mirroring" mechanism serves a vendor's published `models.json` verbatim to that vendor's own endpoint, so the freeform `apply_patch` registration and its companion GPT-5 harness stay together instead of being flattened into the neutral template. The match is on host only, never on model name — the same model resold by an aggregator may not implement the same capabilities.
+- **Get correct Claude Desktop usage numbers**: since v3.18.0, Claude Desktop traffic through the local gateway has been recorded twice in the dashboard — once from the proxy and once from session-log import — roughly doubling its tokens, cost, and request counts. After this fix, every day whose detail rows are still present returns to the correct number automatically, **with no rebuild required**.
+- **Sign in normally after switching back to the official Codex provider**: previously, switching from a third-party provider back to the built-in official Codex entry left the third-party key in `~/.codex/auth.json`. Codex would use it against the official endpoint and get a reliable 401 — and because the file existed, it never fell back to its own login screen, leaving no way out from inside the app.
+- **Upgrade Grok Build from the Settings page**: since 0.2.112, `grok update` performs its distribution by calling npm internally, but an app launched from the GUI cannot see node, so the upgrade only ever reported `Error: No such file or directory (os error 2)`.
+- **Enable takeover on Grok Build without hitting a 404**: a Grok Build provider whose API format had been changed by hand to OpenAI Chat or Anthropic would, once takeover was enabled, send requests to a route the proxy does not register — a straight 404, with no failover and no usage record. On top of that, every Grok Build request used to be treated as a new session, which disabled both cache-key injection and per-session grouping.
+- **See the real cost of eight models that had been billed at $0**: `gpt-5.3-codex-spark`, `gemini-3.5-flash-lite`, `kimi-k2.7-code-highspeed`, `glm-5-turbo`, `glm-5v-turbo`, `qwen3.6-flash`, plus the undated `claude-opus-4-6` / `claude-sonnet-4-6`.
+- **Read the About page's tool manager in Traditional Chinese**: 30 strings had only been added for Simplified Chinese, English, and Japanese and were missing for Traditional Chinese; because i18next silently falls back to English, that panel had been half-English since v3.16.0. A further 9 strings showed Simplified Chinese **in every language**.
+- **Move back and forth between the official subscription and DeepSeek instead of choosing one**: `auth.json` and `config.toml` are single-slot files — Codex itself cannot hold a second set of credentials. A vendor's one-click script rewrites that configuration to be its own, whereas CC Switch snapshots and restores it per provider — which is the most practical difference between the two approaches; see [the comparison below](#importing-through-cc-switch-vs-running-the-official-script).
+
+---
+
+### Usage Guides
+
+The changes in this release center on how Codex connects and on how usage is counted. The following docs are worth reading alongside it:
+
+- **[Local Routing](/en/docs?section=proxy&item=routing)**: which providers need takeover enabled, and what takeover does. After this release, DeepSeek, Volcengine Ark Coding Plan, and Tencent Hunyuan no longer need it.
+- **[Usage Statistics](/en/docs?section=proxy&item=usage)**: the usage dashboard's data sources and how the statistics are counted — useful for understanding how the Claude Desktop double count happened and why some historical days cannot be corrected.
+- **[Using Chat-Format APIs Like DeepSeek in Codex](/en/tutorials/codex-deepseek-routing-guide)**: this guide explains how local routing converts Responses into Chat Completions, and **has been updated for this release**. It now opens with a check for which case you are in: a DeepSeek provider created from the preset connects directly and needs no routing, while one saved before the upgrade — and `deepseek-v4-pro` — still does. The mechanism applies in full to Kimi, Zhipu GLM, SiliconFlow, and other providers that remain Chat-shaped.
+
+---
+
+> [!WARNING]
+>
+> ## Only Official Channels (Please Read)
+>
+> CC Switch is a **fully free and open-source** desktop app, and we **do not charge users any fees**. Please only obtain the software through the official channels listed below:
+>
+> | Channel            | Only Official                                                                  |
+> | ------------------ | ------------------------------------------------------------------------------ |
+> | Website            | **[ccswitch.io](https://ccswitch.io)**                                         |
+> | Source             | **[github.com/farion1231/cc-switch](https://github.com/farion1231/cc-switch)** |
+> | Downloads          | **[GitHub Releases](https://github.com/farion1231/cc-switch/releases)**        |
+> | Author             | **[@farion1231](https://github.com/farion1231)**                               |
+> | Report an Imposter | **[GitHub Issues](https://github.com/farion1231/cc-switch/issues)**            |
+>
+> **Any "CC Switch" website or client that asks you for payment, top-ups, or login credentials is fake.** If you have been tricked into paying, stop the transaction immediately and file a report through GitHub Issues.
+
+---
+
+### Overview
+
+CC Switch v3.19.1 is a maintenance release along three lines. The first is Chinese Codex gateways moving to native Responses as a group: DeepSeek connects directly to `api.deepseek.com` and brings a reusable mechanism with it — mirroring the model catalog a vendor publishes itself, so the freeform `apply_patch` registration and its companion GPT-5 harness stay self-consistent rather than being folded into the neutral template; Volcengine's Ark Coding Plan endpoint `/api/coding/v3` follows now that the official documentation confirms it; and Tencent Hunyuan's TokenHub joins as a new preset. None of the three needs local routing takeover any more.
+
+The second is four failures visible in the field: Claude Desktop usage has been recorded twice since v3.18.0 ([#5938](https://github.com/farion1231/cc-switch/issues/5938)); switching back to the built-in official Codex provider left a third-party `auth.json` behind, producing a 401 with no login screen; `grok update` reported nothing but `os error 2` when run from the GUI; and Grok Build's proxy takeover returned 404 on non-Responses backends while every request was treated as a new session ([#5677](https://github.com/farion1231/cc-switch/pull/5677)). The third is weight loss: 3,166 lines of code with no remaining caller and 4 unused npm dependencies are deleted — this is the first release in the project's history that deletes more than it adds. Beyond that, deep-link import confirmations mask more and truncate less, eight models that had been billed at $0 gain pricing, and four built-in prices are realigned with vendor list prices. This release has **no database schema migration** (the version stays at v16), so upgrading is light.
+
+**Release date**: 2026-07-31
+
+**Change size**: 12 commits | 71 files changed | +2,324 / -3,680 lines
+
+---
+
+### Added
+
+#### Official Vendor Model Catalog Mirroring (DeepSeek First)
+
+Codex reads model capabilities from a catalog file, and CC Switch previously generated that catalog from a neutral template for every provider — which is right for an aggregator, but strips the capabilities a vendor's own integration depends on. Now, for any vendor whose official catalog is bundled with the app, that vendor's own file is mirrored directly.
+
+DeepSeek is the first: the bundled file carries the `deepseek-v4-flash` and `deepseek-v4-pro` entries, preserving `apply_patch_tool_type: "freeform"`, `web_search_tool_type: "text"`, `supports_search_tool: true`, the low / high / max reasoning tiers, and the 17,644-character GPT-5 harness in `base_instructions` and `model_messages` — **that harness has to travel together with the freeform tool registration**, because the harness itself instructs the model to use `apply_patch`; splitting either half leaves the pair inconsistent.
+
+The gate is deliberately narrow: the provider must resolve to the native Responses profile **and** its `base_url` must be on `deepseek.com`. **Matching is by host, not by model brand** — the same model resold by an aggregator may not implement the same capabilities, and granting by brand would hand capabilities to a service that never implemented them. Entries a provider pins in its own catalog still win; an unrecognized model ID clones the flagship entry but keeps its own name. Catalogs generated for every other profile are byte-identical to before.
+
+#### Tencent Hunyuan (TokenHub) Codex Preset
+
+The Codex preset picker gains "Tencent Hunyuan" under the Opensource Official category, between Bailian and StepFun. Selecting it writes `https://tokenhub.tencentmaas.com/v1`, `wire_api = "responses"`, and the `disable_response_storage = true` that TokenHub requires; it declares the two models `hy3` and `hy3-preview` with a **256K** context window (rather than accepting Codex's 128K default), and marks them text-only — Codex will no longer send `view_image` payloads to a model that cannot read them.
+
+Because it is a native Responses provider, Codex connects to the gateway directly with no local routing; the generated catalog uses the neutral native template, which pins `shell_type = "shell_command"` and drops the freeform `apply_patch` registration that native gateways reject. The address manager and latency test have two candidates from the start: the primary domain and the official `.cn` backup. The regionally separate international site is deliberately excluded, because API keys do not carry across sites.
+
+Note that the **API key must be a TokenHub key with Hy3 access enabled**; Coding Plan and Token Plan subscription keys do not work against this endpoint.
+
+#### Built-In Pricing for Eight Models That Had Been Billed at $0
+
+`gpt-5.3-codex-spark`, `gemini-3.5-flash-lite`, `kimi-k2.7-code-highspeed` (2x the `kimi-k2.7-code` baseline, following Kimi's Turbo convention), `glm-5-turbo`, `glm-5v-turbo`, and `qwen3.6-flash` had no row at all in the built-in pricing table, and the prefix fallback could not reach them either, so every request against them was recorded at zero cost.
+
+Two more rows — the undated `claude-opus-4-6` and `claude-sonnet-4-6` — close a subtler gap: model ID resolution only **strips** a date suffix, it never **adds** one, so a log carrying an undated ID matched nothing. All eight rows are seeded insert-if-absent, so any price you edited is untouched.
+
+#### Grok Build Joins the Failover Tabs and Environment-Conflict Detection
+
+The failover section in Settings gains a fourth Grok Build tab alongside Claude Code, Codex, and Gemini. The environment-conflict banner shown at startup also begins detecting `XAI_API_KEY` and `GROK_DEFAULT_MODEL` — two variables that silently override whichever provider you selected in the app. Detection distinguishes exact names from prefixes, so CC Switch's own `GROK_BIN_DIR` and `GROK_HOME` are not falsely reported.
+
+---
+
+### Changed
+
+#### DeepSeek and Volcengine Ark Coding Plan Connect to Codex Directly, With No Local Routing
+
+Both presets were previously marked as OpenAI Chat format, which made both of them "needs takeover": the provider card carried the "needs routing" badge, switching without the proxy running raised a prompt, and every request travelled Codex → local proxy → Responses-to-Chat → upstream.
+
+Both vendors' official Codex integration docs now confirm their endpoints serve the Responses API — DeepSeek's `api.deepseek.com` and Volcengine's `/api/coding/v3` — so both presets are declared native Responses, the badge and the prompt disappear, and Codex connects to the gateway directly. Neither vendor's generated `config.toml` changes (it was already `wire_api = "responses"`); what changes is the catalog generation profile, and for DeepSeek the context window, which is realigned from 1,000,000 to the vendor's own 1,048,576.
+
+BytePlus's international site deliberately stays on Chat routing until its documentation is verified separately. The Volcengine preset also carries a billing note worth knowing: the pay-as-you-go `/api/v3` endpoint **must never** be added to this preset's backup addresses — it bills separately and does not draw down plan quota.
+
+#### Catalog Display Name and Context Window Are Now Explicit-Only
+
+Both fields previously carried local defaults — the model ID and a 128,000-token window — applied before the vendor's value had a chance to participate, so a mirrored catalog's 1M window would have been overwritten with 128K. They are now optional, with the fallbacks moved down to entry construction, so "left blank" genuinely means "keep the value the vendor declared". Providers that set the two fields explicitly, and every non-mirrored profile, generate exactly the catalog they did before.
+
+---
+
+### Importing Through CC Switch vs. Running the Official Script
+
+DeepSeek publishes a one-click Codex setup script. It works, it takes backups, and it comes with a restore menu. **If this machine is only ever going to use DeepSeek, running the official script is perfectly fine.** What CC Switch addresses is a different situation: you want to move back and forth between several providers.
+
+#### Switching Providers Swaps Login State and Configuration as a Set, With No Manual Backup
+
+`~/.codex/auth.json` and `~/.codex/config.toml` are both **single-slot files** — Codex itself has no multi-credential storage, and one configuration can only describe one provider. When you switch away from a provider, CC Switch snapshots the contents of both files into that provider's record; when you switch back, it writes them back whole. So "ChatGPT subscription → DeepSeek → back to the subscription" normally does not require another `codex login`, and moving between third-party providers requires no manual step at all. Doing the same thing by hand means copying both files before and after every switch; miss it once, and the overwritten OAuth credentials can only be recovered by signing in again.
+
+The official script makes a different trade-off: it rewrites `config.toml` into a DeepSeek-specific configuration — pinning `preferred_auth_method = "apikey"` and `forced_login_method = "api"` at the top level to fix authentication to API key, and **deleting any existing `[profiles.*]` from `config.toml`** (Codex's own built-in mechanism for switching between providers). Your ChatGPT credentials themselves are not deleted — `auth.json` is untouched — but they cannot be used under that configuration; returning to the subscription means running the script's restore menu for a whole-file rollback, and that rollback also discards any hand edits you made to `config.toml` after installation. The script itself can only switch between flash and pro; there is no "move to a third provider" option.
+
+#### After Switching Providers, Your Old Sessions Are Still in `codex resume`
+
+Codex sorts its resume list into drawers by the `model_provider` recorded in each session. Every third-party Codex provider CC Switch creates — DeepSeek, Kimi, an aggregator, it makes no difference — writes the same identifier `custom`, so however you switch among them, `codex resume` keeps showing the full history. On its first launch, CC Switch also performs a one-time migration that folds known per-vendor buckets (including the `deepseek` one the official script writes) into this shared bucket, backing the original files up to `~/.cc-switch/backups/` first.
+
+**There is a clear boundary here**: that migration runs once, on CC Switch's first launch. **If you install CC Switch first and only later run the official script**, those `deepseek`-tagged sessions will not be folded in — they stay in their own drawer. Separately, a provider identifier you wrote by hand that is not on the known list is deliberately left alone.
+
+#### Official-Subscription Sessions Are Already Interleaved With Third-Party Ones in CC Switch
+
+CC Switch's **Sessions panel scans the session directory directly and does not read `model_provider`**, so Codex sessions produced during official-subscription use have always been in the same list as third-party ones — searchable, resumable, deletable — **with no toggle required**.
+
+If you additionally want **Codex's own `codex resume` list** to merge official and third-party sessions, that is a separate matter: Settings → General → Codex App Enhancements → **"Unified Codex session history"**, off by default. Enabling it affects new sessions only; moving existing official sessions across as well requires ticking "Also migrate existing official session history" in the enable dialog (also unchecked by default). Both are pre-existing features, not new in this release; for the edge cases see the [Unified Codex Session History guide](/en/tutorials/codex-unified-session-history-guide).
+
+> **Two shared prerequisites, stated up front so they do not confuse you later:**
+>
+> **First, everything above applies to the Codex directory CC Switch points at.** That is `~/.codex` by default and can be changed in Settings. **CC Switch does not read the `CODEX_HOME` environment variable** — if you use that variable to point Codex somewhere else, CC Switch cannot see those sessions, and provider switches will be written into a directory the CLI is not using. To change the directory, use CC Switch's own config-directory setting.
+>
+> **Second, appearing in the same list does not mean a session can be resumed.** Codex's reasoning content (`encrypted_content`) can only be decrypted by the backend that produced it, so continuing an old session on a different provider may fail — that is upstream's design, not something CC Switch can work around.
+
+---
+
+### Fixed
+
+#### Claude Desktop Usage Was Counted Twice
+
+Claude Desktop traffic through the local gateway landed twice in the usage dashboard — once as a proxy row and once as a session-import row — so its tokens, cost, and request counts were roughly doubled.
+
+This is a regression introduced in v3.18.0: the proxy-side dedup ID carried a scope prefix for every app except `claude`, written as `session:{app}:{provider}:{message_id}`, which put `claude-desktop` in its own namespace; meanwhile the session importer kept writing the same Claude message in the bare `session:{message_id}` form with `app_type = 'claude'`. Three dedup defenses failed at once: the primary-key convergence that lets a proxy row absorb an existing session row, the write-side fingerprint probe, and the read-side filter — the latter two both comparing app type with strict equality.
+
+The two apps now share the bare namespace again, and the two comparisons are widened by a one-way rule: a `claude` session row can be absorbed by a `claude-desktop` proxy row, **but not the reverse**. Because the read-side filter is exactly the one daily rollups aggregate through, duplicate rows already in the database stop being counted, **with no row rewritten or deleted** — this self-healing has a retention limit, see "Upgrade Notes". For Codex, Gemini, and OpenCode the widened comparison degenerates to the previous exact match, and quota checks still use strict matching. ([#5938](https://github.com/farion1231/cc-switch/issues/5938), [#5951](https://github.com/farion1231/cc-switch/pull/5951))
+
+#### Switching Back to the Official Codex Provider Left You Stuck on a 401 With No Login Screen
+
+With the Codex API-key preservation toggle off (the default), switching to a third-party provider writes that vendor's key into `~/.codex/auth.json`. Switching afterwards to the built-in official provider — whose stored credentials are empty — took the config-only branch, so `config.toml` was replaced while the third-party `OPENAI_API_KEY` stayed on disk as it was. Codex then used that foreign key against the official endpoint and got a reliable 401; and because `auth.json` existed, it never fell back to its own login screen, leaving no way out from inside the app.
+
+Now, after a successful switch to an official Codex provider, if `auth.json` contains only an `OPENAI_API_KEY` with no first-class credential beside it, the file is deleted — an OAuth token, a personal access token, an agent identity, or a Bedrock key all mark the file as genuine and leave it fully intact, while metadata such as `auth_mode`, `last_refresh`, or an account ID can no longer "shield" a stale key.
+
+**Deleting the file rather than writing `{}`** is deliberate: an empty object is read by Codex as ChatGPT mode without tokens and errors at startup, whereas a missing file is equivalent to being signed out and goes straight to the login flow. The cleanup runs only after the previous provider has been successfully backfilled into the database, so the deleted key is not lost — it is stored in that provider's record and comes back when you select it again. The same change also relaxed live-config reads: the post-cleanup state (no `auth.json`, a `config.toml` present) is no longer reported as "Codex is not installed".
+
+#### Upgrading Grok Build From the Settings Page Reported Nothing but `os error 2`
+
+Upgrading Grok Build under Settings → About failed with `Error: No such file or directory (os error 2)` and no further information.
+
+The root cause is an asymmetry between the probe path and the execution path: probing goes through a login shell, which reads the user's rc files and therefore sees nvm, Homebrew, and Volta, while lifecycle scripts ran under a non-login shell inheriting the very narrow PATH a GUI-launched app starts with. That would normally not matter, because anchored commands invoke their target by absolute path — but grok 0.2.112 moved self-update onto npm distribution, so `grok update` internally invokes `npm view` and `npm i -g`, and npm in turn resolves node through its shebang. The inner call returned ENOENT, and grok surfaced it verbatim as that `os error 2`.
+
+Lifecycle commands on macOS and Linux now merge the login shell's real PATH ahead of the inherited one, read by executing `/usr/bin/env` rather than echoing the variable — because fish stores PATH as a list, and echoing would yield space-separated segments. For a natively installed Grok, the upgrade chain additionally falls back to the official xAI installer, **deliberately not `npm i -g`**: npm shares both of the primary path's failure modes (no node, a mirror missing the package) and would fail alongside it; the official installer is the only route that does not depend on node, lands in the same place, and rewrites the CLI's own `installer` setting back to `internal`, incidentally healing users an earlier npm fallback had moved onto npm distribution.
+
+#### Grok Build Returned 404 With Takeover Enabled, and Every Request Looked Like a New Session
+
+Enabling takeover on a Grok Build provider whose API format had been changed to OpenAI Chat or Anthropic produced an immediate 404, with no failover and no usage record — takeover rewrote the address and the key but left the backend field alone, so the CLI sent requests to a route the proxy does not register. Takeover now pins the backend to Responses as well; the per-provider downgrade to Chat Completions still happens in the forwarding layer, and the forced value is restored along with the whole live-config backup when the proxy stops.
+
+The other problem was that the proxy's session detection recognized only Codex and OpenAI clients, so every Grok Build turn generated a new session ID marked "not client-provided", which suppressed both cache-key injection and per-session grouping in the dashboard. Grok's own headers are now read — the conversation ID first, then the session ID, ignoring the one that changes per request — under a separate prefix, so the records cannot collide with Codex's. ([#5677](https://github.com/farion1231/cc-switch/pull/5677))
+
+#### Nine Interface Strings Showed Simplified Chinese in Every Language
+
+Nine strings displayed Simplified Chinese regardless of the interface language, in English and Japanese interfaces alike. Every call site used the "inline default value" form with a Chinese literal as the default, but the corresponding key was in **none** of the four locale files — and i18next walks the whole language chain before it considers an inline default, so the English fallback never got a chance and the Chinese literal won in every language.
+
+The affected strings cover the Grok Build provider form's required-field validation, the failover hover tooltip shown when an app is not yet under takeover, the warning raised when stopping Claude Desktop routing while another app holds takeover along with its reason line, the provider-identifier read failure, the empty Codex common-config error, the routing service's stopped and stop-failed toasts, and the "unpriced" label the usage tables put on requests that carry tokens but compute to zero cost. All nine keys now exist in Simplified Chinese, English, Japanese, and Traditional Chinese. ([#5960](https://github.com/farion1231/cc-switch/pull/5960))
+
+#### The Traditional Chinese About Page's Tool Manager Fell Back to English
+
+With the interface language set to Traditional Chinese, the tool management section of the About page displayed English — the version rows, the install and update buttons, the result toasts, the install-conflict diagnosis, and the entire upgrade confirmation dialog. That panel was built out across three separate changes, each adding strings for Simplified Chinese, English, and Japanese only; and because i18next's strategy is to fall back to English rather than error, the 30 missing keys were completely invisible in testing. **This gap had shipped in every release from v3.16.0 through v3.19.0.**
+
+All 30 strings are now translated and the install hint is aligned with the other languages; a new locale test requires every tool-management string to exist in all four languages with matching interpolation variables, so this kind of drift will fail the test suite instead of shipping. ([#5943](https://github.com/farion1231/cc-switch/pull/5943))
+
+#### Built-In Pricing Had Drifted From Vendor List Prices
+
+Cost is frozen against the built-in pricing table at the moment a request is logged, so a stale seeded price silently miscounts every subsequent request. Four rows are corrected in this release: `deepseek-chat` and `deepseek-reasoner` are now legacy aliases of V4 Flash at $0.14 input / $0.28 output per million tokens with $0.0028 cache read (previously $0.27/$1.10 and $0.55/$2.19); `minimax-m3` is halved to $0.30/$1.20 per the official standard tier; `gpt-5.6-luna` drops 80% to $0.20/$1.20 and `gpt-5.6-terra` drops 20% to $2/$12 following OpenAI's 2026-07-30 price cut, with `gpt-5.6-sol` deliberately unchanged and the family's cache-write ratio preserved.
+
+The repair only rewrites a row when all four of its price columns **still equal the previous built-in values exactly**, so a price you edited yourself — or one written by models.dev sync — is never touched.
+
+---
+
+### Security Hardening
+
+#### Deep-Link Import Confirmations: Stricter Masking, Less Truncation
+
+This continues the `ccswitch://` confirmation hardening from v3.19.0. Config previews are now built by a single shared module that recursively masks secrets inside nested TOML tables and JSON objects, fixing two defects that pointed in opposite directions at once: a Grok Build import **rendered no config preview at all**, while a Codex import **printed embedded `api_key` values in the clear**.
+
+The 300-character truncation on the config preview is gone; the full content now renders in a scrollable box — closing the last place the confirmation could hide part of what it was about to write. The masking itself is stricter everywhere it is used, **including the MCP import confirmation**: sensitive-name matching adds `AUTHORIZATION`, `COOKIE`, and `CREDENTIAL`, plus exact matches for `AUTH` and `BEARER`; the plaintext prefix shown after masking shrinks from 8 characters to 4; and values of 8 characters or fewer are now replaced entirely rather than displayed as they are.
+
+Finally, the frontend's Base64 decoder no longer trims leading and trailing whitespace — which may well be a `+` that URL decoding turned into a space. This is the same class of frontend/backend decoder divergence fixed in v3.19.0: what the confirmation displays is one thing, what the importer writes is another.
+
+---
+
+### Internal
+
+#### 3,166 Lines With No Caller, 14 Modules, and 4 Dependencies Removed
+
+A pass over code with no remaining caller. On the backend it deletes the provider icon inference table, a placeholder health checker, a never-wired SSE implementation (with its own streaming and non-streaming handlers), two unused proxy session types, four unreferenced usage parsers, and a dead cost-calculation entry point — **the live billing path, its auto-detecting parsers, and session ID extraction are all untouched**. The 22 `#[allow(dead_code)]` suppressions that had kept the compiler quiet about all of it go too.
+
+On the frontend, 14 modules with no importer are deleted, including a prompt form modal and a repository manager both superseded by panel rewrites, a duplicate proxy config hook, a circuit-breaker panel that never had an importer in the project's history, and three schema files; their strings are removed from all four languages in step. The Tauri commands behind these modules are deliberately kept. Four unused npm dependencies are also dropped. Two scripts that regenerated the hand-curated icon index are removed, and the index file's header now states that automatic regeneration is intentionally unsupported.
+
+A companion change consolidates proxy state and takeover state onto a single query layer — there had been a second parallel set of hooks over the same commands with zero callers, whose query keys never had an observer, so every invalidation aimed at them was a no-op. The query key strings are unchanged character for character, and the surviving hook keeps its existing polling behavior. ([#5916](https://github.com/farion1231/cc-switch/pull/5916), [#5928](https://github.com/farion1231/cc-switch/pull/5928))
+
+---
+
+### Upgrade Notes
+
+#### No Database Migration in This Release
+
+v3.19.1 contains no schema migration (the version stays at v16), so no pre-upgrade backup is triggered and the upgrade is ready to use immediately.
+
+#### The Claude Desktop Double-Count Self-Heal Has a 30-Day Window (Please Read)
+
+The fix suppresses duplicate rows at query time rather than rewriting or deleting data, so **every day whose detail rows are still present returns to the correct total on the next launch**, with no rebuild needed.
+
+But detail rows older than 30 days are aggregated into daily rollups and pruned, and a rollup is computed once, under whatever rules were in effect at aggregation time. **Any day already aggregated by a build without this fix keeps its inflated number permanently.** The regression entered with v3.18.0 (2026-07-21), so the sooner you upgrade, the more of the historical range is recovered.
+
+#### The New Pricing Affects Historical Data in Two Different Ways
+
+The eight newly priced models are **recalculated retroactively**: at startup, requests recorded with zero cost have their cost filled in, so the dashboard numbers for those models will **go up**. Detail rows that were already aggregated and pruned cannot be recalculated and stay at zero.
+
+The four repriced models work in the opposite direction: the backfill only touches zero-cost rows, so requests already recorded keep the old price and only new requests bill at the new one — historical and new spend for the same model will not match. Both paths protect your own pricing: the repair only changes rows still at the original built-in value, while manual edits, models.dev sync values, and deletion tombstones in `~/.cc-switch/model-pricing.json` are replayed after seeding and repair and always win.
+
+#### Preset Changes Only Affect Newly Created Providers
+
+An already saved DeepSeek or Volcengine Ark Coding Plan provider keeps the API format it stored, still needs local routing, and still uses the old catalog. To use the direct connection, re-create the provider from the preset, or change the API format to native Responses in the provider form's advanced section.
+
+That said, **a provider already on native Responses whose address is on `deepseek.com` picks up the mirrored official catalog on its next switch**, with no re-save required — because the check reads the live configuration.
+
+#### DeepSeek V4 Pro Cannot Use the Direct Connection Yet
+
+The preset still lists `deepseek-v4-pro`, and the vendor's own published catalog carries it too, but **DeepSeek has not opened its Codex integration for pro**; their stated timing is early August 2026. Until then, selecting pro in direct-connection mode fails upstream — use `deepseek-v4-flash`, which is also the preset's default model.
+
+If you need pro right now, change that provider's API format back to "OpenAI Chat" and enable local routing takeover. This is exactly the path DeepSeek used before v3.19.1: the local proxy converts the Responses requests Codex sends into Chat Completions, and pro is unaffected on that route.
+
+#### Two Prerequisites for the Official DeepSeek Catalog
+
+The mirrored catalog declares a minimum Codex client version of 0.144.0, and **CC Switch does not verify this itself** — the freeform `apply_patch` registration it carries requires that version or newer. Separately, the generated catalog file grows to roughly 75 KB (for the two mirrored models), because each entry carries the full harness text.
+
+#### After Going Direct, Usage Attribution Moves From the Provider Name to `Codex (Session)`
+
+DeepSeek, Volcengine Ark Coding Plan, and Tencent Hunyuan no longer need takeover, so their traffic can bypass the local proxy entirely and the proxy's per-request records no longer see them.
+
+**The usage itself is neither lost nor indistinguishable** — Codex's session-log import records it as before, only that path does not carry provider identity: all Codex usage that did not go through the local proxy is grouped under an entry named `Codex (Session)`, official-subscription consumption included. In other words, once DeepSeek moves from routed to direct, its usage moves out from under the name "DeepSeek" and into `Codex (Session)`.
+
+**To tell them apart, look at the model**: every usage record carries its own model ID, and the usage panel's per-model statistics list them row by row — `deepseek-v4-flash`, `hy3`, `ark-code-latest`, and the official subscription's GPT models each get their own row, with separate cost and token figures. Only when the dimension you actually need is **per provider** (comparing the same model across several aggregators, for instance) do you need to keep using local routing takeover — that route records the real provider name.
+
+#### Two Prerequisites for the Stale Codex Credential Cleanup
+
+The cleanup runs only when the incoming provider carries the explicit official category **and** the outgoing provider was backfilled successfully. An entry created by hand without the official category, or a switch whose backfill failed, still leaves the residue on disk.
+
+#### Enabling Takeover on Grok Build Rewrites the Backend Field
+
+Enabling takeover on a Grok Build provider now rewrites the backend field in the live configuration to Responses. The provider record stored in the database is unaffected, and the live file is restored in full from its backup when the proxy stops.
+
+#### PATH Changes for Tool Installs and Upgrades (macOS / Linux Only)
+
+Every tool install and upgrade triggered from Settings → About now merges the login shell's PATH ahead of the inherited one, so a program a lifecycle script resolves by name may resolve differently than before; each action also starts one extra shell to read that PATH, which executes your interactive startup files. **Windows is unaffected.**
+
+Users on grok 0.2.112 or later may see two installation records — the native one, plus the global npm package `grok update` created itself; upstream keeps them in sync and they report the same version.
+
+#### Environment-Conflict Detection Now Matches Differently
+
+Detection for Claude Code, Codex, and Gemini has been tightened from "contains" to "prefix", so variables that merely contain an app name — `MY_ANTHROPIC_API_KEY`, `OLD_GEMINI_API_KEY` — are **no longer reported as conflicts**. Detection for Grok Build was added at the same time.
+
+#### Deep-Link Import Confirmations Show Less of Each Secret
+
+The plaintext prefix shown after masking shrinks from 8 characters to 4, and values of 8 characters or fewer are masked entirely. This affects the MCP import confirmation as well.
+
+---
+
+### Risk Notice
+
+#### Carried-Over Notices
+
+**xAI Grok OAuth sign-in**: reuses the public OAuth client identity of the official Grok CLI; using it could lead to account restriction or suspension — see the [v3.18.0 release notes](v3.18.0-en.md#risk-notice) for details.
+
+**Codex OAuth reverse proxy**: using a ChatGPT subscription's Codex OAuth through a reverse proxy may violate OpenAI's terms of service. See the [v3.13.0 release notes](v3.13.0-en.md#️-risk-notice) for details.
+
+**SuperGrok quota queries**: the quota display on provider cards depends on a non-public billing endpoint at grok.com and may stop working once xAI changes the interface — see the [v3.19.0 release notes](v3.19.0-en.md#risk-notice) for details.
+
+**Third-party provider routing**: when the CC Switch local proxy converts and forwards Codex, Claude Desktop, or Grok Build requests to a third-party provider, each provider has different constraints on billing, compliance, and data retention. Please read the target provider's terms of service before use.
+
+By enabling these features, users accept the associated risks. CC Switch is not responsible for any account restriction, warning, or service suspension resulting from their use.
+
+---
+
+### Thanks
+
+Most of the fixes in this release came from outside contributors — five of the six PRs are not mine.
+
+#### Code Contributions
+
+- [#5677](https://github.com/farion1231/cc-switch/pull/5677): finishing off Grok Build's proxy takeover and deep-link integration — the backend field, session identity, the failover tab, and environment-variable detection, plus a fix for the credential leak in config previews along the way. Thanks to @YUZHEthefool. This is the broadest single piece of work in the release.
+- [#5951](https://github.com/farion1231/cc-switch/pull/5951): the Claude Desktop double-count fix. Thanks to @Komikawayi. Pinpointing which change in v3.18.0 made all three dedup defenses fail at once was the most patient piece of investigation in this release.
+- [#5916](https://github.com/farion1231/cc-switch/pull/5916), [#5928](https://github.com/farion1231/cc-switch/pull/5928): removing 3,166 lines of code with no callers and the duplicate proxy query layer. Thanks to @SaladDay.
+- [#5943](https://github.com/farion1231/cc-switch/pull/5943): completing the Traditional Chinese tool-management strings and adding a test that prevents locale drift. Thanks to @yovinchen.
+- [#5960](https://github.com/farion1231/cc-switch/pull/5960): completing the 9 strings that showed Simplified Chinese in every language. Thanks to @mhy1227.
+
+#### Issue Reports
+
+Thanks to @Alaric-L for reporting in [#5938](https://github.com/farion1231/cc-switch/issues/5938) that every Claude Desktop request produced an extra log row sourced from `session_log`, causing tokens to be counted twice — that report pinpointed the data source, and the most important usage fix in this release was located directly from it.
+
+---
+
+### Download & Install
+
+Visit [Releases](https://github.com/farion1231/cc-switch/releases/latest) and download the build for your system, or get it from the official site [ccswitch.io](https://ccswitch.io) (downloads are distributed through Cloudflare edge nodes and do not depend on GitHub being reachable).
+
+#### System Requirements
+
+| System  | Minimum Version      | Architecture                        |
+| ------- | -------------------- | ----------------------------------- |
+| Windows | Windows 10 and later | x64 / ARM64                         |
+| macOS   | macOS 12 (Monterey)+ | Intel (x64) / Apple Silicon (arm64) |
+| Linux   | See table below      | x64 / ARM64                         |
+
+#### Windows
+
+| File                                     | Description                                      |
+| ---------------------------------------- | ------------------------------------------------ |
+| `CC-Switch-v3.19.1-Windows.msi`          | **Recommended** - MSI installer with auto-update |
+| `CC-Switch-v3.19.1-Windows-Portable.zip` | Portable build, unzip and run                    |
+
+Windows ARM64 devices should pick the artifact whose file name carries the `arm64` tag.
+
+#### macOS
+
+| File                             | Description                                           |
+| -------------------------------- | ----------------------------------------------------- |
+| `CC-Switch-v3.19.1-macOS.dmg`    | **Recommended** - DMG installer, drag to Applications |
+| `CC-Switch-v3.19.1-macOS.zip`    | Unzip and drag to Applications, Universal Binary      |
+| `CC-Switch-v3.19.1-macOS.tar.gz` | For Homebrew install and auto-update                  |
+
+Homebrew install:
+
+```bash
+brew install --cask cc-switch
+```
+
+Upgrade:
+
+```bash
+brew upgrade --cask cc-switch
+```
+
+#### Linux
+
+Linux assets are available for both **x86_64** and **ARM64** (`aarch64`). Choose the file whose architecture tag matches your machine's `uname -m` output:
+
+- `CC-Switch-v3.19.1-Linux-x86_64.AppImage` / `.deb` / `.rpm`
+- `CC-Switch-v3.19.1-Linux-arm64.AppImage` / `.deb` / `.rpm`
+
+| Distribution                            | Recommended Format | Install Command                                                        |
+| --------------------------------------- | ------------------ | ---------------------------------------------------------------------- |
+| Ubuntu / Debian / Linux Mint / Pop!\_OS | `.deb`             | `sudo dpkg -i CC-Switch-*.deb` or `sudo apt install ./CC-Switch-*.deb` |
+| Fedora / RHEL / CentOS / Rocky Linux    | `.rpm`             | `sudo rpm -i CC-Switch-*.rpm` or `sudo dnf install ./CC-Switch-*.rpm`  |
+| openSUSE                                | `.rpm`             | `sudo zypper install ./CC-Switch-*.rpm`                                |
+| Arch Linux / Manjaro                    | `.AppImage`        | Make executable and run directly, or use AUR                           |
+| Other distributions / unsure            | `.AppImage`        | `chmod +x CC-Switch-*.AppImage && ./CC-Switch-*.AppImage`              |
+
+## [3.19.0] - 2026-07-30
+
+> The through-line of this release is **peace of mind**: a concentrated wave of security hardening — Skill installation, `ccswitch://` import confirmations, SQL backup imports, common-config merging, and terminal launching are all tightened, and two of those items are worth a minute of your attention — the Gemini common-config credential leak is fixed and scrubbed automatically after upgrading (**you need to rotate your keys**), and the `ccswitch://` MCP import confirmation could previously fail to show the command it was about to write (**if you have ever opened an import link of unknown origin, it is worth a check**); both are covered under "Upgrade Notes". Alongside them is one major proxy correctness fix — **reading images through the proxy no longer blows up your context** (a single screenshot used to eat 100,000+ tokens, and two or three were enough to jam a Codex session on 400s). The convenience side is just as substantial: **model pricing can be handed over to models.dev to maintain automatically**, usage from Grok CLI's official login mode and the SuperGrok subscription balance finally reach the dashboard, and **in-app updates now go through the `dl.ccswitch.io` mirror** — so upgrading works even when GitHub is hard to reach.
+
+### Highlights: What You Can Do Now
+
+- **Read images through the proxy without blowing up your context**: with Codex's `view_image` or any MCP tool that returns images, the image used to be serialized into tool text and token-counted as plain text (roughly 9,000× inflation); now every conversion bridge restores images to their native format before sending them upstream (files and audio are supported on the two Chat bridges as well). In a real test the same replayed turn dropped from 85k+ tokens to about 12k, with a 99% cache hit rate.
+- **Hand model pricing over to models.dev**: the usage panel gains "models.dev Automatic Pricing Sync" (off by default). Once enabled, the prices of the models you selected refresh automatically at startup (at most once every 6 hours); you can pick which models to track from the full catalog, or let it automatically include each vendor's latest commonly used models. From this release on, manual price edits and deletions are recorded in `~/.cc-switch/model-pricing.json`, so they survive a database rebuild.
+- **See usage and subscription balance for Grok's official mode**: when Grok CLI signs in with official OAuth it cannot go through the local proxy, so that consumption was previously entirely invisible; now per-turn usage is imported from the session logs and presented in the dashboard as "Grok Build (Session)". Grok Build provider cards in the official category also show the SuperGrok subscription's quota usage and reset time directly.
+- **Open `ccswitch://` import links with more confidence**: the confirmation now shows the command, every argument, the URL, and the environment variables in full (credential-shaped values are shown masked), and highlights the values worth a second look — inline shell execution, environment variables that change loading behavior, intranet / metadata addresses; usage-query scripts show their complete code and are **imported disabled by default**.
+- **Confirm that your Gemini providers no longer carry somebody else's key**: the common-config shared snippet used to copy credentials such as `GOOGLE_API_KEY` into every Gemini provider that used it; this release closes that path, and the first launch after upgrading performs a one-time scrub automatically. **Any key that ever entered the shared Gemini snippet should be treated as exposed — rotate it before re-entering it** (see "Upgrade Notes").
+- **Keep updating the app when GitHub is hard to reach**: the in-app updater queries `https://dl.ccswitch.io/latest.json` (a Cloudflare R2 mirror) first, with GitHub as the fallback; minisign signature verification is unchanged, and the mirror itself is never trusted.
+- **Use the latest models straight away when creating a provider**: preset default models are upgraded to Claude Opus 5, GPT-5.6 Sol, and Gemini 3.6 Flash, with matching pricing seeded into the database; already-created providers are left as they are.
+- **Import fork-dense Codex usage history faster**: each parent rollout file is parsed only once and shared across all of its fork points, so rebuilding fork-dense history speeds up noticeably, and the import results are byte-identical.
+
+---
+
+### Usage Guides
+
+The new capabilities in this release land mainly in the usage panel and `ccswitch://` deep-link imports. The following docs are worth reading alongside it:
+
+- **[Usage Statistics](/en/docs?section=proxy&item=usage)**: the usage dashboard's data sources and how the statistics are counted. This release adds models.dev automatic pricing sync and usage import for Grok's official mode.
+- **[Deep-Link Import (ccswitch://)](/en/docs?section=faq&item=deeplink)**: what each field in the import confirmation means, and the default values of parameters such as `usageEnabled` (from this release on, usage scripts are imported disabled by default, and the docs have been corrected to match).
+- **[Security Policy (SECURITY.md)](https://github.com/farion1231/cc-switch/blob/main/SECURITY.md)**: this release fills in the threat model and reporting scope — which inputs are treated as untrusted and which issues are welcome, at a glance.
+
+---
+
+> [!WARNING]
+>
+> ## Only Official Channels (Please Read)
+>
+> CC Switch is a **fully free and open-source** desktop app, and we **do not charge users any fees**. Please only obtain the software through the official channels listed below:
+>
+> | Channel            | Only Official                                                                  |
+> | ------------------ | ------------------------------------------------------------------------------ |
+> | Website            | **[ccswitch.io](https://ccswitch.io)**                                         |
+> | Source             | **[github.com/farion1231/cc-switch](https://github.com/farion1231/cc-switch)** |
+> | Downloads          | **[GitHub Releases](https://github.com/farion1231/cc-switch/releases)**        |
+> | Author             | **[@farion1231](https://github.com/farion1231)**                               |
+> | Report an Imposter | **[GitHub Issues](https://github.com/farion1231/cc-switch/issues)**            |
+>
+> **Any "CC Switch" website or client that asks you for payment, top-ups, or login credentials is fake.** If you have been tricked into paying, stop the transaction immediately and file a report through GitHub Issues.
+
+---
+
+### Overview
+
+CC Switch v3.19.0 is led by a wave of security hardening and one major proxy correctness fix. On the security side ([#5811](https://github.com/farion1231/cc-switch/pull/5811) plus follow-up standalone fixes): installing Skills from a GitHub repository is hardened against zip-slip and path traversal and given archive limits; the Gemini common-config credential leak is closed, and the first launch after upgrading performs a one-time scrub that cleans out keys already leaked into other providers' configs; importing a SQL backup now executes under a SQLite authorizer, and statements that can reach outside the importing database — `ATTACH` among them — are rejected outright; common-config snippet merging no longer follows `__proto__` into the global prototype; external terminal launching switches to POSIX single-quote escaping, so a directory name can never inject a command again; and the `ccswitch://` import confirmation displays the payload in full (credential-shaped values masked) and flags risky values, with usage scripts imported disabled by default. On the proxy side, images in tool results are no longer serialized into tool text but restored as native media on each conversion bridge (files and audio are supported on the two Chat bridges as well) — ending the "one 113 KB screenshot eats 100,000+ tokens, two or three images jam the Codex session on 400s" problem ([#4465](https://github.com/farion1231/cc-switch/issues/4465), [#5663](https://github.com/farion1231/cc-switch/issues/5663)).
+
+Usage statistics gain two new capabilities: **models.dev automatic pricing sync** (opt-in, [#5734](https://github.com/farion1231/cc-switch/pull/5734)), together with persisting manual price edits / deletions to the human-editable `~/.cc-switch/model-pricing.json`; and **usage import for Grok CLI's official OAuth mode** — traffic that cannot go through the local proxy and was previously entirely invisible — plus a SuperGrok subscription quota display on the provider card. Around distribution and experience: in-app updates prefer the Cloudflare R2 mirror at `dl.ccswitch.io` (GitHub as fallback, signature verification unchanged); Codex usage import reuses an already-parsed parent rollout timeline for forked sessions ([#5626](https://github.com/farion1231/cc-switch/pull/5626)); preset default models move up to Claude Opus 5, GPT-5.6 Sol, and Gemini 3.6 Flash; the OpenClaw Kimi For Coding preset's base URL is corrected; and the toolbar app switcher becomes icon-only. This release has **no database schema migration**, so upgrading is lightweight.
+
+**Release date**: 2026-07-30
+
+**Stats**: 38 commits | 132 files changed | +14,926 / -1,415 lines
+
+---
+
+### Added
+
+#### models.dev Automatic Pricing Sync
+
+The pricing area of the usage panel gains a "models.dev Automatic Pricing Sync" card, **off by default and enabled manually**: turning it on shows a confirmation explaining that CC Switch will refresh the prices of the selected models from models.dev at startup (at most once every 6 hours), and that **both the built-in price and a hand-set price for a matching model will be overwritten**. The "Select Models" dialog offers the full models.dev catalog (searchable and filterable), plus an "automatically include common models" option covering the recently released models from Claude, GPT, Gemini, Grok, DeepSeek, Qwen, MiMo, LongCat, Kimi, MiniMax, and GLM (at most 6 per family, each individually excludable). The card shows the last sync time and any errors, offers "Sync Now", and can open or reload the local pricing file.
+
+From this release on, manual price edits and deletions are also recorded in `~/.cc-switch/model-pricing.json`, a human-editable file sitting next to the database, and replayed on every startup — hand-set pricing no longer disappears after a database rebuild, and a deleted built-in price finally stays deleted (recorded as a tombstone rather than being re-seeded). Note that the file **starts empty and is deliberately not back-filled from the existing pricing table** (otherwise built-in prices would all be written in as overrides, blocking future built-in price corrections), so edits made before the upgrade still live only in the database — re-save one and it enters the file. When a sync genuinely changes a price, historical usage rows whose cost was **never computed** (zero or missing) are recalculated at the new price — rows that already have a cost keep their original values; a failed fetch or being offline never blocks startup. The models.dev list also filters out non-text and deprecated models (audio / image / video / embedding, and so on), which tidies up the manual price-selection dialog along the way. ([#5734](https://github.com/farion1231/cc-switch/pull/5734))
+
+#### Grok Official Mode Usage Finally Reaches the Dashboard
+
+When Grok CLI signs in with official OAuth it cannot be routed through the local proxy — Grok uses an empty config as the mode switch, so there is nowhere to point it at CC Switch — and that consumption was previously entirely invisible in the usage dashboard. CC Switch now imports per-turn usage alongside the regular session-log sync, reading `turn_completed` events from `updates.jsonl` under `~/.grok/sessions` (archived sessions included): cost prefers the exact figure the CLI reports itself, falling back to local pricing when that is missing (the built-in pricing table gains `grok-4.5-build` at $2 input / $6 output / $0.30 cache read, per million tokens). Imported rows are keyed on the upstream per-turn ID, so a rolled-back session cannot cause double counting; a settling window plus a recent-proxy-activity check ensures the same traffic is not counted twice when routed and official modes are mixed. New rows appear in the dashboard under the provider name "Grok Build (Session)", the app filter gains a Grok Build option, and the data-source breakdown gains a "Grok Build Session" entry with its own icon — all four locales included.
+
+#### SuperGrok Subscription Quota on Provider Cards
+
+Grok Build providers in the "official" category now show SuperGrok subscription usage directly on the card, alongside the official-subscription footers for Claude Code / Codex / Gemini: CC Switch reads Grok CLI's own OAuth credentials (`~/.grok/auth.json`) and queries grok.com's billing endpoint for the quota window's used percentage and reset time; when the reset interval is recognizable it is labeled "weekly" or "monthly", otherwise it falls into a new "Credits" tier (rendered as the `c` group in the tray usage summary). A transient network failure keeps the previous reading and retries rather than clearing the footer; an expired token prompts you to run `grok login` again. Managed xAI OAuth (SuperGrok) providers in Claude Code, Claude Desktop, and Codex automatically get the same quota display — the data comes from the account bound to that provider, and the usage-script entry is hidden accordingly. Note that whether a Grok Build provider counts as "official" is now decided purely by the `category` field, with no probing of config contents.
+
+#### Claude Opus 5 Built-In Pricing
+
+`claude-opus-5` joins the built-in pricing table at $5 input / $25 output, $0.50 cache read / $6.25 cache write (per million tokens), so its usage no longer shows $0. It is seeded insert-if-absent, so edited prices are unaffected (Opus 5 fast mode bills separately and is deliberately left out of the table).
+
+#### Preset Catalog Updates
+
+A6API (an aggregation platform that automatically picks the best of several upstreams for the same model) joins the sponsor presets across eight apps; the PackyCode preset gains three backup addresses on the five preset types that support backup endpoints (Claude Code / Claude Desktop / Codex / Gemini CLI / Grok Build), selectable in the endpoint manager and the speed test; the AICoding partner preset returns across seven apps; and sponsor ordering is realigned with the README.
+
+---
+
+### Changed
+
+#### Preset Default Models Upgraded: Claude Opus 5, GPT-5.6 Sol, Gemini 3.6 Flash
+
+The built-in presets' default models are all on the current generation now: `claude-opus-5` replaces `claude-opus-4-8` (all three naming forms covered), `gpt-5.6-sol` replaces `gpt-5.5` and bare `gpt-5.6`, and `gemini-3.6-flash` replaces `gemini-3.5-flash`. Every mirrored location was updated in sync — universal / NewAPI defaults, the Codex custom `config.toml` template, recommendation lists, form placeholders, and copy in all four locales; `gemini-3.6-flash` pricing is seeded into the database at the same time ($1.50 / $7.50, $0.15 cache read, per million tokens). The Code0 and Qiniu Gemini presets, still pinned to `gemini-3.1-pro-preview`, are aligned to 3.6 Flash as well — this is a **deliberate tier change**: 3.6 has no Pro version, and 3.5 Pro is still restricted to partner testing. **Defaults only affect newly created providers**; saved providers keep the model they were created with. Claude Desktop's opus route advances to `claude-opus-5`, with `claude-opus-4-8` moving into the compatibility-alias slot, so existing configs still resolve as before.
+
+#### In-App Updates Now Go Through the ccswitch.io Mirror
+
+The updater now queries `https://dl.ccswitch.io/latest.json` first — a Cloudflare R2 mirror of the release manifest — with GitHub Releases as the fallback, so checking for and downloading updates no longer depends on GitHub being reachable. The mirror manifest points every platform's download at the same bucket, while the minisign signatures stay exactly as they were: a signature covers file content, not the URL, and every downloaded artifact is still verified against the built-in public key, so **the mirror itself is never trusted**. Publishing is handled by a release-gated sync workflow that only rewrites the root manifest when the tag really is GitHub's `releases/latest`, so the mirror can never push users back to an older version.
+
+#### Codex Usage Import: Faster on Forked Sessions
+
+Importing and rebuilding Codex usage statistics no longer re-reads the same parent rollout file once per fork point: each parent `~/.codex/sessions/*.jsonl` is parsed only once into an in-memory token timeline shared by every child session forked from it, and each child's cutoff becomes an in-memory filter instead. The cache is validated by a file identity stamp (modification time, size, plus device/inode on Unix or volume serial number + file ID on Windows), so a parent file that was appended to, rotated, or replaced is re-read rather than served stale. How much faster it gets depends on fork density: fork-dense history sheds a great deal of redundant parsing, while fork-sparse history is essentially unchanged — and in both cases the import results are byte-identical. ([#5626](https://github.com/farion1231/cc-switch/pull/5626))
+
+#### Toolbar App Switcher Becomes Icon-Only
+
+The switcher buttons no longer render a text label next to the icon — with the managed apps grown to eight, the labels were already being collapsed by overflow detection almost all the time, so the ResizeObserver-based auto-compaction was removed and only the icons are shown. App names remain in the hover tooltip, and screen readers still reach them through `aria-label`.
+
+#### Sponsor Domains and Referral Links Refreshed
+
+Several sponsors migrated domains, and preset addresses, backup endpoints, referral links, and README rows have been updated to match (PackyCode → `www.packyapi.ai`, RightCode → `www.rightapi.ai`, ClaudeAPI → `www.apito.ai`, APINebula → `apinebula.ai`, AICodeMirror → `.ai`, AICoding → `.inc`, AIGoCode → `.app`), along with the removal of two backup endpoints that had gone dead. **Already-created providers keep the old address stored in the database** — to move to the new domain, edit the address by hand or recreate the provider from the refreshed preset.
+
+---
+
+### Fixed
+
+#### Reading Images Through the Proxy No Longer Blows Up the Context
+
+When a client read an image through a tool call — Codex's `view_image`, or any MCP tool that returns images — the proxy's protocol conversion serialized the entire image block into the tool message's text, and the upstream token-counted the base64 as plain text: roughly 9,000× inflation, with a 113 KB PNG working out to 100,000+ prompt tokens; Codex replays the whole history every turn, so two or three screenshots were enough to push the session out of the context window and jam it on repeated 400s ([#4465](https://github.com/farion1231/cc-switch/issues/4465), [#5663](https://github.com/farion1231/cc-switch/issues/5663)).
+
+The proxy now lifts media payloads out of tool results and re-sends them in each bridge's native format — **images are covered on every bridge; files and audio apply wherever the target protocol supports them**: the two Chat bridges (Claude→Chat, Codex Responses→Chat) carry images / files / audio, leaving a short marker in the tool message with the media following the tool batch as a synthetic user message; Claude→Responses restores native `input_image`; Codex / GrokBuild→Anthropic rebuilds standard Anthropic image blocks; and Claude→Gemini uses multimodal `functionResponse.parts` on Gemini 3 (`inlineData` on older models), accepting inline base64 images only. Detection covers typed Responses blocks, Anthropic `source` blocks, MCP `data`+`mimeType` results, and whole image data URLs, and sees through arrays and nested `content` wrappers (including JSON-encoded tool output); once an output is judged to contain media, any data URLs and bare base64 left in it are collapsed into placeholders — **bare base64 on its own never triggers media detection**, and ordinary tool output is left exactly as it was. Tool results without media stay byte-identical to before on every bridge, so prompt-cache prefixes are unaffected; the media blocks sent upstream deliberately carry no `cache_control` marker, so strict upstreams such as GLM and Qwen do not reject them. Measured end to end against Kimi K3: the same replayed turn settles at about 12k input tokens with a 99% cache hit rate, where each replay previously had to carry 85k+ of base64 text.
+
+#### "Unsupported Image Fallback" Now Sees Images Inside Tool Results
+
+The "unsupported image fallback" setting replaces image blocks with a placeholder marker when a provider is text-only or the upstream rejects images, but it could previously only see images that were still structured blocks — tool-result images already flattened into base64 text were invisible to it, so a text-only upstream simply failed with no way to recover. The media scrubber now symmetrically detects and strips media inside tool output on every path, so both the strip-before-sending route and the retry-after-rejection route can rescue such turns. Because that detection now also reaches into tool results, a regression test pins down that the reactive retry still fires only on genuine modality rejections — a context-length 400 is not mistaken for an image rejection and retried.
+
+#### Grok Build Cost Backfill No Longer Overestimates
+
+The routine that backfills missing costs previously treated only Codex and Gemini as providers whose reported input tokens already include cache reads, while Grok Build follows the same convention — so backfilled Grok Build rows were priced on the full input and then charged for the cache read a second time, inflating the cost. The set of cache-inclusive providers is now defined in exactly one place, shared by the route logger, the cost calculator, and the backfill routine, so the three can no longer disagree. Note that rows already touched by the old backfill keep their values — the backfill only handles zero-cost rows and never rewrites an existing positive cost.
+
+#### Hand-Edited Config Files No Longer Crash the App or Swallow Your Edits
+
+When `mcp_servers` exists in `~/.codex/config.toml` but is not a table (for example `mcp_servers = "x"`), MCP sync panicked mid-switch — and it happened after both the database and the live config had already been written, leaving a half-applied switch; a non-table value is now warned about and normalized to an empty table, with the same fix in the Codex and GrokBuild writers. The inline-table form (valid TOML) had mirror-image problems: MCP deletion silently did nothing while the UI reported success, and `base_url` edits were written to a level Codex never reads — both handled. An `opencode.json` whose root node or `provider` / `mcp` section is an array or scalar no longer panics; such files are rejected with an error instead of being rebuilt, so your own `model` and `theme` settings are not wiped out. ([#5811](https://github.com/farion1231/cc-switch/pull/5811))
+
+#### Proxy Conversion Survives Malformed Upstream Responses
+
+Malformed data from an upstream gateway could previously take down the local proxy outright instead of producing an error: a non-object `message` or `content_block` in an Anthropic SSE stream, and a buffered response body that is a top-level JSON array or scalar (what a gateway that ignores `stream: true` returns), both hit a panicking indexed assignment; the stream now ends with a normal failure event. A malformed `content_block` header is additionally recovered as a text block — merely sanitizing it into an empty object stops the panic but leaves all the following content silently discarded, making the model look like it said nothing — and since the deltas after a bad header are usually intact, the common case now passes through, with a warning logged whenever the substitution happens. ([#5811](https://github.com/farion1231/cc-switch/pull/5811))
+
+#### OpenClaw's Kimi For Coding Address Corrected
+
+The OpenClaw preset previously pointed at the general platform endpoint `https://api.kimi.com/v1`, which is not what the Kimi For Coding subscription uses, so coding-plan keys did not work. The address is corrected to `https://api.kimi.com/coding/v1`, with the form placeholder and default value updated to match. **Providers created from the old preset need to be pointed at the new address manually.**
+
+---
+
+### Security Hardening
+
+Of the nine items in this section, **two need action from you**: rotating any key that entered the Gemini common config, and checking the MCP entries you once imported through `ccswitch://` — "Upgrade Notes" spells out how. The rest take effect on upgrade with nothing for you to do.
+
+If you never open `ccswitch://` links sent to you by other people and have never used a shared Gemini common config, these nine items mostly mean "less can go wrong from here on"; if either of those two applies to you, **this release is worth upgrading to first**.
+
+#### The Gemini Common Config No Longer Leaks Keys, and Scrubs Automatically After Upgrading
+
+The Gemini common-config extractor previously stripped only `GEMINI_API_KEY` and `GOOGLE_GEMINI_BASE_URL` from the shared snippet and copied every other `env` entry verbatim — but `GOOGLE_API_KEY` is a first-class Gemini credential, so one account's key (along with any other credential-looking entries) was deep-merged into every Gemini provider that used the common config and sent to that provider's base URL, which may well be a third-party relay. The extractor now skips every key that matches a credential pattern (the same matcher set as the Claude extractor), the frontend snippet validator is aligned with it, and a hand edit cannot push one back in either. Because a Gemini snippet is never re-extracted once it exists, the first launch after upgrading also performs a **one-time scrub**: leaked credentials are cleared from the snippet, from every provider they were merged into, and from `~/.gemini/.env` — matched on the key name **plus** an exact value match, so a provider's own same-named key with a different value is not caught up in it — while the env file's formatting and comments are preserved. See "Upgrade Notes" for the scrub's details and caveats. ([#5811](https://github.com/farion1231/cc-switch/pull/5811))
+
+#### Skill Repository Installation Hardened: Path Traversal and Archive Limits
+
+Installing or browsing Skills from a GitHub repository could previously write outside the target directory: archive entries were joined onto the destination path without normalization, so a ZIP containing `..` could escape the extraction directory (zip-slip); and repository coordinates were never validated, so a branch name like `../../../releases/download/v1/evil` could redirect the download to an arbitrary release asset — while Skill repositories can be added through an untrusted `ccswitch://` deep link and are enabled by default, so merely opening the Skills panel is enough to trigger a download. Skill `directory` values coming from backup restores, sync snapshots, and "import from app" were likewise joined into paths without validation, so an uninstall could `remove_dir_all` outside the managed directory. Every landing point now validates the directory name, repository owner / name / branch are allowlisted at the single download choke point, extraction has hard limits (10,000 entries, 512 MB written, 128 MB downloaded, 4 KB symlink targets, with self-referential links rejected), and the new error messages ship in all four locales. ([#5811](https://github.com/farion1231/cc-switch/pull/5811))
+
+#### Deep-Link Import Confirmation: See Everything, Flag the Risks
+
+The `ccswitch://` MCP import confirmation previously rendered only a single truncated `Command:` line and showed nothing of `args`, `url`, or `env` — a link carrying `command: "sh"` plus `args: ["-c", "curl …|sh"]` and an `LD_PRELOAD` environment variable displayed as nothing more than an innocuous `sh`, yet on confirmation it was written into each app's live MCP file. The confirmation now renders the command, every argument, the URL, and the environment variables line by line, wrapping instead of truncating, so nothing gets clipped out of sight (env values whose key name contains TOKEN / KEY / SECRET / PASSWORD are shown masked, as a prefix plus asterisks). Values worth a second look are highlighted and collected into a warning block: shell interpreters carrying an inline-execution flag (including combined forms such as `bash -lc`, `cmd /C`, and PowerShell's `-Command` abbreviations), environment variables that change process loading behavior (`LD_*`, `DYLD_*`, `NODE_OPTIONS`, `PYTHONPATH`, `PATH`, proxy variables, and so on), and endpoints pointing at loopback / intranet / cloud metadata addresses. Flagging is purely advisory and never blocks an import — a local Ollama endpoint is a perfectly ordinary thing to have. The provider confirmation gets the same treatment, and the "will be written to all specified apps immediately" warning is now shown unconditionally instead of being gated on link-controlled fields.
+
+#### Deep-Link Usage Scripts: Disabled by Default, Code Shown Before Use
+
+A usage-query script imported through a deep link is JavaScript that runs every time usage is queried, and it could previously be enabled without you ever having seen the code: the backend treated "code was supplied" as "consent to execute", and the confirmation showed only an enabled / disabled badge, never the script body. Scripts are now **disabled by default** — a link must explicitly carry `usageEnabled=true` to request enabling — and the confirmation shows the entire decoded script in a scrollable, fully wrapped code block, warning that it will be executed once enabled. If decoding fails it falls back to showing the raw payload, so a malformed script cannot masquerade as "no script". The script code is still stored on the provider, and you can enable it manually inside the app after reviewing it.
+
+#### URL-Safe Base64 Could Blank the Whole Confirmation Dialog
+
+The two items above fix "the confirmation doesn't show enough"; this one fixes "the confirmation can show nothing at all". The backend accepts four Base64 variants (including RFC 4648 §5's URL-safe alphabet), while the frontend's `atob` only knows the standard alphabet and, when it cannot decode, **returns the input unchanged instead of raising an error** — so for one and the same payload, the backend decodes successfully and imports, while the frontend is left holding a blob of undecodable characters. Usage scripts and system prompts therefore displayed as opaque Base64; **MCP configs were the worst: the `JSON.parse` failure was swallowed by the component, the confirmation rendered "0 servers" with an empty list, and the backend went right on writing the real entries into the live MCP file**. Changing a single `/` to `_` in the payload was enough — the confirmation goes blank, the import still works, and the full display the two items above had just added is defeated along with it.
+
+The frontend decoder now normalizes the URL-safe alphabet before decoding, so what the confirmation shows is always what will be imported; the shared decoder gains unit tests for the first time, containing a precondition self-assertion that the sample really does land on the URL-safe branch rather than happening to be identical in both encodings.
+
+> This defect affects every version since v3.8.0. If you have ever imported MCP servers through a `ccswitch://` link, it is worth a check — see "Upgrade Notes".
+
+#### SQL Imports Reject Statements That Reach Outside the Importing Database
+
+Importing a database backup previously validated only the file's header comment and then handed the whole text straight to `execute_batch` — a carefully crafted backup could `ATTACH DATABASE` to create a SQLite file anywhere the user can write, and that side effect happened before the import's own state validation, so the file landed even when the import failed as a whole; WebDAV / S3 sync snapshots go through the same code path. A SQLite authorizer is now installed for the duration of an external batch (and removed the moment it ends, so the app's own schema maintenance is unaffected): `ATTACH` / `DETACH`, `VACUUM`, virtual-table creation (file-backed modules such as csvfile can read and write arbitrary paths), and every action SQLite reports as unknown are all rejected — future new statements fail by default; of the PRAGMAs, only the two the exporter actually writes, `foreign_keys` and `user_version`, are allowed through.
+
+#### Prototype Pollution in Common-Config Snippets
+
+The three walkers that apply, remove, and compare common-config snippets all used to follow `__proto__` into the global `Object.prototype`: `JSON.parse('{"__proto__":{…}}')` yields an own enumerable property, so merging wrote attacker-chosen values onto the global prototype — and the `settings` table is overwritten wholesale from the remote during sync, so once a malicious WebDAV / S3 snapshot has landed, opening a provider form once is enough to trigger the merge. All three walkers now skip `__proto__`, `constructor`, and `prototype`; the "common config applied" comparison additionally requires own properties, which incidentally fixes a visible oddity — `{"__proto__":{}}` used to be judged a subset of any config.
+
+#### Command Injection Through Directory Names When Launching a Terminal
+
+When resuming a session in an external terminal, the `cd` line previously wrapped the working directory in double quotes and escaped only backslashes and double quotes — but inside double quotes a shell still expands `$(…)`, backticks, and `$VAR`, and this value is the real project path recorded in the CLI's session history, where on macOS a directory name may legitimately contain those characters. Name a folder that way, and clicking "Resume" executes the embedded command in your terminal, with no compromised component involved anywhere. The three launchers that assemble a shell line — Terminal.app, iTerm, and kitty — switch to POSIX single-quote escaping, under which nothing expands at all (the AppleScript quoting layer needed to get through Terminal / iTerm is handled safely too); Ghostty, WezTerm / Kaku, and Alacritty already passed the directory as a separate argument and were safe to begin with.
+
+#### GrokBuild Credential Resolution No Longer Substitutes or Inlines Environment Keys
+
+GrokBuild credential extraction previously fell back to the process-level `XAI_API_KEY` when the `env_key` variable named in the config was unset — silently substituting another account's key and sending it to whatever base URL the config pointed at; credentials now come only from an explicit inline `api_key` or from the environment variable that `env_key` names exactly. Deep-link imports no longer resolve environment variables into a plaintext `api_key`; a link carrying only an `env_key` name is rejected with a prompt to add it manually — accepting it as-is would mean the victim's environment key still gets resolved at request time and sent to the address the link declares. Fixed along the way: base URL resolution is decoupled from credential resolution, where previously a missing credential cleared the base URL along with it, so on macOS (where GUI processes do not inherit the shell environment) the address shown in the UI differed from the one actually used, and the usage script's `{{baseUrl}}` expanded to empty. ([#5811](https://github.com/farion1231/cc-switch/pull/5811))
+
+---
+
+### Documentation
+
+#### "Using GPT Models in Claude Code" Guide Completed in English and Japanese
+
+The local routing guide that previously existed only in Chinese has now been fully ported to English and Japanese, covering both connection paths end to end: a third-party OpenAI Responses gateway (API key), and a ChatGPT Plus/Pro subscription through Codex device-code OAuth sign-in. Both routing guides were also retitled around "which model" rather than "which client pairs with which" — [Using GPT Models in Claude Code](/en/tutorials/claude-codex-routing-guide) and [Using Claude Models in Codex](/en/tutorials/codex-claude-routing-guide) — and every cross-link (including the v3.18.0 release notes in all three languages) now points at the version in the reader's own language.
+
+#### User Manual: Deep-Link `usageEnabled` Default Corrected
+
+The deep-link reference in the three-language user manual previously claimed `usageEnabled` defaults to `true`, when the actual default is `false`, matching the importer. The manual now states the correct default and adds two consequences: the confirmation shows the script's full code before import, and without an explicit `usageEnabled=true` the script is imported disabled and can be enabled inside the app later.
+
+#### SECURITY.md: Threat Model and Reporting Scope
+
+`SECURITY.md` gains a bilingual threat model and an explicit in-scope / out-of-scope list, triaging reports by "who controls this input" rather than "which API the value eventually reached": the built-in WebView renderer is declared a trusted component (with four independently verifiable facts and the conditions that would invalidate them); deep-link payloads, WebDAV / S3 restore data, imported files, upstream API responses, and inbound requests to the local proxy are all listed as untrusted inputs, and reports about them are welcome.
+
+---
+
+### Upgrade Notes
+
+#### No Database Migration in This Release
+
+v3.19.0 contains no schema migration (the version stays at v16), so it is ready to use straight after upgrading, with no wait for a data rebuild.
+
+#### One-Time Gemini Key Scrub (Please Read)
+
+The first launch after upgrading performs a one-time Gemini common-config scrub before the regular config extraction. **Some Gemini providers may afterwards report a missing API key**: entries are deleted by matching a credential-style key name plus an exact value match, and what usually gets removed is another provider's credential that leaked in through the shared snippet (that provider's own original value was already overwritten when the leak happened and cannot be recovered) — but **a same-value key you intentionally reused across several Gemini providers is removed too**. Either way, rotate before re-entering: **any key that ever entered the shared Gemini snippet should be treated as exposed**. The deleted key names and the affected provider ids (never the values) are recorded in the `settings` table under `gemini_common_config_scrub_audit_v1`, which you can use to locate each provider whose key needs filling in again.
+
+#### Ever Imported MCP Through a Deep Link? Worth a Check (Please Read)
+
+Before this release, the `ccswitch://` MCP import confirmation could **fail to show what was about to be written**: arguments and environment variables were not rendered at all (`command: "sh"` plus `args: ["-c", …]` displayed as a harmless `sh`), and if the payload was URL-safe Base64 encoded the whole list displayed as "0 servers" — while in both cases the backend went right on writing the entries into each app's live MCP file. Both defects affect **every version since v3.8.0** and are fixed together in this release.
+
+Exploiting this requires you to personally open an attacker-supplied link and click "Import", so the vast majority of users are unaffected. **If you have in fact opened a `ccswitch://` MCP import link from a source you did not fully trust**, it is worth going through the MCP panel entry by entry, or checking `mcpServers` in `~/.claude.json` directly (for Codex, `mcp_servers` in `~/.codex/config.toml`), to confirm there is nothing there you do not recognize — MCP servers are executed as child processes the next time the CLI starts.
+
+#### Deep-Link Usage Scripts Are Disabled by Default
+
+A deep link carrying a usage-query script is now imported with the script disabled, unless the link explicitly carries `usageEnabled=true`. Links that relied on automatic enabling (some partners' one-click setup links, for example) will import the script without turning usage queries on — review the code and enable it manually in the provider editor. Usage scripts configured by hand inside the app are unaffected.
+
+#### New Default Models Only Affect Newly Created Providers
+
+Saved providers keep the model ID they were created with; using the new models requires editing them by hand. Claude Desktop's opus route advances to `claude-opus-5` and `claude-opus-4-8` moves into the compatibility-alias slot, so existing configs still resolve as before.
+
+#### Pricing Seeding and the Local Pricing File
+
+The new pricing rows (`claude-opus-5`, `gemini-3.6-flash`, `grok-4.5-build`) are appended on next launch via insert-if-absent — **seeding never overwrites a price you have edited**. `~/.cc-switch/model-pricing.json` starts empty and records only the manual price edits and deletions made from this release on — earlier edits are not migrated into it; to make them survive a database rebuild, just re-save them once. The models.dev automatic sync stays off until you turn it on; once it is on, it is the one path that overwrites matching prices, built-in and hand-edited alike.
+
+#### GrokBuild Implicit Environment-Variable Fallback Removed
+
+GrokBuild providers that relied on the implicit `XAI_API_KEY` environment fallback now need an explicit `api_key` or a correctly named `env_key`.
+
+#### Grok Official Mode Usage Is Intentionally Delayed
+
+Grok usage from official mode appears after a delay of roughly ten minutes plus one sync cycle — events settle first and are then checked against proxy-recorded rows to prevent double counting; if routed traffic and official traffic alternate within the window, some official turns are skipped rather than risking a duplicate count. Grok Build rows that the old cost backfill overestimated keep their values — the backfill only handles zero-cost rows and never revises an existing positive cost.
+
+#### The Update Mirror Takes Effect from the Next Release
+
+The updater's endpoint list is baked into the app binary, so existing installations still query only GitHub until they upgrade to a version containing this change; from then on the `dl.ccswitch.io` mirror comes first, with GitHub as fallback.
+
+#### Sponsor Domain Migrations Do Not Change Existing Providers
+
+Already-created providers keep the old address stored in the database and still point at the old domain. To move to the new domain, edit the provider's address by hand, or recreate it from the refreshed preset.
+
+---
+
+### Risk Notice
+
+#### SuperGrok Quota Queries (New in This Release)
+
+The SuperGrok quota display on provider cards reads Grok CLI's own OAuth credentials (`~/.grok/auth.json`) and queries grok.com's billing endpoint — an endpoint that is not publicly documented, and whose response parsing is based on observation of the current format, so this feature may stop working once xAI changes the interface (at which point the card degrades to showing no quota, with nothing else affected). CC Switch neither stores nor modifies these credentials.
+
+#### Carried-Over Notices
+
+**xAI Grok OAuth sign-in**: reuses the public OAuth client identity of the official Grok CLI; using it could lead to account restriction or suspension — see the [v3.18.0 release notes](v3.18.0-en.md#risk-notice) for details.
+
+**Codex OAuth reverse proxy**: using a ChatGPT subscription's Codex OAuth through a reverse proxy may violate OpenAI's terms of service. See the [v3.13.0 release notes](v3.13.0-en.md#️-risk-notice) for details.
+
+**Third-party provider routing**: when CC Switch's local proxy converts and forwards Codex, Claude Desktop, or Grok Build requests to third-party providers, each provider may have different requirements for billing, compliance, and data retention. Read the target provider's terms before use.
+
+By enabling these features, users accept the related risks. CC Switch is not responsible for account restrictions, warnings, or service suspensions caused by using these features.
+
+---
+
+### Thanks
+
+This release's security hardening came almost entirely from outside — one PR, plus the security reports we received.
+
+#### Code Contributions
+
+- [#5811](https://github.com/farion1231/cc-switch/pull/5811): zip-slip and repository-coordinate traversal in Skill installation, the Gemini common-config credential leak and its one-time scrub, GrokBuild credential resolution, and fixes across several panic paths, thanks @zayokami. This is the broadest single body of work in the release.
+- [#5734](https://github.com/farion1231/cc-switch/pull/5734): models.dev automatic pricing sync, thanks @YUZHEthefool.
+- [#5626](https://github.com/farion1231/cc-switch/pull/5626): faster Codex usage import for forked sessions, thanks @ayanamislover (co-credited with @SaladDay).
+
+#### Security Reports
+
+Four of the fixes in this release's "Security Hardening" section came from security reports sent privately. Thanks to **23pds** (SlowMist) and **zues devil** — attributed item by item below:
+
+- **The deep-link import confirmation showed only a single truncated `Command:` line** — `args`, `url`, and `env` were not rendered at all, so an `sh -c` payload with `LD_PRELOAD` looked like nothing but an `sh` in the UI. This is the highest-impact item in the release. (23pds, SlowMist)
+- **SQL backup imports were unconstrained** — `ATTACH DATABASE` could create a file anywhere the user can write, and the side effect happened before the import's own validation. (zues devil)
+- **Command injection through directory names when launching an external terminal** — the `cd` line was double-quoted, so `$(…)` still expanded, and this value is the real project path recorded in the session history. (Reported independently by zues devil and 23pds, against the built-in launchers and the custom template paths respectively.)
+- **Prototype pollution in common-config snippet merging** — all three walkers followed `__proto__` into the global `Object.prototype`. (23pds, SlowMist)
+
+These reports also prompted us to fill in the threat model and reporting scope in [SECURITY.md](https://github.com/farion1231/cc-switch/blob/main/SECURITY.md) — until then, this project documented only how to report, never what counts as a vulnerability.
+
+The other two deep-link fixes (usage scripts disabled by default, and the URL-safe Base64 bypass) were found while reviewing those fixes themselves, and were not part of the original reports.
+
+#### Issue Reports
+
+Thanks to the users who reported proxy image reads blowing up the context in [#4465](https://github.com/farion1231/cc-switch/issues/4465) and [#5663](https://github.com/farion1231/cc-switch/issues/5663) — this release's most important proxy fix came from the reproduction clues in those real-world scenarios.
+
+---
+
+### Download & Install
+
+Visit [Releases](https://github.com/farion1231/cc-switch/releases/latest) and download the build for your system, or get it from the official site [ccswitch.io](https://ccswitch.io) (from this release on, downloads are distributed through Cloudflare edge nodes and no longer depend on GitHub being reachable).
+
+#### System Requirements
+
+| System  | Minimum Version      | Architecture                        |
+| ------- | -------------------- | ----------------------------------- |
+| Windows | Windows 10 and later | x64 / ARM64                         |
+| macOS   | macOS 12 (Monterey)+ | Intel (x64) / Apple Silicon (arm64) |
+| Linux   | See table below      | x64 / ARM64                         |
+
+#### Windows
+
+| File                                     | Description                                      |
+| ---------------------------------------- | ------------------------------------------------ |
+| `CC-Switch-v3.19.0-Windows.msi`          | **Recommended** - MSI installer with auto-update |
+| `CC-Switch-v3.19.0-Windows-Portable.zip` | Portable build, unzip and run                    |
+
+Windows ARM64 devices should pick the artifact whose file name carries the `arm64` tag.
+
+#### macOS
+
+| File                             | Description                                           |
+| -------------------------------- | ----------------------------------------------------- |
+| `CC-Switch-v3.19.0-macOS.dmg`    | **Recommended** - DMG installer, drag to Applications |
+| `CC-Switch-v3.19.0-macOS.zip`    | Unzip and drag to Applications, Universal Binary      |
+| `CC-Switch-v3.19.0-macOS.tar.gz` | For Homebrew install and auto-update                  |
+
+Homebrew install:
+
+```bash
+brew install --cask cc-switch
+```
+
+Upgrade:
+
+```bash
+brew upgrade --cask cc-switch
+```
+
+#### Linux
+
+Linux assets are available for both **x86_64** and **ARM64** (`aarch64`). Choose the file whose architecture tag matches your machine's `uname -m` output:
+
+- `CC-Switch-v3.19.0-Linux-x86_64.AppImage` / `.deb` / `.rpm`
+- `CC-Switch-v3.19.0-Linux-arm64.AppImage` / `.deb` / `.rpm`
+
+| Distribution                            | Recommended Format | Install Command                                                        |
+| --------------------------------------- | ------------------ | ---------------------------------------------------------------------- |
+| Ubuntu / Debian / Linux Mint / Pop!\_OS | `.deb`             | `sudo dpkg -i CC-Switch-*.deb` or `sudo apt install ./CC-Switch-*.deb` |
+| Fedora / RHEL / CentOS / Rocky Linux    | `.rpm`             | `sudo rpm -i CC-Switch-*.rpm` or `sudo dnf install ./CC-Switch-*.rpm`  |
+| openSUSE                                | `.rpm`             | `sudo zypper install ./CC-Switch-*.rpm`                                |
+| Arch Linux / Manjaro                    | `.AppImage`        | Make executable and run directly, or use AUR                           |
+| Other distributions / unsure            | `.AppImage`        | `chmod +x CC-Switch-*.AppImage && ./CC-Switch-*.AppImage`              |
+
 ## [3.18.0] - 2026-07-21
 
 > This release lets you do two brand-new things: **hand xAI's Grok CLI (Grok Build) over to CC Switch** — it becomes the eighth managed app, with one-click provider switching, MCP / Skills sync, proxy takeover, and usage statistics all included; and **connect Grok to Claude Code, Claude Desktop, and Codex** — either by signing in with your xAI Grok account directly (device-code authorization, no API key, running on your Grok subscription, with a strict-gateway compatibility layer on the Codex side so codex 0.142+ works too), or with an xAI API key (Codex gets a native Responses direct-connection preset; Claude Code can go through local routing). Just as important is a wave of fixes: the **Codex usage double count introduced in v3.17.0 is fixed**, with an automatic data rebuild after upgrading so the dashboard numbers become real again; **codex 0.144.5+ failing to start because of the model catalog is fixed**; and switching providers on Windows no longer flashes a console window or freezes the UI. Diagnostic logs also move from "wiped on every startup" to persistent across restarts, size-rotated, and fully redacted — and a UI crash now leaves an on-disk report instead of just a blank white window.
@@ -1332,7 +2048,7 @@ Linux assets are available for both **x86_64** and **ARM64** (`aarch64`). Choose
 
 This release adds a **Codex unified session history** toggle — it migrates / restores sessions, and if used without care it can make you think sessions were "lost," so it is well worth reading its guide first. This release also changes how usage is counted and reworks the dashboard quite a bit, so both are worth starting with:
 
-- **[Codex Unified Session History: Feature Overview and Usage Guide](https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-unified-session-history-guide-en.md)**: what "unify / migrate / restore" actually changes, why your data is never truly lost, and how to verify and precisely restore sessions when you can't see them. **If you used this toggle or worry a session is gone, read this first.**
+- **[Codex Unified Session History: Feature Overview and Usage Guide](/en/tutorials/codex-unified-session-history-guide)**: what "unify / migrate / restore" actually changes, why your data is never truly lost, and how to verify and precisely restore sessions when you can't see them. **If you used this toggle or worry a session is gone, read this first.**
 - **[Usage Statistics](/en/docs?section=proxy&item=usage)**: understand the Usage Dashboard's data sources (proxy logs, session sync) and how the statistics are counted. This release adds dashboard-wide provider / model filters and surfaces the real pricing model for route-takeover traffic.
 - **[Settings](/en/docs?section=getting-started&item=settings)**: the custom User-Agent override, the Codex unified session history toggle, and other switches live in the provider form's advanced options and on the settings page.
 

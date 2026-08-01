@@ -2,6 +2,722 @@
 
 CC Switch 的重要版本更新记录。
 
+## [3.19.1] - 2026-07-31
+
+> 这一版的主线是**把上一版的尾巴收干净**：三家国产 Codex 网关经确认原生支持 Responses API，**不用再开本地路由接管**——DeepSeek 与火山方舟 Coding Plan 的预设从走本地路由改为直连，新加入的腾讯混元 TokenHub 一上来就是直连；四个能在日常里撞上的故障被修掉——**Claude Desktop 用量自 v3.18.0 起被算了两遍**（升级后历史数字会自动回正，但有 30 天窗口，见「升级提醒」）、切回官方 Codex 会卡在 401 且看不到登录界面、从设置页升级 Grok Build 只报一句 `os error 2`、Grok Build 开启接管后直接 404。另有 8 个此前一直按 $0 记账的模型补上内置定价，39 个界面文案的语言问题被修正。本版**没有数据库迁移**，并且是本项目第一个删除量超过新增量的版本。
+
+### 重点内容：你现在可以
+
+- **让 DeepSeek、火山方舟 Coding Plan、腾讯混元在 Codex 里直连**：三家的官方 Codex 文档都已确认端点原生提供 Responses API。DeepSeek 与火山方舟 Coding Plan 的既有预设从 Chat 格式改为原生格式，供应商卡片上的「需要路由」标记与切换时的提示随之消失，请求不再经过本地代理的协议转换；腾讯混元 TokenHub 是本版新增的预设，从一开始就是原生格式。**注意 DeepSeek V4 Pro 暂时还不能直连**——厂商侧尚未开通它的 Codex 集成，直连请用 V4 Flash（预设默认），详见[升级提醒](#deepseek-v4-pro-暂时还不能直连)。
+- **让 DeepSeek 用上 DeepSeek 自己发布的模型目录**：新的「官方厂商目录镜像」机制把厂商公布的 `models.json` 原样下发给该厂商自己的端点，freeform `apply_patch` 与配套的 GPT-5 提示词框架成套保留，不再被压成中性模板。判定只认域名、不认模型名——同一个模型在聚合站上未必实现同样的能力。
+- **拿到正确的 Claude Desktop 用量数字**：自 v3.18.0 起，经本地网关的 Claude Desktop 流量在看板里被记了两遍——一遍来自代理、一遍来自会话日志导入，token、费用与请求数约翻倍。本版修好后，明细行还在的日子会自动回到正确数字，**不需要重建**。
+- **切回官方 Codex 之后能正常登录**：此前从第三方供应商切回内置的官方 Codex 条目时，第三方的 key 会留在 `~/.codex/auth.json` 里，Codex 拿着它去请求官方端点，稳定 401——又因为文件存在，它不会退回自己的登录界面，在应用里没有出路。
+- **从设置页把 Grok Build 升上去**：`grok update` 自 0.2.112 起改为内部调用 npm 完成分发，而图形界面启动的应用看不到 node，升级只会报一句 `Error: No such file or directory (os error 2)`。
+- **给 Grok Build 开启接管而不是撞上 404**：API 格式被手动改成 OpenAI Chat 或 Anthropic 的 Grok Build 供应商，开启接管后请求会打到一个代理没有注册的路由上，直接 404，且没有故障转移、没有用量记录。同时，Grok Build 的每次请求此前都被当成新会话，缓存键注入与按会话聚合都失效了。
+- **看到 8 个此前一直按 $0 记账的模型的真实成本**：`gpt-5.3-codex-spark`、`gemini-3.5-flash-lite`、`kimi-k2.7-code-highspeed`、`glm-5-turbo`、`glm-5v-turbo`、`qwen3.6-flash`，以及不带日期后缀的 `claude-opus-4-6` / `claude-sonnet-4-6`。
+- **在繁体中文界面里看懂「关于」页的工具管理**：30 个只补了简中 / 英文 / 日文的文案漏了繁体中文，因为 i18next 会静默回落英文，这块面板自 v3.16.0 起一直是半英文的。另有 9 个文案在**所有语言下**都显示简体中文。
+- **在官方订阅与 DeepSeek 之间来回切，而不是二选一**：`auth.json` 与 `config.toml` 都是单槽文件，Codex 自己存不下第二份凭据。厂商的一键脚本会把这份配置改造成自己专用的，而 CC Switch 是按供应商整段快照与还原——这也是它和官方脚本最实际的区别，详见[下文对照](#用-cc-switch-接入和直接跑官方脚本有什么不同)。
+
+---
+
+### 使用攻略
+
+本版的改动集中在 Codex 的连接方式与用量统计口径上，建议结合以下文档了解：
+
+- **[本地路由](/zh/docs?section=proxy&item=routing)**：哪些供应商需要开启接管、接管做了什么。本版之后 DeepSeek、火山方舟 Coding Plan 与腾讯混元都不再需要它。
+- **[用量统计](/zh/docs?section=proxy&item=usage)**：用量看板的数据来源与统计口径，理解 Claude Desktop 双算是怎么发生的、修复后为什么部分历史日期无法回正。
+- **[在 Codex 中用 DeepSeek 这类 Chat 格式 API](/zh/tutorials/codex-deepseek-routing-guide)**：这篇攻略讲的是本地路由如何把 Responses 转换成 Chat Completions，**已针对本版更新**。开头新增了一节判定：用预设新建的 DeepSeek 走直连不需要路由，但升级前保存的供应商、以及要用 `deepseek-v4-pro` 时仍然需要；机制部分对 Kimi、智谱 GLM、SiliconFlow 等仍是 Chat 形态的供应商完全适用。
+
+---
+
+> [!WARNING]
+>
+> ## 唯一官方渠道声明（请务必阅读）
+>
+> CC Switch 是**完全免费、开源**的桌面应用，**不会向用户收取任何费用**。请仅通过下列官方渠道获取本软件：
+>
+> | 类别     | 唯一官方                                                                       |
+> | -------- | ------------------------------------------------------------------------------ |
+> | 官网     | **[ccswitch.io](https://ccswitch.io)**                                         |
+> | 源码     | **[github.com/farion1231/cc-switch](https://github.com/farion1231/cc-switch)** |
+> | 下载     | **[GitHub Releases](https://github.com/farion1231/cc-switch/releases)**        |
+> | 作者     | **[@farion1231](https://github.com/farion1231)**                               |
+> | 举报山寨 | **[GitHub Issues](https://github.com/farion1231/cc-switch/issues)**            |
+>
+> **任何向你收费、要求充值、或索取登录凭据的"CC Switch"网站或客户端均为假冒**。如果你被诱导支付了费用，请立即停止操作并通过 GitHub Issues 反馈。
+
+---
+
+### 概览
+
+CC Switch v3.19.1 是一次维护性发布，主线有三条。第一条是国产 Codex 网关集体转向原生 Responses：DeepSeek 直连 `api.deepseek.com`，并带来一个可复用的机制——把厂商自己发布的模型目录原样镜像下发，让 freeform `apply_patch` 与配套的 GPT-5 提示词框架保持自洽，而不是被折叠成中性模板；火山方舟的 Coding Plan 端点 `/api/coding/v3` 在官方文档确认后跟进；腾讯混元的 TokenHub 作为新预设加入。三者都不再需要开启本地路由接管。
+
+第二条是四个现场可见的故障修复：Claude Desktop 的用量自 v3.18.0 起被记两遍（[#5938](https://github.com/farion1231/cc-switch/issues/5938)）；切回内置官方 Codex 供应商会留下第三方的 `auth.json`，导致 401 且看不到登录界面；`grok update` 在图形界面下只报 `os error 2`；Grok Build 的代理接管在非 Responses 后端上 404，且每次请求都被当作新会话（[#5677](https://github.com/farion1231/cc-switch/pull/5677)）。第三条是减重：3,166 行已无任何调用方的代码与 4 个未使用的 npm 依赖被删除——本版是本项目第一个删除量超过新增量的版本。此外，深链导入确认框的脱敏更严、截断更少，8 个此前按 $0 记账的模型补上定价，4 个内置定价与厂商牌价重新对齐。本版**没有数据库 schema 迁移**（版本号保持 v16），升级轻量。
+
+**发布日期**：2026-07-31
+
+**更新规模**：12 commits | 71 files changed | +2,324 / -3,680 lines
+
+---
+
+### 新功能
+
+#### 官方厂商模型目录镜像（DeepSeek 首发）
+
+Codex 从一个目录文件读取模型能力，而 CC Switch 此前对所有供应商都用中性模板生成这个目录——对聚合站这是对的，但会剥掉厂商自家集成所依赖的能力。现在，凡是随应用内置了官方目录的厂商，直接镜像下发它自己的那一份。
+
+DeepSeek 是第一家：内置文件带着 `deepseek-v4-flash` 与 `deepseek-v4-pro` 两个条目，保留 `apply_patch_tool_type: "freeform"`、`web_search_tool_type: "text"`、`supports_search_tool: true`、low / high / max 三档思考强度，以及 `base_instructions` 与 `model_messages` 里那份 17,644 字符的 GPT-5 提示词框架——**这份框架必须与 freeform 工具注册一起走**，因为框架本身就在指导模型使用 `apply_patch`，拆开任何一半都会不自洽。
+
+判定条件刻意收得很窄：供应商必须落在原生 Responses 档**并且** `base_url` 在 `deepseek.com` 上。**只认域名、不认模型品牌**——同一个模型在转售它的聚合站上未必实现同样的能力，按品牌授予等于把能力凭空发给了没有实现它的服务。供应商自己在目录里写死的条目仍然优先；遇到不认识的模型 ID 会克隆旗舰条目，但保留它自己的名称。其它所有档位生成的目录与改动前逐字节一致。
+
+#### 腾讯混元（TokenHub）Codex 预设
+
+Codex 的预设选择器里新增「Tencent Hunyuan」，归入「开源官方」分类，位于百炼与阶跃之间。选中即写好 `https://tokenhub.tencentmaas.com/v1`、`wire_api = "responses"` 与 TokenHub 强制要求的 `disable_response_storage = true`；声明 `hy3` 与 `hy3-preview` 两个模型，上下文窗口 **256K**（而不是接受 Codex 的 128K 默认值），并标记为纯文本——Codex 不会再把 `view_image` 的图片载荷发给读不了图的模型。
+
+因为是原生 Responses 供应商，Codex 直连网关、无需本地路由；生成的目录走中性原生模板，会固定 `shell_type = "shell_command"` 并去掉原生网关拒收的 freeform `apply_patch` 注册。地址管理器与测速里从一开始就有两个候选：主域名与官方备用的 `.cn` 域名；区域独立的国际站刻意排除在外，因为 API Key 不跨站通用。
+
+注意 **API Key 需要是开通了 Hy3 权限的 TokenHub key**，Coding Plan 与 Token Plan 的订阅 key 在这个端点上用不了。
+
+#### 8 个此前按 $0 记账的模型补上内置定价
+
+`gpt-5.3-codex-spark`、`gemini-3.5-flash-lite`、`kimi-k2.7-code-highspeed`（按 Kimi 的 Turbo 惯例，取 `kimi-k2.7-code` 基准价的 2 倍）、`glm-5-turbo`、`glm-5v-turbo`、`qwen3.6-flash` 在内置定价表里根本没有行，前缀回退也够不着，因此每一次请求都被记成零成本。
+
+另外两行 —— 不带日期后缀的 `claude-opus-4-6` 与 `claude-sonnet-4-6` —— 补的是一个更隐蔽的缺口：模型 ID 解析只会**剥掉**日期后缀、从不**补上**，所以一条带着无日期 ID 的日志谁也匹配不到。八行全部按「不存在才插入」播种，你改过的价格不受影响。
+
+#### Grok Build 加入故障转移页签与环境变量冲突检测
+
+设置页的故障转移在 Claude Code、Codex、Gemini 之外新增第四个 Grok Build 页签。启动时的环境变量冲突横幅也开始检测 `XAI_API_KEY` 与 `GROK_DEFAULT_MODEL`——这两个变量会静默盖掉你在应用里选的供应商。检测区分了精确名与前缀，所以 CC Switch 自己用的 `GROK_BIN_DIR`、`GROK_HOME` 不会被误报。
+
+---
+
+### 变更
+
+#### DeepSeek 与火山方舟 Coding Plan 改为直连 Codex，不再需要本地路由
+
+两家的预设此前都标记为 OpenAI Chat 格式，因此都是「需要接管」的：供应商卡片带着「需要路由」标记，未开代理就切换会弹提示，每个请求都要走 Codex → 本地代理 → Responses 转 Chat → 上游这条链路。
+
+现在两家的官方 Codex 集成文档都已确认端点提供 Responses API——DeepSeek 的 `api.deepseek.com` 与火山方舟的 `/api/coding/v3`——两个预设随之声明为原生 Responses，标记与提示消失，Codex 直连网关。两家写出的 `config.toml` 都没有变化（本来就是 `wire_api = "responses"`），变的是目录生成档位；DeepSeek 另外把上下文窗口从 1,000,000 对齐到厂商自己的 1,048,576。
+
+BytePlus 国际站刻意保持 Chat 路由不变，等国际站文档单独核实后再说。火山预设里还留了一条值得知道的计费注记：按量计费的 `/api/v3` 端点**绝不能**加进这个预设的备用地址——它单独计费，不走套餐额度。
+
+#### 目录的显示名与上下文窗口改为「显式才生效」
+
+这两个字段此前带着本地默认值——模型 ID 与 128,000 的窗口——并且在厂商值有机会参与之前就应用了，镜像目录里 1M 的窗口会被 128K 覆盖掉。现在它们是可选的，回退挪到条目构造那一层，于是「留空」才真正等于「沿用厂商声明的值」。显式写了这两个字段的供应商，以及所有非镜像档位，生成的目录与之前完全一致。
+
+---
+
+### 用 CC Switch 接入，和直接跑官方脚本有什么不同
+
+DeepSeek 官方提供了一条 Codex 一键接入脚本，它能用、会备份、也带恢复菜单。**如果你这台机器就打算专心用 DeepSeek，跑官方脚本没有任何问题。** CC Switch 解决的是另一个场景：你要在多个供应商之间来回切。
+
+#### 换供应商时，登录态与配置整套换，不用自己备份
+
+`~/.codex/auth.json` 与 `~/.codex/config.toml` 都是**单槽文件**——Codex 本身没有多凭据存储，一份配置只能对应一个供应商。CC Switch 在你切走某个供应商时，把这一对文件的内容整段快照进那个供应商的记录里；切回来时再整段写回。所以「ChatGPT 订阅 → DeepSeek → 切回订阅」通常不需要重新 `codex login`，第三方之间来回切则完全无需手工动作。手工做同一件事，你得在每次切换前后各拷贝一次这两个文件，漏一次，被覆盖的 OAuth 凭据就只能重新登录找回。
+
+官方脚本的取舍不同：它把 `config.toml` 改造成 DeepSeek 专用配置——顶层写死 `preferred_auth_method = "apikey"` 与 `forced_login_method = "api"`，把认证方式固定为 API Key，并且**删除 `config.toml` 里已有的 `[profiles.*]`**（Codex 自带的多供应商切换机制）。你的 ChatGPT 登录凭据本身没有被删，`auth.json` 原封不动；但在这份配置下用不上，想回订阅需要跑脚本的恢复菜单整体回滚——回滚会连带丢掉安装之后你对 `config.toml` 的任何手改。脚本本身也只能在 flash 与 pro 之间切换，没有「换到第三个供应商」这一档。
+
+#### 换供应商之后，`codex resume` 里的旧会话还在
+
+Codex 的续聊列表按会话里记录的 `model_provider` 分抽屉。CC Switch 创建的所有第三方 Codex 供应商——不管是 DeepSeek、Kimi 还是聚合站——都写同一个标识 `custom`，所以在它们之间怎么换，`codex resume` 一直能看到全部历史。CC Switch 首次启动时还会做一次性迁移，把已知的按厂商分桶的旧会话（官方脚本写入的 `deepseek` 也在其中）折进这个共享桶，原文件先备份到 `~/.cc-switch/backups/`。
+
+**这里有一条明确边界**：这个迁移只在 CC Switch 首次启动时跑一次。**如果你先装了 CC Switch、之后才去跑官方脚本**，那批带 `deepseek` 标识的会话不会再被折进来，它们会留在自己的抽屉里。另外，你手写的、不在已知名单里的供应商标识，CC Switch 刻意不去改动它。
+
+#### 官方订阅的会话，在 CC Switch 里本来就和第三方混排
+
+CC Switch 的**会话管理面板直接扫描会话目录、不读 `model_provider`**，所以官方订阅期间产生的 Codex 会话一直和第三方会话在同一个列表里，可搜索、可续聊、可删除——**不需要开任何开关**。
+
+如果你还希望 **Codex 自己的 `codex resume` 列表**也把官方与第三方合并，那是另一件事：设置 → 通用 → Codex 应用增强 → **「统一 Codex 会话历史」**，默认关闭。开启后只影响新会话；已有的官方会话要一并迁入，需要在开启确认框里再勾选「同时迁入现有官方会话历史」（同样默认不勾）。这两项都是既有功能、不是本版新增，边界场景见[《统一 Codex 会话历史》攻略](/zh/tutorials/codex-unified-session-history-guide)。
+
+> **两个共同前提，先说清楚免得你事后困惑：**
+>
+> **一、以 CC Switch 指向的 Codex 目录为准。** 默认是 `~/.codex`，可在设置里改。**CC Switch 不读 `CODEX_HOME` 环境变量**——如果你用这个变量把 Codex 指到别处，那边的会话它看不见，供应商切换也会写进 CLI 没在用的目录里。要换目录请用 CC Switch 自己的「配置文件目录」设置。
+>
+> **二、出现在同一个列表里，不等于一定能续聊。** Codex 的推理内容（`encrypted_content`）只有产生它的后端能解密，跨供应商继续一段旧会话可能失败——这是上游的设计，不是 CC Switch 能绕过的。
+
+---
+
+### 修复
+
+#### Claude Desktop 的用量被算了两遍
+
+经本地网关的 Claude Desktop 流量在用量看板里落两次——一次是代理行，一次是会话记录导入行——于是它的 token、费用与请求数大约翻倍。
+
+这是 v3.18.0 引入的回归：代理侧的去重 ID 对除 `claude` 之外的所有应用都带上作用域前缀，写成 `session:{应用}:{供应商}:{消息ID}`，这就把 `claude-desktop` 放进了独立命名空间；而会话导入器仍然以裸的 `session:{消息ID}` 形态、`app_type = 'claude'` 写同一条 Claude 消息。三道去重防线因此同时失守：让代理行吸收已有会话行的主键收敛、写入侧的指纹探测、读取侧的过滤器——后两者都在用严格相等比较应用类型。
+
+现在两个应用重新共用裸命名空间，两处比较则按单向规则放宽：`claude` 的会话行可以被 `claude-desktop` 的代理行吸收，**反过来不成立**。由于读取侧的过滤器也正是日报聚合所使用的那一个，已经入库的重复行会停止被计入，**不改写、不删除任何一行**——这条自愈有保留期限制，见「升级提醒」。对 Codex、Gemini、OpenCode 而言放宽后的比较退化为原来的精确匹配，额度检查仍使用严格匹配。（[#5938](https://github.com/farion1231/cc-switch/issues/5938)、[#5951](https://github.com/farion1231/cc-switch/pull/5951)）
+
+#### 切回官方 Codex 供应商会卡在 401、看不到登录界面
+
+在 Codex API Key 保留开关关闭时（默认如此），切换到第三方供应商会把对方的 key 写进 `~/.codex/auth.json`。之后再切到内置的官方供应商——它存的凭据是空的——会走「只写配置」这条分支，于是 `config.toml` 被替换，而第三方的 `OPENAI_API_KEY` 原样留在盘上。Codex 随后拿着这把外来的 key 去请求官方端点，稳定 401；又因为 `auth.json` 存在，它不会退回自己的登录界面，在应用里找不到出路。
+
+现在，成功切到官方 Codex 供应商之后，如果 `auth.json` 里只有一个 `OPENAI_API_KEY`、旁边没有任何一等凭据，这个文件会被删除——OAuth 令牌、个人访问令牌、agent 身份、Bedrock key 中的任何一个都标志着这是一份真实凭据，会被完整保留；而 `auth_mode`、`last_refresh`、账号 ID 这类纯元数据不再能「挡住」一把过期的 key。
+
+**选择删除文件而不是写入 `{}`**：空对象会被 Codex 判定为没有令牌的 ChatGPT 模式并在启动时报错，而文件缺失才等价于未登录、直接进登录流程。清理只在旧供应商已成功回填进数据库之后执行，所以被删掉的 key 并没有丢——它存进了那个供应商的记录里，再次选中它就会回来。同一处改动还放宽了 live 配置读取：清理之后的状态（没有 `auth.json`、有 `config.toml`）不再被报成「Codex 未安装」。
+
+#### 从设置页升级 Grok Build 只报一句 `os error 2`
+
+在设置 → 关于里升级 Grok Build 会失败于 `Error: No such file or directory (os error 2)`，没有任何其它信息。
+
+根因是探测与执行两条路径的不对称：探测走登录 shell，会读取用户的 rc 文件，因此看得见 nvm、Homebrew、Volta；而生命周期脚本跑在非登录 shell 下，继承的是图形界面应用启动时那份很窄的 PATH。这本来无所谓，因为锚定命令都用绝对路径调用目标程序——但 grok 0.2.112 把自更新改到了 npm 分发上，`grok update` 内部会调起 `npm view` 与 `npm i -g`，而 npm 自己又要通过 shebang 解析 node。内层调用返回 ENOENT，grok 就把它原样抛成了那句 `os error 2`。
+
+现在 macOS 与 Linux 上的生命周期命令会把登录 shell 的真实 PATH 并到继承的那份前面，读取方式是执行 `/usr/bin/env` 而不是回显变量——因为 fish 把 PATH 存成列表，回显会得到空格分隔的片段。原生安装的 Grok 还给升级链追加了官方 xAI 安装脚本作为兜底，**刻意不用 `npm i -g`**：npm 与主路径共享同样两种失败模式（没有 node、镜像源缺包），会一起失败；官方安装脚本是唯一不依赖 node 的路径，落点相同，并且会把 CLI 自己的 `installer` 设置改回 `internal`，顺带治好被早期 npm 兜底切到 npm 分发上的用户。
+
+#### Grok Build 开启接管后 404，且每次请求都像新会话
+
+在 API 格式被改成 OpenAI Chat 或 Anthropic 的 Grok Build 供应商上开启接管，会立刻得到 404，没有故障转移也没有用量记录——接管改写了地址与 key，却没有动后端字段，于是 CLI 把请求发到了代理没有注册的路由上。现在接管会同时把后端固定为 Responses；针对具体供应商降级到 Chat Completions 的动作仍然发生在转发层，而这个被强制的值会随整份 live 配置的备份在代理停止时还原。
+
+另一个问题是代理的会话识别此前只认 Codex 与 OpenAI 客户端，因此 Grok Build 的每一轮都会生成一个新的会话 ID 并标记为「非客户端提供」，这同时压掉了缓存键注入与看板里的按会话聚合。现在会读取 Grok 自己的头——先会话所属的对话 ID，再会话 ID，忽略每请求变化的那个——并使用独立前缀，避免与 Codex 的记录撞车。（[#5677](https://github.com/farion1231/cc-switch/pull/5677)）
+
+#### 9 个界面文案在所有语言下都显示简体中文
+
+有 9 个字符串无论界面语言是什么都显示简体中文，英文与日文界面同样如此。每个调用点都用了「内联默认值」的写法、默认值是中文字面量，但对应的键在四个语言文件里**一个都没有**——而 i18next 会先走完语言链才考虑内联默认值，于是英文回退根本没有机会生效，中文字面量在所有语言下都赢了。
+
+受影响的文案覆盖 Grok Build 供应商表单的必填校验提示、应用尚未接管时的故障转移悬停提示、另一个应用持有接管时停止 Claude Desktop 路由的警告及其原因说明、供应商标识读取失败提示、Codex 通用配置为空的错误、路由服务的停止与停止失败两个提示，以及用量表格里给「有 token 但算出来是零成本」的请求打的「未定价」标签。9 个键现在在简中、英文、日文、繁中里都有了。（[#5960](https://github.com/farion1231/cc-switch/pull/5960)）
+
+#### 繁体中文的「关于」页工具管理回落成英文
+
+界面语言设为繁体中文时，「关于」页的工具管理区块显示英文——版本行、安装与更新按钮、结果提示、安装冲突诊断，以及整个升级确认弹窗。这块面板由三次改动逐步建成，每次都只补了简中、英文、日文；而 i18next 的策略是回落英文而不是报错，于是 30 个缺失的键在测试里完全不可见。**这个缺口自 v3.16.0 起一直带到 v3.19.0。**
+
+30 个文案现在全部译好，安装提示也与其它语言对齐；新增的语言测试要求每一个工具管理文案在四种语言下都存在、且插值变量一致，这类漂移以后会在测试里失败而不是发出去。（[#5943](https://github.com/farion1231/cc-switch/pull/5943)）
+
+#### 内置定价与厂商牌价脱节
+
+成本在写入日志时就按内置定价表冻结，所以一个过期的播种价会静默地把之后每一次请求都算错。本版修正四行：`deepseek-chat` 与 `deepseek-reasoner` 现在是 V4 Flash 的旧称别名，每百万 token $0.14 输入 / $0.28 输出、缓存读 $0.0028（原为 $0.27/$1.10 与 $0.55/$2.19）；`minimax-m3` 按官方标准档减半到 $0.30/$1.20；`gpt-5.6-luna` 按 OpenAI 2026-07-30 的降价下调 80% 到 $0.20/$1.20，`gpt-5.6-terra` 下调 20% 到 $2/$12，`gpt-5.6-sol` 刻意不动，该系列的缓存写入比例保持不变。
+
+修复只在一行的四个价格列**仍然全等于此前的内置值**时才改写它，所以你自己改过的价格——或者由 models.dev 同步写入的价格——绝不会被动到。
+
+---
+
+### 安全加固
+
+#### 深链导入确认框：脱敏更严，截断更少
+
+这是 v3.19.0 那轮 `ccswitch://` 确认框加固的延续。配置预览改由一个共享模块统一构建，会递归地对嵌套 TOML 表与 JSON 对象里的密钥脱敏，一次修好两个方向相反的缺陷：Grok Build 的导入此前**完全不渲染**配置预览，而 Codex 的导入会把内嵌的 `api_key` **明文打印**出来。
+
+配置预览上 300 字符的截断被移除，完整内容现在渲染在可滚动的框里——补上了确认框最后一处可能隐藏「即将写入什么」的地方。脱敏本身在所有使用它的位置都更严了，**包括 MCP 导入确认框**：敏感键名匹配新增 `AUTHORIZATION`、`COOKIE`、`CREDENTIAL`，以及精确匹配的 `AUTH` 与 `BEARER`；脱敏后显示的明文前缀从 8 个字符缩到 4 个；长度不超过 8 个字符的值现在整体替换，而不是原样显示。
+
+最后，前端的 Base64 解码器不再裁掉首尾空白——那有可能是 URL 解码把 `+` 变成的空格。这与 v3.19.0 修过的是同一类前后端解码口径分歧：确认框显示的是一回事，导入器写进去的是另一回事。
+
+---
+
+### 内部
+
+#### 删掉 3,166 行已无调用方的代码、14 个模块与 4 个依赖
+
+一轮针对「没有任何调用方」的清理。后端删除了供应商图标推断表、一个占位的健康检查器、一套从未接线的 SSE 实现（含它自己的流式与非流式处理器）、两个未使用的代理会话类型，以及四个无引用的用量解析器与一个死的成本计算入口——**线上计费路径、它的自动识别解析器与会话 ID 提取全部原封不动**。22 处 `#[allow(dead_code)]` 抑制（正是它们让编译器一直没报警）随之删除。
+
+前端删除 14 个无导入方的模块，包括已被面板改版取代的提示词表单弹窗与仓库管理器、一个重复的代理配置 hook、一个在项目历史上从未有过导入方的熔断器面板，以及三个 schema 文件；它们的文案在四种语言里同步删除。这些模块背后的 Tauri 命令刻意保留。另外删除 4 个未使用的 npm 依赖。两个会重新生成手工维护的图标索引的脚本被移除，索引文件头改为写明「刻意不支持自动重生成」。
+
+配套的一处改动把代理状态与接管状态合并到单一的查询层——此前有第二套并行的 hook 覆盖同样的命令，但零调用方，它的查询键从来没有观察者，针对它们的失效调用全是空转。查询键字符串逐字未变，保留下来的 hook 维持原有的轮询行为。（[#5916](https://github.com/farion1231/cc-switch/pull/5916)、[#5928](https://github.com/farion1231/cc-switch/pull/5928)）
+
+---
+
+### 升级提醒
+
+#### 本版没有数据库迁移
+
+v3.19.1 不含 schema 迁移（版本号保持 v16），不会触发升级前备份，升级即用。
+
+#### Claude Desktop 双算的自愈有 30 天窗口（请读）
+
+修复是在查询时抑制重复行，而不是改写或删除数据，所以**明细行还在的每一天都会在下次启动后恢复正确总数**，不需要任何重建操作。
+
+但明细行超过 30 天会被聚合进日报并清理，而日报是按聚合当时生效的口径算一次就固定下来的。**已经被没有此修复的版本聚合掉的日期，会永久保留虚高的数字。** 这个回归自 v3.18.0（2026-07-21）进入，所以越早升级、能救回的历史区间越完整。
+
+#### 新定价对历史数据的两种不同影响
+
+八个新补定价的模型会被**回溯补算**：启动时会给成本记为零的请求补上成本，因此这些模型的看板数字会**上升**。已经聚合并清理掉的明细行无法补算，保持为零。
+
+四个改价的模型方向相反：补算只处理零成本行，所以已经记录的请求保持旧价，只有新请求按新价计费——同一个模型的历史花费与新增花费会不一致。两条路径都保护你自己的定价：修复只改仍是原内置值的行，而 `~/.cc-switch/model-pricing.json` 里的手工改价、models.dev 同步值与删除墓碑会在播种与修复之后重放，始终优先。
+
+#### 预设变更只影响新建供应商
+
+已经保存的 DeepSeek 或火山方舟 Coding Plan 供应商保持它存的 API 格式，仍然需要本地路由，也仍用旧目录。想用直连，请从预设重新创建供应商，或在供应商表单的高级区把 API 格式改为原生 Responses。
+
+不过，**已经是原生 Responses、且地址在 `deepseek.com` 上的供应商，下次切换时就会自动用上镜像的官方目录**，不需要重新保存——因为判定读的是 live 配置。
+
+#### DeepSeek V4 Pro 暂时还不能直连
+
+预设里仍然列着 `deepseek-v4-pro`，厂商自己发布的目录也带着它，但 **DeepSeek 侧针对 pro 的 Codex 集成尚未开通**，官方给出的时间是 2026 年 8 月初。在那之前，直连模式下选 pro 会在上游报错——请用 `deepseek-v4-flash`，它也是预设的默认模型。
+
+如果你现在就要用 pro，把这个供应商的 API 格式改回「OpenAI Chat」并开启本地路由接管即可。这正是 v3.19.1 之前 DeepSeek 一直走的那条路：本地代理会把 Codex 发出的 Responses 请求转换成 Chat Completions，pro 在这条路上不受影响。
+
+#### DeepSeek 官方目录的两个前提
+
+镜像的目录声明了 Codex 客户端最低版本 0.144.0，**CC Switch 自己不做校验**——它携带的 freeform `apply_patch` 注册需要这个版本或更新。另外，生成的目录文件会涨到约 75 KB（两个镜像模型），因为每个条目都带着完整的提示词框架文本。
+
+#### 直连之后，用量的归属会从供应商名变成 `Codex (Session)`
+
+DeepSeek、火山方舟 Coding Plan 与腾讯混元不再需要接管，它们的流量可以完全绕过本地代理，代理侧的逐请求记录因此看不到它们。
+
+**用量本身不会丢，也仍然分得清**——Codex 的会话日志导入照常记录，只是这条路径不携带供应商身份：所有没走本地代理的 Codex 用量会一起归入名为 `Codex (Session)` 的条目，官方订阅的消耗也在这一行里。也就是说，DeepSeek 从走路由改为直连之后，它的用量会从「DeepSeek」这个名字下移到 `Codex (Session)`。
+
+**要区分它们，看模型**：每条用量记录都带着自己的模型 ID，用量面板的「模型统计」按模型逐行列出——`deepseek-v4-flash`、`hy3`、`ark-code-latest` 与官方订阅的 GPT 系列各归各行，费用与 token 都是分开的。只有当你需要的正是**按供应商**这个维度（比如同一个模型在多家聚合站之间比价），才需要继续用本地路由接管——这条路会记录真实的供应商名。
+
+#### Codex 残留凭据清理的两个前提
+
+清理只在「切入的供应商带有显式的官方分类」**且**「切出的供应商已成功回填」时执行。手工创建、没有标记官方分类的条目，或者回填失败的那次切换，残留仍会留在盘上。
+
+#### Grok Build 开启接管会改写后端字段
+
+在 Grok Build 供应商上开启接管，现在会把 live 配置里的后端字段改写为 Responses。数据库里存的供应商记录不受影响，代理停止时 live 文件会从备份整体还原。
+
+#### 工具安装与升级的 PATH 变化（仅 macOS / Linux）
+
+设置 → 关于里触发的每一次工具安装与升级，现在都会把登录 shell 的 PATH 并到继承的那份前面，因此生命周期脚本按名称解析到的程序有可能与之前不同；每次操作还会多启动一个 shell 来读取这份 PATH，这会执行你的交互式启动文件。**Windows 不受影响。**
+
+使用 grok 0.2.112 及以上版本的用户可能会看到两份安装记录——原生的那份，加上 `grok update` 自己创建的全局 npm 包；它们由上游保持同步，版本号一致。
+
+#### 环境变量冲突检测的匹配口径变了
+
+Claude Code、Codex、Gemini 的检测从「包含」收紧为「前缀」，因此仅仅名字里含有应用名的变量——`MY_ANTHROPIC_API_KEY`、`OLD_GEMINI_API_KEY`——**不再被报为冲突**。同时新增了 Grok Build 的检测。
+
+#### 深链导入确认框显示的密钥更少
+
+脱敏后显示的明文前缀从 8 个字符缩到 4 个，长度不超过 8 个字符的值整体脱敏。这也影响 MCP 导入确认框。
+
+---
+
+### 风险提示
+
+#### 沿用的提示
+
+**xAI Grok OAuth 登录**：复用官方 Grok CLI 的公开 OAuth 客户端身份，使用可能导致账号被限制或封禁——详见 [v3.18.0 release notes](v3.18.0-zh.md#风险提示)。
+
+**Codex OAuth 反向代理**：使用 ChatGPT 订阅的 Codex OAuth 反代可能违反 OpenAI 服务条款，详情见 [v3.13.0 release notes](v3.13.0-zh.md#️-风险提示)。
+
+**SuperGrok 配额查询**：供应商卡片的配额展示依赖 grok.com 的非公开计费端点，xAI 调整接口后可能失效——详见 [v3.19.0 release notes](v3.19.0-zh.md#风险提示)。
+
+**第三方供应商路由**：通过 CC Switch 本地代理把 Codex、Claude Desktop 或 Grok Build 的请求转换并转发到第三方供应商时，各供应商对计费、合规与数据留存的约束不同，请在使用前阅读目标供应商的服务条款。
+
+用户启用上述功能即表示自行承担相关风险。CC Switch 不对因使用这些功能而导致的任何账号限制、警告或服务暂停承担责任。
+
+---
+
+### 致谢
+
+这一版的修复大半来自外部贡献者——六个 PR 里有五个不是我写的。
+
+#### 代码贡献
+
+- [#5677](https://github.com/farion1231/cc-switch/pull/5677)：Grok Build 的代理接管与深链集成收尾——补齐后端字段、会话身份识别、故障转移页签与环境变量检测，并顺带修好了配置预览里的密钥泄漏，感谢 @YUZHEthefool。这是本版覆盖面最广的一份工作。
+- [#5951](https://github.com/farion1231/cc-switch/pull/5951)：Claude Desktop 用量双算修复，感谢 @Komikawayi。定位到 v3.18.0 的哪一处改动让三道去重防线同时失守，是本版最需要耐心的一次排查。
+- [#5916](https://github.com/farion1231/cc-switch/pull/5916)、[#5928](https://github.com/farion1231/cc-switch/pull/5928)：删除 3,166 行无调用方代码与重复的代理查询层，感谢 @SaladDay。
+- [#5943](https://github.com/farion1231/cc-switch/pull/5943)：补齐繁体中文的工具管理文案，并新增防止语言漂移的测试，感谢 @yovinchen。
+- [#5960](https://github.com/farion1231/cc-switch/pull/5960)：补齐 9 个在所有语言下都显示简体中文的文案，感谢 @mhy1227。
+
+#### 问题反馈
+
+感谢 @Alaric-L 在 [#5938](https://github.com/farion1231/cc-switch/issues/5938) 中报告 Claude Desktop 的每次请求都多出一条 `session_log` 来源的日志、导致 token 被统计两遍——这条反馈精确到了数据来源，本版最重要的用量修复直接由它定位。
+
+---
+
+### 下载与安装
+
+访问 [Releases](https://github.com/farion1231/cc-switch/releases/latest) 下载对应版本，或从官网 [ccswitch.io](https://ccswitch.io) 获取（下载经 Cloudflare 边缘节点分发，不依赖 GitHub 可达）。
+
+#### 系统要求
+
+| 系统    | 最低版本                   | 架构                                |
+| ------- | -------------------------- | ----------------------------------- |
+| Windows | Windows 10 及以上          | x64 / ARM64                         |
+| macOS   | macOS 12 (Monterey) 及以上 | Intel (x64) / Apple Silicon (arm64) |
+| Linux   | 见下表                     | x64 / ARM64                         |
+
+#### Windows
+
+| 文件                                     | 说明                                |
+| ---------------------------------------- | ----------------------------------- |
+| `CC-Switch-v3.19.1-Windows.msi`          | **推荐** - MSI 安装包，支持自动更新 |
+| `CC-Switch-v3.19.1-Windows-Portable.zip` | 便携版，解压即用，不写入注册表      |
+
+Windows ARM64 设备请选择文件名中带 `arm64` 标识的对应制品。
+
+#### macOS
+
+| 文件                             | 说明                                          |
+| -------------------------------- | --------------------------------------------- |
+| `CC-Switch-v3.19.1-macOS.dmg`    | **推荐** - DMG 安装包，拖入 Applications 即可 |
+| `CC-Switch-v3.19.1-macOS.zip`    | 解压后拖入 Applications，Universal Binary     |
+| `CC-Switch-v3.19.1-macOS.tar.gz` | 用于 Homebrew 安装和自动更新                  |
+
+Homebrew 安装：
+
+```bash
+brew install --cask cc-switch
+```
+
+更新：
+
+```bash
+brew upgrade --cask cc-switch
+```
+
+#### Linux
+
+Linux 资产同时提供 **x86_64** 和 **ARM64**（`aarch64`）两种架构。资产文件名中包含架构标识，请按你机器的 `uname -m` 输出选择对应版本：
+
+- `CC-Switch-v3.19.1-Linux-x86_64.AppImage` / `.deb` / `.rpm`
+- `CC-Switch-v3.19.1-Linux-arm64.AppImage` / `.deb` / `.rpm`
+
+| 发行版                                  | 推荐格式    | 安装方式                                                               |
+| --------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| Ubuntu / Debian / Linux Mint / Pop!\_OS | `.deb`      | `sudo dpkg -i CC-Switch-*.deb` 或 `sudo apt install ./CC-Switch-*.deb` |
+| Fedora / RHEL / CentOS / Rocky Linux    | `.rpm`      | `sudo rpm -i CC-Switch-*.rpm` 或 `sudo dnf install ./CC-Switch-*.rpm`  |
+| openSUSE                                | `.rpm`      | `sudo zypper install ./CC-Switch-*.rpm`                                |
+| Arch Linux / Manjaro                    | `.AppImage` | 添加执行权限后直接运行，或使用 AUR                                     |
+| 其他发行版 / 不确定                     | `.AppImage` | `chmod +x CC-Switch-*.AppImage && ./CC-Switch-*.AppImage`              |
+
+## [3.19.0] - 2026-07-30
+
+> 这一版的主线是**让你更放心**：一波集中式安全加固——Skill 安装、`ccswitch://` 导入确认、SQL 备份导入、通用配置合并、终端启动全部收紧，其中两条需要你花一分钟确认——Gemini 通用配置的密钥泄漏已修复并在升级后自动清洗（**需要你轮换密钥**），`ccswitch://` 的 MCP 导入确认框此前可能显示不出即将写入的命令（**若你曾打开过来源不明的导入链接，建议核对一次**），两条都见「升级提醒」；一个代理正确性大修——**通过代理读图不再撑爆上下文**（一张截图曾经吃掉 10 万+ token，两三张就能把 Codex 会话卡死在 400 上）。省心的部分同样实在：**模型定价可以交给 models.dev 自动维护**、Grok CLI 官方登录模式的用量与 SuperGrok 订阅余量终于进看板、**应用内更新改走 `dl.ccswitch.io` 镜像**——GitHub 访问不畅也能顺利升级。
+
+### 重点内容：你现在可以
+
+- **在代理下正常读图，不再撑爆上下文**：Codex 的 `view_image`、返回图片的 MCP 工具，图片此前被序列化成工具文本、按纯文本计 token（约 9,000 倍膨胀）；现在所有转换桥都把图片还原为原生格式再上送（文件与音频在两条 Chat 桥上一并支持）。真实测试里同一回放轮从 85k+ token 降到约 12k、缓存命中 99%。
+- **把模型定价交给 models.dev 自动维护**：用量面板新增「models.dev 自动定价同步」（默认关闭）。开启后启动时自动刷新所选模型的价格（每 6 小时至多一次），可在完整目录里挑选要跟踪的模型，或让它自动包含各家最新的常用模型。手工改价与删价从本版起会记入 `~/.cc-switch/model-pricing.json`，数据库重建也不丢。
+- **看到 Grok 官方模式的用量与订阅余量**：Grok CLI 用官方 OAuth 登录时无法走本地代理，此前这部分消耗完全不可见；现在会从会话日志导入逐轮用量，看板里以「Grok Build (Session)」呈现。官方类 Grok Build 供应商卡片还会直接显示 SuperGrok 订阅的额度用量与重置时间。
+- **更放心地点开 `ccswitch://` 导入链接**：确认框现在完整展示命令、每个参数、URL 与环境变量（凭据类值脱敏显示），高亮标记值得多看一眼的值——shell 内联执行、改变加载行为的环境变量、内网 / 元数据地址；用量查询脚本会显示完整代码，且**默认以禁用状态导入**。
+- **确认 Gemini 供应商里不再夹带别人的密钥**：通用配置共享片段此前会把 `GOOGLE_API_KEY` 等凭据复制进每个使用它的 Gemini 供应商；本版关闭该路径，升级后首次启动自动执行一次性清洗。**凡是进过共享 Gemini 片段的密钥都应视为已暴露，请先轮换再重填**（见「升级提醒」）。
+- **在 GitHub 访问不畅时照常更新应用**：应用内更新器优先查询 `https://dl.ccswitch.io/latest.json`（Cloudflare R2 镜像），GitHub 作为回落；minisign 签名校验不变，镜像本身不被信任。
+- **新建供应商时直接用上最新模型**：预设默认模型升级为 Claude Opus 5、GPT-5.6 Sol 与 Gemini 3.6 Flash，配套定价同步入库；已创建的供应商保持原样。
+- **更快导入 fork 密集的 Codex 用量历史**：父 rollout 文件只解析一次、跨全部 fork 点共享，fork 密集的历史重建明显提速，导入结果逐字节不变。
+
+---
+
+### 使用攻略
+
+本版新能力主要落在用量面板与 `ccswitch://` 深链导入上，建议结合以下文档了解：
+
+- **[用量统计](/zh/docs?section=proxy&item=usage)**：用量看板的数据来源与统计口径。本版新增 models.dev 自动定价同步与 Grok 官方模式用量导入。
+- **[深链导入（ccswitch://）](/zh/docs?section=faq&item=deeplink)**：导入确认框的字段说明与 `usageEnabled` 等参数的默认值（本版起用量脚本默认禁用导入，文档已同步修正）。
+- **[安全策略（SECURITY.md）](https://github.com/farion1231/cc-switch/blob/main/SECURITY.md)**：本版补齐了威胁模型与报告范围——哪些输入被视为不可信、哪些问题欢迎报告，一目了然。
+
+---
+
+> [!WARNING]
+>
+> ## 唯一官方渠道声明（请务必阅读）
+>
+> CC Switch 是**完全免费、开源**的桌面应用，**不会向用户收取任何费用**。请仅通过下列官方渠道获取本软件：
+>
+> | 类别     | 唯一官方                                                                       |
+> | -------- | ------------------------------------------------------------------------------ |
+> | 官网     | **[ccswitch.io](https://ccswitch.io)**                                         |
+> | 源码     | **[github.com/farion1231/cc-switch](https://github.com/farion1231/cc-switch)** |
+> | 下载     | **[GitHub Releases](https://github.com/farion1231/cc-switch/releases)**        |
+> | 作者     | **[@farion1231](https://github.com/farion1231)**                               |
+> | 举报山寨 | **[GitHub Issues](https://github.com/farion1231/cc-switch/issues)**            |
+>
+> **任何向你收费、要求充值、或索取登录凭据的"CC Switch"网站或客户端均为假冒**。如果你被诱导支付了费用，请立即停止操作并通过 GitHub Issues 反馈。
+
+---
+
+### 概览
+
+CC Switch v3.19.0 由一波安全加固与一个代理正确性大修领衔。安全侧（[#5811](https://github.com/farion1231/cc-switch/pull/5811) 及后续独立修复）：从 GitHub 仓库安装 Skill 加固了 zip-slip 与路径穿越并设归档上限；Gemini 通用配置的密钥泄漏被关闭，升级后首次启动自动执行一次性清洗，把已经泄漏进其它供应商配置的密钥清理干净；导入 SQL 备份改在 SQLite authorizer 下执行，`ATTACH` 等能触及导入库之外的语句一律拒绝；通用配置片段合并不再跟随 `__proto__` 污染全局原型；外部终端启动改用 POSIX 单引号转义，目录名再也注入不了命令；`ccswitch://` 导入确认框完整展示载荷（凭据类值脱敏显示）并标记风险值，用量脚本默认禁用导入。代理侧，工具结果里的图片不再被序列化成工具文本，而是在各转换桥还原为原生媒体上送（文件与音频在两条 Chat 桥上一并支持）——终结了「一张 113 KB 截图吃掉 10 万+ token、两三张图把 Codex 会话卡死在 400 上」的问题（[#4465](https://github.com/farion1231/cc-switch/issues/4465)、[#5663](https://github.com/farion1231/cc-switch/issues/5663)）。
+
+用量统计获得两块新能力：**models.dev 自动定价同步**（可选开启，[#5734](https://github.com/farion1231/cc-switch/pull/5734)），配套把手工改价 / 删价持久化到人类可编辑的 `~/.cc-switch/model-pricing.json`；以及 **Grok CLI 官方 OAuth 模式的用量导入**——这条流量无法走本地代理，此前完全不可见——外加供应商卡片上的 SuperGrok 订阅配额展示。围绕分发与体验：应用内更新优先走 `dl.ccswitch.io` 的 Cloudflare R2 镜像（GitHub 回落，签名校验不变）；Codex 用量导入对 fork 会话重用已解析的父 rollout 时间线（[#5626](https://github.com/farion1231/cc-switch/pull/5626)）；预设默认模型升级为 Claude Opus 5、GPT-5.6 Sol 与 Gemini 3.6 Flash；OpenClaw 的 Kimi For Coding 预设修正了 base URL；工具栏应用切换器改为纯图标。本版**没有数据库 schema 迁移**，升级轻量。
+
+**发布日期**：2026-07-30
+
+**更新规模**：38 commits | 132 files changed | +14,926 / -1,415 lines
+
+---
+
+### 新功能
+
+#### models.dev 自动定价同步
+
+用量面板的定价区新增「models.dev 自动定价同步」卡片，**默认关闭、需手动开启**：开启时会有确认说明——CC Switch 将在启动时（每 6 小时至多一次）从 models.dev 刷新所选模型的价格，**同名模型的内置价与手工价都会被覆盖**。「选择模型」对话框提供完整的 models.dev 目录（可搜索筛选），另有「自动包含常用模型」选项，覆盖 Claude、GPT、Gemini、Grok、DeepSeek、Qwen、MiMo、LongCat、Kimi、MiniMax、GLM 各家最近发布的模型（每族至多 6 个，可单独排除）。卡片显示上次同步时间与错误，提供「立即同步」，还能打开或重载本地定价文件。
+
+从本版起，手工改价与删价会同时记入数据库旁边的人类可编辑文件 `~/.cc-switch/model-pricing.json`，每次启动重放——数据库重建后手工定价不再丢失，删掉的内置价也终于能删得掉（以墓碑记录，不再被重新播种）。注意该文件创建时为空、**刻意不从既有定价表回填**（否则内置价会被一并写成覆盖项、挡掉将来的内置价修正），升级前的改价仍只存在数据库里，重存一次即可入文件。同步真的改了价格时，会把**从未算出成本**（零或缺失）的历史用量行按新价补算——已有成本的行保持原值；拉取失败或离线绝不阻塞启动。models.dev 列表还过滤掉了非文本与已弃用的模型（音频 / 图像 / 视频 / embedding 等），手动选价对话框一并清爽了。（[#5734](https://github.com/farion1231/cc-switch/pull/5734)）
+
+#### Grok 官方模式的用量，终于进看板
+
+Grok CLI 用官方 OAuth 登录时无法经本地代理路由——Grok 以空配置作为模式开关，没有地方能把它指向 CC Switch——这部分消耗此前在用量看板里完全不可见。现在 CC Switch 会随常规会话日志同步，从 `~/.grok/sessions`（含归档会话）的 `updates.jsonl` 里按 `turn_completed` 事件导入逐轮用量：成本优先采用 CLI 自己上报的精确数字，缺失时回落本地定价（内置定价表新增 `grok-4.5-build`，$2 输入 / $6 输出 / $0.30 缓存读，每百万 token）。导入行以上游逐轮 ID 为键，回卷会话不会造成重复计数；沉淀窗口加近期代理活动检查，确保同一流量在「路由 + 官方」混用时也不会算两次。看板里新行以「Grok Build (Session)」供应商名呈现，应用筛选器新增 Grok Build 选项，数据来源分栏新增「Grok Build Session」条目与专属图标，四语齐全。
+
+#### 供应商卡片上的 SuperGrok 订阅配额
+
+类别为「官方」的 Grok Build 供应商，卡片上现在直接显示 SuperGrok 订阅用量——与 Claude Code / Codex / Gemini 的官方订阅页脚并列：CC Switch 读取 Grok CLI 自己的 OAuth 凭据（`~/.grok/auth.json`），查询 grok.com 计费端点获取额度窗口的已用百分比与重置时间；重置间隔可识别时标注为「周」或「月」，否则归入新的「Credits」档（托盘用量摘要中以 `c` 组呈现）。网络瞬断时保留上一次读数并重试，不清空页脚；令牌过期会提示重新 `grok login`。Claude Code、Claude Desktop 与 Codex 里的受管 xAI OAuth（SuperGrok）供应商也自动获得同款配额展示——数据来自绑定到该供应商的账号，用量脚本入口随之隐藏。注意 Grok Build 供应商的「官方」判定现在只看 `category` 字段，不再探测配置内容。
+
+#### Claude Opus 5 内置定价
+
+`claude-opus-5` 加入内置定价表：$5 输入 / $25 输出、$0.50 缓存读 / $6.25 缓存写（每百万 token），用量不再显示 $0。按「不存在才插入」播种，改过的价格不受影响（Opus 5 fast 模式走独立计费，刻意未入表）。
+
+#### 预设目录更新
+
+A6API（同模型多上游自动择优的聚合平台）加入八个应用的赞助商预设；PackyCode 预设在支持备用端点的五类预设（Claude Code / Claude Desktop / Codex / Gemini CLI / Grok Build）上新增三个备用地址，可在地址管理器与测速里选择；AICoding 合作伙伴预设回归七个应用；赞助商排序与 README 重新对齐。
+
+---
+
+### 变更
+
+#### 预设默认模型升级：Claude Opus 5、GPT-5.6 Sol、Gemini 3.6 Flash
+
+内置预设的默认模型全面来到当前一代：`claude-opus-5` 替换 `claude-opus-4-8`（三种命名形态全覆盖），`gpt-5.6-sol` 替换 `gpt-5.5` 与裸 `gpt-5.6`，`gemini-3.6-flash` 替换 `gemini-3.5-flash`。同步更新了所有镜像位置——通用 / NewAPI 默认值、Codex 自定义 `config.toml` 模板、推荐列表、表单占位符与四语文案；`gemini-3.6-flash` 定价同步入库（$1.50 / $7.50、缓存读 $0.15，每百万 token）。仍钉在 `gemini-3.1-pro-preview` 的 Code0 与七牛 Gemini 预设一并对齐到 3.6 Flash——这是**有意的档位调整**：3.6 没有 Pro 版，3.5 Pro 仍限合作测试。**默认值只影响新建供应商**，已保存的供应商维持创建时的模型；Claude Desktop 的 opus 路由现值前进到 `claude-opus-5`，`claude-opus-4-8` 转入兼容别名槽，存量配置照常解析。
+
+#### 应用内更新改走 ccswitch.io 镜像
+
+更新器现在优先查询 `https://dl.ccswitch.io/latest.json`——发布清单的 Cloudflare R2 镜像——GitHub Releases 作为回落，检查与下载更新不再依赖 GitHub 可达。镜像清单把各平台下载指向同一存储桶，而 minisign 签名保持不动：签名覆盖的是文件内容而非 URL，每个下载产物仍会对着内置公钥校验，**镜像本身始终不被信任**。发布由 release 门控的同步工作流负责，只有当 tag 确为 GitHub 的 `releases/latest` 时才改写根清单，镜像永远不会把用户往回推到旧版本。
+
+#### Codex 用量导入：fork 会话提速
+
+导入与重建 Codex 用量统计不再对同一个父 rollout 文件按 fork 点逐次重读：每个父 `~/.codex/sessions/*.jsonl` 只解析一次，生成内存中的 token 时间线，由所有从它 fork 出的子会话共享，各子会话的截断点改为内存过滤。缓存以文件身份戳校验（修改时间、大小，加 Unix 的 device/inode 或 Windows 的卷序列号 + 文件 ID），被追加、轮转或替换的父文件会重读而不是拿到陈旧数据。提速幅度取决于 fork 密度：fork 密集的历史冗余解析大幅减少，fork 稀少的历史基本不变——两种情况下导入结果都逐字节一致。（[#5626](https://github.com/farion1231/cc-switch/pull/5626)）
+
+#### 工具栏应用切换器改为纯图标
+
+切换器按钮不再在图标旁渲染文字标签——受管应用增至八个后，标签本来就几乎总是被溢出检测收起，于是移除了基于 ResizeObserver 的自动紧凑机制，始终只显示图标。应用名保留在悬停提示里，读屏器经 `aria-label` 照常可及。
+
+#### 赞助商域名与推荐链接刷新
+
+多家赞助商迁移了域名，预设地址、备用端点、推荐链接与 README 行已同步（PackyCode → `www.packyapi.ai`、RightCode → `www.rightapi.ai`、ClaudeAPI → `www.apito.ai`、APINebula → `apinebula.ai`、AICodeMirror → `.ai`、AICoding → `.inc`、AIGoCode → `.app`），顺带移除了两个已失效的备用端点。**已创建的供应商保留数据库里存的旧地址**——想迁到新域名，手动改地址或从刷新后的预设重建即可。
+
+---
+
+### 修复
+
+#### 通过代理读图不再撑爆上下文
+
+客户端经工具调用读取图片时——Codex 的 `view_image`，或任何返回图片的 MCP 工具——代理的协议转换会把整个图片块序列化进工具消息的文本里，上游按纯文本给 base64 计 token：约 9,000 倍的膨胀，一张 113 KB 的 PNG 折算 10 万+ prompt token；Codex 每轮重放全部历史，两三张截图就足以把会话顶出上下文窗口、卡死在反复的 400 上（[#4465](https://github.com/farion1231/cc-switch/issues/4465)、[#5663](https://github.com/farion1231/cc-switch/issues/5663)）。
+
+代理现在把媒体载荷从工具结果里提出来、按各桥的原生格式重新上送——**图片全桥覆盖，文件与音频在目标协议支持处生效**：两条 Chat 桥（Claude→Chat、Codex Responses→Chat）承载图片 / 文件 / 音频，工具消息里留下简短标记、媒体作为合成用户消息紧随工具批次之后；Claude→Responses 还原原生 `input_image`，Codex / GrokBuild→Anthropic 重建标准 Anthropic 图片块，Claude→Gemini 在 Gemini 3 上用多模态 `functionResponse.parts`（旧型号用 `inlineData`），只接受内联 base64 图片。检测覆盖有类型的 Responses 块、Anthropic `source` 块、MCP `data`+`mimeType` 结果与整串图片 data URL，可穿透数组与嵌套 `content` 包装（含 JSON 编码的工具输出）；一旦判定输出含媒体，其中残留的 data URL 与裸 base64 会被折叠成占位——**裸 base64 本身从不触发媒体判定**，普通工具输出原样不动。不含媒体的工具结果在所有桥上保持与之前逐字节一致，prompt 缓存前缀不受影响；上送的媒体块刻意不带 `cache_control` 标记，GLM、Qwen 这类严格上游不会拒收。对 Kimi K3 的端到端实测：同一回放轮稳定在约 12k 输入 token、缓存命中 99%，此前每次重放要背 85k+ 的 base64 文本。
+
+#### 「不支持图片回退」现在能看到工具结果里的图
+
+「不支持图片回退」设置会在供应商仅文本或上游拒图时用占位标记替换图片块，但它此前只能看到仍是结构化块的图片——已被打平成 base64 文本的工具结果图片对它不可见，仅文本上游直接失败、无从恢复。媒体清洗器现在在每条路径上对称地检测并剥离工具输出内的媒体，发送前剥离与被拒后重试两条路都能救回这类轮次；由于该检测现在也深入工具结果，一条回归测试钉住了反应式重试仍只对真正的模态拒绝触发——上下文超限的 400 不会被误当拒图去重试。
+
+#### Grok Build 成本回填不再高估
+
+补算缺失成本的例程此前只把 Codex 与 Gemini 视为「上报输入 token 已含缓存读」的供应商，而 Grok Build 同属该口径——被回填的 Grok Build 行按全量输入计价、缓存读又计一次，成本虚高。缓存含入式供应商集合现在只定义一处，由路由记录器、成本计算器与回填例程共享，三者不再可能各说各话。注意此前已被旧回填修过的行保持原值——回填只处理零成本行，从不改写已有正成本。
+
+#### 手工编辑的配置文件不再让应用崩溃或吞掉编辑
+
+`~/.codex/config.toml` 里 `mcp_servers` 存在但不是表（比如 `mcp_servers = "x"`）时，MCP 同步会在切换中途 panic——且发生在数据库与 live 配置都已写入之后，留下半套用的切换；非表值现在先告警再归一为空表，Codex 与 GrokBuild 写入器同步修复。内联表形态（合法 TOML）有镜像问题：MCP 删除静默无效而界面报成功、`base_url` 编辑写到 Codex 根本不读的层级——均已处理。根节点、`provider` 或 `mcp` 段是数组 / 标量的 `opencode.json` 不再 panic，这类文件会被报错拒绝而不是重建，你自己的 `model`、`theme` 设置不会被抹掉。（[#5811](https://github.com/farion1231/cc-switch/pull/5811)）
+
+#### 代理转换扛得住畸形上游响应
+
+上游网关的畸形数据此前可能直接干掉本地代理而不是产生错误：Anthropic SSE 流里非对象的 `message` 或 `content_block`、缓冲响应体是顶层 JSON 数组或标量（无视 `stream: true` 的网关就返回这种）都会命中 panic 的索引赋值；流现在以正常的失败事件收尾。畸形的 `content_block` 头还会被恢复为文本块——只把它净化成空对象虽止住 panic，却让后续内容全部被静默丢弃、模型看起来什么都没说——由于坏头之后的增量通常是完好的，常见情况现在能通传，替换发生时记一条警告。（[#5811](https://github.com/farion1231/cc-switch/pull/5811)）
+
+#### OpenClaw 的 Kimi For Coding 地址修正
+
+OpenClaw 预设此前指向通用平台端点 `https://api.kimi.com/v1`，而 Kimi For Coding 订阅走的不是它，coding 套餐的 key 用不了。地址修正为 `https://api.kimi.com/coding/v1`，表单占位符与默认值同步更新。**从旧预设创建的供应商需手动改到新地址。**
+
+---
+
+### 安全加固
+
+本节九条里，**有两件事需要你动手**：轮换进过 Gemini 通用配置的密钥，以及核对曾经通过 `ccswitch://` 导入的 MCP 条目——「升级提醒」里写明了怎么做。其余的升级即生效，不需要你操作。
+
+如果你从不点开别人发来的 `ccswitch://` 链接，也没用过共享的 Gemini 通用配置，那这九条对你的意义主要是「以后更不容易出事」；如果两条里有一条对得上，**这一版值得优先升级**。
+
+#### Gemini 通用配置不再泄漏密钥，升级后自动清洗
+
+Gemini 通用配置提取器此前只从共享片段里剥掉 `GEMINI_API_KEY` 与 `GOOGLE_GEMINI_BASE_URL`，其余 `env` 条目原样复制——而 `GOOGLE_API_KEY` 正是 Gemini 的一等凭据，某个账号的 key（连同其它长得像凭据的条目）会被深合并进每一个使用通用配置的 Gemini 供应商，并发往对方的 base URL——那可能是第三方中转。提取器现在跳过一切命中凭据模式的键（与 Claude 提取器同一套匹配器），前端片段校验器同步对齐，手工编辑也塞不回去。由于 Gemini 片段一旦存在就不再重提取，升级后首次启动还会执行**一次性清洗**：把已经泄漏的凭据从片段、从每个被合并到的供应商、从 `~/.gemini/.env` 里清掉——按键名**加值**全等匹配，供应商自己的同名不同值 key 不受牵连——并保留 env 文件的排版与注释。清洗细节与注意事项见「升级提醒」。（[#5811](https://github.com/farion1231/cc-switch/pull/5811)）
+
+#### Skill 仓库安装加固：路径穿越与归档上限
+
+从 GitHub 仓库安装或浏览 Skill 此前可能写到目标目录之外：归档条目未经归一就拼上目标路径，带 `..` 的 ZIP 能逃出解压目录（zip-slip）；仓库坐标从未校验，`../../../releases/download/v1/evil` 这样的分支名能把下载重定向到任意 release 资产——而 Skill 仓库可经不可信的 `ccswitch://` 深链添加且默认启用，打开 Skills 面板就足以触发下载。来自备份恢复、同步快照与「从应用导入」的 Skill `directory` 值同样未经校验就拼路径，卸载可能 `remove_dir_all` 到受管目录之外。所有落点现在都校验目录名，仓库 owner / 名称 / 分支在唯一下载汇聚点白名单化，解压设硬上限（10,000 条目、写入 512 MB、下载 128 MB、符号链接目标 4 KB，自指链接拒绝），新错误信息四语齐全。（[#5811](https://github.com/farion1231/cc-switch/pull/5811)）
+
+#### 深链导入确认框：看全内容，标记风险
+
+`ccswitch://` 的 MCP 导入确认框此前只渲染一行会被截断的 `Command:`，`args`、`url`、`env` 一概不显示——链接带上 `command: "sh"` 加 `args: ["-c", "curl …|sh"]` 和一个 `LD_PRELOAD` 环境变量，显示出来只是一个人畜无害的 `sh`，确认后却被写进各应用的 live MCP 文件。确认框现在把命令、每个参数、URL 与环境变量逐行渲染，换行而非截断，不会有内容被裁掉看不见（键名含 TOKEN / KEY / SECRET / PASSWORD 的 env 值以前缀加星号脱敏显示）；值得多看一眼的值会被高亮并汇总进警告块：带内联执行标志的 shell 解释器（含 `bash -lc`、`cmd /C`、PowerShell `-Command` 缩写等组合形态）、改变进程加载行为的环境变量（`LD_*`、`DYLD_*`、`NODE_OPTIONS`、`PYTHONPATH`、`PATH`、代理变量等）、指向回环 / 内网 / 云元数据地址的端点。标记纯属提示、从不拦截导入——本地 Ollama 端点是再正常不过的用法。供应商确认框获得同款处理；「将立即写入所有指定应用」的警告改为无条件显示，不再受链接可控字段的门控。
+
+#### 深链用量脚本：默认禁用导入，代码先看后用
+
+经深链导入的用量查询脚本是每次查用量都会执行的 JavaScript，此前可能全程没见过代码就被启用：后端把「带了代码」当作「同意执行」，确认框只显示启用 / 禁用徽标、从不显示脚本体。脚本现在**默认禁用**——链接必须显式携带 `usageEnabled=true` 才请求启用——确认框以可滚动、完整换行的代码块显示解码后的全部脚本，并警告启用后将会执行。解码失败时回落显示原始载荷，畸形脚本不可能伪装成「没有脚本」。脚本代码照常存到供应商上，审阅后可在应用内手动开启。
+
+#### URL-safe Base64 曾让确认框整块变空
+
+上面两条修的是「确认框显示得不够」，这一条修的是「确认框可以什么都不显示」。后端接受四种 Base64 变体（含 RFC 4648 §5 的 URL-safe 字母表），而前端的 `atob` 只认标准字母表、解不开时**原样返回输入而不报错**——于是同一段载荷，后端解码成功并导入，前端拿到的是一坨解不开的字符。用量脚本与系统提示词因此显示成不透明的 Base64；**MCP 配置最糟：`JSON.parse` 失败被组件吞掉，确认框渲染成「0 个服务器」加一张空列表，而后端照常把真实条目写进 live MCP 文件**。把载荷里一个 `/` 换成 `_` 就够了——确认框变空，导入功能完好，上面两条刚补上的完整展示随之一并失效。
+
+前端解码器现在先归一 URL-safe 字母表再解码，确认框显示的永远与将要导入的一致；共享解码器首次有了单元测试，用例内含前置自检，确保样本真的落在 URL-safe 分支上而不是碰巧两种编码相同。
+
+> 这条缺陷影响 v3.8.0 起的所有版本。若你曾通过 `ccswitch://` 链接导入过 MCP 服务器，建议检查一次——见「升级提醒」。
+
+#### SQL 导入拒绝触及导入库之外的语句
+
+导入数据库备份此前只校验文件头注释，之后整段文本直接交给 `execute_batch`——精心构造的备份可以 `ATTACH DATABASE` 在用户可写的任意位置创建 SQLite 文件，且该副作用发生在导入自身的状态校验之前，导入整体失败文件也已落地；WebDAV / S3 同步快照走的是同一条代码路径。现在外部批次执行期间安装 SQLite authorizer（结束立即卸下，应用自身的 schema 维护不受影响）：`ATTACH` / `DETACH`、`VACUUM`、虚表创建（csvfile 这类文件后端模块能读写任意路径）以及一切 SQLite 报告为未知的动作一律拒绝——未来的新语句默认失败；PRAGMA 只放行导出器实际会写的 `foreign_keys` 与 `user_version` 两个。
+
+#### 通用配置片段的原型污染
+
+应用、移除、比对通用配置片段的三个遍历器此前都会跟着 `__proto__` 走进全局 `Object.prototype`：`JSON.parse('{"__proto__":{…}}')` 产出的是自有可枚举属性，合并会把攻击者指定的值写上全局原型——而 `settings` 表在同步时会被远端整表覆盖，恶意 WebDAV / S3 快照落地后，打开一次供应商表单就触发合并。三个遍历器现在一律跳过 `__proto__`、`constructor`、`prototype`；「已应用通用配置」的比对同时要求自有属性，顺带修掉一个可见怪象——`{"__proto__":{}}` 此前被判定为任何配置的子集。
+
+#### 终端启动的目录名命令注入
+
+在外部终端恢复会话时，`cd` 行此前用双引号包裹工作目录、只转义反斜杠和双引号——双引号里 shell 照样展开 `$(…)`、反引号与 `$VAR`，而这个值是 CLI 会话历史里记录的真实项目路径，macOS 上目录名合法地可以包含这些字符。文件夹起了那样的名字，点「恢复」就会在你的终端里执行内嵌命令，全程无需任何被攻破的组件。三个拼 shell 行的启动器——Terminal.app、iTerm、kitty——改用 POSIX 单引号转义，任何内容都不展开（穿过 Terminal / iTerm 所需的 AppleScript 引号层同样安全）；Ghostty、WezTerm / Kaku、Alacritty 本就把目录作为独立参数传递，原本安全。
+
+#### GrokBuild 凭据解析不再替换或内联环境密钥
+
+GrokBuild 凭据提取此前在配置指定的 `env_key` 变量未设置时回落到进程级 `XAI_API_KEY`——静默替换成另一个账号的 key、发往配置指向的任意 base URL；凭据现在只来自显式的内联 `api_key` 或 `env_key` 精确命名的环境变量。深链导入不再把环境变量解析成明文 `api_key`；只带 `env_key` 名字的链接会被拒绝并提示手动添加——照单全收意味着请求时仍会解析受害者的环境密钥、送往链接声明的地址。顺带修复：base URL 解析与凭据解析解耦，此前凭据缺失连 base URL 一起清空，macOS（GUI 进程不继承 shell 环境）上界面显示的地址与实际使用的不一致、用量脚本的 `{{baseUrl}}` 展开为空。（[#5811](https://github.com/farion1231/cc-switch/pull/5811)）
+
+---
+
+### 文档
+
+#### 「在 Claude Code 中使用 GPT 模型」攻略补齐英日双语
+
+此前仅有中文的本地路由攻略现已完整移植为英文与日文，端到端覆盖两条接入路径：第三方 OpenAI Responses 网关（API Key），以及 ChatGPT Plus/Pro 订阅经 Codex 设备码 OAuth 登录。两篇路由攻略同时改题为「用什么模型」而非「什么客户端对」——《[在 Claude Code 中使用 GPT 模型](/zh/tutorials/claude-codex-routing-guide)》《[在 Codex 中使用 Claude 模型](/zh/tutorials/codex-claude-routing-guide)》——所有交叉链接（含三语 v3.18.0 release notes）改为指向读者语言的版本。
+
+#### 用户手册：深链 `usageEnabled` 默认值修正
+
+三语用户手册的深链参考此前声称 `usageEnabled` 默认为 `true`，实际默认 `false`、与导入器一致。手册现在写明正确默认值，并补充两个推论：导入前确认框会完整显示脚本代码；未显式 `usageEnabled=true` 时脚本以禁用状态导入，可稍后在应用内开启。
+
+#### SECURITY.md：威胁模型与报告范围
+
+`SECURITY.md` 补齐双语威胁模型与明确的范围内 / 范围外清单，报告按「谁控制这个输入」而非「值最终到了哪个 API」分诊：内置 WebView 渲染器声明为受信组件（附四条可独立验证的事实与失效触发条件）；深链载荷、WebDAV / S3 恢复数据、导入文件、上游 API 响应、本地代理的入站请求全部列为不可信输入、欢迎报告。
+
+---
+
+### 升级提醒
+
+#### 本版没有数据库迁移
+
+v3.19.0 不含 schema 迁移（版本号保持 v16），升级即用，无需等待数据重建。
+
+#### Gemini 密钥一次性清洗（请读）
+
+升级后首次启动会在常规配置提取前执行一次性的 Gemini 通用配置清洗。**部分 Gemini 供应商随后可能提示缺少 API Key**：条目按凭据型键名加值全等匹配删除，通常删掉的是经共享片段泄漏进来的其它供应商凭据（该供应商自己的原值在泄漏发生时已被覆盖、无法找回）——但**你有意在多个 Gemini 供应商间复用的同值 key 也会被一并移除**。无论哪种情况，请先轮换再重填：**凡是进过共享 Gemini 片段的密钥都应视为已暴露**。删除的键名与受影响的供应商 id（绝不含值）记录在 `settings` 表的 `gemini_common_config_scrub_audit_v1` 下，可据此逐一定位需要重新填写密钥的供应商。
+
+#### 曾用深链导入过 MCP？建议检查一次（请读）
+
+本版之前，`ccswitch://` 的 MCP 导入确认框可能**显示不出即将写入的内容**：参数与环境变量一概不渲染（`command: "sh"` 加 `args: ["-c", …]` 显示成一个无害的 `sh`），若载荷用 URL-safe Base64 编码，则整个列表显示成「0 个服务器」——而后端两种情况都照常把条目写进各应用的 live MCP 文件。这两条缺陷影响 **v3.8.0 起的所有版本**，本版一并修复。
+
+利用需要你亲自打开攻击者提供的链接并点「导入」，因此绝大多数用户不受影响。**如果你确实从不完全信任的来源打开过 `ccswitch://` MCP 导入链接**，建议在 MCP 面板逐条核对，或直接检查 `~/.claude.json` 的 `mcpServers`（Codex 见 `~/.codex/config.toml` 的 `mcp_servers`），确认没有你不认识的条目——MCP 服务器会在 CLI 下次启动时作为子进程执行。
+
+#### 深链用量脚本默认禁用
+
+携带用量查询脚本的深链现在默认以禁用状态导入，除非链接显式携带 `usageEnabled=true`。依赖自动启用的链接（例如部分合作伙伴的一键配置链接）会导入脚本但不开启用量查询——审阅代码后在供应商编辑器里手动开启即可。应用内手工配置的用量脚本不受影响。
+
+#### 新默认模型只影响新建供应商
+
+已保存的供应商维持创建时的模型 ID，想用新模型需手动编辑。Claude Desktop 的 opus 路由现值前进到 `claude-opus-5`、`claude-opus-4-8` 移入兼容别名槽，存量配置照常解析。
+
+#### 定价播种与本地定价文件
+
+新定价行（`claude-opus-5`、`gemini-3.6-flash`、`grok-4.5-build`）在下次启动按「不存在才插入」追加——**播种绝不覆盖你改过的价格**。`~/.cc-switch/model-pricing.json` 创建时为空，只记录本版之后的手工改价与删价——更早的改价不会迁入，想让它们扛住数据库重建，重存一次即可。models.dev 自动同步保持关闭直到你手动开启；一旦开启，它是唯一会覆盖同名价格（内置与手工皆然）的路径。
+
+#### GrokBuild 隐式环境变量回落已移除
+
+依赖隐式 `XAI_API_KEY` 环境回落的 GrokBuild 供应商，现在需要显式的 `api_key` 或正确命名的 `env_key`。
+
+#### Grok 官方模式用量有意延迟
+
+官方模式的 Grok 用量会延迟约十分钟加一个同步周期出现——事件先沉淀、再与代理记录的行核对防止双计；若路由流量与官方流量在窗口内交替，部分官方轮会被跳过而不是冒险重复计数。被旧成本回填高估过的 Grok Build 行保持原值——回填只处理零成本行，从不修订已有正成本。
+
+#### 更新镜像自下个版本起生效
+
+更新器端点列表内置在应用二进制里，现有安装在升级到含本改动的版本之前仍然只查 GitHub；此后优先 `dl.ccswitch.io` 镜像、GitHub 回落。
+
+#### 赞助商域名迁移不改存量供应商
+
+已创建的供应商保留数据库中存储的旧地址，仍指向旧域名。想迁到新域名，手动修改供应商地址，或从刷新后的预设重新创建。
+
+---
+
+### 风险提示
+
+#### SuperGrok 配额查询（本版新增）
+
+供应商卡片的 SuperGrok 配额展示会读取 Grok CLI 自己的 OAuth 凭据（`~/.grok/auth.json`）并查询 grok.com 的计费端点——该端点并非公开文档化接口，其响应解析基于对现有格式的观察，xAI 调整接口后此功能可能失效（届时卡片降级为不显示配额，其余功能不受影响）。CC Switch 不会存储或修改这些凭据。
+
+#### 沿用的提示
+
+**xAI Grok OAuth 登录**：复用官方 Grok CLI 的公开 OAuth 客户端身份，使用可能导致账号被限制或封禁——详见 [v3.18.0 release notes](v3.18.0-zh.md#风险提示)。
+
+**Codex OAuth 反向代理**：使用 ChatGPT 订阅的 Codex OAuth 反代可能违反 OpenAI 服务条款，详情见 [v3.13.0 release notes](v3.13.0-zh.md#️-风险提示)。
+
+**第三方供应商路由**：通过 CC Switch 本地代理把 Codex、Claude Desktop 或 Grok Build 的请求转换并转发到第三方供应商时，各供应商对计费、合规与数据留存的约束不同，请在使用前阅读目标供应商的服务条款。
+
+用户启用上述功能即表示自行承担相关风险。CC Switch 不对因使用这些功能而导致的任何账号限制、警告或服务暂停承担责任。
+
+---
+
+### 致谢
+
+这一版的安全加固几乎全部来自外部——一个 PR，加上收到的安全报告。
+
+#### 代码贡献
+
+- [#5811](https://github.com/farion1231/cc-switch/pull/5811)：Skill 安装的 zip-slip 与仓库坐标穿越、Gemini 通用配置密钥泄漏与一次性清洗、GrokBuild 凭据解析、多处 panic 路径修复，感谢 @zayokami。这是本版单个来源里覆盖面最广的一份工作。
+- [#5734](https://github.com/farion1231/cc-switch/pull/5734)：models.dev 自动定价同步，感谢 @YUZHEthefool。
+- [#5626](https://github.com/farion1231/cc-switch/pull/5626)：Codex fork 会话用量导入提速，感谢 @ayanamislover（与 @SaladDay 共同署名）。
+
+#### 安全报告
+
+本版「安全加固」里的四条修复来自私下发来的安全报告。感谢 **23pds**（SlowMist 慢雾）与 **zues devil**——逐条归属如下：
+
+- **深链导入确认框只显示一行会被截断的 `Command:`**——`args`、`url`、`env` 一概不渲染，`sh -c` 加 `LD_PRELOAD` 的载荷在界面上看起来只是一个 `sh`。这是本版影响面最大的一条。（23pds，SlowMist）
+- **导入 SQL 备份未受约束**——`ATTACH DATABASE` 能在用户可写的任意位置创建文件，且副作用发生在导入自身的校验之前。（zues devil）
+- **外部终端启动的目录名命令注入**——`cd` 行用双引号包裹，`$(…)` 照常展开，而这个值是会话历史里记录的真实项目路径。（zues devil 与 23pds 各自独立报告，分别指向内置启动器与自定义模板两条路径）
+- **通用配置片段合并的原型污染**——三个遍历器都会跟着 `__proto__` 走进全局 `Object.prototype`。（23pds，SlowMist）
+
+报告同时促使我们补齐了 [SECURITY.md](https://github.com/farion1231/cc-switch/blob/main/SECURITY.md) 的威胁模型与报告范围——在此之前，这个项目只写了怎么报告，没写什么算漏洞。
+
+其余两条深链修复（用量脚本默认禁用、URL-safe Base64 绕过）是在审查上述修复本身时发现的，不在原始报告内。
+
+#### 问题反馈
+
+感谢在 [#4465](https://github.com/farion1231/cc-switch/issues/4465) 与 [#5663](https://github.com/farion1231/cc-switch/issues/5663) 中反馈代理读图撑爆上下文的用户——本版最重要的代理修复来自这些真实场景的复现线索。
+
+---
+
+### 下载与安装
+
+访问 [Releases](https://github.com/farion1231/cc-switch/releases/latest) 下载对应版本，或从官网 [ccswitch.io](https://ccswitch.io) 获取（本版起下载经 Cloudflare 边缘节点分发，不再依赖 GitHub 可达）。
+
+#### 系统要求
+
+| 系统    | 最低版本                   | 架构                                |
+| ------- | -------------------------- | ----------------------------------- |
+| Windows | Windows 10 及以上          | x64 / ARM64                         |
+| macOS   | macOS 12 (Monterey) 及以上 | Intel (x64) / Apple Silicon (arm64) |
+| Linux   | 见下表                     | x64 / ARM64                         |
+
+#### Windows
+
+| 文件                                     | 说明                                |
+| ---------------------------------------- | ----------------------------------- |
+| `CC-Switch-v3.19.0-Windows.msi`          | **推荐** - MSI 安装包，支持自动更新 |
+| `CC-Switch-v3.19.0-Windows-Portable.zip` | 便携版，解压即用，不写入注册表      |
+
+Windows ARM64 设备请选择文件名中带 `arm64` 标识的对应制品。
+
+#### macOS
+
+| 文件                             | 说明                                          |
+| -------------------------------- | --------------------------------------------- |
+| `CC-Switch-v3.19.0-macOS.dmg`    | **推荐** - DMG 安装包，拖入 Applications 即可 |
+| `CC-Switch-v3.19.0-macOS.zip`    | 解压后拖入 Applications，Universal Binary     |
+| `CC-Switch-v3.19.0-macOS.tar.gz` | 用于 Homebrew 安装和自动更新                  |
+
+Homebrew 安装：
+
+```bash
+brew install --cask cc-switch
+```
+
+更新：
+
+```bash
+brew upgrade --cask cc-switch
+```
+
+#### Linux
+
+Linux 资产同时提供 **x86_64** 和 **ARM64**（`aarch64`）两种架构。资产文件名中包含架构标识，请按你机器的 `uname -m` 输出选择对应版本：
+
+- `CC-Switch-v3.19.0-Linux-x86_64.AppImage` / `.deb` / `.rpm`
+- `CC-Switch-v3.19.0-Linux-arm64.AppImage` / `.deb` / `.rpm`
+
+| 发行版                                  | 推荐格式    | 安装方式                                                               |
+| --------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| Ubuntu / Debian / Linux Mint / Pop!\_OS | `.deb`      | `sudo dpkg -i CC-Switch-*.deb` 或 `sudo apt install ./CC-Switch-*.deb` |
+| Fedora / RHEL / CentOS / Rocky Linux    | `.rpm`      | `sudo rpm -i CC-Switch-*.rpm` 或 `sudo dnf install ./CC-Switch-*.rpm`  |
+| openSUSE                                | `.rpm`      | `sudo zypper install ./CC-Switch-*.rpm`                                |
+| Arch Linux / Manjaro                    | `.AppImage` | 添加执行权限后直接运行，或使用 AUR                                     |
+| 其他发行版 / 不确定                     | `.AppImage` | `chmod +x CC-Switch-*.AppImage && ./CC-Switch-*.AppImage`              |
+
 ## [3.18.0] - 2026-07-21
 
 > 这一版你可以做两件全新的事：**把 xAI 的 Grok CLI（Grok Build）交给 CC Switch 管理**——它成为第八个受管应用，供应商一键切换、MCP / Skills 同步、代理接管与用量统计一应俱全；以及**把 Grok 接进 Claude Code、Claude Desktop 和 Codex**——既可以直接用 xAI Grok 账号登录（设备码授权、无需 API Key，跑你的 Grok 订阅，Codex 侧自带严格网关兼容层，codex 0.142+ 也能跑通），也可以用 xAI API Key 接入（Codex 有原生 Responses 直连预设，Claude Code 可走本地路由）。同样重要的是一波修复：v3.17.0 引入的 **Codex 用量双计已修**，升级后自动重建数据，看板数字恢复真实；**codex 0.144.5+ 因模型目录无法启动的问题已修**；Windows 上切换供应商不再闪黑窗、不再卡住界面。诊断日志也从「每次启动清空」变为跨重启持久保留、按大小轮转、全面脱敏，界面崩溃会落盘留证而不再只剩一片白屏。
@@ -1329,7 +2045,7 @@ Linux 资产同时提供 **x86_64** 和 **ARM64**（`aarch64`）两种架构。�
 
 本版新增了 **Codex 统一会话历史** 开关——它涉及会话的迁移 / 还原，操作不当时容易让人误以为"会话丢了"，强烈建议先读这篇攻略；用量统计的口径和看板这一版也做了较多调整，一并附上：
 
-- **[Codex 统一会话历史：功能介绍与使用攻略](https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-unified-session-history-guide-zh.md)**：讲清"统一 / 迁移 / 还原"到底改了什么、为什么数据不会真正丢失，以及看不到会话时如何自查与精确还原。**用过这个开关、或担心会话丢失，请务必先读。**
+- **[Codex 统一会话历史：功能介绍与使用攻略](/zh/tutorials/codex-unified-session-history-guide)**：讲清"统一 / 迁移 / 还原"到底改了什么、为什么数据不会真正丢失，以及看不到会话时如何自查与精确还原。**用过这个开关、或担心会话丢失，请务必先读。**
 - **[用量统计](/zh/docs?section=proxy&item=usage)**：了解用量看板的数据来源（代理日志、会话同步）与统计口径，本版新增了全局的供应商 / 模型筛选，并把路由接管的真实计价模型展示了出来。
 - **[设置](/zh/docs?section=getting-started&item=settings)**：自定义 User-Agent 覆盖、Codex 统一会话历史等开关都在供应商表单的高级选项与设置页里。
 

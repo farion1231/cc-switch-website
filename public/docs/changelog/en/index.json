@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "version": "3.19.1",
+      "date": "2026-07-31",
+      "isPreRelease": false,
+      "summary": "The through-line of this release is **tying off the loose ends of the last one**: three Chinese Codex gateways have been confirmed to support the Responses API natively, so **local routing takeover is no longer required** — the DeepSeek and Volcengine Ark Coding Plan presets move from routed to direct, and the newly added Tencent Hunyuan TokenHub is direct from the start. Four failures you could hit in daily use are fixed: **Claude Desktop usage has been counted twice since v3.18.0** (the historical numbers correct themselves after upgrading, but there is a 30-day window — see \"Upgrade Notes\"), switching back to the official Codex provider left you stuck on a 401 with no login screen, upgrading Grok Build from Settings failed with nothing but `os error 2`, and enabling takeover on Grok Build returned a straight 404. On top of that, eight models that had been billed at $0 gain built-in pricing, and 39 interface strings have their language problem fixed. This release has **no database migration**, and it is the first release in this project's history that deletes more than it adds."
+    },
+    {
+      "version": "3.19.0",
+      "date": "2026-07-30",
+      "isPreRelease": false,
+      "summary": "The through-line of this release is **peace of mind**: a concentrated wave of security hardening — Skill installation, `ccswitch://` import confirmations, SQL backup imports, common-config merging, and terminal launching are all tightened, and two of those items are worth a minute of your attention — the Gemini common-config credential leak is fixed and scrubbed automatically after upgrading (**you need to rotate your keys**), and the `ccswitch://` MCP import confirmation could previously fail to show the command it was about to write (**if you have ever opened an import link of unknown origin, it is worth a check**); both are covered under \"Upgrade Notes\". Alongside them is one major proxy correctness fix — **reading images through the proxy no longer blows up your context** (a single screenshot used to eat 100,000+ tokens, and two or three were enough to jam a Codex session on 400s). The convenience side is just as substantial: **model pricing can be handed over to models.dev to maintain automatically**, usage from Grok CLI's official login mode and the SuperGrok subscription balance finally reach the dashboard, and **in-app updates now go through the `dl.ccswitch.io` mirror** — so upgrading works even when GitHub is hard to reach."
+    },
+    {
       "version": "3.18.0",
       "date": "2026-07-21",
       "isPreRelease": false,
