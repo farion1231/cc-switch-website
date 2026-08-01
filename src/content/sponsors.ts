@@ -28,7 +28,6 @@ import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import atlascloudIcon from '@/assets/icons/sponsors/atlascloud_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
-import unity2Icon from '@/assets/icons/sponsors/unity2.png';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
@@ -81,7 +80,6 @@ const sponsorDisplayOrder = [
   'pateway',
   'fenno',
   'runapi',
-  'unity2',
   'shengsuanyun',
   'aigocode',
   'aicoding',
@@ -786,30 +784,6 @@ export const sponsors: Sponsor[] = [
       zh: '专属链接注册即送 $5 体验额度',
       en: 'Free $5 credit on signup via exclusive link',
       ja: '専用リンク登録で $5 の無料クレジット',
-    },
-  },
-  {
-    id: 'unity2',
-    name: 'Unity2.ai',
-    icon: unity2Icon,
-    url: 'https://unity2.ai/register?source=ccs',
-    tier: 'standard',
-    category: 'relay',
-    iconBg: 'light',
-    tagline: {
-      zh: '高性能 AI 模型 API 中转平台',
-      en: 'High-performance AI model relay',
-      ja: '高性能 AI モデル API リレー',
-    },
-    description: {
-      zh: 'Unity2.ai 面向个人开发者、团队和企业提供高性能 AI 模型 API 中转服务，长期服务国内头部企业，日均承载超 300 亿 token 调用，支持 5000 RPM 级高并发、余额计费、组合订阅、企业开票和专属对接。',
-      en: 'Unity2.ai is a high-performance AI model API relay for individual developers, teams, and enterprises. Trusted by leading companies in China, it serves over 30 billion tokens per day with 5,000 RPM-class concurrency, balance billing, bundle subscriptions, corporate invoicing, and dedicated support.',
-      ja: 'Unity2.ai は個人開発者、チーム、企業向けの高性能 AI モデル API リレーです。中国の大手企業に長年利用され、1 日 300 億トークン以上を処理し、5000 RPM クラスの高並列、残高課金、組み合わせサブスクリプション、企業向け請求書、専任サポートに対応します。',
-    },
-    perk: {
-      zh: '注册领 $2，加入官方群再送 $10',
-      en: 'Get $2 on signup, plus $10 for joining the official group',
-      ja: '登録で $2、公式グループ参加でさらに $10',
     },
   },
   {
