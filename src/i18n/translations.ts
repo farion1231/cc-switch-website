@@ -16,6 +16,7 @@ export const translations = {
     // Common UI strings (loading states, 404 page, etc.)
     common: {
       loading: '加载中...',
+      mermaidError: 'Mermaid 渲染失败',
       notFound: {
         title: '页面未找到',
         backHome: '返回首页',
@@ -639,6 +640,7 @@ export const translations = {
     // Common UI strings (loading states, 404 page, etc.)
     common: {
       loading: 'Loading...',
+      mermaidError: 'Mermaid render failed',
       notFound: {
         title: 'Page Not Found',
         backHome: 'Back to home',
@@ -1262,6 +1264,7 @@ export const translations = {
     // Common UI strings (loading states, 404 page, etc.)
     common: {
       loading: '読み込み中...',
+      mermaidError: 'Mermaid のレンダリングに失敗しました',
       notFound: {
         title: 'ページが見つかりません',
         backHome: 'ホームへ戻る',
