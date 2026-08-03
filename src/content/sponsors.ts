@@ -31,7 +31,6 @@ import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
-import nekocodeIcon from '@/assets/icons/sponsors/nekocode-icon.png';
 import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
 import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
@@ -70,7 +69,7 @@ export interface Sponsor {
   featured?: boolean;
 }
 
-// Mirrors the main project's README order; website-only sponsors follow it.
+// Mirrors the main project's README order with explicit placements for website-only sponsors.
 const sponsorDisplayOrder = [
   'kimi-k2-7-code',
   'packycode',
@@ -82,6 +81,7 @@ const sponsorDisplayOrder = [
   'runapi',
   'shengsuanyun',
   'aigocode',
+  'qiniu',
   'aicoding',
   'subrouter',
   'apikey-fun',
@@ -92,7 +92,6 @@ const sponsorDisplayOrder = [
   'claudecn',
   'byteplus',
   'siliconflow',
-  'nekocode',
   'a6api',
   'atlascloud',
   'ucloud',
@@ -104,7 +103,6 @@ const sponsorDisplayOrder = [
   'cubence',
   'crazyrouter',
   'dmxapi',
-  'qiniu',
   'sudocode',
 ] as const;
 
@@ -118,9 +116,9 @@ export const sponsors: Sponsor[] = [
     name: 'Kimi K3',
     icon: kimiIcon,
     url: {
-      zh: 'https://platform.kimi.com?aff=cc-switch',
-      en: 'https://platform.kimi.ai?aff=cc-switch',
-      ja: 'https://platform.kimi.ai?aff=cc-switch',
+      zh: 'https://platform.kimi.com?track_id=track-6840233b42274ab4bcfd283e2bdd2aee&aff=cc-switch',
+      en: 'https://platform.kimi.ai?track_id=track-20d65732f0aa45dcb1df9691a15610af&aff=cc-switch',
+      ja: 'https://platform.kimi.ai?track_id=track-20d65732f0aa45dcb1df9691a15610af&aff=cc-switch',
     },
     tier: 'flagship',
     category: 'native-platform',
@@ -136,6 +134,11 @@ export const sponsors: Sponsor[] = [
       zh: 'Kimi K3 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型。K3 拥有 2.8T 参数、原生视觉能力与 100 万 Token 上下文，在长程编码、知识工作和推理任务中展现前沿性能。使用 CC Switch，可以在各类 Agent 工具中便捷配置和切换 Kimi。',
       en: "Kimi K3 is Moonshot AI's most capable model and the world's first open 3T-class model. With 2.8 trillion parameters, native vision, and a 1-million-token context window, K3 delivers frontier performance across long-horizon coding, knowledge work, and reasoning. CC Switch makes it easy to configure and switch to Kimi across agentic tools.",
       ja: 'Kimi K3 は Moonshot AI がこれまでに開発した中で最も高性能なモデルであり、世界初のオープンソース 3T クラスモデルです。2.8 兆パラメータ、ネイティブな視覚能力、100 万トークンのコンテキストウィンドウを備え、長期にわたるコーディング、ナレッジワーク、推論タスクにおいてフロンティア級の性能を発揮します。CC Switch を使えば、さまざまなエージェントツールで Kimi を手軽に設定・切り替えできます。',
+    },
+    perk: {
+      zh: '新用户首充返 10% API 额度，最高 ¥1000',
+      en: '10% bonus API credit on first top-up, up to CNY ¥1,000',
+      ja: '初回チャージの 10% を API クレジットで還元（最大 CNY ¥1,000）',
     },
   },
   {
@@ -833,30 +836,6 @@ export const sponsors: Sponsor[] = [
       en: '¥9.9 Coding Plan with $150 credit, up to 20% referral rewards',
       ja: '9.9 元で $150 相当の Coding Plan、紹介特典は最大 20%',
     },
-  },
-  {
-    id: 'nekocode',
-    name: 'NekoCode',
-    icon: nekocodeIcon,
-    url: 'https://nekocode.ai?aff=CCSWITCH',
-    tier: 'standard',
-    category: 'relay',
-    tagline: {
-      zh: '稳定可靠的 AI 模型 API 中转',
-      en: 'Stable, reliable AI model relay',
-      ja: '安定・高効率な AI モデル API リレー',
-    },
-    description: {
-      zh: 'NekoCode 为开发者提供稳定、高效、可靠的 Claude、Codex 等 AI 模型 API 中转服务，价格透明，接入便捷，支持灵活的按量计费。',
-      en: 'NekoCode gives developers stable, efficient, and reliable API relay access for Claude, Codex, and other AI models, with transparent pricing, simple integration, and flexible pay-as-you-go billing.',
-      ja: 'NekoCode は Claude や Codex などの AI モデルに対応した、安定性・効率性・信頼性に優れた API 中継サービスを提供します。料金体系は明瞭で、接続も簡単、柔軟な従量課金に対応しています。',
-    },
-    perk: {
-      zh: '充值 9 折，优惠码 cc-switch',
-      en: '10% off top-ups with code cc-switch',
-      ja: 'チャージ 10% オフ（コード cc-switch）',
-    },
-    couponCode: 'cc-switch',
   },
   {
     id: 'a6api',
