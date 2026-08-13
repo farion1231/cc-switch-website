@@ -166,7 +166,11 @@ export function SponsorCard({ sponsor, variant }: SponsorCardProps) {
         <TooltipTrigger asChild>
           <span className="absolute inset-0" />
         </TooltipTrigger>
-        <TooltipContent side="bottom" className="max-w-xs text-xs leading-relaxed">
+        <TooltipContent
+          side="bottom"
+          collisionPadding={16}
+          className="max-w-64 whitespace-normal break-words text-xs leading-relaxed"
+        >
           {description}
         </TooltipContent>
       </Tooltip>

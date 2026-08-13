@@ -942,14 +942,14 @@ export const sponsors: Sponsor[] = [
     category: 'aggregator',
     since: '2026-08',
     tagline: {
-      zh: '企业级 Token 工厂',
-      en: 'Enterprise-grade token factory',
-      ja: 'エンタープライズグレードのトークンファクトリー',
+      zh: '企业级超级 Token 工厂',
+      en: 'Enterprise-grade super token factory',
+      ja: 'エンタープライズグレードのスーパートークンファクトリー',
     },
     description: {
-      zh: 'XycAi 企业级 Token 工厂支持 200+ 全球模型一键接入，并提供 SLA 自动赔付与异常缓存费用 100% 退还。',
-      en: 'XycAi is an enterprise-grade token factory with one-click access to 200+ global models, automatic SLA compensation, and 100% refunds for abnormal cache charges.',
-      ja: 'XycAi はエンタープライズグレードのトークンファクトリーです。200+ のグローバルモデルにワンクリックで接続でき、SLA 自動補償と異常キャッシュ料金の 100% 返金を提供します。',
+      zh: 'XycAi 是企业级超级 Token 工厂，由海滴智能云（中澳合资集团旗下全资）旗下广州星道智能推出。提供 200+ 全球模型一键接入，覆盖文本、推理、图像、音频与视频；全时自建母号，支持专票、GST 税费等相关票据；全网首创 SLA 自动赔付与异常缓存 100% 退还，公开全站缓存命中率，并提供 7×24 小时探针、团队共享余额、智能分区分组和 CN2 回源 API 灾备线路。官方域名 xyc.ai，现用地址 xycai.us。',
+      en: 'XycAi is an enterprise-grade super token factory from Guangzhou Xingdao Intelligence under Haidi Intelligent Cloud, part of a Sino-Australian joint venture group. It provides one-click access to 200+ global models across text, reasoning, image, audio, and video; continuously self-managed master accounts; special VAT invoices, GST receipts, and other billing documents; industry-first automatic SLA compensation and 100% refunds for abnormal cache charges; public sitewide cache-hit metrics; 24/7 probes; shared team balances; smart region and group management; and CN2 origin API disaster recovery. Official domain: xyc.ai. Current site: xycai.us.',
+      ja: 'XycAi は、海滴智能云（中豪合弁グループ傘下）配下の広州星道智能が提供するエンタープライズグレードのスーパートークンファクトリーです。テキスト、推論、画像、音声、動画を含む 200+ のグローバルモデルへワンクリックで接続でき、常時自社管理のマスターアカウント、専用増値税発票や GST 税務書類などに対応します。業界初の SLA 自動補償と異常キャッシュ料金の 100% 返金、サイト全体のキャッシュヒット率公開、24 時間年中無休のプローブ、チーム残高共有、スマートなリージョン・グループ管理、CN2 オリジン API の災害対策回線を提供します。公式ドメインは xyc.ai、現在のサイトは xycai.us です。',
     },
     perk: {
       zh: 'SLA 自动赔付，异常缓存费用 100% 退还',
