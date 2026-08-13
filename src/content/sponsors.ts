@@ -35,6 +35,7 @@ import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
 import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
 import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
+import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -104,6 +105,7 @@ const sponsorDisplayOrder = [
   'crazyrouter',
   'dmxapi',
   'sudocode',
+  'xycai',
 ] as const;
 
 const sponsorDisplayRank = new Map<string, number>(
@@ -671,7 +673,7 @@ export const sponsors: Sponsor[] = [
     id: 'runapi',
     name: 'RunAPI',
     icon: runapiIcon,
-    url: 'https://runapi.co/register?aff=iOKB',
+    url: 'https://runapi.host/register?aff=iOKB',
     tier: 'standard',
     category: 'aggregator',
     since: '2025-10',
@@ -832,9 +834,9 @@ export const sponsors: Sponsor[] = [
       ja: 'Fenno.ai は安定・高効率な API リレーで、現在は Codex の中継を中心に提供しています。OpenAI / Anthropic 互換プロトコルに対応し、Codex、Claude Code、OpenCode などから利用でき、法人決済と請求書発行にも対応します。',
     },
     perk: {
-      zh: '9.9 元享 $150 Coding Plan，邀请最高 20% 奖励',
-      en: '¥9.9 Coding Plan with $150 credit, up to 20% referral rewards',
-      ja: '9.9 元で $150 相当の Coding Plan、紹介特典は最大 20%',
+      zh: '$1.99 享 $50 Trial Plan（7 天有效），邀请最高 20% 奖励',
+      en: '$1.99 Trial Plan with $50 credit for 7 days, up to 20% referral rewards',
+      ja: '$1.99 で $50 相当の Trial Plan（7 日間有効）、紹介特典は最大 20%',
     },
   },
   {
@@ -929,6 +931,30 @@ export const sponsors: Sponsor[] = [
       zh: '注册并加入 QQ 群 726213516，联系群主领取 ¥10 试用额度',
       en: 'Sign up, join QQ group 726213516, and contact the group owner for CNY ¥10 trial credit',
       ja: '登録後 QQ グループ 726213516 に参加し、管理者へ連絡すると CNY ¥10 のトライアルクレジットを進呈',
+    },
+  },
+  {
+    id: 'xycai',
+    name: 'XycAi',
+    icon: xycaiIcon,
+    url: 'https://xycai.us/register?aff=Uhu9',
+    tier: 'standard',
+    category: 'aggregator',
+    since: '2026-08',
+    tagline: {
+      zh: '企业级 Token 工厂',
+      en: 'Enterprise-grade token factory',
+      ja: 'エンタープライズグレードのトークンファクトリー',
+    },
+    description: {
+      zh: 'XycAi 企业级 Token 工厂支持 200+ 全球模型一键接入，并提供 SLA 自动赔付与异常缓存费用 100% 退还。',
+      en: 'XycAi is an enterprise-grade token factory with one-click access to 200+ global models, automatic SLA compensation, and 100% refunds for abnormal cache charges.',
+      ja: 'XycAi はエンタープライズグレードのトークンファクトリーです。200+ のグローバルモデルにワンクリックで接続でき、SLA 自動補償と異常キャッシュ料金の 100% 返金を提供します。',
+    },
+    perk: {
+      zh: 'SLA 自动赔付，异常缓存费用 100% 退还',
+      en: 'Automatic SLA compensation and 100% abnormal cache refunds',
+      ja: 'SLA 自動補償、異常キャッシュ料金を 100% 返金',
     },
   },
 ].sort(
