@@ -36,6 +36,7 @@ import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
 import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
 import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
 import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
+import ppioIcon from '@/assets/icons/sponsors/ppio.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -89,6 +90,7 @@ const sponsorDisplayOrder = [
   'claudeapi',
   'code0',
   'teamorouter',
+  'ppio',
   'new-api',
   'claudecn',
   'byteplus',
@@ -321,6 +323,30 @@ export const sponsors: Sponsor[] = [
       zh: '新用户首次充值 9 折',
       en: '10% off first top-up for new users',
       ja: '新規ユーザー初回チャージ 10% オフ',
+    },
+  },
+  {
+    id: 'ppio',
+    name: 'PPIO',
+    icon: ppioIcon,
+    url: 'https://ppio.com/activity/ccswitch',
+    tier: 'standard',
+    category: 'native-platform',
+    since: '2026-08',
+    tagline: {
+      zh: '国内领先的独立 Agentic Cloud',
+      en: 'Leading independent Agentic Cloud in China',
+      ja: '中国有数の独立系 Agentic Cloud',
+    },
+    description: {
+      zh: 'PPIO 是国内领先的独立 Agentic Cloud 服务商，由 PPTV 创始人姚欣和前 PPTV 首席架构师王闻宇于 2018 年联合创立。一个 API Key 即可调用 DeepSeek-V4-Flash、Kimi-K3、GLM-5.2、MiniMax-M3 等旗舰开源模型；企业 Token Plan 最低 6 折并支持 200 席位，Fusion 融合模型以 1/10 的价格比肩 Fable5。',
+      en: 'PPIO is a leading independent Agentic Cloud provider in China, co-founded in 2018 by PPTV founder Yao Xin and former PPTV chief architect Wang Wenyu. One API key provides access to flagship open-source models such as DeepSeek-V4-Flash, Kimi-K3, GLM-5.2, and MiniMax-M3. Its enterprise Token Plan is available at up to 40% off for as many as 200 seats, while the Fusion blended model matches Fable5 at one-tenth of the price.',
+      ja: 'PPIO は中国有数の独立系 Agentic Cloud プロバイダーで、PPTV 創業者の姚欣氏と元 PPTV チーフアーキテクトの王聞宇氏が 2018 年に共同設立しました。API キー 1 つで DeepSeek-V4-Flash、Kimi-K3、GLM-5.2、MiniMax-M3 などの主要なオープンソースモデルを利用できます。法人向け Token Plan は最大 40% オフで 200 席まで対応し、Fusion 融合モデルは 1/10 の価格で Fable5 に匹敵します。',
+    },
+    perk: {
+      zh: '实名认证送 ¥10 代金券，邀请充值最高返 15%',
+      en: '¥10 voucher after identity verification, plus up to 15% referral cashback',
+      ja: '本人確認で ¥10 クーポン、紹介チャージで最大 15% キャッシュバック',
     },
   },
   {

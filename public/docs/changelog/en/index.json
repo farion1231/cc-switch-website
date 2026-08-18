@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "version": "3.20.0",
+      "date": "2026-08-18",
+      "isPreRelease": false,
+      "summary": "Three structural lines carry this release: **Pi becomes the ninth managed app** — providers, prompts, Skills, a session browser and usage statistics, all in one place; **Codex gains multiple ChatGPT accounts** — sign in to as many as you like in the Auth Center, bind each official card to its own account, and never cross-bill a switch; and **Claude Code's built-in WebSearch finally works under GPT routing**. There is one urgent fix too: v3.19.2 could not update or switch existing configurations on WSL paths — affected users should upgrade straight to this release. The same Windows wave brings a version-detection overhaul (five issues fixed at once), the startup flash fix, and the MSI registry-key cleanup. This release **includes a database migration (v16 → v17)** — a backup is created automatically before migrating, and downgrading requires restoring it."
+    },
+    {
+      "version": "3.19.2",
+      "date": "2026-08-06",
+      "isPreRelease": false,
+      "summary": "The through-line of this release is **getting the numbers right and pinning down the boundaries**: Codex usage accounting fixes a defect that could count an interleaved-counter file several times over — new data is correct immediately after upgrading, and inflated history can be corrected with a one-time manual rebuild (see \"Upgrade Notes\"); a six-part security hardening pass caps every unbounded read across usage scripts, session logs, catalog files, and buffered proxy response bodies. The everyday conveniences are filled in too: the MCP / prompt / Skills panels can be searched, and MCP and Skills gain one-click per-app bulk toggles; the Auth Center shows each ChatGPT account's subscription usage; OMO users get a working integration back. With two write paths batched, backup imports, automatic sync, and usage re-imports no longer stall at every turn on large databases. This release has **no database migration**."
+    },
+    {
       "version": "3.19.1",
       "date": "2026-07-31",
       "isPreRelease": false,
