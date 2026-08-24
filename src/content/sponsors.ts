@@ -302,9 +302,9 @@ export const sponsors: Sponsor[] = [
     name: 'TeamoRouter',
     icon: teamorouterIcon,
     url: {
-      zh: 'https://teamorouter.com/zh?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
-      en: 'https://teamorouter.com/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
-      ja: 'https://teamorouter.com/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+      zh: 'https://teamorouter.cn/zh?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+      en: 'https://teamorouter.cn/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
+      ja: 'https://teamorouter.cn/?utm_source=cc_switch&utm_medium=referral&utm_campaign=ai_directory',
     },
     tier: 'standard',
     category: 'aggregator',
