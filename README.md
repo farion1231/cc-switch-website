@@ -1,3 +1,5 @@
+
+
 # CC Switch Website
 
 CC Switch 官方网站，展示产品功能、文档和更新日志。
@@ -23,6 +25,9 @@ npm run dev
 
 # 构建生产版本
 npm run build
+
+# 预览生产版本
+npm run preview
 
 # 运行完整质量检查
 npm run check
