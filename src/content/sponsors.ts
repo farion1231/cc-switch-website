@@ -1,5 +1,6 @@
 import type { Language } from '@/i18n/translations';
 
+import code9527Icon from '@/assets/icons/sponsors/9527code.svg';
 import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
 import packycodeIcon from '@/assets/icons/sponsors/packycode.svg';
 import aicodingIcon from '@/assets/icons/sponsors/aicoding.svg';
@@ -87,6 +88,7 @@ const sponsorDisplayOrder = [
   'aicoding',
   'subrouter',
   'apikey-fun',
+  '9527code',
   'claudeapi',
   'code0',
   'teamorouter',
@@ -742,6 +744,30 @@ export const sponsors: Sponsor[] = [
       zh: '专属链接注册，充值永久最高 95 折',
       en: 'Exclusive link: up to permanent 5% off top-ups',
       ja: '専用リンク登録でチャージ永久最大 5% オフ',
+    },
+  },
+  {
+    id: '9527code',
+    name: '9527CODE',
+    icon: code9527Icon,
+    url: 'https://9527.codes/register?aff=e5zI',
+    tier: 'standard',
+    category: 'aggregator',
+    since: '2026-09',
+    tagline: {
+      zh: '企业级线路，质保 99.99% 可用',
+      en: 'Enterprise-grade routes with 99.99% availability',
+      ja: 'エンタープライズ回線、可用性 99.99% を保証',
+    },
+    description: {
+      zh: '快速、稳定、高可用。联系客服领取试用额度。邀请返现无上限。不稳定包赔偿！让你感受网线插在官方服务器的体验！',
+      en: 'Fast, stable, and highly available. Contact support for trial credit, earn unlimited referral cashback, and receive compensation for instability. Experience a connection that feels plugged directly into the official servers.',
+      ja: '高速・安定・高可用性。サポートへの連絡でトライアルクレジットを進呈し、紹介キャッシュバックは上限なし。不安定な場合は補償します。公式サーバーへ直接接続したような体験を提供します。',
+    },
+    perk: {
+      zh: '联系客服领取试用额度，邀请返现无上限',
+      en: 'Contact support for trial credit and unlimited referral cashback',
+      ja: 'サポート連絡で体験クレジット、紹介還元は上限なし',
     },
   },
   {
