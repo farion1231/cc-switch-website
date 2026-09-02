@@ -10,6 +10,7 @@ import {
 } from '@/content/sponsors';
 import { fadeInUpItem } from '@/lib/motion';
 import { cn, displayDomain } from '@/lib/utils';
+import { SponsorLogo } from './SponsorLogo';
 import { SponsorPerkBadge } from './SponsorPerkBadge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -55,9 +56,10 @@ export function SponsorCard({ sponsor, variant }: SponsorCardProps) {
             hasCustomBg ? customBgClass : 'bg-primary/10',
           )}
         >
-          <img
+          <SponsorLogo
             src={iconSrc}
-            alt={name}
+            name={name}
+            followsTheme={sponsor.iconFollowsTheme}
             className={cn(
               'h-12 w-12 md:h-14 md:w-14',
               hasCustomBg && 'h-full w-full object-contain',
@@ -114,9 +116,10 @@ export function SponsorCard({ sponsor, variant }: SponsorCardProps) {
               hasCustomBg ? customBgClass : 'bg-primary/10',
             )}
           >
-            <img
+            <SponsorLogo
               src={iconSrc}
-              alt={name}
+              name={name}
+              followsTheme={sponsor.iconFollowsTheme}
               className={cn(
                 'h-8 w-8 md:h-10 md:w-10',
                 hasCustomBg && 'h-full w-full object-contain',
@@ -181,9 +184,10 @@ export function SponsorCard({ sponsor, variant }: SponsorCardProps) {
             hasCustomBg ? customBgClass : 'bg-primary/10',
           )}
         >
-          <img
+          <SponsorLogo
             src={iconSrc}
-            alt={name}
+            name={name}
+            followsTheme={sponsor.iconFollowsTheme}
             className={cn(
               'h-6 w-6',
               hasCustomBg && 'h-full w-full object-contain',

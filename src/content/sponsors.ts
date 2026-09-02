@@ -68,6 +68,7 @@ export interface Sponsor {
   couponCode?: string;
   banner?: LocalizedAsset;
   iconBg?: 'light' | 'dark' | 'auto';
+  iconFollowsTheme?: boolean;
   since?: string;
   featured?: boolean;
 }
@@ -753,6 +754,7 @@ export const sponsors: Sponsor[] = [
     url: 'https://9527.codes/register?aff=e5zI',
     tier: 'standard',
     category: 'aggregator',
+    iconFollowsTheme: true,
     since: '2026-09',
     tagline: {
       zh: '企业级线路，质保 99.99% 可用',

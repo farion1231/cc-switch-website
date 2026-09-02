@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 883 686">
   <title>9527 CODE</title>
-  <path fill="#4F46E5" opacity=".82" d="M282 0h217l123 235v3H381l-45 90h334l137 265 76-9-27 102H622L502 454 220 561H0Z"/>
-  <path fill="#4F46E5" d="m282 1 216 2-278 556L1 560Zm411 379 4 1 157 304H622l-8-14-112-218Z"/>
+  <path fill="currentColor" opacity=".82" d="M282 0h217l123 235v3H381l-45 90h334l137 265 76-9-27 102H622L502 454 220 561H0Z"/>
+  <path fill="currentColor" d="m282 1 216 2-278 556L1 560Zm411 379 4 1 157 304H622l-8-14-112-218Z"/>
 </svg>

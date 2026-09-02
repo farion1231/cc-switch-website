@@ -10,6 +10,7 @@ import {
   sponsors,
 } from '@/content/sponsors';
 import { cn, displayDomain } from '@/lib/utils';
+import { SponsorLogo } from './SponsorLogo';
 
 const lightLogoBg = 'bg-white dark:bg-white/95 p-1';
 const darkLogoBg = 'bg-[#0b0b10] p-1';
@@ -129,12 +130,12 @@ export function SponsorPerksTable() {
                               logoBgClass(sponsor.iconBg),
                             )}
                           >
-                            <img
+                            <SponsorLogo
                               src={iconSrc}
-                              alt={name}
+                              name={name}
+                              followsTheme={sponsor.iconFollowsTheme}
                               className="h-full w-full object-contain"
                               loading="lazy"
-                              decoding="async"
                             />
                           </div>
                           <span className="font-medium text-foreground">{name}</span>
@@ -195,12 +196,12 @@ export function SponsorPerksTable() {
                         logoBgClass(sponsor.iconBg),
                       )}
                     >
-                      <img
+                      <SponsorLogo
                         src={iconSrc}
-                        alt={name}
+                        name={name}
+                        followsTheme={sponsor.iconFollowsTheme}
                         className="h-full w-full object-contain"
                         loading="lazy"
-                        decoding="async"
                       />
                     </div>
                     <div className="min-w-0 flex-1">
