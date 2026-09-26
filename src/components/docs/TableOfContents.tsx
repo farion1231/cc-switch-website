@@ -1,12 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { cn, scrollToAnchor, slugify } from '@/lib/utils';
+import { cn, scrollToAnchor } from '@/lib/utils';
+import { extractHeadings, type MarkdownHeading } from '@/lib/headings';
 import { useLanguage } from '@/i18n/useLanguage';
-
-interface TocItem {
-  id: string;
-  text: string;
-  level: number;
-}
 
 interface TableOfContentsProps {
   content: string;
@@ -17,23 +12,10 @@ export function TableOfContents({ content, className }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('');
   const { t } = useLanguage();
 
-  // Extract headings from markdown content
-  const headings = useMemo(() => {
-    const regex = /^(#{1,3})\s+(.+)$/gm;
-    const items: TocItem[] = [];
-    let match;
-
-    while ((match = regex.exec(content)) !== null) {
-      const level = match[1].length;
-      const text = match[2].trim();
-
-      if (level <= 3) {
-        items.push({ id: slugify(text), text, level });
-      }
-    }
-
-    return items;
-  }, [content]);
+  const headings = useMemo<MarkdownHeading[]>(
+    () => extractHeadings(content).filter((heading) => heading.level <= 3),
+    [content],
+  );
 
   // Track scroll position to highlight active heading
   useEffect(() => {

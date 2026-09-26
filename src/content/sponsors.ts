@@ -124,7 +124,7 @@ const sponsorDisplayRank = new Map<string, number>(
   sponsorDisplayOrder.map((id, index) => [id, index]),
 );
 
-export const sponsors: Sponsor[] = [
+export const sponsors: Sponsor[] = ([
   {
     id: 'kimi-k2-7-code',
     name: 'Kimi K3',
@@ -1038,7 +1038,7 @@ export const sponsors: Sponsor[] = [
       ja: 'SLA 自動補償、異常キャッシュ料金を 100% 返金',
     },
   },
-].sort(
+] satisfies Sponsor[]).sort(
   (left, right) =>
     (sponsorDisplayRank.get(left.id) ?? sponsorDisplayOrder.length) -
     (sponsorDisplayRank.get(right.id) ?? sponsorDisplayOrder.length),

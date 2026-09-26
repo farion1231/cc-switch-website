@@ -181,4 +181,21 @@ ${alternateLinks(alternates, path)}
 </urlset>
 `;
 
-writeFileSync('public/sitemap.xml', xml);
+// --check (part of `npm run check`): fail when a changelog version, tutorial or
+// docs page is missing from the committed sitemap. lastmod is ignored.
+if (process.argv.includes('--check')) {
+  const withoutLastmod = (text) => text.replace(/<lastmod>[^<]*<\/lastmod>/g, '');
+  let committed = '';
+  try {
+    committed = readFileSync('public/sitemap.xml', 'utf8');
+  } catch {
+    // treated as out of date below
+  }
+  if (withoutLastmod(committed) !== withoutLastmod(xml)) {
+    console.error('[sitemap] public/sitemap.xml is out of date; run `npm run generate:sitemap`.');
+    process.exit(1);
+  }
+  console.log(`[sitemap] up to date (${urls.length} URLs)`);
+} else {
+  writeFileSync('public/sitemap.xml', xml);
+}

@@ -71,12 +71,12 @@ manifest.json 结构（字段变更时两边同步改）：
 1. **开通 R2**：Cloudflare 面板 → R2（需绑定付款方式；免费额度内不扣费：存储 10GB·月、读 1000 万次/月、出口流量无限免费）。
 2. **建 bucket**：名为 `cc-switch-releases`（与 workflow 中 `R2_BUCKET` 一致）。
 3. **绑自定义域**：bucket → Settings → Custom Domains → 添加 `dl.ccswitch.io`。绑定后才有 CDN 缓存和免费下载；不要用 `r2.dev` 开发域（限速且不可缓存）。
-4. **配置 CORS**（必须，否则前端跨域拉不到 manifest）：bucket → Settings → CORS Policy：
+4. **配置 CORS**（必须，否则前端跨域拉不到 manifest）：bucket → Settings → CORS Policy。`www.ccswitch.io` 也能直接打开站点，漏掉它的话，从 www 进来的访客拉不到 manifest，下载页会退回 GitHub 链接。线上规则若有调整，以面板导出的为准：
 
    ```json
    [
      {
-       "AllowedOrigins": ["https://ccswitch.io", "http://localhost:8080"],
+       "AllowedOrigins": ["https://ccswitch.io", "https://www.ccswitch.io", "http://localhost:8080"],
        "AllowedMethods": ["GET", "HEAD"],
        "AllowedHeaders": ["*"],
        "MaxAgeSeconds": 86400

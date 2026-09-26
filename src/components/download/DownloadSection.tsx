@@ -101,6 +101,9 @@ function PrimaryDownload({
       {platform === 'windows' && (
         <p className="text-sm text-muted-foreground">{t.downloadPage.windowsArchHint}</p>
       )}
+      {platform === 'linux' && (
+        <p className="max-w-xl text-center text-sm text-muted-foreground">{t.downloadPage.linuxRequirement}</p>
+      )}
 
       <p className="text-xs text-muted-foreground/80">{t.downloadPage.otherPlatformsHint}</p>
     </motion.div>
@@ -239,11 +242,18 @@ function PlatformMatrix({ manifest, initialPlatform }: { manifest: DownloadManif
       {activePlatform === 'macos' && (
         <p className="mt-3 text-center text-sm text-muted-foreground">{t.downloadPage.macNotarized}</p>
       )}
+      {activePlatform === 'linux' && (
+        <p className="mt-3 text-center text-sm text-muted-foreground">{t.downloadPage.linuxRequirement}</p>
+      )}
       {rows.some((row) => row.files.some((file) => file.sha256)) && (
         <p className="mt-3 text-center text-xs leading-relaxed text-muted-foreground/90">
           {t.downloadPage.verifyIntro}{' '}
           <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-foreground">
-            {activePlatform === 'windows' ? 'certutil -hashfile <file> SHA256' : 'shasum -a 256 <file>'}
+            {activePlatform === 'windows'
+              ? 'certutil -hashfile <file> SHA256'
+              : activePlatform === 'linux'
+                ? 'sha256sum <file>'
+                : 'shasum -a 256 <file>'}
           </code>
           {t.downloadPage.verifyOutro}
         </p>

@@ -14,6 +14,7 @@ import {
 } from '@/lib/changelog';
 import { getLocalizedPath } from '@/i18n/routes';
 import { useLanguage } from '@/i18n/useLanguage';
+import { jumpToHeading } from '@/lib/utils';
 
 const indexCache = new Map<string, ChangelogIndex>();
 const versionCache = new Map<string, string>();
@@ -133,7 +134,7 @@ export default function ChangelogPage() {
   useEffect(() => {
     if (!versionData) return;
     const id = decodeURIComponent(window.location.hash.slice(1));
-    if (id) document.getElementById(id)?.scrollIntoView();
+    if (id) return jumpToHeading(id);
   }, [versionData]);
 
   // No /:version in URL → redirect to latest once index is ready.

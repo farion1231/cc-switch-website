@@ -10,6 +10,7 @@ import {
   XAxis,
   type TooltipProps,
 } from 'recharts';
+import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 
@@ -189,7 +190,7 @@ function StatsTooltip({
   active,
   payload,
   lines,
-}: TooltipProps<number, string> & { lines: MetricLine[] }) {
+}: TooltipProps<ValueType, NameType> & { lines: MetricLine[] }) {
   const point = payload?.[0]?.payload as NormalizedChartDataPoint | undefined;
   if (!active || !point) return null;
 

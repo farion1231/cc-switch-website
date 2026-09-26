@@ -101,13 +101,17 @@ export function detectPlatform(): DownloadPlatform | null {
 export async function detectArch(): Promise<Exclude<DownloadArch, 'universal'> | null> {
   try {
     const uaData = getUAData();
-    if (!uaData?.getHighEntropyValues) return null;
-    const { architecture } = await uaData.getHighEntropyValues(['architecture']);
-    if (architecture === 'arm') return 'arm64';
-    if (architecture === 'x86') return 'x64';
+    if (uaData?.getHighEntropyValues) {
+      const { architecture } = await uaData.getHighEntropyValues(['architecture']);
+      if (architecture === 'arm') return 'arm64';
+      if (architecture === 'x86') return 'x64';
+    }
   } catch {
-    // Client hints unavailable or blocked; callers fall back to defaults.
+    // Client hints unavailable or blocked; fall through to the UA string.
   }
+  // Firefox has no client hints but names ARM Linux in its UA ("Linux aarch64").
+  // An x64 AppImage cannot run there, unlike x64 builds on Windows on ARM.
+  if (/aarch64|arm64/i.test(navigator.userAgent)) return 'arm64';
   return null;
 }
 

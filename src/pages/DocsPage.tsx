@@ -11,6 +11,7 @@ import { getDocSections } from '@/content/docs/navigation';
 import { SiteFooter } from '@/components/ccswitch/SiteFooter';
 import { ChevronLeft, ChevronRight, Edit, Clock, Search } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
+import { jumpToHeading } from '@/lib/utils';
 
 type FlattenedDocNavItem = {
   sectionId: string;
@@ -60,8 +61,9 @@ export default function DocsPage() {
   // Jump instantly like native anchors; headings carry scroll-mt-24 for the fixed header.
   useEffect(() => {
     if (isLoading || !pendingAnchorRef.current) return;
-    document.getElementById(pendingAnchorRef.current)?.scrollIntoView();
+    const anchor = pendingAnchorRef.current;
     pendingAnchorRef.current = '';
+    return jumpToHeading(anchor);
   }, [isLoading, content]);
 
   // Keyboard shortcut for search (Cmd+K / Ctrl+K)

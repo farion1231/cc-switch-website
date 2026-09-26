@@ -53,8 +53,22 @@
   Cache-Control: public, max-age=86400
 /favicon.png
   Cache-Control: public, max-age=86400
-/placeholder.svg
-  Cache-Control: public, max-age=86400
+
+# Raw markdown fetched by the SPA. The rendered pages live under /<lang>/docs,
+# /<lang>/changelog and /<lang>/tutorials; keep the source files out of search.
+# /docs and /docs/ themselves are SPA routes, so no /docs/* wildcard here.
+/docs/zh/*
+  X-Robots-Tag: noindex
+/docs/en/*
+  X-Robots-Tag: noindex
+/docs/ja/*
+  X-Robots-Tag: noindex
+/docs/changelog/*
+  X-Robots-Tag: noindex
+/docs/tutorials/*
+  X-Robots-Tag: noindex
+/docs/release-notes/*
+  X-Robots-Tag: noindex
 
 # SEO discovery files — short cache so updates propagate quickly
 /sitemap.xml

@@ -1,4 +1,4 @@
-import { slugify } from './utils';
+import { extractHeadings } from './headings';
 
 export interface ChangelogVersion {
   version: string;
@@ -70,17 +70,17 @@ export function stripChangelogVersionHeading(content: string) {
   return content.replace(/^## \[[^\]]+\]\s*-\s*\d{4}-\d{2}-\d{2}\s*\n*/m, '');
 }
 
+// Ids come from the same content VersionCard renders, so repeated headings
+// get the same -1, -2 suffixes as on the page.
 export function getVersionTocItems(content: string): ChangelogTocItem[] {
-  const regex = /^### (.+)$/gm;
   const items: ChangelogTocItem[] = [];
-  let match: RegExpExecArray | null;
 
-  while ((match = regex.exec(content)) !== null) {
-    const text = match[1].trim().replace(/^[\p{Extended_Pictographic}️\s]+/u, '');
-    const lowerText = text.toLowerCase();
-    if (sectionTitleExclusions.has(lowerText)) continue;
+  for (const heading of extractHeadings(stripChangelogVersionHeading(content))) {
+    if (heading.level !== 3) continue;
+    const text = heading.text.replace(/^[\p{Extended_Pictographic}️\s]+/u, '');
+    if (sectionTitleExclusions.has(text.toLowerCase())) continue;
 
-    items.push({ text, id: slugify(text) });
+    items.push({ text, id: heading.id });
   }
 
   return items;
