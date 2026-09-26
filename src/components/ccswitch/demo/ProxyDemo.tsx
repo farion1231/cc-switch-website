@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Activity, ChevronUp, Clock, ListOrdered, Server, TrendingUp } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { claudeProviders, codexProviders, geminiProviders } from '@/content/providers';
+import { claudeProviders, codexProviders, geminiProviders, type Provider } from '@/content/providers';
 import { useLanguage } from '@/i18n/useLanguage';
 import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 
@@ -27,19 +27,17 @@ export function ProxyContent() {
   const [grokBuildEnabled, setGrokBuildEnabled] = useState(false);
   const [logEnabled, setLogEnabled] = useState(true);
 
+  const queue = (providers: Provider[], names: string[]) =>
+    names.map((name, index) => {
+      const provider = providers.find((item) => item.name === name);
+      return { rank: index + 1, name, subtitle: provider?.subtitle ?? '', status: t.demo.proxy.normal };
+    });
+
+  // Queue relay providers by name so reordering the demo cards never puts an official login here.
   const failoverQueues = {
-    Claude: [
-      { rank: 1, name: claudeProviders[0].name, subtitle: claudeProviders[0].subtitle, status: t.demo.proxy.normal },
-      { rank: 2, name: claudeProviders[1].name, subtitle: claudeProviders[1].subtitle, status: t.demo.proxy.normal },
-    ],
-    Codex: [
-      { rank: 1, name: codexProviders[0].name, subtitle: codexProviders[0].subtitle, status: t.demo.proxy.normal },
-      { rank: 2, name: codexProviders[2].name, subtitle: codexProviders[2].subtitle, status: t.demo.proxy.normal },
-    ],
-    Gemini: [
-      { rank: 1, name: geminiProviders[0].name, subtitle: geminiProviders[0].subtitle, status: t.demo.proxy.normal },
-      { rank: 2, name: geminiProviders[1].name, subtitle: geminiProviders[1].subtitle, status: t.demo.proxy.normal },
-    ],
+    Claude: queue(claudeProviders, ['PackyCode', 'ZetaAPI']),
+    Codex: queue(codexProviders, ['PackyCode', 'AICodeMirror']),
+    Gemini: queue(geminiProviders, ['PackyCode', 'APINebula']),
   };
 
   const proxyToggles: ProxyToggle[] = [
