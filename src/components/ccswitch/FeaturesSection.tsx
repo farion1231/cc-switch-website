@@ -72,7 +72,7 @@ export function FeaturesSection() {
             </div>
             <div className="flex items-center gap-2 text-foreground">
               <Layers className="w-5 h-5 text-success" />
-              <span className="font-semibold">7</span>
+              <span className="font-semibold">10</span>
               <span className="text-muted-foreground">{t.hero.supportedCli}</span>
             </div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-warm/10 border border-accent-warm/30 text-accent-warm text-sm font-medium">

@@ -1,7 +1,7 @@
 {
-  "name": "CC Switch - AI Coding CLI Control Surface",
+  "name": "CC Switch - AI Coding Tool Manager",
   "short_name": "CC Switch",
-  "description": "Official website for CC Switch, the open source control surface for AI coding CLI workflows.",
+  "description": "Official website for CC Switch, the free, open source desktop app for managing providers, local routing, MCP, Skills, sessions, and usage across AI coding tools.",
   "start_url": "/zh/",
   "scope": "/",
   "display": "standalone",

@@ -66,7 +66,8 @@ export interface Sponsor {
   tagline: LocalizedText;
   description: LocalizedText;
   perk?: LocalizedText;
-  couponCode?: string;
+  /** A plain string shows in every language; a per-language map shows only where the code applies. */
+  couponCode?: string | Partial<Record<Language, string>>;
   banner?: LocalizedAsset;
   bannerLinks?: Array<{
     label: LocalizedText;
@@ -267,8 +268,8 @@ export const sponsors: Sponsor[] = [
     },
     description: {
       zh: 'AICodeMirror 提供 Claude Code / Codex / Gemini CLI 官方高稳定中转服务，支持企业级高并发、极速开票、7×24 专属技术支持。Claude Code 低至 3.8 折，Codex 0.2 折，Gemini 0.9 折。',
-      en: 'AICodeMirror delivers high-stability official relays for Claude Code, Codex, and Gemini CLI with enterprise concurrency, fast invoicing, and 24/7 dedicated support. Claude Code from 38% off, Codex from 2%, Gemini from 9%.',
-      ja: 'AICodeMirror は Claude Code / Codex / Gemini CLI に対応する公式高安定中継サービス。企業向け高並列処理、即日インボイス、24 時間体制の専属サポートを提供。Claude Code は 62% オフから利用可能。',
+      en: 'AICodeMirror delivers high-stability official relays for Claude Code, Codex, and Gemini CLI with enterprise concurrency, fast invoicing, and 24/7 dedicated support. Claude Code / Codex / Gemini at as low as 38% / 2% / 9% of the original price.',
+      ja: 'AICodeMirror は Claude Code / Codex / Gemini CLI に対応する公式高安定中継サービス。企業向け高並列処理、即日インボイス、24 時間体制の専属サポートを提供。Claude Code / Codex / Gemini は最安で元価格の 38% / 2% / 9%。',
     },
     perk: {
       zh: '首充 8 折，企业最高 7.5 折',
@@ -323,8 +324,8 @@ export const sponsors: Sponsor[] = [
     },
     perk: {
       zh: '注册即送 $3，充值低至 6 折',
-      en: 'Free $3 on signup, recharge as low as 40% off',
-      ja: '登録で $3、最大 60% オフ',
+      en: 'Free $3 on signup, top-ups as low as 60% of the original price',
+      ja: '登録で $3、チャージは最安で元価格の 60%',
     },
   },
   {
@@ -431,7 +432,7 @@ export const sponsors: Sponsor[] = [
       en: '500K free tokens per model on signup',
       ja: '登録でモデルごとに 50 万トークン無料',
     },
-    couponCode: '6J6FV5N2',
+    couponCode: { zh: '6J6FV5N2' },
   },
   {
     id: 'siliconflow',
@@ -509,7 +510,7 @@ export const sponsors: Sponsor[] = [
   },
   {
     id: 'ucloud',
-    name: { zh: '优云智算', en: 'UCloud', ja: 'UCloud' },
+    name: { zh: '优云智算', en: 'Compshare', ja: 'Compshare' },
     icon: ucloudIcon,
     url: 'https://www.compshare.cn/coding-plan?ytag=GPU_YY_YX_git_cc-switch',
     tier: 'standard',
@@ -522,8 +523,8 @@ export const sponsors: Sponsor[] = [
     },
     description: {
       zh: '优云智算是 UCloud 旗下 AI 云平台，提供国内外稳定模型 API。主打高性价比国模 Coding Plan 套餐，支持 Claude Code、Codex 与 API 调用，企业高并发、7×24 技术支持、自助开票。',
-      en: 'AI cloud by UCloud offering stable Chinese and global model APIs. Cost-effective Coding Plans for Claude Code, Codex, and API access with enterprise concurrency, 24/7 support, and self-serve invoices.',
-      ja: 'UCloud の AI クラウドプラットフォーム。国内外の安定したモデル API を提供し、Coding Plan・Claude Code・Codex に対応。法人向けに高並列処理、24 時間サポート、セルフ請求書発行を備えます。',
+      en: 'Compshare is the AI cloud by UCloud, offering stable Chinese and global model APIs. Cost-effective Coding Plans for Claude Code, Codex, and API access with enterprise concurrency, 24/7 support, and self-serve invoices.',
+      ja: 'Compshare は UCloud 傘下の AI クラウドプラットフォーム。国内外の安定したモデル API を提供し、Coding Plan・Claude Code・Codex に対応。法人向けに高並列処理、24 時間サポート、セルフ請求書発行を備えます。',
     },
     perk: {
       zh: '注册送 ¥5 平台体验金',
@@ -584,7 +585,7 @@ export const sponsors: Sponsor[] = [
     id: 'sssaicode',
     name: 'SSSAiCode',
     icon: sssaicodeIcon,
-    url: 'https://www.sssaicode.com/register?ref=DCP0SM',
+    url: 'https://sssaicodeapi.com/register?ref=DCP0SM',
     tier: 'standard',
     category: 'relay',
     since: '2025-08',
@@ -765,9 +766,9 @@ export const sponsors: Sponsor[] = [
       ja: 'FluxA × Baidu AI Cloud AgenticPlan',
     },
     description: {
-      zh: 'FluxA 与百度智能云联合推出 AgenticPlan，内含低至 6 折的百度千帆 TokenPlan，可使用 DeepSeek V4、GLM 5.2、Kimi 等旗舰模型，并获赠 FluxA AgentMarket API 额度，解锁搜索、数据抓取、社交媒体、金融、加密、生图、视频等 1000+ 付费 API。在用户授权下，AI Agent 还可通过官方 Visa 卡自主采购资源、管理 API Key、监控用量并规划续费。',
-      en: 'FluxA and Baidu AI Cloud jointly offer AgenticPlan, including Baidu Qianfan TokenPlan at up to 40% off with access to DeepSeek V4, GLM 5.2, Kimi and other flagship models. Bonus FluxA AgentMarket credits unlock 1,000+ paid APIs for search, scraping, social media, finance, crypto, images and video. With user authorization, AI agents can also use the official Visa card to procure resources, manage API keys, monitor usage and plan renewals.',
-      ja: 'FluxA と百度智能雲（Baidu AI Cloud）が共同提供する AgenticPlan は、百度千帆 TokenPlan を最大 40% オフで利用でき、DeepSeek V4、GLM 5.2、Kimi などの主力モデルに対応します。特典の FluxA AgentMarket クレジットで、検索・データ取得・SNS・金融・暗号資産・画像生成・動画など 1,000 以上の有料 API も利用できます。ユーザーの承認のもと、AI エージェントは公式 Visa カードでリソースを調達し、API キー管理、使用量監視、更新計画も行えます。',
+      zh: 'FluxA 与百度智能云联合推出 AgenticPlan，内含低至 6 折的百度千帆 TokenPlan，可使用 DeepSeek V4、GLM 5.2、Kimi 等旗舰模型，并获赠 FluxA AgentMarket API 额度，解锁搜索、数据抓取、社交媒体、金融、加密、生图、视频等 13000+ 付费 API。在用户授权下，AI Agent 还可通过官方 Visa 卡自主采购资源、管理 API Key、监控用量并规划续费。',
+      en: 'FluxA and Baidu AI Cloud jointly offer AgenticPlan, including Baidu Qianfan TokenPlan at up to 40% off with access to DeepSeek V4, GLM 5.2, Kimi and other flagship models. Bonus FluxA AgentMarket credits unlock 13,000+ paid APIs for search, scraping, social media, finance, crypto, images and video. With user authorization, AI agents can also use the official Visa card to procure resources, manage API keys, monitor usage and plan renewals.',
+      ja: 'FluxA と百度智能雲（Baidu AI Cloud）が共同提供する AgenticPlan は、百度千帆 TokenPlan を最大 40% オフで利用でき、DeepSeek V4、GLM 5.2、Kimi などの主力モデルに対応します。特典の FluxA AgentMarket クレジットで、検索・データ取得・SNS・金融・暗号資産・画像生成・動画など 13,000 以上の有料 API も利用できます。ユーザーの承認のもと、AI エージェントは公式 Visa カードでリソースを調達し、API キー管理、使用量監視、更新計画も行えます。',
     },
     perk: {
       zh: '千帆 TokenPlan 低至 6 折，赠 AgentMarket API 额度',
@@ -1025,14 +1026,14 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'relay',
     tagline: {
-      zh: '一个 Key 统一使用 Claude Opus 4.8 与 GPT-5.6',
-      en: 'One key for Claude Opus 4.8 and GPT-5.6',
-      ja: '1つのキーで Claude Opus 4.8 と GPT-5.6 を利用',
+      zh: '一个 Key 统一使用 Claude Opus 5 与 GPT-5.6',
+      en: 'One key for Claude Opus 5 and GPT-5.6',
+      ja: '1つのキーで Claude Opus 5 と GPT-5.6 を利用',
     },
     description: {
-      zh: 'SudoCode 让 Claude Code 与 Claude Desktop 接入 Claude Opus 4.8，Codex 接入 GPT-5.6，一个 Key 统一使用。',
-      en: 'With one SudoCode key, Claude Code and Claude Desktop use Claude Opus 4.8, while Codex uses GPT-5.6.',
-      ja: 'SudoCode の1つのキーで、Claude Code と Claude Desktop では Claude Opus 4.8、Codex では GPT-5.6 を利用できます。',
+      zh: 'SudoCode 让 Claude Code 与 Claude Desktop 接入 Claude Opus 5，Codex 接入 GPT-5.6，一个 Key 统一使用。',
+      en: 'With one SudoCode key, Claude Code and Claude Desktop use Claude Opus 5, while Codex uses GPT-5.6.',
+      ja: 'SudoCode の1つのキーで、Claude Code と Claude Desktop では Claude Opus 5、Codex では GPT-5.6 を利用できます。',
     },
     perk: {
       zh: '注册并加入 QQ 群 726213516，联系群主领取 ¥10 试用额度',
@@ -1097,4 +1098,12 @@ export function resolveSponsorUrl(
 ): string {
   if (typeof url === 'string') return url;
   return url[language];
+}
+
+export function resolveCouponCode(
+  code: Sponsor['couponCode'],
+  language: Language,
+): string | undefined {
+  if (typeof code === 'string') return code;
+  return code?.[language];
 }

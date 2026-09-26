@@ -4,14 +4,27 @@ CC Switch official website: https://ccswitch.io/
 
 Official source repository: https://github.com/farion1231/cc-switch
 
-CC Switch is an open source desktop application for managing AI coding CLI workflows. It supports Claude Code, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent with provider management, Local Routing, automatic failover, MCP, Skills, Prompts, sessions, and usage statistics.
+ccswitch.io is the only official website of CC Switch. Other domains using the CC Switch name are not affiliated with the project.
+
+CC Switch is a free, open source (MIT) desktop app for Windows, macOS, and Linux that manages AI coding tools from one place. It supports 10 tools: Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build (switch mode, one active provider at a time), plus OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code (coexist mode, several providers at once).
+
+Core capabilities:
+
+- Provider management with 90+ presets, one-click switching, and custom configurations
+- Local Routing that converts between Anthropic, OpenAI, and Gemini API formats (for example, GPT in Claude Code or Claude in Codex), with automatic failover, circuit breakers, and request logs
+- MCP servers and Skills added once and synced to the tools you choose; prompts managed per tool (CLAUDE.md / AGENTS.md / GEMINI.md). Supported features vary by tool
+- Usage and cost tracking from session logs, even without Local Routing, plus subscription quota and balance on provider cards and the tray
+- Session history browsing and search, projects that switch a whole setup at once (Claude Code, Claude Desktop, and Codex), and WebDAV / S3 cloud sync
 
 Important links:
 
+- Download: https://ccswitch.io/zh/download (English: https://ccswitch.io/en/download, Japanese: https://ccswitch.io/ja/download)
 - Official documentation: https://ccswitch.io/zh/docs
 - English documentation: https://ccswitch.io/en/docs
 - Japanese documentation: https://ccswitch.io/ja/docs
 - Official changelog: https://ccswitch.io/zh/changelog
+- English changelog: https://ccswitch.io/en/changelog
+- Japanese changelog: https://ccswitch.io/ja/changelog
 - GitHub releases: https://github.com/farion1231/cc-switch/releases
 - Issue tracker: https://github.com/farion1231/cc-switch/issues
 

@@ -8,7 +8,7 @@ import {
   CC_SWITCH_FOUNDING_DATE,
   CC_SWITCH_VERSION,
   GITHUB_REPO_URL,
-  HOMEBREW_REPO_URL,
+  HOMEBREW_CASK_URL,
   htmlLang,
   hreflang,
   OG_IMAGE_PATH,
@@ -161,7 +161,7 @@ function getJsonLd(routeKey: RouteKey, canonicalUrl: string, language: Language,
       name: SITE_NAME,
       url: SITE_URL,
       logo: absoluteUrl('/favicon.png'),
-      sameAs: [GITHUB_REPO_URL, HOMEBREW_REPO_URL],
+      sameAs: [GITHUB_REPO_URL, HOMEBREW_CASK_URL],
       foundingDate: CC_SWITCH_FOUNDING_DATE,
       description: seoCopy.en.home.description,
     },
@@ -217,7 +217,7 @@ function getJsonLd(routeKey: RouteKey, canonicalUrl: string, language: Language,
       publisher: {
         '@id': organizationId,
       },
-      sameAs: [GITHUB_REPO_URL, HOMEBREW_REPO_URL],
+      sameAs: [GITHUB_REPO_URL, HOMEBREW_CASK_URL],
     });
   }
 

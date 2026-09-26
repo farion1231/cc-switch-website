@@ -6,6 +6,7 @@ import { useLanguage } from '@/i18n/useLanguage';
 import {
   resolveLocalizedAsset,
   resolveSponsorName,
+  resolveCouponCode,
   resolveSponsorUrl,
   sponsors,
 } from '@/content/sponsors';
@@ -113,6 +114,7 @@ export function SponsorPerksTable() {
                   const iconSrc = resolveLocalizedAsset(sponsor.icon, language);
                   const name = resolveSponsorName(sponsor.name, language);
                   const url = resolveSponsorUrl(sponsor.url, language);
+                  const couponCode = resolveCouponCode(sponsor.couponCode, language);
 
                   return (
                     <tr
@@ -143,14 +145,14 @@ export function SponsorPerksTable() {
                       </td>
                       <td className="px-5 py-4 text-muted-foreground">{perk}</td>
                       <td className="px-5 py-4">
-                        {sponsor.couponCode ? (
+                        {couponCode ? (
                           <button
                             type="button"
-                            onClick={() => handleCopy(sponsor.couponCode!, sponsor.id)}
+                            onClick={() => handleCopy(couponCode, sponsor.id)}
                             className="group inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 font-mono text-xs text-foreground transition-colors hover:border-primary/50 hover:text-primary"
-                            aria-label={`${t.sponsorsPage.card.copyCoupon}: ${sponsor.couponCode}`}
+                            aria-label={`${t.sponsorsPage.card.copyCoupon}: ${couponCode}`}
                           >
-                            <span>{sponsor.couponCode}</span>
+                            <span>{couponCode}</span>
                             {isCopied ? (
                               <Check className="h-3.5 w-3.5 text-primary" />
                             ) : (
@@ -186,6 +188,7 @@ export function SponsorPerksTable() {
               const iconSrc = resolveLocalizedAsset(sponsor.icon, language);
               const name = resolveSponsorName(sponsor.name, language);
               const url = resolveSponsorUrl(sponsor.url, language);
+              const couponCode = resolveCouponCode(sponsor.couponCode, language);
 
               return (
                 <li key={sponsor.id} className="space-y-3 p-4">
@@ -221,14 +224,14 @@ export function SponsorPerksTable() {
                     </a>
                   </div>
                   <p className="text-sm text-muted-foreground">{perk}</p>
-                  {sponsor.couponCode && (
+                  {couponCode && (
                     <button
                       type="button"
-                      onClick={() => handleCopy(sponsor.couponCode!, sponsor.id)}
+                      onClick={() => handleCopy(couponCode, sponsor.id)}
                       className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 font-mono text-xs text-foreground transition-colors hover:border-primary/50 hover:text-primary"
-                      aria-label={`${t.sponsorsPage.card.copyCoupon}: ${sponsor.couponCode}`}
+                      aria-label={`${t.sponsorsPage.card.copyCoupon}: ${couponCode}`}
                     >
-                      <span>{sponsor.couponCode}</span>
+                      <span>{couponCode}</span>
                       {isCopied ? (
                         <Check className="h-3.5 w-3.5 text-primary" />
                       ) : (

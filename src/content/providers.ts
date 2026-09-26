@@ -14,7 +14,6 @@ import packyCodeIconSvg from '@/assets/icons/packycode.svg?raw';
 import stepFunIcon from '@/assets/icons/stepfun.svg';
 import stepFunIconSvg from '@/assets/icons/stepfun.svg?raw';
 import claudeApiIcon from '@/assets/icons/sponsors/claudeapi.png';
-import lionccIcon from '@/assets/icons/sponsors/lioncc.svg';
 import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
 import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
 import zhipuIcon from '@/assets/icons/zhipu.svg';
@@ -61,7 +60,7 @@ export const claudeProviders: Provider[] = [
     icon: minimaxIcon,
     iconBg: 'bg-rose-500/20',
     name: 'MiniMax',
-    subtitle: 'https://platform.minimaxi.com',
+    subtitle: 'https://platform.minimax.cn',
     time: '2',
     quota: {
       updatedMinutes: 2,
@@ -167,7 +166,7 @@ export const codexProviders: Provider[] = [
     icon: minimaxIcon,
     iconBg: 'bg-rose-500/20',
     name: 'MiniMax',
-    subtitle: 'https://platform.minimaxi.com',
+    subtitle: 'https://platform.minimax.cn',
     time: '3',
     quota: {
       updatedMinutes: 3,
@@ -219,7 +218,7 @@ export const geminiProviders: Provider[] = [
     icon: minimaxIcon,
     iconBg: 'bg-rose-500/20',
     name: 'MiniMax',
-    subtitle: 'https://platform.minimaxi.com',
+    subtitle: 'https://platform.minimax.cn',
     time: '6',
     quota: {
       updatedMinutes: 6,
@@ -308,18 +307,10 @@ export const openClawProviders: Provider[] = [
     isSvgUrl: true,
   },
   {
-    icon: lionccIcon,
-    iconBg: 'bg-lime-500/15',
-    name: 'LionCCAPI',
-    subtitle: 'https://vibecodingapi.ai',
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  {
     icon: minimaxIcon,
     iconBg: 'bg-rose-500/20',
     name: 'MiniMax',
-    subtitle: 'https://platform.minimaxi.com',
+    subtitle: 'https://platform.minimax.cn',
     time: '8',
     quota: {
       updatedMinutes: 8,

@@ -30,7 +30,7 @@ export const translations = {
       platforms: '支持 macOS 12+ · Windows 10+ · Linux',
       stars: 'Stars',
       downloads: '下载',
-      supportedCli: '支持应用',
+      supportedCli: '支持工具',
       rustBadge: 'Rust #1',
       starRankBadge: 'GitHub 总榜 #{rank}',
     },
@@ -40,8 +40,8 @@ export const translations = {
       subtitle: '一个应用管理供应商、路由、用量、会话和技能',
       items: [
         {
-          title: '统一管理七大应用',
-          description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent 的供应商配置。',
+          title: '一个应用，十个工具',
+          description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi 和 MiniMax Code 的供应商配置。',
         },
         {
           title: '自动故障转移',
@@ -49,15 +49,15 @@ export const translations = {
         },
         {
           title: '用量与额度可见',
-          description: '实时追踪请求、Token、缓存命中、成本和订阅额度，支持日期范围筛选与自定义模型价格。',
+          description: '不开本地路由也能从会话记录统计 Token、缓存命中和成本，支持日期范围筛选与自定义模型价格；供应商卡片和托盘直接显示订阅额度与余额。',
         },
         {
-          title: '安全本地存储',
-          description: '所有配置和 API Key 安全存储在本地 SQLite 数据库，支持完整的 Schema 迁移。',
+          title: '本地优先存储',
+          description: '配置和 API Key 默认保存在本地 SQLite 数据库，支持完整的 Schema 迁移；只有开启 WebDAV / S3 云同步时，才会上传到你自己配置的存储。',
         },
         {
           title: 'MCP / Skills / 会话',
-          description: '统一管理 MCP、Skills、Prompts、Hermes Memory 和跨应用会话恢复，无需手动编辑配置文件。',
+          description: '集中管理 MCP、Skills、提示词和 Hermes 记忆，浏览、搜索各工具的会话历史并复制恢复命令，无需手动编辑配置文件。',
         },
         {
           title: '开源免费',
@@ -69,7 +69,7 @@ export const translations = {
     tech: {
       badge: '开发者友好',
       title: '零配置，开箱即用',
-      description: '无需修改代码，开启本地路由即可获得格式转换、热切换、故障转移、请求日志和用量统计。',
+      description: '无需修改代码，开启本地路由即可获得格式转换、热切换、故障转移和请求日志。',
       features: [
         {
           title: 'SQLite 数据持久化',
@@ -96,7 +96,7 @@ export const translations = {
     // Demo Section
     demo: {
       title: '直观的操作界面',
-      subtitle: '七应用切换、工具栏和本地路由状态一眼可见',
+      subtitle: '应用切换、工具栏和本地路由状态一眼可见',
       localRouting: '路由',
       toolbar: {
         skills: 'Skills',
@@ -222,11 +222,11 @@ export const translations = {
         },
         {
           question: '支持哪些 AI 编程工具？',
-          answer: '目前支持 Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw 和 Hermes Agent，并为不同应用提供对应的供应商预设、配置写入和会话管理能力。',
+          answer: '目前支持 10 个工具：Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build 为切换式，同一时间只启用一个供应商；OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code 为共存式，可以同时添加多个供应商。各工具支持的功能（MCP、Skills、提示词、本地路由等）不完全相同，详见 GitHub README 的「各工具支持的功能」一节。',
         },
         {
           question: '我的 API Key 安全吗？',
-          answer: '绝对安全。所有 API Key 和配置信息都存储在您本地的 SQLite 数据库中，不会上传到任何服务器。',
+          answer: 'API Key 和供应商配置默认保存在您本机的 SQLite 数据库和对应工具自己的配置文件中。只有您主动开启 WebDAV / S3 云同步时，才会上传到您自己配置的存储。',
         },
         {
           question: '本地路由服务会影响请求速度吗？',
@@ -238,7 +238,7 @@ export const translations = {
         },
         {
           question: '遇到问题如何获取帮助？',
-          answer: '您可以通过 GitHub Issues 反馈问题，或者加入我们的 Discord 社区与其他用户交流。',
+          answer: '您可以通过 GitHub Issues 反馈问题，或者在 GitHub Discussions 与其他用户交流。',
         },
       ],
     },
@@ -398,7 +398,7 @@ export const translations = {
         terms: '服务条款',
         license: 'MIT 许可证',
       },
-      copyright: '© 2025 CC Switch. 基于 MIT 协议开源。',
+      copyright: '© 2025–{year} CC Switch. 基于 MIT 协议开源。',
       madeWith: 'Made with ❤️ by CC Switch Team',
     },
     // Sponsors Page
@@ -458,7 +458,7 @@ export const translations = {
           },
           {
             q: '有哪些合作方案？',
-            a: '目前提供两种合作方案。两种方案都包含官网赞助商页展示、应用内预设接入与高亮推荐，以及优先技术支持。完整方案在此基础上额外提供 GitHub README 广告位，支持中/日/英三语展示。具体合作细节欢迎邮件沟通。',
+            a: '目前提供两种合作方案。两种方案都包含官网赞助商页展示、应用内预设接入与高亮推荐，以及优先技术支持。完整方案在此基础上额外提供 GitHub README 广告位，支持中/英/日/德四语展示。具体合作细节欢迎邮件沟通。',
           },
           {
             q: '完成洽谈后多久可以上线？',
@@ -477,7 +477,7 @@ export const translations = {
         perks: [
           {
             title: 'GitHub README 广告位',
-            description: '中、日、英三语展示，覆盖 GitHub 上的中外开发者。',
+            description: '中、英、日、德四语展示，覆盖 GitHub 上的中外开发者。',
           },
           {
             title: '应用内预设接入',
@@ -653,7 +653,7 @@ export const translations = {
       platforms: 'macOS 12+ · Windows 10+ · Linux',
       stars: 'Stars',
       downloads: 'Downloads',
-      supportedCli: 'Apps Supported',
+      supportedCli: 'Tools Supported',
       rustBadge: 'Rust #1',
       starRankBadge: 'GitHub Global Rank #{rank}',
     },
@@ -663,8 +663,8 @@ export const translations = {
       subtitle: 'One app for providers, routing, usage, sessions, and skills',
       items: [
         {
-          title: 'Seven Apps, One Control Surface',
-          description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent from one interface.',
+          title: 'One App, Ten Tools',
+          description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code from one interface.',
         },
         {
           title: 'Automatic Failover',
@@ -672,15 +672,15 @@ export const translations = {
         },
         {
           title: 'Usage & Quota Visibility',
-          description: 'Track requests, tokens, cache activity, costs, and subscription quota with date ranges and custom model pricing.',
+          description: 'Track tokens, cache hits, and costs from session logs even without Local Routing, with date ranges and custom model pricing; provider cards and the tray show subscription quota and balance.',
         },
         {
-          title: 'Secure Local Storage',
-          description: 'All configurations and API keys are securely stored in a local SQLite database with full schema migration support.',
+          title: 'Local-First Storage',
+          description: 'Configurations and API keys stay in a local SQLite database by default, with full schema migration support; they are uploaded only to your own storage when you turn on WebDAV / S3 cloud sync.',
         },
         {
           title: 'MCP, Skills & Sessions',
-          description: 'Manage MCP, Skills, Prompts, Hermes Memory, and cross-app session restore without editing config files by hand.',
+          description: 'Manage MCP, Skills, Prompts, and Hermes memory in one place, and browse or search each tool\'s session history and copy resume commands — no hand-editing config files.',
         },
         {
           title: 'Open Source & Free',
@@ -692,7 +692,7 @@ export const translations = {
     tech: {
       badge: 'Developer Friendly',
       title: 'Zero Configuration, Ready to Use',
-      description: 'No code changes required. Enable Local Routing to get format conversion, hot switching, failover, request logs, and usage analytics.',
+      description: 'No code changes required. Enable Local Routing to get format conversion, hot switching, failover, and request logs.',
       features: [
         {
           title: 'SQLite Data Persistence',
@@ -719,7 +719,7 @@ export const translations = {
     // Demo Section
     demo: {
       title: 'Intuitive Interface',
-      subtitle: 'Seven-app switching, toolbar actions, and Local Routing status at a glance',
+      subtitle: 'App switching, toolbar actions, and Local Routing status at a glance',
       localRouting: 'Routing',
       toolbar: {
         skills: 'Skills',
@@ -845,11 +845,11 @@ export const translations = {
         },
         {
           question: 'Which AI coding tools are supported?',
-          answer: 'CC Switch supports Claude Code, Claude Desktop, Codex, Gemini CLI, OpenCode, OpenClaw, and Hermes Agent, with app-specific provider presets, config writing, and session workflows.',
+          answer: 'CC Switch supports 10 tools. Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build are switch-mode tools with one active provider at a time; OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code are coexist-mode tools that can hold several providers at once. Supported features (MCP, Skills, Prompts, Local Routing, and more) vary by tool — see “Supported Features by Tool” in the GitHub README.',
         },
         {
           question: 'Is my API Key secure?',
-          answer: 'Absolutely. All API keys and configurations are stored in your local SQLite database and are never uploaded to any server.',
+          answer: 'By default, API keys and provider settings stay on your machine, in the local SQLite database and in each tool\'s own config files. They are uploaded only to your own storage when you turn on WebDAV / S3 cloud sync.',
         },
         {
           question: 'Does Local Routing affect request speed?',
@@ -861,7 +861,7 @@ export const translations = {
         },
         {
           question: 'How do I get help?',
-          answer: 'You can report issues via GitHub Issues or join our Discord community to connect with other users.',
+          answer: 'You can report issues via GitHub Issues or connect with other users in GitHub Discussions.',
         },
       ],
     },
@@ -1021,7 +1021,7 @@ export const translations = {
         terms: 'Terms of Service',
         license: 'MIT License',
       },
-      copyright: '© 2025 CC Switch. Open source under MIT license.',
+      copyright: '© 2025–{year} CC Switch. Open source under MIT license.',
       madeWith: 'Made with ❤️ by CC Switch Team',
     },
     // Sponsors Page
@@ -1081,7 +1081,7 @@ export const translations = {
           },
           {
             q: 'What sponsorship tiers are available?',
-            a: 'We offer two sponsorship tiers. Both tiers include placement on this sponsors page, in-app preset provider integration with a highlighted recommendation, and priority technical support. The full tier additionally features a GitHub README banner with English, Chinese, and Japanese variants. Reach out by email for partnership details.',
+            a: 'We offer two sponsorship tiers. Both tiers include placement on this sponsors page, in-app preset provider integration with a highlighted recommendation, and priority technical support. The full tier additionally features a GitHub README banner with English, Chinese, Japanese, and German variants. Reach out by email for partnership details.',
           },
           {
             q: 'How long does it take to go live?',
@@ -1100,7 +1100,7 @@ export const translations = {
         perks: [
           {
             title: 'GitHub README banner',
-            description: 'Featured banner with English, Chinese, and Japanese variants — reaches global developers on GitHub.',
+            description: 'Featured banner with English, Chinese, Japanese, and German variants — reaches global developers on GitHub.',
           },
           {
             title: 'In-app preset integration',
@@ -1276,7 +1276,7 @@ export const translations = {
       platforms: 'macOS 12+ · Windows 10+ · Linux 対応',
       stars: 'Stars',
       downloads: 'ダウンロード',
-      supportedCli: '対応アプリ',
+      supportedCli: '対応ツール',
       rustBadge: 'Rust #1',
       starRankBadge: 'GitHub 世界ランキング #{rank}',
     },
@@ -1286,24 +1286,24 @@ export const translations = {
       subtitle: 'プロバイダー、ルーティング、使用量、セッション、Skills を1つに',
       items: [
         {
-          title: '7つのアプリを統一管理',
-          description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent のプロバイダーを1つの画面で管理できます。',
+          title: '1つのアプリで10のツール',
+          description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code のプロバイダーを1つの画面で管理できます。',
         },
         {
           title: '自動フェイルオーバー',
-          description: 'Local Routing はサーキットブレーカー、ヘルスチェック、フェイルオーバーキューを備え、障害時にバックアップへ自動切替できます。',
+          description: 'ローカルルーティングはサーキットブレーカー、ヘルスチェック、フェイルオーバーキューを備え、障害時にバックアップへ自動切替できます。',
         },
         {
           title: '使用量とクォータを可視化',
-          description: 'リクエスト、トークン、キャッシュ、コスト、サブスクリプション枠を期間別に追跡し、モデル価格も調整できます。',
+          description: 'ローカルルーティングをオンにしなくても、セッション記録からトークン、キャッシュヒット、コストを期間別に集計し、モデル価格も調整できます。プロバイダーカードとトレイにはサブスクリプションのクォータと残高を表示します。',
         },
         {
-          title: 'セキュアなローカルストレージ',
-          description: '全ての設定と API キーはローカル SQLite データベースに安全に保存。完全なスキーママイグレーションをサポート。',
+          title: 'ローカルファーストのストレージ',
+          description: '設定と API キーはデフォルトでローカル SQLite データベースに保存され、完全なスキーママイグレーションをサポート。WebDAV / S3 クラウド同期をオンにした場合のみ、ご自身で設定したストレージにアップロードされます。',
         },
         {
           title: 'MCP / Skills / セッション',
-          description: 'MCP、Skills、Prompts、Hermes Memory、アプリ横断のセッション復元を手動編集なしで管理できます。',
+          description: 'MCP、Skills、プロンプト、Hermes のメモリをまとめて管理し、各ツールのセッション履歴の閲覧・検索と再開コマンドのコピーも、設定ファイルを手動編集せずに行えます。',
         },
         {
           title: 'オープンソース＆無料',
@@ -1315,7 +1315,7 @@ export const translations = {
     tech: {
       badge: '開発者フレンドリー',
       title: 'ゼロ設定、すぐに使える',
-      description: 'コード変更不要。Local Routing をオンにするだけで、形式変換、ホットスイッチ、フェイルオーバー、リクエストログ、使用量分析を利用できます。',
+      description: 'コード変更不要。ローカルルーティングをオンにするだけで、形式変換、ホットスイッチ、フェイルオーバー、リクエストログを利用できます。',
       features: [
         {
           title: 'SQLite データ永続化',
@@ -1342,8 +1342,8 @@ export const translations = {
     // Demo Section
     demo: {
       title: '直感的なインターフェース',
-      subtitle: '7アプリ切り替え、ツールバー操作、Local Routing 状態をひと目で確認',
-      localRouting: 'Routing',
+      subtitle: 'アプリ切り替え、ツールバー操作、ローカルルーティングの状態をひと目で確認',
+      localRouting: 'ルーティング',
       toolbar: {
         skills: 'Skills',
         prompts: 'Prompts',
@@ -1362,7 +1362,7 @@ export const translations = {
       },
       actionNames: {
         settings: '設定',
-        localRouting: 'Local Routing 切り替え',
+        localRouting: 'ローカルルーティング切り替え',
         addProvider: 'プロバイダーを追加',
         activateProvider: 'プロバイダーを有効化',
         editProvider: 'プロバイダーを編集',
@@ -1371,7 +1371,7 @@ export const translations = {
         configureUsage: '使用量クエリ設定',
         deleteProvider: 'プロバイダーを削除',
         skills: 'Skills 管理',
-        prompts: 'Prompts 管理',
+        prompts: 'プロンプト管理',
         sessions: 'セッション管理',
         mcp: 'MCP 管理',
         workspace: 'Workspace ファイル管理',
@@ -1387,11 +1387,11 @@ export const translations = {
       },
       tabs: {
         provider: 'プロバイダー管理',
-        proxy: 'Local Routing',
+        proxy: 'ローカルルーティング',
         stats: '使用統計',
       },
       proxy: {
-        localProxy: 'Local Routing',
+        localProxy: 'ローカルルーティング',
         proxyDescription: 'ルーティングサービスの切り替え、ステータスとポート情報の確認',
         running: '実行中',
         stopped: '停止中',
@@ -1447,11 +1447,11 @@ export const translations = {
       contactUs: 'お問い合わせ',
       features: [
         '無制限のプロバイダー設定',
-        'Local Routing とホットスイッチ',
+        'ローカルルーティングとホットスイッチ',
         '自動フェイルオーバー',
         '使用量・クォータ・コスト追跡',
-        'MCP/Skills/Prompts/セッション管理',
-        'Hermes Memory と OpenClaw Workspace',
+        'MCP/Skills/プロンプト/セッション管理',
+        'Hermes のメモリと OpenClaw ワークスペース',
         'クロスプラットフォーム対応 (macOS/Win/Linux)',
         'コミュニティサポート',
         'オープンソースへのアクセス',
@@ -1468,15 +1468,15 @@ export const translations = {
         },
         {
           question: 'どの AI コーディングツールに対応していますか？',
-          answer: 'Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes Agent に対応し、それぞれにプロバイダープリセット、設定書き込み、セッション機能を提供します。',
+          answer: '10 のツールに対応しています。Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build は切り替え型で、同時に有効にできるプロバイダーは 1 つです。OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code は共存型で、複数のプロバイダーを同時に追加できます。対応機能（MCP、Skills、プロンプト、ローカルルーティングなど）はツールごとに異なります。詳しくは GitHub README の「ツール別の対応機能」をご覧ください。',
         },
         {
           question: 'API キーは安全ですか？',
-          answer: '絶対に安全です。全ての API キーと設定はローカルの SQLite データベースに保存され、サーバーにアップロードされることはありません。',
+          answer: 'API キーとプロバイダー設定は、デフォルトではお使いのマシンの SQLite データベースと各ツール自身の設定ファイルに保存されます。WebDAV / S3 クラウド同期をオンにした場合のみ、ご自身で設定したストレージにアップロードされます。',
         },
         {
-          question: 'Local Routing はリクエスト速度に影響しますか？',
-          answer: '影響はごくわずかです。Local Routing は Rust で構築されており、形式変換、リクエストログ、ヘルスチェック、フェイルオーバーも提供します。',
+          question: 'ローカルルーティングはリクエスト速度に影響しますか？',
+          answer: '影響はごくわずかです。ローカルルーティングは Rust で構築されており、形式変換、リクエストログ、ヘルスチェック、フェイルオーバーも提供します。',
         },
         {
           question: 'どうすれば貢献できますか？',
@@ -1484,7 +1484,7 @@ export const translations = {
         },
         {
           question: '問題が発生した場合、どのようにヘルプを得られますか？',
-          answer: 'GitHub Issues で問題を報告するか、Discord コミュニティに参加して他のユーザーと交流できます。',
+          answer: 'GitHub Issues で問題を報告するか、GitHub Discussions で他のユーザーと交流できます。',
         },
       ],
     },
@@ -1644,7 +1644,7 @@ export const translations = {
         terms: '利用規約',
         license: 'MIT ライセンス',
       },
-      copyright: '© 2025 CC Switch. MIT ライセンスでオープンソース。',
+      copyright: '© 2025–{year} CC Switch. MIT ライセンスでオープンソース。',
       madeWith: 'Made with ❤️ by CC Switch Team',
     },
     // Sponsors Page
@@ -1704,7 +1704,7 @@ export const translations = {
           },
           {
             q: 'どのような提携プランがありますか？',
-            a: '2 つの提携プランをご用意しています。両プランとも、公式サイトのスポンサーページ掲載、アプリ内プリセットプロバイダー連携とハイライト推薦、優先技術サポートが含まれます。フルプランではこれに加えて、GitHub README バナー掲載（英語・中国語・日本語の 3 言語対応）が含まれます。提携の詳細についてはメールでお問い合わせください。',
+            a: '2 つの提携プランをご用意しています。両プランとも、公式サイトのスポンサーページ掲載、アプリ内プリセットプロバイダー連携とハイライト推薦、優先技術サポートが含まれます。フルプランではこれに加えて、GitHub README バナー掲載（英語・中国語・日本語・ドイツ語の 4 言語対応）が含まれます。提携の詳細についてはメールでお問い合わせください。',
           },
           {
             q: '提携が決まってから掲載までどのくらいかかりますか？',
@@ -1723,7 +1723,7 @@ export const translations = {
         perks: [
           {
             title: 'GitHub README バナー',
-            description: '英語・中国語・日本語の 3 言語に対応し、GitHub のグローバル開発者にリーチ。',
+            description: '英語・中国語・日本語・ドイツ語の 4 言語に対応し、GitHub のグローバル開発者にリーチ。',
           },
           {
             title: 'アプリ内プリセット連携',

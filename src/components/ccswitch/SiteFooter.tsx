@@ -42,7 +42,7 @@ export function SiteFooter() {
       title: t.footer.community.title,
       links: [
         { label: t.footer.community.github, href: 'https://github.com/farion1231/cc-switch' },
-        { label: t.footer.community.contributing, href: 'https://github.com/farion1231/cc-switch#contributing' },
+        { label: t.footer.community.contributing, href: 'https://github.com/farion1231/cc-switch/blob/main/CONTRIBUTING.md' },
         { label: t.footer.community.issues, href: 'https://github.com/farion1231/cc-switch/issues' },
         { label: t.footer.community.sponsors, href: '/sponsors', internal: true },
       ],
@@ -114,7 +114,7 @@ export function SiteFooter() {
         {/* Bottom Bar */}
         <div className="flex flex-col items-start justify-between gap-3 border-t border-border pt-8 sm:items-center md:flex-row md:gap-4">
           <p className="text-sm text-muted-foreground">
-            {t.footer.copyright}
+            {t.footer.copyright.replace('{year}', String(new Date().getFullYear()))}
           </p>
           <p className="text-muted-foreground text-sm">
             {t.footer.madeWith}
