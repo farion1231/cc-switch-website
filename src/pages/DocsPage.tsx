@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { DocsSidebar } from '@/components/docs/DocsSidebar';
@@ -6,7 +6,7 @@ import { DocsMobileNav } from '@/components/docs/DocsMobileNav';
 import { MarkdownRenderer } from '@/components/docs/MarkdownRenderer';
 import { DocsSearch } from '@/components/docs/DocsSearch';
 import { TableOfContents } from '@/components/docs/TableOfContents';
-import { fetchDocContent, getDocSourcePath } from '@/content/docs';
+import { fetchDocContent, getDocSourcePath, normalizeAnchor } from '@/content/docs';
 import { getDocSections } from '@/content/docs/navigation';
 import { SiteFooter } from '@/components/ccswitch/SiteFooter';
 import { ChevronLeft, ChevronRight, Edit, Clock, Search } from 'lucide-react';
@@ -25,6 +25,10 @@ export default function DocsPage() {
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // Anchor from the incoming URL (cross-page manual links). Updating the query
+  // below drops the hash, so remember it until the doc has rendered. GitHub-style
+  // anchors typed or linked from outside are normalized to this site's heading ids.
+  const pendingAnchorRef = useRef(normalizeAnchor(decodeURIComponent(window.location.hash.slice(1))));
   const { language, t } = useLanguage();
   const docSections = useMemo(() => getDocSections(t), [t]);
 
@@ -52,6 +56,13 @@ export default function DocsPage() {
     // Scroll to top
     window.scrollTo(0, 0);
   }, [language, activeSection, activeItem, setSearchParams]);
+
+  // Jump instantly like native anchors; headings carry scroll-mt-24 for the fixed header.
+  useEffect(() => {
+    if (isLoading || !pendingAnchorRef.current) return;
+    document.getElementById(pendingAnchorRef.current)?.scrollIntoView();
+    pendingAnchorRef.current = '';
+  }, [isLoading, content]);
 
   // Keyboard shortcut for search (Cmd+K / Ctrl+K)
   useEffect(() => {

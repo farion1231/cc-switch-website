@@ -51,14 +51,14 @@ export const defaultDocSections: DocSection[] = [
   },
   {
     id: 'proxy',
-    title: '代理与高可用',
+    title: '本地路由与高可用',
     icon: <Server className="w-4 h-4" />,
     items: [
-      { id: 'service', title: '代理服务' },
+      { id: 'service', title: '本地路由服务' },
       { id: 'routing', title: '应用路由' },
       { id: 'failover', title: '故障转移' },
       { id: 'usage', title: '用量统计' },
-      { id: 'model-test', title: '模型检查' },
+      { id: 'model-test', title: '连通检测' },
     ],
   },
   {

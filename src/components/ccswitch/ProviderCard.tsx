@@ -1,5 +1,5 @@
 import { motion, LayoutGroup, Reorder, useDragControls } from "framer-motion";
-import { RefreshCw, Play, Check, Copy, BarChart3, Trash2, SquarePen, Clock, TestTube2, GripVertical } from "lucide-react";
+import { RefreshCw, Play, Check, Copy, BarChart3, Trash2, SquarePen, Clock, Activity, GripVertical } from "lucide-react";
 import type { MouseEvent } from "react";
 import { InlineSvgIcon } from "@/components/ccswitch/InlineSvgIcon";
 import { cn } from "@/lib/utils";
@@ -181,7 +181,7 @@ export function ProviderCard({
             {[
               { Icon: SquarePen, label: t.demo.actionNames.editProvider },
               { Icon: Copy, label: t.demo.actionNames.duplicateProvider },
-              { Icon: TestTube2, label: t.demo.actionNames.testProvider },
+              { Icon: Activity, label: t.demo.actionNames.testProvider },
               { Icon: BarChart3, label: t.demo.actionNames.configureUsage },
               { Icon: Trash2, label: t.demo.actionNames.deleteProvider },
             ].map(({ Icon, label }) => (

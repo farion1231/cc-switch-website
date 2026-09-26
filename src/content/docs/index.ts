@@ -100,6 +100,21 @@ export function getDocSourcePath(language: Language, sectionId: string, itemId?:
   return `docs/user-manual/${language}/${relativePath}`;
 }
 
+// The manual is written against GitHub's heading anchors, which keep repeated
+// dashes and some symbols (`codex--grok-build-…`, `️-风险提示`). This site's
+// slugify drops them, so rewrite every anchor into the site's form.
+export function normalizeAnchor(hash: string): string {
+  return hash
+    .replace(/[^\p{L}\p{N}-]/gu, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function withAnchor(path: string, hash: string) {
+  const anchor = normalizeAnchor(hash);
+  return anchor ? `${path}#${anchor}` : path;
+}
+
 function resolveDocLink(currentRelativePath: string, href: string) {
   const [rawPath, hash = ''] = href.split('#');
   const resolvedPath = new URL(rawPath, `https://ccswitch.local/${currentRelativePath}`).pathname.replace(/^\//, '');
@@ -108,7 +123,7 @@ function resolveDocLink(currentRelativePath: string, href: string) {
   if (!route) return href;
 
   const query = `?section=${encodeURIComponent(route.sectionId)}&item=${encodeURIComponent(route.itemId)}`;
-  return hash ? `${query}#${hash}` : query;
+  return withAnchor(query, hash);
 }
 
 function processDocContent(content: string, currentRelativePath: string) {
@@ -117,14 +132,20 @@ function processDocContent(content: string, currentRelativePath: string) {
       /!\[([^\]]*)\]\(\.\.\/(?:\.\.\/)?assets\/([^)]+)\)/g,
       '![$1](/docs/assets/$2)'
     )
+    // Release notes render on the changelog pages, not as raw markdown.
     .replace(
-      /\]\(\.\.\/\.\.\/\.\.\/release-notes\/([^)]+)\)/g,
-      '](/docs/release-notes/$1)'
+      /\]\(\.\.\/\.\.\/\.\.\/release-notes\/v([\d.]+)-(zh|en|ja)\.md(?:#([^)]+))?\)/g,
+      (_, version: string, lang: string, hash = '') => `](${withAnchor(`/${lang}/changelog/${version}`, hash)})`
+    )
+    .replace(
+      /\]\(\.\.\/\.\.\/\.\.\/guides\/([a-z0-9-]+)-(zh|en|ja)\.md(?:#([^)]+))?\)/g,
+      (_, slug: string, lang: string, hash = '') => `](${withAnchor(`/${lang}/tutorials/${slug}`, hash)})`
     )
     .replace(
       /\]\(((?!https?:\/\/|mailto:|#|\/|\?)[^)]+\.md(?:#[^)]+)?)\)/g,
       (_, href: string) => `](${resolveDocLink(currentRelativePath, href)})`
-    );
+    )
+    .replace(/\]\(#([^)]+)\)/g, (_, hash: string) => `](${withAnchor('', hash)})`);
 }
 
 export async function fetchDocContent(language: Language, sectionId: string, itemId?: string): Promise<string> {
