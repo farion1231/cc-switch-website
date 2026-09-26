@@ -83,7 +83,7 @@ export function DemoSection() {
           <div className="ccswitch-app-demo relative flex h-[590px] flex-col overflow-hidden rounded-xl border border-border bg-background text-foreground shadow-2xl sm:h-[620px] sm:rounded-2xl md:h-[650px]">
             <MacOsWindowBar
               responsive
-              className="h-9 shrink-0 border-b border-border bg-background px-3 sm:h-11 sm:px-4"
+              className="h-7 shrink-0 bg-background px-3 sm:px-4"
             />
 
             <AnimatePresence mode="wait">

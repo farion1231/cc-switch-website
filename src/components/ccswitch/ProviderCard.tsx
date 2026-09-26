@@ -1,4 +1,4 @@
-import { motion, LayoutGroup, Reorder, useDragControls } from "framer-motion";
+import { AnimatePresence, motion, LayoutGroup, Reorder, useDragControls } from "framer-motion";
 import { RefreshCw, Play, Check, Copy, BarChart3, Trash2, SquarePen, Clock, Activity, GripVertical } from "lucide-react";
 import type { MouseEvent } from "react";
 import { InlineSvgIcon } from "@/components/ccswitch/InlineSvgIcon";
@@ -9,7 +9,6 @@ import { resolveSponsorUrl } from "@/content/sponsors";
 
 interface ProviderCardProps {
   provider: Provider;
-  index: number;
   isActive: boolean;
   proxyEnabled: boolean;
   onSelect: () => void;
@@ -20,7 +19,6 @@ interface ProviderCardProps {
 
 export function ProviderCard({
   provider,
-  index,
   isActive,
   proxyEnabled,
   onSelect,
@@ -59,15 +57,7 @@ export function ProviderCard({
       dragListener={false}
       dragControls={dragControls}
       layout
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{
-        delay: index * 0.08,
-        duration: 0.4,
-        ease: [0.25, 0.46, 0.45, 0.94],
-        layout: { duration: 0.28 },
-      }}
+      transition={{ layout: { duration: 0.28 } }}
       onClick={handleSelect}
       className={cn(
         "group relative flex cursor-pointer items-center gap-2 overflow-hidden rounded-xl border border-border bg-card text-card-foreground transition-all duration-300 hover:shadow-sm sm:gap-3",
@@ -348,28 +338,38 @@ export function ProviderList({
   compact = false,
   animationKey = "default",
 }: ProviderListProps) {
+  // Same switch as the real app (App.tsx): fade the old list out, then the new one in.
   return (
-    <LayoutGroup id={animationKey}>
-      <Reorder.Group
-        axis="y"
-        values={providers}
-        onReorder={onReorderProviders}
-        className={cn("space-y-2", compact ? "space-y-2" : "space-y-3")}
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={animationKey}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
       >
-        {providers.map((provider, index) => (
-          <ProviderCard
-            key={`${animationKey}-${provider.name}`}
-            provider={provider}
-            index={index}
-            isActive={index === activeProvider}
-            proxyEnabled={proxyEnabled}
-            onSelect={() => onSelectProvider(index)}
-            onAction={onAction}
-            onActionEnd={onActionEnd}
-            compact={compact}
-          />
-        ))}
-      </Reorder.Group>
-    </LayoutGroup>
+        <LayoutGroup id={animationKey}>
+          <Reorder.Group
+            axis="y"
+            values={providers}
+            onReorder={onReorderProviders}
+            className={cn("space-y-2", compact ? "space-y-2" : "space-y-3")}
+          >
+            {providers.map((provider, index) => (
+              <ProviderCard
+                key={`${animationKey}-${provider.name}`}
+                provider={provider}
+                isActive={index === activeProvider}
+                proxyEnabled={proxyEnabled}
+                onSelect={() => onSelectProvider(index)}
+                onAction={onAction}
+                onActionEnd={onActionEnd}
+                compact={compact}
+              />
+            ))}
+          </Reorder.Group>
+        </LayoutGroup>
+      </motion.div>
+    </AnimatePresence>
   );
 }
