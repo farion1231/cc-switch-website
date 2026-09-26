@@ -31,22 +31,40 @@ import {
   claudeProviders,
   codexProviders,
   geminiProviders,
+  grokBuildProviders,
   hermesProviders,
+  mcodeProviders,
   openClawProviders,
   opencodeProviders,
+  piProviders,
   type Provider,
 } from '@/content/providers';
 import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 
 import claudeIcon from '@/assets/icons/claude.svg';
 import geminiIcon from '@/assets/icons/gemini.svg';
+import grokIcon from '@/assets/icons/grok.svg';
+import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import hermesIcon from '@/assets/icons/hermes.png';
+import minimaxIcon from '@/assets/icons/minimax.svg';
 import openaiIcon from '@/assets/icons/openai.svg';
 import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import openClawIcon from '@/assets/icons/openclaw.svg';
 import openCodeIcon from '@/assets/icons/opencode.svg';
+import piIcon from '@/assets/icons/pi.svg';
+import piIconSvg from '@/assets/icons/pi.svg?raw';
 
-type CliTabId = 'claude' | 'claude-desktop' | 'codex' | 'gemini' | 'opencode' | 'openclaw' | 'hermes';
+type CliTabId =
+  | 'claude'
+  | 'claude-desktop'
+  | 'codex'
+  | 'gemini'
+  | 'grokbuild'
+  | 'opencode'
+  | 'openclaw'
+  | 'hermes'
+  | 'pi'
+  | 'mcode';
 
 interface CliTab {
   id: CliTabId;
@@ -63,9 +81,12 @@ const cliTabs = [
   { id: 'claude-desktop', label: 'Claude Desktop', icon: claudeIcon, badgeIcon: Monitor, badgeOffsetY: 0.5 },
   { id: 'codex', label: 'Codex', icon: openaiIcon, iconSvg: openaiIconSvg, iconColor: 'currentColor' },
   { id: 'gemini', label: 'Gemini', icon: geminiIcon },
+  { id: 'grokbuild', label: 'Grok Build', icon: grokIcon, iconSvg: grokIconSvg, iconColor: 'currentColor' },
   { id: 'opencode', label: 'OpenCode', icon: openCodeIcon },
   { id: 'openclaw', label: 'OpenClaw', icon: openClawIcon },
   { id: 'hermes', label: 'Hermes', icon: hermesIcon },
+  { id: 'pi', label: 'Pi', icon: piIcon, iconSvg: piIconSvg, iconColor: 'currentColor' },
+  { id: 'mcode', label: 'MiniMax Code', icon: minimaxIcon },
 ] satisfies CliTab[];
 
 const initialProviderLists: Record<CliTabId, Provider[]> = {
@@ -73,9 +94,12 @@ const initialProviderLists: Record<CliTabId, Provider[]> = {
   'claude-desktop': claudeDesktopProviders,
   codex: codexProviders,
   gemini: geminiProviders,
+  grokbuild: grokBuildProviders,
   opencode: opencodeProviders,
   openclaw: openClawProviders,
   hermes: hermesProviders,
+  pi: piProviders,
+  mcode: mcodeProviders,
 };
 
 interface ToolbarAction {
@@ -100,6 +124,7 @@ const toolbarActionsByApp: Record<CliTabId, ToolbarAction[]> = {
   ],
   codex: defaultToolbarActions,
   gemini: defaultToolbarActions,
+  grokbuild: defaultToolbarActions,
   opencode: defaultToolbarActions,
   openclaw: [
     { key: 'workspace', icon: FolderOpen },
@@ -114,6 +139,9 @@ const toolbarActionsByApp: Record<CliTabId, ToolbarAction[]> = {
     { key: 'dashboard', icon: LayoutDashboard },
     { key: 'mcp', icon: Server },
   ],
+  // Pi has no native MCP registry, so the app hides the MCP button.
+  pi: defaultToolbarActions.filter(({ key }) => key !== 'mcp'),
+  mcode: defaultToolbarActions,
 };
 
 export function ProviderContent() {

@@ -7,7 +7,7 @@ export const HOMEBREW_CASK_URL = 'https://formulae.brew.sh/cask/cc-switch';
 export const SPONSOR_CONTACT_EMAIL = 'support@ccswitch.io';
 export const SPONSOR_CONTACT_URL = `mailto:${SPONSOR_CONTACT_EMAIL}`;
 export const RELEASES_URL = 'https://github.com/farion1231/cc-switch/releases';
-export const OG_IMAGE_PATH = '/og-image.png';
+export const OG_IMAGE_PATH = '/og-image.png?v=2';
 
 // Sync with cc-switch package.json on each release.
 export const CC_SWITCH_VERSION = '3.20.4';

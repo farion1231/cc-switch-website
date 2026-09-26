@@ -1,6 +1,9 @@
 import anthropicIcon from '@/assets/icons/anthropic.svg';
 import anthropicIconSvg from '@/assets/icons/anthropic.svg?raw';
 import geminiIcon from '@/assets/icons/gemini-2.svg';
+import deepseekIcon from '@/assets/icons/deepseek.svg';
+import grokIcon from '@/assets/icons/grok.svg';
+import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import hermesIcon from '@/assets/icons/hermes.png';
 import minimaxIcon from '@/assets/icons/minimax.svg';
 import openaiIcon from '@/assets/icons/openai.svg';
@@ -13,9 +16,13 @@ import packyCodeIcon from '@/assets/icons/packycode.svg';
 import packyCodeIconSvg from '@/assets/icons/packycode.svg?raw';
 import stepFunIcon from '@/assets/icons/stepfun.svg';
 import stepFunIconSvg from '@/assets/icons/stepfun.svg?raw';
+import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import claudeApiIcon from '@/assets/icons/sponsors/claudeapi.png';
+import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
+import kimiIconSvg from '@/assets/icons/sponsors/kimi.svg?raw';
 import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
 import shengsuanyunIcon from '@/assets/icons/sponsors/shengsuanyun.svg';
+import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import zhipuIcon from '@/assets/icons/zhipu.svg';
 import zhipuIconSvg from '@/assets/icons/zhipu.svg?raw';
 
@@ -369,6 +376,144 @@ export const hermesProviders: Provider[] = [
     iconBg: 'bg-purple-500/15',
     name: 'Nous Research',
     subtitle: 'https://nousresearch.com',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+];
+
+export const grokBuildProviders: Provider[] = [
+  {
+    icon: grokIcon,
+    iconSvg: grokIconSvg,
+    iconBg: 'bg-slate-500/20',
+    iconColor: 'currentColor',
+    name: 'Grok Official',
+    subtitle: 'https://x.ai/grok',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: packyCodeIcon,
+    iconSvg: packyCodeIconSvg,
+    iconBg: 'bg-emerald-500/20',
+    iconColor: 'currentColor',
+    name: 'PackyCode',
+    subtitle: 'https://www.packyapi.ai',
+    time: '6',
+    used: '184',
+    remaining: '316',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: zetaapiIcon,
+    iconBg: 'bg-sky-500/15',
+    name: 'ZetaAPI',
+    subtitle: 'https://zetaapi.ai',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: apinebulaIcon,
+    iconBg: 'bg-indigo-500/15',
+    name: 'APINebula',
+    subtitle: 'https://apinebula.ai',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+];
+
+export const piProviders: Provider[] = [
+  {
+    icon: kimiIcon,
+    iconSvg: kimiIconSvg,
+    iconBg: 'bg-slate-500/20',
+    iconColor: 'currentColor',
+    name: 'Kimi For Coding',
+    subtitle: 'https://www.kimi.com/code',
+    time: '3',
+    quota: {
+      updatedMinutes: 3,
+      tiers: [
+        { label: '5h', utilization: 27, resetsIn: '4h05m' },
+        { label: '7d', utilization: 41, resetsIn: '2d18h' },
+      ],
+    },
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: packyCodeIcon,
+    iconSvg: packyCodeIconSvg,
+    iconBg: 'bg-emerald-500/20',
+    iconColor: 'currentColor',
+    name: 'PackyCode',
+    subtitle: 'https://www.packyapi.ai',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: zetaapiIcon,
+    iconBg: 'bg-sky-500/15',
+    name: 'ZetaAPI',
+    subtitle: 'https://zetaapi.ai',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: zhipuIcon,
+    iconSvg: zhipuIconSvg,
+    iconBg: 'bg-blue-500/20',
+    iconColor: '#0F62FE',
+    name: 'Zhipu GLM',
+    subtitle: 'https://open.bigmodel.cn',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+];
+
+export const mcodeProviders: Provider[] = [
+  {
+    icon: minimaxIcon,
+    iconBg: 'bg-rose-500/20',
+    name: 'MiniMax',
+    subtitle: 'https://platform.minimax.cn',
+    time: '2',
+    quota: {
+      updatedMinutes: 2,
+      tiers: [
+        { label: '5h', utilization: 38, resetsIn: '3h20m' },
+        { label: '7d', utilization: 15, resetsIn: '5d9h' },
+      ],
+    },
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: kimiIcon,
+    iconSvg: kimiIconSvg,
+    iconBg: 'bg-slate-500/20',
+    iconColor: 'currentColor',
+    name: 'Kimi For Coding',
+    subtitle: 'https://www.kimi.com/code',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: packyCodeIcon,
+    iconSvg: packyCodeIconSvg,
+    iconBg: 'bg-emerald-500/20',
+    iconColor: 'currentColor',
+    name: 'PackyCode',
+    subtitle: 'https://www.packyapi.ai',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  {
+    icon: deepseekIcon,
+    iconBg: 'bg-blue-500/15',
+    name: 'DeepSeek',
+    subtitle: 'https://platform.deepseek.com',
     isUrl: true,
     isSvgUrl: true,
   },

@@ -28,9 +28,6 @@ export function SponsorCard({ sponsor, variant }: SponsorCardProps) {
   const description = sponsor.description[language];
   const perk = sponsor.perk?.[language];
   const visitLabel = t.sponsorsPage.card.visit;
-  const sinceLabel = sponsor.since
-    ? t.sponsorsPage.card.since.replace('{date}', sponsor.since)
-    : null;
   const tier = variant ?? sponsor.tier;
   const iconSrc = resolveLocalizedAsset(sponsor.icon, language);
   const name = resolveSponsorName(sponsor.name, language);
@@ -73,9 +70,6 @@ export function SponsorCard({ sponsor, variant }: SponsorCardProps) {
             <h3 className="text-2xl font-bold text-foreground transition-colors group-hover:text-primary md:text-3xl">
               {name}
             </h3>
-            {sinceLabel && (
-              <span className="text-xs text-muted-foreground md:text-sm">{sinceLabel}</span>
-            )}
           </div>
           <p className="mt-1 text-sm font-medium text-primary md:text-base">{tagline}</p>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">

@@ -32,7 +32,6 @@ export const translations = {
       downloads: '下载',
       supportedCli: '支持工具',
       rustBadge: 'Rust #1',
-      starRankBadge: 'GitHub 总榜 #{rank}',
     },
     // Features Section
     features: {
@@ -44,24 +43,24 @@ export const translations = {
           description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi 和 MiniMax Code 的供应商配置。',
         },
         {
-          title: '自动故障转移',
-          description: '本地路由内置熔断器、健康监控和故障转移队列，主 Provider 异常时自动切换到备用 Provider。',
+          title: '告别手动编辑',
+          description: '内置 90+ 供应商预设，包括 AWS Bedrock、NVIDIA NIM 和社区中转服务。选一个预设、填入 Key 就能一键切换，不用再手改 JSON、TOML、YAML 或 .env 文件，原有配置也不会丢失。',
         },
         {
-          title: '用量与额度可见',
+          title: '在 Claude Code 里用 GPT，在 Codex 里用 Claude',
+          description: '内置本地路由，自动转换 Anthropic、OpenAI、Gemini 的接口格式；熔断器和故障转移队列会在主供应商异常时自动切到备用供应商。',
+        },
+        {
+          title: 'MCP、Skills 与提示词集中管理',
+          description: 'MCP 和 Skills 添加一次，按工具勾选同步；提示词按工具分别维护。还能浏览、搜索各工具的会话历史，并复制恢复命令。',
+        },
+        {
+          title: '用量与额度一目了然',
           description: '不开本地路由也能从会话记录统计 Token、缓存命中和成本，支持日期范围筛选与自定义模型价格；供应商卡片和托盘直接显示订阅额度与余额。',
         },
         {
-          title: '本地优先存储',
-          description: '配置和 API Key 默认保存在本地 SQLite 数据库，支持完整的 Schema 迁移；只有开启 WebDAV / S3 云同步时，才会上传到你自己配置的存储。',
-        },
-        {
-          title: 'MCP / Skills / 会话',
-          description: '集中管理 MCP、Skills、提示词和 Hermes 记忆，浏览、搜索各工具的会话历史并复制恢复命令，无需手动编辑配置文件。',
-        },
-        {
-          title: '开源免费',
-          description: '基于 MIT 协议开源，完全免费使用。社区驱动开发，欢迎贡献代码和反馈。',
+          title: '跨平台，开源免费',
+          description: '基于 Tauri 2 构建的原生桌面应用，支持 Windows、macOS 和 Linux；MIT 协议开源，完全免费，欢迎贡献代码和反馈。',
         },
       ],
     },
@@ -72,8 +71,8 @@ export const translations = {
       description: '无需修改代码，开启本地路由即可获得格式转换、热切换、故障转移和请求日志。',
       features: [
         {
-          title: 'SQLite 数据持久化',
-          description: '所有配置存储在本地 SQLite 数据库，安全可靠，支持完整的 Schema 迁移。',
+          title: '本地优先，可选云同步',
+          description: '配置和 API Key 默认保存在本地 SQLite 数据库，支持完整的 Schema 迁移；开启 WebDAV / S3 云同步后可在多台设备间同步，数据只上传到你自己配置的存储。',
         },
         {
           title: 'Rust 后端 + React 前端',
@@ -431,7 +430,6 @@ export const translations = {
       },
       card: {
         visit: '访问网站',
-        since: '赞助自 {date}',
         perk: '专属福利',
         coupon: '优惠码',
         copyCoupon: '复制优惠码',
@@ -655,7 +653,6 @@ export const translations = {
       downloads: 'Downloads',
       supportedCli: 'Tools Supported',
       rustBadge: 'Rust #1',
-      starRankBadge: 'GitHub Global Rank #{rank}',
     },
     // Features Section
     features: {
@@ -667,24 +664,24 @@ export const translations = {
           description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code from one interface.',
         },
         {
-          title: 'Automatic Failover',
-          description: 'Local Routing combines circuit breakers, health checks, and failover queues so requests can move to a backup provider automatically.',
+          title: 'No More Manual Editing',
+          description: '90+ built-in provider presets, including AWS Bedrock, NVIDIA NIM, and community relays. Pick a preset, enter your key, and switch in one click — no more hand-editing JSON, TOML, YAML, or .env files, and your existing configuration stays intact.',
         },
         {
-          title: 'Usage & Quota Visibility',
+          title: 'Use GPT in Claude Code, Claude in Codex',
+          description: 'Built-in Local Routing converts between Anthropic, OpenAI, and Gemini API formats automatically, while circuit breakers and failover queues move requests to a backup provider when the primary one fails.',
+        },
+        {
+          title: 'Centralized MCP, Skills & Prompts',
+          description: 'Add MCP servers and Skills once, then choose which tools to sync them to; prompts are maintained per tool. You can also browse and search each tool\'s session history and copy resume commands.',
+        },
+        {
+          title: 'Usage & Quotas at a Glance',
           description: 'Track tokens, cache hits, and costs from session logs even without Local Routing, with date ranges and custom model pricing; provider cards and the tray show subscription quota and balance.',
         },
         {
-          title: 'Local-First Storage',
-          description: 'Configurations and API keys stay in a local SQLite database by default, with full schema migration support; they are uploaded only to your own storage when you turn on WebDAV / S3 cloud sync.',
-        },
-        {
-          title: 'MCP, Skills & Sessions',
-          description: 'Manage MCP, Skills, Prompts, and Hermes memory in one place, and browse or search each tool\'s session history and copy resume commands — no hand-editing config files.',
-        },
-        {
-          title: 'Open Source & Free',
-          description: 'Open source under MIT license, completely free. Community-driven development, contributions welcome.',
+          title: 'Cross-Platform, Open Source & Free',
+          description: 'A native desktop app for Windows, macOS, and Linux, built with Tauri 2. Open source under the MIT license, completely free, and open to contributions and feedback.',
         },
       ],
     },
@@ -695,8 +692,8 @@ export const translations = {
       description: 'No code changes required. Enable Local Routing to get format conversion, hot switching, failover, and request logs.',
       features: [
         {
-          title: 'SQLite Data Persistence',
-          description: 'All configurations stored in local SQLite database, secure and reliable with full schema migration support.',
+          title: 'Local-First, Optional Cloud Sync',
+          description: 'Configurations and API keys stay in a local SQLite database by default, with full schema migration support. Turn on WebDAV / S3 cloud sync to share them across devices — uploaded only to storage you configure.',
         },
         {
           title: 'Rust Backend + React Frontend',
@@ -1054,7 +1051,6 @@ export const translations = {
       },
       card: {
         visit: 'Visit website',
-        since: 'Sponsoring since {date}',
         perk: 'Exclusive perk',
         coupon: 'Coupon code',
         copyCoupon: 'Copy coupon',
@@ -1278,7 +1274,6 @@ export const translations = {
       downloads: 'ダウンロード',
       supportedCli: '対応ツール',
       rustBadge: 'Rust #1',
-      starRankBadge: 'GitHub 世界ランキング #{rank}',
     },
     // Features Section
     features: {
@@ -1290,24 +1285,24 @@ export const translations = {
           description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code のプロバイダーを1つの画面で管理できます。',
         },
         {
-          title: '自動フェイルオーバー',
-          description: 'ローカルルーティングはサーキットブレーカー、ヘルスチェック、フェイルオーバーキューを備え、障害時にバックアップへ自動切替できます。',
+          title: '手動編集は不要',
+          description: 'AWS Bedrock、NVIDIA NIM、コミュニティリレーなど 90 以上のプロバイダープリセットを内蔵。プリセットを選んでキーを入力すればワンクリックで切り替えられ、JSON、TOML、YAML、.env ファイルを手で編集する必要はありません。既存の設定も失われません。',
         },
         {
-          title: '使用量とクォータを可視化',
+          title: 'Claude Code で GPT を、Codex で Claude を',
+          description: 'ローカルルーティングを内蔵し、Anthropic、OpenAI、Gemini の API 形式を自動で変換。サーキットブレーカーとフェイルオーバーキューにより、メインのプロバイダーに障害が起きると自動でバックアップへ切り替えます。',
+        },
+        {
+          title: 'MCP・Skills・プロンプトを一元管理',
+          description: 'MCP と Skills は一度追加すれば、ツールごとにチェックを入れて同期。プロンプトはツールごとに個別に管理できます。各ツールのセッション履歴の閲覧・検索や、再開コマンドのコピーにも対応します。',
+        },
+        {
+          title: '使用量とクォータをひと目で確認',
           description: 'ローカルルーティングをオンにしなくても、セッション記録からトークン、キャッシュヒット、コストを期間別に集計し、モデル価格も調整できます。プロバイダーカードとトレイにはサブスクリプションのクォータと残高を表示します。',
         },
         {
-          title: 'ローカルファーストのストレージ',
-          description: '設定と API キーはデフォルトでローカル SQLite データベースに保存され、完全なスキーママイグレーションをサポート。WebDAV / S3 クラウド同期をオンにした場合のみ、ご自身で設定したストレージにアップロードされます。',
-        },
-        {
-          title: 'MCP / Skills / セッション',
-          description: 'MCP、Skills、プロンプト、Hermes のメモリをまとめて管理し、各ツールのセッション履歴の閲覧・検索と再開コマンドのコピーも、設定ファイルを手動編集せずに行えます。',
-        },
-        {
-          title: 'オープンソース＆無料',
-          description: 'MIT ライセンスでオープンソース、完全無料。コミュニティ主導の開発、貢献歓迎。',
+          title: 'クロスプラットフォーム、オープンソースで無料',
+          description: 'Tauri 2 で構築されたネイティブデスクトップアプリで、Windows、macOS、Linux に対応。MIT ライセンスのオープンソースで完全無料。コードの貢献やフィードバックも歓迎します。',
         },
       ],
     },
@@ -1318,8 +1313,8 @@ export const translations = {
       description: 'コード変更不要。ローカルルーティングをオンにするだけで、形式変換、ホットスイッチ、フェイルオーバー、リクエストログを利用できます。',
       features: [
         {
-          title: 'SQLite データ永続化',
-          description: 'すべての設定はローカル SQLite データベースに保存され、安全で信頼性が高く、完全なスキーママイグレーションをサポート。',
+          title: 'ローカルファースト、クラウド同期は任意',
+          description: '設定と API キーはデフォルトでローカル SQLite データベースに保存され、完全なスキーママイグレーションをサポート。WebDAV / S3 クラウド同期をオンにすると複数のデバイス間で同期でき、アップロード先はご自身で設定したストレージだけです。',
         },
         {
           title: 'Rust バックエンド + React フロントエンド',
@@ -1677,7 +1672,6 @@ export const translations = {
       },
       card: {
         visit: 'サイトを見る',
-        since: '{date} よりサポート',
         perk: '専用特典',
         coupon: 'クーポンコード',
         copyCoupon: 'クーポンをコピー',

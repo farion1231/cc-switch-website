@@ -76,7 +76,6 @@ export interface Sponsor {
   }>;
   iconBg?: 'light' | 'dark' | 'auto';
   iconFollowsTheme?: boolean;
-  since?: string;
   featured?: boolean;
 }
 
@@ -138,7 +137,6 @@ export const sponsors: Sponsor[] = [
     tier: 'flagship',
     category: 'native-platform',
     featured: true,
-    since: '2026-07',
     banner: { zh: kimiBannerZh, en: kimiBannerEn, ja: kimiBannerEn, default: kimiBannerEn },
     bannerLinks: [
       {
@@ -184,7 +182,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'relay',
     featured: true,
-    since: '2025-01',
     iconBg: 'light',
     tagline: {
       zh: '稳定高效的 API 中转服务',
@@ -210,7 +207,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://aicoding.inc/i/CCSWITCH',
     tier: 'standard',
     category: 'relay',
-    since: '2026-07',
     tagline: {
       zh: '全球大模型 API 超值中转服务',
       en: 'Cost-effective global AI model API relay',
@@ -235,7 +231,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'aggregator',
     featured: true,
-    since: '2025-04',
     tagline: {
       zh: '一站式 AI 编程平台',
       en: 'All-in-one AI coding platform',
@@ -260,7 +255,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'relay',
     featured: true,
-    since: '2025-05',
     tagline: {
       zh: '官方高稳定中转服务',
       en: 'High-stability official relay',
@@ -285,7 +279,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'native-platform',
     featured: true,
-    since: '2025-04',
     tagline: {
       zh: '工业级 AI 任务并行执行平台',
       en: 'Industrial-grade parallel AI execution',
@@ -310,7 +303,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'relay',
     featured: true,
-    since: '2025-06',
     iconBg: 'light',
     tagline: {
       zh: '官方直连高品质 API 中转',
@@ -363,7 +355,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://ppio.com/activity/ccswitch',
     tier: 'standard',
     category: 'native-platform',
-    since: '2026-08',
     tagline: {
       zh: '国内领先的独立 Agentic Cloud',
       en: 'Leading independent Agentic Cloud in China',
@@ -416,7 +407,6 @@ export const sponsors: Sponsor[] = [
     },
     tier: 'standard',
     category: 'native-platform',
-    since: '2025-10',
     tagline: {
       zh: '字节自研全模态大模型平台',
       en: 'ByteDance full-modal LLM platform',
@@ -441,7 +431,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://cloud.siliconflow.cn/i/YflgU2Ve',
     tier: 'standard',
     category: 'native-platform',
-    since: '2025-05',
     tagline: {
       zh: '高性能多模态 AI 基础设施',
       en: 'High-performance multimodal AI infra',
@@ -465,7 +454,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://cubence.com/signup?code=CCSWITCH&source=ccs',
     tier: 'standard',
     category: 'relay',
-    since: '2025-06',
     tagline: {
       zh: '可靠高效的 API 中继',
       en: 'Reliable and efficient API relay',
@@ -490,7 +478,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://www.dmxapi.cn/register?aff=bUHu',
     tier: 'standard',
     category: 'aggregator',
-    since: '2025-04',
     iconBg: 'light',
     tagline: {
       zh: '一个 Key 用全球大模型',
@@ -515,7 +502,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://www.compshare.cn/coding-plan?ytag=GPU_YY_YX_git_cc-switch',
     tier: 'standard',
     category: 'subscription',
-    since: '2025-05',
     tagline: {
       zh: 'UCloud 旗下 AI 云平台',
       en: 'AI cloud platform by UCloud',
@@ -539,7 +525,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://crazyrouter.com/register?aff=OZcm&ref=cc-switch',
     tier: 'standard',
     category: 'aggregator',
-    since: '2025-07',
     tagline: {
       zh: '高性能 AI API 聚合平台',
       en: 'High-performance AI API aggregator',
@@ -564,7 +549,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://www.rightapi.ai/register?aff=CCSWITCH',
     tier: 'standard',
     category: 'relay',
-    since: '2025-08',
     tagline: {
       zh: '按量 / 包月双模式中转',
       en: 'Pay-as-you-go & monthly relay',
@@ -588,7 +572,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://sssaicodeapi.com/register?ref=DCP0SM',
     tier: 'standard',
     category: 'relay',
-    since: '2025-08',
     tagline: {
       zh: '稳定平价的 Claude / CodeX 中转',
       en: 'Affordable Claude / CodeX relay',
@@ -612,7 +595,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://www.micuapi.ai/register?aff=aOYQ',
     tier: 'standard',
     category: 'relay',
-    since: '2025-09',
     tagline: {
       zh: '试错零成本的中转服务',
       en: 'Zero-risk LLM relay',
@@ -637,7 +619,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://etok.ai',
     tier: 'standard',
     category: 'subscription',
-    since: '2025-10',
     tagline: {
       zh: '一站式 AI 编程工具服务',
       en: 'All-in-one AI coding service',
@@ -661,7 +642,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://console.apito.ai/agent/register/pQBql2buaqiX3dDS',
     tier: 'standard',
     category: 'relay',
-    since: '2025-10',
     tagline: {
       zh: '官方渠道直供，零降智零逆向',
       en: 'Official-channel relay, zero degradation',
@@ -708,7 +688,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://claudecn.ai/register?aff=HEL9',
     tier: 'standard',
     category: 'relay',
-    since: '2025-10',
     iconBg: 'light',
     tagline: {
       zh: '企业级 AI 中转平台',
@@ -733,7 +712,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://runapi.host/register?aff=iOKB',
     tier: 'standard',
     category: 'aggregator',
-    since: '2025-10',
     iconBg: 'dark',
     tagline: {
       zh: '150+ 模型低至 1 折',
@@ -759,7 +737,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'subscription',
     iconBg: 'light',
-    since: '2026-09',
     tagline: {
       zh: 'FluxA × 百度智能云 AgenticPlan',
       en: 'FluxA × Baidu AI Cloud AgenticPlan',
@@ -808,16 +785,15 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'aggregator',
     iconFollowsTheme: true,
-    since: '2026-09',
     tagline: {
-      zh: '企业级线路，质保 99.99% 可用',
-      en: 'Enterprise-grade routes with 99.99% availability',
-      ja: 'エンタープライズ回線、可用性 99.99% を保証',
+      zh: '企业级满血中转，服务稳定性 99.9%',
+      en: 'Enterprise-grade relay with 99.9% service stability',
+      ja: 'エンタープライズ級リレー、サービス安定性 99.9%',
     },
     description: {
-      zh: '快速、稳定、高可用。联系客服领取试用额度。邀请返现无上限。不稳定包赔偿！让你感受网线插在官方服务器的体验！',
-      en: 'Fast, stable, and highly available. Contact support for trial credit, earn unlimited referral cashback, and receive compensation for instability. Experience a connection that feels plugged directly into the official servers.',
-      ja: '高速・安定・高可用性。サポートへの連絡でトライアルクレジットを進呈し、紹介キャッシュバックは上限なし。不安定な場合は補償します。公式サーバーへ直接接続したような体験を提供します。',
+      zh: '专注稳定性与服务质量的企业级满血 AI 中转平台，为 Claude Code、Codex 等主流模型提供高速、稳定的中转服务。持续运营一年，服务稳定性达 99.9%，提供 7×24 小时人工技术支持。',
+      en: 'An enterprise-grade, full-capability AI relay focused on stability and service quality, providing fast, stable relay for Claude Code, Codex, and other mainstream models. One year of continuous operation, 99.9% service stability, and 7×24 human technical support.',
+      ja: '安定性とサービス品質にこだわったエンタープライズ級のフルスペック AI リレー。Claude Code や Codex などの主要モデルに高速で安定したリレーを提供します。1 年間の継続運営、サービス安定性 99.9%、7×24 時間の有人技術サポート。',
     },
     perk: {
       zh: '联系客服领取试用额度，邀请返现无上限',
@@ -858,7 +834,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'aggregator',
     iconFollowsTheme: true,
-    since: '2026-09',
     tagline: {
       zh: '可用性 99.99% 的 AI 模型网关',
       en: 'AI model gateway with 99.99% availability',
@@ -955,7 +930,6 @@ export const sponsors: Sponsor[] = [
     tier: 'standard',
     category: 'aggregator',
     iconBg: 'light',
-    since: '2026-07',
     tagline: {
       zh: '多商家竞价的 AI 模型 API 聚合平台',
       en: 'Multi-vendor AI model API aggregation',
@@ -1048,7 +1022,6 @@ export const sponsors: Sponsor[] = [
     url: 'https://xycai.us/register?aff=Uhu9',
     tier: 'standard',
     category: 'aggregator',
-    since: '2026-08',
     tagline: {
       zh: '企业级超级 Token 工厂',
       en: 'Enterprise-grade super token factory',

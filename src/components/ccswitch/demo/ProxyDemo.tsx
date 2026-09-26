@@ -8,6 +8,7 @@ import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 
 import claudeIcon from '@/assets/icons/claude.svg';
 import geminiIcon from '@/assets/icons/gemini.svg';
+import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 
 interface ProxyToggle {
@@ -23,6 +24,7 @@ export function ProxyContent() {
   const [claudeEnabled, setClaudeEnabled] = useState(true);
   const [codexEnabled, setCodexEnabled] = useState(true);
   const [geminiEnabled, setGeminiEnabled] = useState(false);
+  const [grokBuildEnabled, setGrokBuildEnabled] = useState(false);
   const [logEnabled, setLogEnabled] = useState(true);
 
   const failoverQueues = {
@@ -58,6 +60,12 @@ export function ProxyContent() {
       icon: <img src={geminiIcon} alt="Gemini" className="w-5 h-5" />,
       enabled: geminiEnabled,
       setEnabled: setGeminiEnabled,
+    },
+    {
+      name: 'Grok Build',
+      icon: <InlineSvgIcon svg={grokIconSvg} label="Grok Build" className="h-5 w-5" />,
+      enabled: grokBuildEnabled,
+      setEnabled: setGrokBuildEnabled,
     },
   ];
 
@@ -109,14 +117,14 @@ export function ProxyContent() {
         <div className="text-sm text-muted-foreground mb-1">{t.provider.inUse}</div>
         <p className={cn('break-words text-sm sm:text-base', proxyRunning ? 'text-emerald-500' : 'text-amber-500')}>
           {proxyRunning
-            ? `${t.demo.proxy.currentProvider}：PackyCode (Claude Opus 4.7)`
+            ? `${t.demo.proxy.currentProvider}：PackyCode (Claude Opus 5)`
             : `${t.demo.proxy.currentProvider}：${t.demo.proxy.waitingRequest}`}
         </p>
       </div>
 
       <div className="mb-5 sm:mb-6">
         <div className="text-sm text-muted-foreground mb-3">{t.demo.proxy.proxyEnable}</div>
-        <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {proxyToggles.map((item) => (
             <div key={item.name} className="flex items-center justify-between rounded-xl border border-border bg-card p-3">
               <span className="flex items-center gap-2 font-medium text-foreground">

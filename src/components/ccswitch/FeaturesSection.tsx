@@ -1,23 +1,21 @@
 import { motion } from 'framer-motion';
 import {
   Layers,
-  Zap,
-  DollarSign,
-  Shield,
-  Settings,
-  GitBranch,
+  SlidersHorizontal,
+  Route,
+  Puzzle,
+  BarChart3,
+  Monitor,
   Star,
   Download,
   Trophy,
-  TrendingUp,
   type LucideIcon
 } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
 import { useGitHubStats } from '@/hooks/useGitHubStars';
-import { useStarHistoryRank } from '@/hooks/useStarHistoryRank';
 import { SectionHeader } from './SectionHeader';
 
-const featureIcons: LucideIcon[] = [Layers, Zap, DollarSign, Shield, Settings, GitBranch];
+const featureIcons: LucideIcon[] = [Layers, SlidersHorizontal, Route, Puzzle, BarChart3, Monitor];
 
 const featureCardClass =
   'bg-gradient-to-br from-primary/5 to-accent-warm/5 dark:from-primary/10 dark:to-accent-warm/10';
@@ -47,7 +45,6 @@ const itemVariants = {
 export function FeaturesSection() {
   const { t } = useLanguage();
   const { formattedStars, formattedDownloads } = useGitHubStats();
-  const globalRank = useStarHistoryRank();
 
   return (
     <section id="features" className="section-y bg-background">
@@ -79,17 +76,6 @@ export function FeaturesSection() {
               <Trophy className="w-4 h-4" />
               {t.hero.rustBadge}
             </span>
-            {globalRank !== null && (
-              <a
-                href="https://www.star-history.com/#farion1231/cc-switch&Date"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-warm/10 border border-accent-warm/30 text-accent-warm text-sm font-medium transition-colors hover:bg-accent-warm/20"
-              >
-                <TrendingUp className="w-4 h-4" />
-                {t.hero.starRankBadge.replace('{rank}', String(globalRank))}
-              </a>
-            )}
           </div>
         </SectionHeader>
 
