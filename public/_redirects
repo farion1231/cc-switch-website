@@ -2,6 +2,13 @@
 # returning the same canonical-mapped HTML to crawlers.
 /  /zh/  302
 
+# Retired tutorials: permanently redirect to their official replacement.
+# Must stay above the SPA rewrites, which would otherwise match first.
+/zh/tutorials/codex-oauth-claude-code-local-routing  /zh/tutorials/claude-codex-routing-guide  301
+/en/tutorials/codex-oauth-claude-code-local-routing  /en/tutorials/claude-codex-routing-guide  301
+/ja/tutorials/codex-oauth-claude-code-local-routing  /ja/tutorials/claude-codex-routing-guide  301
+/tutorials/codex-oauth-claude-code-local-routing  /tutorials/claude-codex-routing-guide  301
+
 # SPA route rewrites. Keep these scoped to real client routes so missing
 # static files such as /assets/*.js return a real 404 instead of index.html.
 /zh  /  200

@@ -9,6 +9,7 @@ import {
   Clock,
   Edit,
   ExternalLink,
+  RefreshCw,
   User,
 } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
@@ -164,6 +165,12 @@ export default function TutorialDetailPage() {
                       <Calendar className="h-4 w-4" />
                       {detail.published.replace('{date}', tutorial.date)}
                     </span>
+                    {tutorial.updated && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <RefreshCw className="h-4 w-4" />
+                        {detail.updated.replace('{date}', tutorial.updated)}
+                      </span>
+                    )}
                     <span className="inline-flex items-center gap-1.5">
                       <Clock className="h-4 w-4" />
                       {detail.readMin.replace('{n}', String(tutorial.readMinutes))}

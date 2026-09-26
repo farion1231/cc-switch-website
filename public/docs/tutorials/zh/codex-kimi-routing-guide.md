@@ -4,7 +4,7 @@
 
 Kimi 开放平台和 Kimi For Coding 的官方 Codex 预设已切换为 **Responses**，无需为了协议转换开启本地路由。旧卡片保存的是创建时的快照，不会自动更新。
 
-1. 升级到 CC Switch v3.20.3 或更新版本，在 Codex 标签下按 API Key 来源选择最新的 **Kimi** 或 **Kimi For Coding** 预设。
+1. 升级到 CC Switch v3.20.3 或更新版本，在 Codex 标签下按 API Key 来源选择最新的 **Kimi** 或 **Kimi For Coding** 预设。国际站（kimi.ai）的 Key 选 **Kimi Global** 或 **Kimi For Coding Global**（v3.20.4 起提供）。
 2. 填入对应 API Key，保存并启用。旧卡片建议重新添加预设；若手动迁移，确认端点正确后将「上游格式」改为 **Responses**。
 3. 重启 Codex，使配置和模型目录生效。原生 Responses 也可经标准代理转发，但不再需要 Responses→Chat 转换。
 
@@ -81,7 +81,7 @@ Kimi 的 API Key 有两个来源，对应 CC Switch 里两个不同的内置预�
 
 ## 其它 Chat 供应商怎么处理
 
-Kimi、DeepSeek、MiniMax、SiliconFlow 等常见 Chat 格式供应商在 CC Switch 里已有预设，优先用预设即可。只有预设里没有的供应商，才需要选择自定义配置；这时按对方文档填 API Key、base URL 和模型，并把 `高级选项` 里的 `上游格式` 选为 `Chat Completions（需开启路由）`。
+SiliconFlow、ModelScope 等常见 Chat 格式供应商在 CC Switch 里已有预设，优先用预设即可。只有预设里没有的供应商，才需要选择自定义配置；这时按对方文档填 API Key、base URL 和模型，并把 `高级选项` 里的 `上游格式` 选为 `Chat Completions（需开启路由）`。
 
 如果上游直接支持 OpenAI Responses API，把 `上游格式` 选为 `Responses` 即可；这时 CC Switch 按 Responses 直连，不做 Chat 转换。
 

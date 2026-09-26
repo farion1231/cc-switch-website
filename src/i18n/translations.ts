@@ -606,6 +606,7 @@ export const translations = {
         back: '返回攻略列表',
         readMin: '{n} 分钟阅读',
         published: '发布于 {date}',
+        updated: '更新于 {date}',
         bySource: '由 {source} 提供',
         notAvailable: {
           title: '这篇攻略暂时没有当前语言的版本',
@@ -1227,6 +1228,7 @@ export const translations = {
         back: 'Back to tutorials',
         readMin: '{n} min read',
         published: 'Published {date}',
+        updated: 'Updated {date}',
         bySource: 'by {source}',
         notAvailable: {
           title: 'This article isn\'t available in your language yet',
@@ -1848,6 +1850,7 @@ export const translations = {
         back: 'チュートリアル一覧に戻る',
         readMin: '読了 {n} 分',
         published: '公開日：{date}',
+        updated: '更新日：{date}',
         bySource: '{source} 提供',
         notAvailable: {
           title: 'この記事は現在の言語ではまだ提供されていません',

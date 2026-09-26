@@ -1641,12 +1641,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-kimi-routing-guide" />
   </url>
   <url>
-    <loc>https://ccswitch.io/zh/tutorials/codex-oauth-claude-code-local-routing</loc>
-    <lastmod>2026-09-26</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-oauth-claude-code-local-routing" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/codex-oauth-claude-code-local-routing" />
-  </url>
-  <url>
     <loc>https://ccswitch.io/zh/tutorials/codex-official-auth-preservation-guide</loc>
     <lastmod>2026-09-26</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-official-auth-preservation-guide" />

@@ -31,6 +31,8 @@ export interface Tutorial {
   author: TutorialAuthor;
   /** Publish date in YYYY-MM-DD. */
   date: string;
+  /** Last substantive revision in YYYY-MM-DD, shown on the detail page. Does not affect sorting. */
+  updated?: string;
   category: TutorialCategory;
   source: TutorialSource;
   /** Estimated reading time in minutes. */
@@ -120,6 +122,7 @@ export const tutorials: Tutorial[] = [
     },
     author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-kimi-routing-guide-zh.md' },
     date: '2026-07-07',
+    updated: '2026-09-26',
     category: 'practice',
     source: 'official',
     readMinutes: 6,
@@ -159,7 +162,7 @@ export const tutorials: Tutorial[] = [
     summary: {
       zh: '社区实战攻略：在 SSH / Docker / WSL 等没有桌面环境的地方，用 cc-switch CLI 版的 TUI 全屏界面和 CLI 命令行两种模式管理供应商、同步 WebDAV、检查环境冲突，与桌面 GUI 版无缝配合。',
       en: 'A community guide covering cc-switch CLI on headless servers (SSH / Docker / WSL): TUI interactive mode, CLI subcommands, WebDAV sync, env checks, and how the CLI branch complements the desktop GUI.',
-      ja: 'SSH / Docker / WSL などデスクトップ環境がないサーバーで、cc-switch CLI の TUI と CLI の両モードを使い、Provider 管理、WebDAV 同期、環境チェックを行うコミュニティガイドです。',
+      ja: 'SSH / Docker / WSL などデスクトップ環境がないサーバーで、cc-switch CLI の TUI と CLI の両モードを使い、プロバイダー管理、WebDAV 同期、環境チェックを行うコミュニティガイドです。',
     },
     author: { name: 'saladday', url: 'https://github.com/SaladDay' },
     date: '2026-06-06',
@@ -183,6 +186,7 @@ export const tutorials: Tutorial[] = [
     },
     author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-desktop-custom-model-visibility-zh.md' },
     date: '2026-06-27',
+    updated: '2026-09-26',
     category: 'troubleshooting',
     source: 'official',
     readMinutes: 4,
@@ -204,6 +208,7 @@ export const tutorials: Tutorial[] = [
     },
     author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-official-auth-preservation-guide-zh.md' },
     date: '2026-06-01',
+    updated: '2026-09-26',
     category: 'practice',
     source: 'official',
     readMinutes: 9,
@@ -235,17 +240,18 @@ export const tutorials: Tutorial[] = [
   {
     slug: 'codex-deepseek-routing-guide',
     title: {
-      zh: '在 Codex 中使用 DeepSeek 这类 Chat 格式 API',
-      en: 'Use DeepSeek-Style Chat APIs in Codex',
-      ja: 'Codex で DeepSeek などの Chat 形式 API を使う',
+      zh: '在 Codex 中使用 Chat 格式 API：本地路由攻略与 DeepSeek 迁移说明',
+      en: 'Using Chat-Format APIs in Codex: Local Routing Guide and DeepSeek Migration Notes',
+      ja: 'Codex で Chat 形式 API を使う: ローカルルーティングガイドと DeepSeek 移行の説明',
     },
     summary: {
-      zh: '官方实战攻略：先判断供应商是否仍需路由，再按需将 Responses 转换为 Chat Completions；同时说明 3.19.1 后 DeepSeek 原生直连、旧配置与 deepseek-v4-pro 的处理方式。',
-      en: 'Official hands-on guide for identifying providers that still need Responses-to-Chat routing, plus the native DeepSeek path introduced in 3.19.1 and handling for older configurations and deepseek-v4-pro.',
-      ja: 'Responses から Chat へのルーティングが必要なプロバイダーの見分け方と、3.19.1 以降の DeepSeek ネイティブ接続、既存設定、deepseek-v4-pro の扱いを解説する公式実践ガイドです。',
+      zh: '官方实战攻略：先看供应商卡片是否带「需要路由」徽章，再按需把 Codex 的 Responses 请求转换成 Chat Completions；附 DeepSeek 旧卡片改为原生直连的方法。',
+      en: 'Official hands-on guide: check whether a provider card shows the Needs Routing badge, then convert Codex Responses requests to Chat Completions only where needed. Also covers moving older DeepSeek cards to native direct connections.',
+      ja: 'プロバイダーカードに「ルーティングが必要」バッジがあるかを確認し、必要な場合だけ Codex の Responses リクエストを Chat Completions に変換する公式実践ガイドです。DeepSeek の旧カードをネイティブ直接接続に切り替える方法も紹介します。',
     },
     author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/codex-deepseek-routing-guide-zh.md' },
     date: '2026-05-29',
+    updated: '2026-09-26',
     category: 'practice',
     source: 'official',
     readMinutes: 8,
@@ -258,12 +264,12 @@ export const tutorials: Tutorial[] = [
     title: {
       zh: '使用 CC Switch 一键配置、管理和切换 Claude 桌面版供应商',
       en: 'Configure, Manage, and Switch Claude Desktop Providers with CC Switch',
-      ja: 'CC Switch で Claude Desktop の Provider を設定・管理・切り替える',
+      ja: 'CC Switch で Claude Desktop のプロバイダーを設定・管理・切り替える',
     },
     summary: {
       zh: 'Jason Young 的实操帖，介绍如何用 CC Switch 管理 Claude Desktop 的多个供应商配置，并快速完成配置、切换和日常维护。',
       en: 'A hands-on post by Jason Young showing how to manage multiple Claude Desktop provider configurations with CC Switch, including setup, switching, and day-to-day maintenance.',
-      ja: 'Jason Young による実践メモ。CC Switch で Claude Desktop の複数 Provider 設定を管理し、セットアップ、切り替え、日常運用を行う方法を紹介します。',
+      ja: 'Jason Young による実践メモ。CC Switch で Claude Desktop の複数プロバイダー設定を管理し、セットアップ、切り替え、日常運用を行う方法を紹介します。',
     },
     author: { name: 'Jason Young', url: 'https://x.com/Jason_Young1231' },
     date: '2026-05-16',
@@ -276,28 +282,6 @@ export const tutorials: Tutorial[] = [
     featured: true,
   },
   {
-    slug: 'codex-oauth-claude-code-local-routing',
-    title: {
-      zh: '用本地路由把 Codex 模型接到 Claude Code',
-      en: 'Use Local Routing to Run Codex Models in Claude Code',
-      ja: 'Local Routing で Codex モデルを Claude Code から使う',
-    },
-    summary: {
-      zh: '基于 GitHub issue #1997 的社区讨论，梳理 Codex OAuth 反向代理、本地路由、Claude 路由接管、全局终端启动和常见报错排查。',
-      en: 'A practical guide based on GitHub issue #1997 covering Codex OAuth reverse proxy, Local Routing, Claude routing takeover, launching from a normal terminal, and common pitfalls.',
-      ja: 'GitHub issue #1997 の議論をもとに、Codex OAuth リバースプロキシ、Local Routing、Claude ルーティング、通常のターミナル起動、よくある落とし穴を整理します。',
-    },
-    author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/issues/1997' },
-    date: '2026-05-06',
-    category: 'practice',
-    source: 'official',
-    readMinutes: 11,
-    languages: ['zh'],
-    accent: 'amber',
-    coverIcons: [tutorialIcons.codex, tutorialIcons.claude],
-    featured: true,
-  },
-  {
     slug: 'khazix-agent-model-switching',
     title: {
       zh: '这个 51K 星标的开源神器，让任何 Agent 都能一键切换所有模型',
@@ -307,7 +291,7 @@ export const tutorials: Tutorial[] = [
     summary: {
       zh: '数字生命卡兹克的社区长文，系统介绍 CC Switch 的安装、供应商配置、热切换、用量追踪和本地路由故障转移。',
       en: 'A community long-form guide by Khazix covering CC Switch installation, provider setup, hot switching, usage tracking, and local routing failover.',
-      ja: 'Khazix によるコミュニティ記事。CC Switch のインストール、Provider 設定、ホットスイッチ、使用量追跡、Local Routing のフェイルオーバーを紹介。',
+      ja: 'Khazix によるコミュニティ記事。CC Switch のインストール、プロバイダー設定、ホットスイッチ、使用量追跡、ローカルルーティングのフェイルオーバーを紹介。',
     },
     author: { name: '数字生命卡兹克', url: 'https://x.com/Khazix0918' },
     date: '2026-04-28',
@@ -329,7 +313,7 @@ export const tutorials: Tutorial[] = [
     summary: {
       zh: 'SiliconFlow 官方文档，介绍如何下载安装 CC Switch、获取 SiliconFlow API Key、为 Claude Code / OpenClaw 添加 SiliconFlow 供应商，并使用托盘切换、MCP、用量统计等进阶功能。',
       en: 'SiliconFlow official documentation covering CC Switch installation, SiliconFlow API key setup, Claude Code / OpenClaw provider configuration, tray switching, MCP, usage tracking, and advanced workflows.',
-      ja: 'SiliconFlow 公式ドキュメント。CC Switch のインストール、SiliconFlow API Key、Claude Code / OpenClaw の Provider 設定、トレイ切替、MCP、使用量統計などを紹介します。',
+      ja: 'SiliconFlow 公式ドキュメント。CC Switch のインストール、SiliconFlow API Key、Claude Code / OpenClaw のプロバイダー設定、トレイ切替、MCP、使用量統計などを紹介します。',
     },
     author: { name: 'SiliconFlow', url: 'https://www.siliconflow.cn/' },
     date: '2026-04-15',
@@ -349,9 +333,9 @@ export const tutorials: Tutorial[] = [
       ja: 'AI コーディングツールで MiniMax を使う',
     },
     summary: {
-      zh: 'MiniMax 开放平台文档，介绍 MiniMax-M2.7 与 MiniMax-M2.7-highspeed 如何通过 OpenAI / Anthropic 兼容接口接入 Claude Code、Codex、Cursor、OpenCode、OpenClaw、Zed 等 AI 编程工具。',
-      en: 'MiniMax official documentation for connecting MiniMax-M2.7 and MiniMax-M2.7-highspeed to AI coding tools such as Claude Code, Codex, Cursor, OpenCode, OpenClaw, and Zed through OpenAI / Anthropic compatible APIs.',
-      ja: 'MiniMax 公式ドキュメント。MiniMax-M2.7 / MiniMax-M2.7-highspeed を OpenAI / Anthropic 互換 API 経由で Claude Code、Codex、Cursor、OpenCode、OpenClaw、Zed などに接続する方法を紹介します。',
+      zh: 'MiniMax 开放平台文档，介绍如何通过 OpenAI / Anthropic 兼容接口，把 MiniMax 模型接入 Claude Code、Codex、Cursor、OpenCode、OpenClaw、Zed 等 AI 编程工具。',
+      en: 'MiniMax official documentation for connecting MiniMax models to AI coding tools such as Claude Code, Codex, Cursor, OpenCode, OpenClaw, and Zed through OpenAI / Anthropic compatible APIs.',
+      ja: 'MiniMax 公式ドキュメント。MiniMax のモデルを OpenAI / Anthropic 互換 API 経由で Claude Code、Codex、Cursor、OpenCode、OpenClaw、Zed などに接続する方法を紹介します。',
     },
     author: { name: 'MiniMax', url: 'https://platform.minimaxi.com/' },
     date: '2026-05-06',
@@ -373,7 +357,7 @@ export const tutorials: Tutorial[] = [
     summary: {
       zh: '小陈同学c_z 的 B 站视频攻略，演示通过 CC Switch 将 DeepSeek V4 Pro 接入 Claude Code，覆盖安装、API Key 创建、供应商配置、模型切换、1M 上下文、Max 思考等级和真实任务测试。',
       en: 'A Bilibili video guide by 小陈同学c_z showing how to connect DeepSeek V4 Pro to Claude Code with CC Switch, covering installation, API key setup, provider configuration, model switching, 1M context, Max thinking level, and real task testing.',
-      ja: '小陈同学c_z による Bilibili 動画ガイド。CC Switch で DeepSeek V4 Pro を Claude Code に接続し、インストール、API Key、Provider 設定、モデル切替、1M コンテキスト、Max 思考レベル、実タスク検証を紹介します。',
+      ja: '小陈同学c_z による Bilibili 動画ガイド。CC Switch で DeepSeek V4 Pro を Claude Code に接続し、インストール、API Key、プロバイダー設定、モデル切替、1M コンテキスト、Max 思考レベル、実タスク検証を紹介します。',
     },
     author: { name: '小陈同学c_z', url: 'https://space.bilibili.com/243917657' },
     date: '2026-05-01',
@@ -395,7 +379,7 @@ export const tutorials: Tutorial[] = [
     summary: {
       zh: 'Claude API 的中文入门教程，介绍如何安装 CC Switch、导入 ClaudeAPI 配置、切换供应商、启动 Claude Code，并测试 API 连通性与查看用量。',
       en: 'A Chinese getting-started guide from Claude API covering CC Switch installation, ClaudeAPI configuration import, provider switching, launching Claude Code, connectivity testing, and usage checks.',
-      ja: 'Claude API による中国語の入門ガイド。CC Switch のインストール、ClaudeAPI 設定のインポート、Provider の切り替え、Claude Code の起動、接続テスト、使用量確認を紹介します。',
+      ja: 'Claude API による中国語の入門ガイド。CC Switch のインストール、ClaudeAPI 設定のインポート、プロバイダーの切り替え、Claude Code の起動、接続テスト、使用量確認を紹介します。',
     },
     author: { name: 'Claude API', url: 'https://apito.ai/zh/blog/' },
     date: '2026-04-05',
@@ -417,7 +401,7 @@ export const tutorials: Tutorial[] = [
     summary: {
       zh: '尹珉的 CC Switch 入门教程，介绍如何统一管理 Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw 的 Provider 配置，并接入 Kimi、GLM 等模型。',
       en: 'A getting-started guide by Yin Min covering provider management for Claude Code, Codex, Gemini CLI, OpenCode, and OpenClaw, including Kimi and GLM setup.',
-      ja: '尹珉による入門ガイド。Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw の Provider 設定を統一管理し、Kimi や GLM を接続する方法を紹介します。',
+      ja: '尹珉による入門ガイド。Claude Code、Codex、Gemini CLI、OpenCode、OpenClaw のプロバイダー設定を統一管理し、Kimi や GLM を接続する方法を紹介します。',
     },
     author: { name: '尹珉', url: 'https://x.com/yinmin1987' },
     date: '2026-03-10',
@@ -434,12 +418,12 @@ export const tutorials: Tutorial[] = [
     title: {
       zh: '如何在不同的 Claude Code 终端使用不同的供应商',
       en: 'Use Different Providers in Different Claude Code Terminals',
-      ja: 'Claude Code の複数ターミナルで別々の Provider を使う',
+      ja: 'Claude Code の複数ターミナルで別々のプロバイダーを使う',
     },
     summary: {
       zh: 'Jason Young 的实操帖：CC Switch v3.10 新增带配置环境隔离的“打开终端”功能，让每个 Claude Code 终端只使用对应供应商配置，不受全局热切换影响。',
       en: 'A hands-on post by Jason Young: CC Switch v3.10 added isolated “Open Terminal” sessions so each Claude Code terminal can use its own provider configuration without being affected by global hot switching.',
-      ja: 'Jason Young による実践メモ。CC Switch v3.10 の隔離された「ターミナルを開く」により、各 Claude Code ターミナルで個別の Provider 設定を使い、グローバルなホットスイッチの影響を避けられます。',
+      ja: 'Jason Young による実践メモ。CC Switch v3.10 の隔離された「ターミナルを開く」により、各 Claude Code ターミナルで個別のプロバイダー設定を使い、グローバルなホットスイッチの影響を避けられます。',
     },
     author: { name: 'Jason Young', url: 'https://x.com/Jason_Young1231' },
     date: '2026-01-24',
@@ -461,7 +445,7 @@ export const tutorials: Tutorial[] = [
     summary: {
       zh: 'Jason Young 的实操帖：添加多个 OpenAI 官方供应商，配合 Codex /logout 获取不同账号的 access token，在多个 Plus 订阅之间快速切换。',
       en: 'A hands-on post by Jason Young: add multiple official OpenAI providers, use Codex /logout to capture access tokens for different accounts, and switch between multiple Plus subscriptions.',
-      ja: 'Jason Young による実践メモ。複数の OpenAI 公式 Provider を追加し、Codex /logout で別アカウントの access token を取得して、複数の Plus サブスクリプションを切り替えます。',
+      ja: 'Jason Young による実践メモ。複数の OpenAI 公式プロバイダーを追加し、Codex /logout で別アカウントの access token を取得して、複数の Plus サブスクリプションを切り替えます。',
     },
     author: { name: 'Jason Young', url: 'https://x.com/Jason_Young1231' },
     date: '2025-11-06',

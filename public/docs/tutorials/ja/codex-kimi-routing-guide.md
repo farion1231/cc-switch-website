@@ -4,8 +4,8 @@
 
 Kimi オープンプラットフォームと Kimi For Coding の公式 Codex プリセットは **Responses** に移行しました。プロトコル変換のためのローカルルーティングは不要です。既存カードには作成時のプリセットが保存されており、自動更新はされません。
 
-1. CC Switch v3.20.3 以降に更新し、Codex タブで API Key の発行元に応じた最新の **Kimi** または **Kimi For Coding** プリセットを選択します。
-2. 対応する API Key を入力し、保存して有効にします。旧カードはプリセットの追加し直しを推奨します。手動で移行する場合は、エンドポイントを確認して「上流形式」を **Responses** に変更します。
+1. CC Switch v3.20.3 以降に更新し、Codex タブで API Key の発行元に応じた最新の **Kimi** または **Kimi For Coding** プリセットを選択します。国際版（kimi.ai）の Key には **Kimi Global** または **Kimi For Coding Global**（v3.20.4 から提供）を選択します。
+2. 対応する API Key を入力し、保存して有効にします。旧カードはプリセットの追加し直しを推奨します。手動で移行する場合は、エンドポイントを確認して「上流フォーマット」を **Responses** に変更します。
 3. Codex を再起動し、設定とモデルカタログを読み込みます。ネイティブ Responses を通常のプロキシ経由で転送することもできますが、Responses→Chat 変換は不要です。
 
 詳細は [v3.20.3 更新情報](/ja/changelog/3.20.3)と[プロバイダーの追加](/ja/docs?section=providers&item=add)を参照してください。**以下は既存の Chat カードのトラブルシュート用に残した旧版の手順と画像であり、最新プリセットの設定ではありません。**
@@ -20,7 +20,7 @@ Kimi オープンプラットフォームと Kimi For Coding の公式 Codex プ
 
 CC Switch では、Codex が常にローカルルートへ接続し、Responses API のままリクエストを送るようにします。ルート内部で現在のプロバイダーが Chat 形式かどうかを判定し、必要ならリクエストを Chat Completions に書き換えて上流へ送り、最後に Chat レスポンスを Codex が理解できる Responses 形式へ戻します。
 
-![Codex プロバイダー一覧のローカルルーティング必須マーク](/docs/assets/codex-kimi-routing/01-codex-providers-require-routing.png)
+![Codex プロバイダー一覧の「ルーティングが必要」マーク](/docs/assets/codex-kimi-routing/01-codex-providers-require-routing.png)
 
 この経路は主に 4 つのステップに分かれます：
 
@@ -81,7 +81,7 @@ Codex に入ったら、`/model` で現在のモデルが Kimi プリセット�
 
 ## 他の Chat プロバイダーの場合
 
-Kimi、DeepSeek、MiniMax、SiliconFlow など一般的な Chat 形式プロバイダーは CC Switch にプリセットがあるため、まずはプリセットを使ってください。プリセットにないプロバイダーだけ、カスタム設定を選びます。その場合は相手側のドキュメントに従って API Key、base URL、モデルを入力し、`高級オプション` の `上流フォーマット` を `Chat Completions（ルーティング必須）` に設定します。
+SiliconFlow、ModelScope など一般的な Chat 形式プロバイダーは CC Switch にプリセットがあるため、まずはプリセットを使ってください。プリセットにないプロバイダーだけ、カスタム設定を選びます。その場合は相手側のドキュメントに従って API Key、base URL、モデルを入力し、`高級オプション` の `上流フォーマット` を `Chat Completions（ルーティング必須）` に設定します。
 
 上流が OpenAI Responses API を直接サポートしている場合は、`上流フォーマット` を `Responses` にすれば、CC Switch は Responses のまま直結でき、Chat 変換は行いません。
 

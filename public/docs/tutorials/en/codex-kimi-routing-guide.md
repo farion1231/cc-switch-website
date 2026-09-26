@@ -4,7 +4,7 @@
 
 The official Codex presets for the Kimi Open Platform and Kimi For Coding now use **Responses**, without local routing for protocol conversion. Existing cards retain their original preset snapshot and do not update automatically.
 
-1. Upgrade to CC Switch v3.20.3 or later. In the Codex tab, choose the latest **Kimi** or **Kimi For Coding** preset according to where your API key comes from.
+1. Upgrade to CC Switch v3.20.3 or later. In the Codex tab, choose the latest **Kimi** or **Kimi For Coding** preset according to where your API key comes from. For a key from the international site (kimi.ai), choose **Kimi Global** or **Kimi For Coding Global** (available since v3.20.4).
 2. Enter the matching API key, save and enable the provider. For an older card, adding the preset again is recommended; for manual migration, verify the endpoint and change **Upstream Format** to **Responses**.
 3. Restart Codex to load the configuration and model catalog. Native Responses can also use standard proxy routing, but Responses-to-Chat conversion is no longer required.
 
@@ -61,7 +61,7 @@ The preset already includes Kimi's request base URL, default model, model menu, 
 
 Go to the `Routing` page in Settings, expand `Local Routing`, and complete two toggles:
 
-1. Turn on the main routing switch to start the local service. The default address is `127.0.0.1:15721`.
+1. Turn on the `Routing Master Switch` to start the local service. The default address is `127.0.0.1:15721`.
 2. Turn on `Codex` under `Routing Enabled`. If you only want Codex to use local routing, you can leave Claude and Gemini off.
 
 ![Enabling Codex routing on the local routing page](/docs/assets/codex-kimi-routing/03-local-route-codex-takeover.png)
@@ -81,7 +81,7 @@ Inside Codex, use `/model` to check whether the current model comes from the Kim
 
 ## How to handle other Chat providers
 
-Kimi, DeepSeek, MiniMax, SiliconFlow, and other common Chat-format providers already have presets in CC Switch, so use presets first. Only choose custom configuration for providers that are not covered by presets; in that case, fill in the API key, base URL, and models according to the provider's documentation, and set `Upstream Format` under `Advanced Options` to `Chat Completions (routing required)`.
+SiliconFlow, ModelScope, and other common Chat-format providers already have presets in CC Switch, so use presets first. Only choose custom configuration for providers that are not covered by presets; in that case, fill in the API key, base URL, and models according to the provider's documentation, and set `Upstream Format` under `Advanced Options` to `Chat Completions (routing required)`.
 
 If the upstream provider directly supports the OpenAI Responses API, set `Upstream Format` to `Responses`; CC Switch then connects through Responses directly without Chat conversion.
 
