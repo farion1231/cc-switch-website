@@ -5,6 +5,7 @@ import { InlineSvgIcon } from "@/components/ccswitch/InlineSvgIcon";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/useLanguage";
 import type { Provider } from "@/content/providers";
+import { resolveSponsorUrl } from "@/content/sponsors";
 
 interface ProviderCardProps {
   provider: Provider;
@@ -28,7 +29,8 @@ export function ProviderCard({
   compact = false,
 }: ProviderCardProps) {
   const dragControls = useDragControls();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const linkHref = provider.href ? resolveSponsorUrl(provider.href, language) : provider.subtitle;
   const handleSelect = () => {
     onSelect();
   };
@@ -108,9 +110,9 @@ export function ProviderCard({
         <div className={cn("font-semibold leading-none text-foreground", compact ? "text-sm" : "text-base")}>{provider.name}</div>
         {provider.isUrl ? (
           <a
-            href={provider.subtitle}
+            href={linkHref}
             target="_blank"
-            rel="noopener noreferrer"
+            rel={provider.href ? "sponsored noopener noreferrer" : "noopener noreferrer"}
             onClick={(e) => e.stopPropagation()}
             className={cn(
               "mt-1 block truncate text-blue-500 transition-colors hover:underline dark:text-blue-400",

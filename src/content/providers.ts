@@ -20,6 +20,7 @@ import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
 import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import zhipuIcon from '@/assets/icons/zhipu.svg';
 import zhipuIconSvg from '@/assets/icons/zhipu.svg?raw';
+import { sponsors, type LocalizedText } from '@/content/sponsors';
 
 export interface Provider {
   icon: string;
@@ -27,7 +28,10 @@ export interface Provider {
   iconBg: string;
   iconColor?: string;
   name: string;
+  /** Shown on the card; usually the provider's official site. */
   subtitle: string;
+  /** Where the link goes when it differs from `subtitle` (sponsor referral links). */
+  href?: string | LocalizedText;
   time?: string;
   used?: string;
   remaining?: string;
@@ -43,6 +47,17 @@ export interface Provider {
   isText?: boolean;
   isSvgUrl?: boolean;
 }
+
+// Sponsor cards show the official domain but link to the referral URL kept in
+// sponsors.ts, so the two never drift apart.
+const sponsorHref = (id: string) => sponsors.find((sponsor) => sponsor.id === id)?.url;
+
+// The demo cards show the Kimi Code plan, not the API platform in sponsors.ts.
+const KIMI_CODE_HREF: LocalizedText = {
+  zh: 'https://www.kimi.com/code?aff=cc-switch',
+  en: 'https://www.kimi.ai/code?aff=cc-switch',
+  ja: 'https://www.kimi.ai/code?aff=cc-switch',
+};
 
 // Demo cards mirror the app's preset order: the tool's own official provider,
 // then Kimi (prime partner), then the top-ranked sponsors from the README;
@@ -73,6 +88,7 @@ export const claudeProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     time: '3',
     quota: {
       updatedMinutes: 3,
@@ -91,6 +107,7 @@ export const claudeProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     time: '10',
     used: '672',
     remaining: '66',
@@ -102,6 +119,7 @@ export const claudeProviders: Provider[] = [
     iconBg: 'bg-sky-500/15',
     name: 'ZetaAPI',
     subtitle: 'https://zetaapi.ai',
+    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -135,6 +153,7 @@ export const claudeDesktopProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     time: '4',
     quota: {
       updatedMinutes: 4,
@@ -151,6 +170,7 @@ export const claudeDesktopProviders: Provider[] = [
     iconBg: 'bg-indigo-500/15',
     name: 'APINebula',
     subtitle: 'https://apinebula.ai',
+    href: sponsorHref('apinebula'),
     time: '6',
     used: '238',
     remaining: '262',
@@ -162,6 +182,7 @@ export const claudeDesktopProviders: Provider[] = [
     iconBg: 'bg-sky-500/15',
     name: 'PatewayAI',
     subtitle: 'https://pateway.ai',
+    href: sponsorHref('pateway'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -203,6 +224,7 @@ export const codexProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     time: '5',
     quota: {
       updatedMinutes: 5,
@@ -221,6 +243,7 @@ export const codexProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     time: '5',
     used: '128',
     remaining: '372',
@@ -232,6 +255,7 @@ export const codexProviders: Provider[] = [
     iconBg: 'bg-cyan-500/15',
     name: 'AICodeMirror',
     subtitle: 'https://www.aicodemirror.ai',
+    href: sponsorHref('aicodemirror'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -271,6 +295,7 @@ export const geminiProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     time: '2',
     used: '256',
     remaining: '744',
@@ -282,6 +307,7 @@ export const geminiProviders: Provider[] = [
     iconBg: 'bg-indigo-500/15',
     name: 'APINebula',
     subtitle: 'https://apinebula.ai',
+    href: sponsorHref('apinebula'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -290,6 +316,7 @@ export const geminiProviders: Provider[] = [
     iconBg: 'bg-cyan-500/15',
     name: 'AICodeMirror',
     subtitle: 'https://www.aicodemirror.ai',
+    href: sponsorHref('aicodemirror'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -313,6 +340,7 @@ export const opencodeProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     time: '2',
     quota: {
       updatedMinutes: 2,
@@ -331,6 +359,7 @@ export const opencodeProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     time: '4',
     used: '214',
     remaining: '786',
@@ -342,6 +371,7 @@ export const opencodeProviders: Provider[] = [
     iconBg: 'bg-sky-500/15',
     name: 'ZetaAPI',
     subtitle: 'https://zetaapi.ai',
+    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -350,6 +380,7 @@ export const opencodeProviders: Provider[] = [
     iconBg: 'bg-indigo-500/15',
     name: 'APINebula',
     subtitle: 'https://apinebula.ai',
+    href: sponsorHref('apinebula'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -373,6 +404,7 @@ export const openClawProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     time: '8',
     quota: {
       updatedMinutes: 8,
@@ -391,6 +423,7 @@ export const openClawProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     time: '7',
     used: '93',
     remaining: '407',
@@ -402,6 +435,7 @@ export const openClawProviders: Provider[] = [
     iconBg: 'bg-sky-500/15',
     name: 'ZetaAPI',
     subtitle: 'https://zetaapi.ai',
+    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -410,6 +444,7 @@ export const openClawProviders: Provider[] = [
     iconBg: 'bg-cyan-500/15',
     name: 'AICodeMirror',
     subtitle: 'https://www.aicodemirror.ai',
+    href: sponsorHref('aicodemirror'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -441,6 +476,7 @@ export const hermesProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     time: '3',
     quota: {
       updatedMinutes: 3,
@@ -459,6 +495,7 @@ export const hermesProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     time: '3',
     used: '318',
     remaining: '682',
@@ -470,6 +507,7 @@ export const hermesProviders: Provider[] = [
     iconBg: 'bg-sky-500/15',
     name: 'ZetaAPI',
     subtitle: 'https://zetaapi.ai',
+    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -503,6 +541,7 @@ export const grokBuildProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     time: '6',
     used: '184',
     remaining: '316',
@@ -514,6 +553,7 @@ export const grokBuildProviders: Provider[] = [
     iconBg: 'bg-sky-500/15',
     name: 'ZetaAPI',
     subtitle: 'https://zetaapi.ai',
+    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -522,6 +562,7 @@ export const grokBuildProviders: Provider[] = [
     iconBg: 'bg-indigo-500/15',
     name: 'APINebula',
     subtitle: 'https://apinebula.ai',
+    href: sponsorHref('apinebula'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -545,6 +586,7 @@ export const piProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     time: '3',
     quota: {
       updatedMinutes: 3,
@@ -563,6 +605,7 @@ export const piProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -571,6 +614,7 @@ export const piProviders: Provider[] = [
     iconBg: 'bg-sky-500/15',
     name: 'ZetaAPI',
     subtitle: 'https://zetaapi.ai',
+    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -620,6 +664,7 @@ export const mcodeProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'Kimi For Coding',
     subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
     isUrl: true,
     isSvgUrl: true,
   },
@@ -630,6 +675,7 @@ export const mcodeProviders: Provider[] = [
     iconColor: 'currentColor',
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
+    href: sponsorHref('packycode'),
     isUrl: true,
     isSvgUrl: true,
   },
