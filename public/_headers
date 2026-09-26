@@ -49,8 +49,6 @@
 # Static images served from /public — moderate caching, no fingerprint
 /og-image.png
   Cache-Control: public, max-age=2592000
-/og-image.svg
-  Cache-Control: public, max-age=2592000
 /favicon.ico
   Cache-Control: public, max-age=86400
 /favicon.png

@@ -1,0 +1,90 @@
+<!doctype html>
+<!--
+  Source for public/og-image.png (1200x630). Colors are the site's light-theme tokens
+  from src/index.css; the logo is the app icon (cc-switch/src-tauri/icons/icon.png).
+  Render (macOS, from this folder):
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 \
+      --virtual-time-budget=5000 --screenshot="$PWD/../../public/og-image.png" "file://$PWD/og-image.html"
+  After changing the image, bump the ?v= query in src/lib/seo.ts and index.html.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=block" rel="stylesheet">
+<style>
+  :root {
+    --background: 38 28% 91%;
+    --foreground: 30 15% 15%;
+    --muted-foreground: 30 12% 38%;
+    --primary: 15 65% 52%;
+    --border: 35 18% 80%;
+  }
+  html, body { margin: 0; padding: 0; }
+  body {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    color: hsl(var(--foreground));
+    background: hsl(var(--background));
+  }
+  /* Same 60px grid and top wash as the homepage hero */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.4) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.5;
+  }
+  .wash {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 78% 50%, hsl(var(--primary) / 0.16), transparent 42%),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.05), transparent 60%);
+  }
+  .content { position: absolute; left: 80px; top: 112px; width: 730px; }
+  h1 { margin: 0; font-size: 92px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .tagline { margin: 22px 0 0; font-size: 34px; font-weight: 600; color: hsl(var(--muted-foreground)); letter-spacing: -0.01em; }
+  .tools { display: flex; flex-wrap: wrap; gap: 0 10px; margin-top: 42px; }
+  .tools .break { flex-basis: 100%; height: 12px; }
+  .tools span:not(.break) {
+    padding: 7px 15px;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--primary) / 0.22);
+    background: hsl(var(--primary) / 0.1);
+    font-size: 19px; font-weight: 500;
+  }
+  .footer { position: absolute; left: 80px; bottom: 58px; display: flex; align-items: baseline; gap: 18px; }
+  .site { font-size: 28px; font-weight: 700; color: hsl(var(--primary)); }
+  .meta { font-size: 21px; font-weight: 500; color: hsl(var(--muted-foreground)); }
+  .logo {
+    position: absolute; right: 70px; top: 50%;
+    width: 330px; height: 330px; transform: translateY(-50%);
+    filter: drop-shadow(0 18px 36px hsl(var(--primary) / 0.18));
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="wash"></div>
+  <img class="logo" src="cc-switch-logo-512.png" alt="">
+  <div class="content">
+    <h1>CC Switch</h1>
+    <p class="tagline">One app for ten AI coding tools</p>
+    <div class="tools">
+      <span>Claude Code</span><span>Claude Desktop</span><span>Codex</span><span>Gemini CLI</span>
+      <span>Grok Build</span><span class="break"></span><span>OpenCode</span><span>OpenClaw</span><span>Hermes</span>
+      <span>Pi</span><span>MiniMax Code</span>
+    </div>
+  </div>
+  <div class="footer">
+    <span class="site">ccswitch.io</span>
+    <span class="meta">Free &amp; open source · macOS · Windows · Linux</span>
+  </div>
+</body>
+</html>
