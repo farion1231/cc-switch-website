@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.20.4",
+      "date": "2026-09-22",
+      "isPreRelease": false,
+      "summary": "This release is mostly fixes, plus one new integration: **MiniMax Code becomes the tenth managed app** — providers, MCP, Skills, prompts, session browsing and usage statistics all come along, while the default model, sign-in and session deletion stay with MiniMax Code itself. The fixes center on using Codex through the local proxy, and four problems that made Codex unusable are closed in this release: starting with Codex 0.154, tools placed in `additional_tools` made strict Chat gateways return 400 outright; a single screenshot with `detail: \"original\"` made every later turn of the session return 400; editing or switching away from some Codex providers silently wiped the saved API key; and a card bound to a deleted ChatGPT account could neither be switched away from nor rebound. On the Claude Code side, auto mode works again under GitHub Copilot, and `/effort`'s `xhigh` and `max`, as well as Grok 4.6's reasoning effort, are sent at the selected tier. Claude Desktop's third-party configuration now supports Linux as well. **This release includes a database migration (v18 → v19); we recommend backing up the database manually before upgrading** — see [Upgrade Notes](#this-release-includes-a-database-migration)."
+    },
+    {
       "version": "3.20.3",
       "date": "2026-09-11",
       "isPreRelease": false,
@@ -182,7 +188,7 @@
     },
     {
       "version": "3.6.1",
-      "date": "1970-01-01",
+      "date": "2025-11-10",
       "isPreRelease": false,
       "summary": "Stability improvements and user experience optimization (based on v3.6.0)"
     },

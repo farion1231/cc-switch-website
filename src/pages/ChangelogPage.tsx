@@ -128,6 +128,14 @@ export default function ChangelogPage() {
     [versionMarkdown],
   );
 
+  // Honor #anchor deep links (e.g. /changelog/3.13.0#风险提示) once the version has rendered.
+  // Jump instantly like native anchors; headings carry scroll-mt-24 for the fixed header.
+  useEffect(() => {
+    if (!versionData) return;
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (id) document.getElementById(id)?.scrollIntoView();
+  }, [versionData]);
+
   // No /:version in URL → redirect to latest once index is ready.
   if (!versionParam && index && versions.length > 0) {
     return <Navigate to={getLocalizedPath(`/changelog/${versions[0].version}`, language)} replace />;

@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "3.20.4",
+      "date": "2026-09-22",
+      "isPreRelease": false,
+      "summary": "这一版以修复为主，另有一项新接入：**MiniMax Code 成为第十个受管应用**，供应商、MCP、Skills、提示词、会话浏览与用量统计一并接入，默认模型、登录和会话删除仍由 MiniMax Code 自己管。修复主要集中在经本地代理使用 Codex 的场景，四个会让 Codex 用不下去的问题在本版关闭：Codex 0.154 起放进 `additional_tools` 的工具让严格的 Chat 网关直接 400；一张 `detail: \"original\"` 的截图让整段会话此后每轮都 400；编辑或切走部分 Codex 供应商会悄悄清空已保存的 API Key；绑定到已删除 ChatGPT 账号的卡片既切不走，也改不了绑定。Claude Code 这边，GitHub Copilot 下的 auto mode 恢复可用，`/effort` 的 `xhigh`、`max` 与 Grok 4.6 的推理强度都按所选档位发送。Claude Desktop 的第三方配置现在也支持 Linux。**本版含数据库迁移（v18 → v19），建议升级前手动备份一次数据库**，见[升级提醒](#本版含数据库迁移)。"
+    },
+    {
       "version": "3.20.3",
       "date": "2026-09-11",
       "isPreRelease": false,
@@ -182,7 +188,7 @@
     },
     {
       "version": "3.6.1",
-      "date": "1970-01-01",
+      "date": "2025-11-10",
       "isPreRelease": false,
       "summary": "稳定性提升与用户体验优化（基于 v3.6.0）"
     },

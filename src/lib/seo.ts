@@ -10,7 +10,7 @@ export const RELEASES_URL = 'https://github.com/farion1231/cc-switch/releases';
 export const OG_IMAGE_PATH = '/og-image.png';
 
 // Sync with cc-switch package.json on each release.
-export const CC_SWITCH_VERSION = '3.15.0';
+export const CC_SWITCH_VERSION = '3.20.4';
 // First public release of cc-switch (v2.0.3, 2025-08-22) — predates the
 // ccswitch.ai squatter (2026-04-23) by ~8 months. Keep this stable.
 export const CC_SWITCH_FOUNDING_DATE = '2025-08-22';
