@@ -130,9 +130,9 @@ export const sponsors: Sponsor[] = ([
     name: 'Kimi K3',
     icon: kimiIcon,
     url: {
-      zh: 'https://platform.kimi.com?track_id=track-6840233b42274ab4bcfd283e2bdd2aee&aff=cc-switch',
-      en: 'https://platform.kimi.ai?track_id=track-20d65732f0aa45dcb1df9691a15610af&aff=cc-switch',
-      ja: 'https://platform.kimi.ai?track_id=track-20d65732f0aa45dcb1df9691a15610af&aff=cc-switch',
+      zh: 'https://platform.kimi.com?track_id=track-7cf2b91dcde043eda6ef9a95951a042c&aff=cc-switch',
+      en: 'https://platform.kimi.ai?track_id=track-674ed6e2af924a5682a87421f7cf753a&aff=cc-switch',
+      ja: 'https://platform.kimi.ai?track_id=track-674ed6e2af924a5682a87421f7cf753a&aff=cc-switch',
     },
     tier: 'flagship',
     category: 'native-platform',
@@ -151,11 +151,11 @@ export const sponsors: Sponsor[] = ([
       },
       {
         label: { zh: 'Kimi API · 中文站', en: 'Kimi API · China', ja: 'Kimi API · 中国向け' },
-        url: 'https://platform.kimi.com?track_id=track-6840233b42274ab4bcfd283e2bdd2aee&aff=cc-switch',
+        url: 'https://platform.kimi.com?track_id=track-7cf2b91dcde043eda6ef9a95951a042c&aff=cc-switch',
       },
       {
         label: { zh: 'Kimi API · 国际站', en: 'Kimi API · Global', ja: 'Kimi API · Global' },
-        url: 'https://platform.kimi.ai?track_id=track-20d65732f0aa45dcb1df9691a15610af&aff=cc-switch',
+        url: 'https://platform.kimi.ai?track_id=track-674ed6e2af924a5682a87421f7cf753a&aff=cc-switch',
       },
     ],
     tagline: {
