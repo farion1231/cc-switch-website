@@ -20,7 +20,6 @@ import crazyrouterIcon from '@/assets/icons/sponsors/crazyrouter.svg';
 import rightcodeIcon from '@/assets/icons/sponsors/rightcode.svg';
 import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
 import micuIcon from '@/assets/icons/sponsors/micu.svg';
-import etokIcon from '@/assets/icons/sponsors/etok.png';
 import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import code0Icon from '@/assets/icons/sponsors/code0.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
@@ -111,7 +110,6 @@ const sponsorDisplayOrder = [
   'soleapi',
   'micu',
   'rightcode',
-  'etok',
   'cubence',
   'crazyrouter',
   'dmxapi',
@@ -611,29 +609,6 @@ export const sponsors: Sponsor[] = ([
       ja: 'クーポンで 10% オフ',
     },
     couponCode: 'ccswitch',
-  },
-  {
-    id: 'etok',
-    name: 'ETok.ai',
-    icon: etokIcon,
-    url: 'https://etok.ai',
-    tier: 'standard',
-    category: 'subscription',
-    tagline: {
-      zh: '一站式 AI 编程工具服务',
-      en: 'All-in-one AI coding service',
-      ja: 'AI コーディング向け統合サービス',
-    },
-    description: {
-      zh: '致力于打造一站式 AI 编程工具服务平台，提供 Claude Code 专业套餐及技术社群服务，同时支持 Google Gemini 和 OpenAI Codex，让 AI 辅助编程真正成为开发者的生产力工具。',
-      en: 'All-in-one AI coding service offering Claude Code professional plans, a developer community, and Google Gemini & OpenAI Codex support — turning AI coding into real productivity.',
-      ja: 'AI コーディング向け統合サービス。Claude Code のプロフェッショナルプランや開発者コミュニティに加え、Google Gemini と OpenAI Codex にも対応し、AI 活用を真の生産性向上につなげます。',
-    },
-    perk: {
-      zh: 'Claude Code 专业套餐 + 技术社群',
-      en: 'Pro Claude Code plans + dev community',
-      ja: 'Claude Code プロプラン + 開発者コミュニティ',
-    },
   },
   {
     id: 'claudeapi',
