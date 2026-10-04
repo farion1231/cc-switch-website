@@ -38,6 +38,7 @@ import soleapiIcon from '@/assets/icons/sponsors/soleapi.svg';
 import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
 import ppioIcon from '@/assets/icons/sponsors/ppio.png';
 import fluxaIcon from '@/assets/icons/sponsors/fluxa.png';
+import api88Icon from '@/assets/icons/sponsors/88api.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -93,6 +94,7 @@ const sponsorDisplayOrder = [
   'aicoding',
   'subrouter',
   'fluxa',
+  '88api',
   'apikey-fun',
   '9527code',
   'claudeapi',
@@ -726,6 +728,30 @@ export const sponsors: Sponsor[] = ([
       zh: '千帆 TokenPlan 低至 6 折，赠 AgentMarket API 额度',
       en: 'Up to 40% off Qianfan TokenPlan + bonus AgentMarket API credits',
       ja: '千帆 TokenPlan 最大 40% オフ＋AgentMarket API クレジット',
+    },
+  },
+  {
+    id: '88api',
+    name: '88API',
+    icon: api88Icon,
+    url: 'https://88api.ai/sign-up?aff=HSGY',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'dark',
+    tagline: {
+      zh: '一站式多模型 API 聚合平台',
+      en: 'One-stop multi-model API platform',
+      ja: 'ワンストップのマルチモデル API',
+    },
+    description: {
+      zh: '88API 是由香港企业运营的一站式多模型 API 平台，面向开发者、创作者与 AI 应用用户，通过统一接口接入文本、图片、语音和视频模型，覆盖 AI 编程、智能翻译、内容创作、配音、图像生成、视频生成等常见工作流。支持在 CC Switch 中直接添加和切换 Provider，并提供国际主流付款方式、发票与企业级稳定服务。',
+      en: '88API is a one-stop multi-model API platform operated by a Hong Kong company for developers, creators, and AI application users. A unified interface gives access to text, image, speech, and video models for workflows such as AI coding, smart translation, content creation, voice-over, image generation, and video generation. It can be added and switched directly in CC Switch, with major international payment methods, invoicing, and enterprise-grade stability.',
+      ja: '88API は香港企業が運営するワンストップのマルチモデル API プラットフォームです。開発者、クリエイター、AI アプリユーザー向けに、統一インターフェースからテキスト・画像・音声・動画モデルを利用でき、AI コーディング、スマート翻訳、コンテンツ制作、ナレーション、画像生成、動画生成などをカバーします。CC Switch でそのまま Provider として追加・切り替えでき、主要な国際決済、請求書発行、エンタープライズ級の安定性に対応します。',
+    },
+    perk: {
+      zh: '专属链接注册可获取赠送额度',
+      en: 'Bonus credits via exclusive signup link',
+      ja: '専用リンク登録で特典クレジット',
     },
   },
   {
