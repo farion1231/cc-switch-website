@@ -2,6 +2,387 @@
 
 CC Switch 的重要版本更新记录。
 
+## [4.0.4] - 2026-10-07
+
+#### 正式版（4.0.4）：全新界面，全新聚合模式，更稳的配置切换
+
+这是 v4.0 的首个正式版，应用内会自动更新。它包含 4.0 预览版的全部内容，以及预览期间 4.0.1 到 4.0.4 的修复和新增。
+
+这是 CC Switch 迄今规模最大的一次更新。这次更新，我们重新梳理了 CC Switch 最核心的体验：如何接入模型、如何切换供应商，以及如何管理越来越多的 AI 编程工具。
+
+界面从侧边栏到托盘全部重新设计，应用、配置、用量和会话都有了清楚的位置。新推出的聚合模式可以把多家供应商的模型放进 Claude Code 或 Codex 的同一个模型列表，在客户端里随手切换。用量统计页面也重新设计了：每一次请求的 Token 用量、花费和输出速度都有记录；时间范围选「全部」，还能用热力图看过去一年每天的用量。会话管理也从头重写，AI 每一轮做了什么、改了什么、哪一步失败了，都一目了然。重写了配置写入的底层机制：切换供应商时，由全量重写改为关键字段替换，大幅降低复杂度的同时避免了一系列配置丢失问题。MCP 服务器现在也能同步到 Pi 了，一份 MCP 配置可以同时用在 8 个 AI 编程工具里。
+
+> **从 3.x 升级？** 切换供应商的方式、数据库版本和几个设置都有变化，建议先看一下下方的「升级须知」。
+
+---
+
+### 全新界面
+
+新界面采用侧边栏布局和橙色主题。应用切换，以及 MCP、Skills、提示词、会话、授权中心、用量统计这些全局功能，都可以从侧边栏直接进入。
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/main-zh.png" alt="新界面：侧边栏、模式标签和供应商卡片" width="720"></p>
+
+- **模式一目了然**：每个应用页的顶部是「直连 / 路由 / 聚合」三个标签。点标签只切换查看的内容，不会改动配置；真正切换模式的按钮会写明会发生什么，回到直连只需一步，还能撤销
+- **工具有了自己的家**：新的「应用」页集中显示每个 AI 编程工具的版本、安装位置和来源，支持安装、升级和批量升级
+- **更简洁的添加供应商面板**：搜索、选预设，填表单。搜索支持中文名和域名；同一家的不同套餐和地区合并成一行，Claude 的预设合并后行数明显减少。取消了所有预设供应商的高亮推荐
+- **额度显示剩余量**：卡片上直接写「5 小时剩余 94%」「余额 8.99 CNY」，每一档后面还会显示重置倒计时，比如「⏱ 2h30m」。平时用灰色，不抢眼；百分比额度低于 10% 时加粗提醒，余额用完时才变红；点击额度会重新查询，并显示查询结果。Codex 订阅显示剩余重置次数和过期时间，ChatGPT 订阅还会显示 Codex Credits 余额，并按 API 价折算成美元
+- **托盘按应用重新组织**：每行显示「名称 · 模式 · 供应商 · 额度」，子菜单里只列出当前能切换的供应商。只有真正需要你处理时，托盘图标才显示提醒点
+- **设置按用途分组**：通用、应用配置、本地路由、网络、数据、关于。本地路由的服务状态、监听地址和故障转移参数都集中在一处
+- **编辑不再是弹窗**：供应商、MCP 和提示词都在内容区打开整页编辑，侧栏照常可用。有未保存的修改时，点侧栏、按 ⌘, 或从托盘切走都会先问一句
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/apps-zh.png" alt="应用页：集中管理各个 AI 编程工具的版本、安装与升级" width="720"></p>
+
+老用户第一次打开新版时，会看到一次简短的说明，告诉你常用功能搬到了哪里。之后每次更新，首次打开还会弹出一份更新摘要；想再看，可以在「设置 → 关于」里点「近期更新」。
+
+---
+
+### 聚合：一个模型列表，多家供应商
+
+以前想用另一家供应商的模型，得先回到 CC Switch 切换供应商，再回到客户端继续工作。
+
+现在开启**聚合**模式，把几家供应商添加进来，它们的模型会同时出现在 Claude Code 或 Codex 的模型选择器里。选哪个模型，请求就发给哪一家，不用离开客户端。
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-codex-zh.png" alt="Codex 的模型选择器里同时列出多家供应商的模型" width="560"></p>
+
+- **随时添加和移除**：在供应商卡片上点「添加」或「移除」。再选一家作为默认供应商，没有指定聚合模型的请求都交给它
+- **一眼认出模型**：每个模型名后面都标着来自哪家供应商，比如「Kimi K3（Kimi For Coding）」；说明里还会写出上游真实的模型 ID 和上下文窗口，比如 `kimi-k3 · 256K`
+- **精简的配置表单**：在「聚合」页添加或编辑供应商时，连接信息和模型列表放在同一页，只需要填这些；在「直连」「路由」页用的是完整表单
+- **Codex 混用不报错**：把官方账号设为默认，官方模型和第三方模型会并列显示。在不同供应商的模型之间来回切换，上下文压缩和推理状态都能接上
+- **同一会话里换模型**：可以在一个会话中途换用其他模型。注意每次切换后，新模型都要重新建立提示词缓存，切换后的第一轮费用会明显高一些
+- **重启提醒**：Codex 的模型列表变化后会提示重启，Codex CLI 可以在横幅里一键重启后台服务；Claude Code 的聚合模型改动立即生效，不用重启
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-zh.png" alt="聚合模式：一家默认供应商，另外添加了 6 家" width="720"></p>
+
+聚合需要手动开启，目前支持 Claude Code 和 Codex。Claude Code 的聚合模型列表需要 Claude Code 2.1.243 或更新版本。它按你选的模型分发请求，不提供故障转移。
+
+| 模式 | 请求怎么走 | 适合什么情况 |
+|------|-----------|--------|
+| **直连** | 客户端直接连供应商 | 日常使用 |
+| **路由** | 经本地路由转发给一家供应商，可以转换协议、设置故障转移 | 协议不兼容，或者需要故障转移 |
+| **聚合** | 经本地路由，按模型分发给多家供应商 | 在一个会话里混用多家模型 |
+
+> **致敬 opencodex**
+>
+> 聚合模式大量学习和参考了 [opencodex](https://github.com/lidge-jun/opencodex)。给模型 ID 加上供应商前缀，让多家模型同时出现在 Claude Code 和 Codex 的选择器里；让 Codex 在第三方模型上也能做上下文压缩；检测后台服务是否还在用旧的模型列表，并提醒重启。这些思路都来自 opencodex 的探索。感谢 opencodex 的作者（[@lidge-jun](https://github.com/lidge-jun)）和贡献者们把这些成果开源出来，向他们的开源精神致以崇高的敬意！
+>
+> 如果你想要一个专注于「任意模型接入 Codex 和 Claude Code」的工具，非常推荐试试 opencodex！
+
+---
+
+### 用量统计
+
+**用量页**重新设计了指标、趋势图、请求日志，以及供应商、模型、定价四张统计表，都支持分页。新增「全部」时间范围，用 53 周热力图显示每天的用量。大范围统计时，窗口不再卡顿。
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/usage-zh.png" alt="用量统计：53 周热力图与请求日志" width="720"></p>
+
+- **输出速度**改为只按生成时间计算，去掉了首字等待。即使没开路由，从 Claude Code、Codex 会话日志导入的请求也能显示估算速度，用「≈」标记
+- **模型表格加上成功率和速度两列**。「平均成本」列去掉了，悬停在成本上可以看到
+- **供应商和模型表格计入缓存 token**，各行加起来和顶部的总 token 数对得上
+- 没开路由时从会话日志导入的用量，供应商显示为「Claude Code · 会话日志」这样的名字，悬停会说明为什么分不出具体供应商
+- 写入用量记录改到单独的线程，硬盘慢时也不会拖慢路由服务
+
+---
+
+### 切换供应商，你的配置原封不动
+
+这是这次更新里最重要的底层变化，适用于 Claude Code、Codex、Gemini CLI、Grok Build 和 Claude Desktop。
+
+CC Switch 发布于 2025 年 8 月，那个时候 API 的生态远没有现在成熟，各家官方和第三方供应商之间的 API 格式往往差距非常大，所以在最初设计的时候，切换供应商选择了全量覆盖。但这个选择带来了一系列的问题和复杂度。随着生态的成熟，现在是时候重构了。
+
+**以前**：切换供应商时，会用这家存下的快照重写整个配置文件。你在 `settings.json` 里加的 hooks、插件、权限设置，在 `config.toml` 里加的 MCP 服务器，要么在切换时丢失，要么被收进某一家供应商的快照，切到别家就没了。
+
+**现在**：切换只替换地址、凭据、模型、协议这几项，以及这家供应商自己的开关。其他内容原样保留：
+
+- TOML 和 `.env` 文件里，没改到的行连同注释、顺序，逐字节保持不变
+- JSON 文件里，其他每个键的值和顺序都保持不变
+- 共享设置本来就留在配置文件里，所以「通用配置片段」功能也就不需要了
+
+**编辑器底部会预览切换后配置文件的样子**。在这里直接改的全局设置会写进配置文件，保存前还会检查文件是否被别的程序改过。
+
+新的写入机制同时带来几层保护：
+
+- 配置文件格式有误时停止写入，原文件保持不动
+- 写入前先检查外部改动，不会覆盖其他程序刚保存的内容
+- 同时改多个文件时先记下意图，即使中途意外退出，下次启动也会自动收尾，不会停在只改了一半的状态
+- 每个文件第一次由新版写入前，原样备份一份
+- 含密钥的配置文件只允许本人读写
+
+开启或关闭路由，也不再依赖「备份、还原」整份配置。Codex 切到第三方供应商时被覆盖的 ChatGPT 登录会暂存在本机，切回官方账号时自动还原。
+
+---
+
+### 会话管理：每一次 AI 编程，都看得清清楚楚
+
+AI 编程工具会把每次会话完整地记在本机，但原始记录是成千上万行 JSON，几乎没法直接读。这一版我们从头重写了会话管理，让会话记录尽可能地易读，同时添加了用量和消耗金额统计。
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/session-zh.png" alt="会话阅读页：执行过程摘要、工具调用详情和对话目录" width="720"></p>
+
+- **九个客户端，同一种读法**：Claude Code、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes、Pi、MiniMax Code 的记录都解析成结构化内容，正文、思考、工具调用、工具结果和图片各自呈现
+- **一轮工作，一行摘要**：AI 的一长串操作折叠成一行，比如「执行过程 · 44 步 · 27 个命令 · 改了 2 个文件 · 1 个失败 · 27m45s」。失败的命令标成红色，展开就能看到参数、输出和退出码；连续读文件、搜索这类步骤会合并成「查看了 N 个文件、搜索 N 次」
+- **对话目录**：右侧列出你的每一次提问，以及这一轮用了多少步、得出了什么结论。有失败步骤的轮次带红点，点一下就跳过去
+- **三种视图**：「全部」看完整过程，「对话」只看你和 AI 说了什么，「改动」只看改了哪些文件
+- **会话全貌一眼可见**：顶部显示项目目录、起止时间、提问次数、工具调用次数、模型、总 Token 数，以及按 API 价格算的费用
+- **会话内查找**：命中的内容即使藏在折叠的工具输出里，也会自动展开定位；长会话里输入也不卡
+- **从阅读到继续工作**：一键在你常用的终端（比如 Ghostty）里恢复会话，也可以复制恢复命令；还支持导出 Markdown、复制单轮或整段对话
+- **列表更好找**：按项目或时间分组，搜索标题、目录、首末消息或会话 ID，支持批量删除
+- 支持 OpenCode 2.x 和 Gemini CLI 新版 JSONL 格式的会话，Hermes 会话也能正常打开了
+
+会话阅读页的重做由 [@Owlbay](https://github.com/Owlbay) 主导完成，感谢 Owlbay 投入的大量心血。
+
+---
+
+### MCP 同步到 Pi
+
+Pi 1.0 内置了 MCP，配置格式和 Claude Code 相同。现在在 MCP 页面给 Pi 打开同步，你已有的 MCP 服务器就能在 Pi 里直接用。加上 Claude Code、Codex、Gemini CLI、Grok Build、OpenCode、Hermes、MiniMax Code，一份 MCP 配置可以同时管理 8 个 AI 编程工具。
+
+- **只写连接相关的字段**：超时、工具暴露、OAuth 这些 Pi 自己的设置原样保留
+- **关掉同步不会删条目**：只是在 Pi 里标成停用，再打开时这些设置都还在
+- **不支持的配置会直接提示**：Pi 不支持的 SSE 传输、名称里带特殊字符的服务器不会写进文件
+
+Pi 的 MCP 同步由 [@Owlbay](https://github.com/Owlbay) 和 [@LystranG](https://github.com/LystranG) 完成。
+
+---
+
+### 更多改进
+
+- **Claude Code 快捷开关**：新增「关闭 auto mode 服务端检查」。Claude Code 2.1.281 起，经过第三方网关或本地路由时，每个会话都会先提示一次「不符合条件」，勾选后直接用本机检查，不再提示；新建第三方供应商时默认勾上，官方端点不要勾。每个快捷开关后面都加了「?」，说明它做什么、是全局设置还是跟着供应商切换
+- **MCP**：可以一次粘贴多个服务器配置，JSON、TOML、Codex 和 OpenCode 格式都能识别。某个应用写入失败时可以单独重试，一个服务器出错也不会影响其他服务器
+- **Skills**：「已安装」和「发现」合并成一页，可以一键全部更新，同步方式可选自动、仅符号链接、仅复制；已安装列表的表头加了全选框
+- **提示词**：八个应用的提示词在同一页管理，支持复制到其他应用、导入已有文件、删除后撤销
+- **授权中心**：账号、重新登录入口和剩余额度一目了然
+- **备份一目了然**：「备份与恢复」里新增可展开的「其他备份」，列出 `~/.cc-switch` 下每类备份的路径、大小和数量，可以打开所在位置，也可以整类删除，删除前会说明会失去什么
+- **模型参数自动补全**：选中拉取到的模型时，会从预设和 models.dev 补上上下文窗口、输出上限、推理档位和输入类型，不覆盖你已经填过的值
+- **Claude Desktop**：使用模型映射时，本地路由服务会自动启动，用完自动停止
+- **OpenCode**：支持 OpenCode 2.0 的新版供应商配置，新旧格式都能读写，格式有误会指出具体字段；可以选择思考档位，已知支持推理的模型会自动标记，档位由 OpenCode 自己生成；`opencode.jsonc` 里的注释和格式在同步时会保留，支持 2.x 的用量统计
+- **MiniMax Code**：可以在「应用」页安装和升级，新建供应商时可以自己填供应商 key
+- **预设与定价**：新增 Command Code、OpenCode Zen（Claude Code、Codex，和 OpenCode Go 合成一行）、模力方舟（Claude Code、Codex、Pi、OpenCode、OpenClaw）预设，更新 Claude Opus 5.5、GPT-6 Sol / Luna、MiMo V2.6 等模型的定价；已有的预设都有了正式图标
+- **日志更好排查**：切换供应商和进出路由、聚合时，日志会写明从哪切到哪、结果如何
+- **项目切换器默认隐藏**：大多数用户用不到「项目」，新安装时主页和托盘不再显示项目切换器，需要时在设置里打开；已经在用的不受影响
+
+---
+
+### 升级须知
+
+**配置的归属变了。** 共享设置直接留在客户端配置文件里，「通用配置片段」功能已经移除。在客户端里临时选的模型或推理强度，切到别家再切回来时，会恢复成供应商设定的值。想固定下来，在供应商编辑器里保存即可。
+
+**有些修复需要切换一次才生效。** Codex 模型目录和会话分组的修复，要等 CC Switch 下一次写入 Codex 配置时才会应用，升级后切换一次供应商即可。已有的 MCP 配置重新同步一次，就能清掉旧的 `type` 字段。
+
+**切换后记得按提示重启。** Codex、Gemini CLI、Grok Build 切换模型后需要重启，Codex 的聚合列表变化后也需要重启；Claude Code 的聚合模型改动不需要重启。
+
+**数据库结构升到了 20。** 升级前的数据库会自动备份在 `~/.cc-switch/backups/`（`db_backup_` 开头）；之后再装回 3.x 会提示「数据库版本过新」。
+
+**已有的卡片保持原样。** 预设更新只影响新建的供应商，比如已有的 Claude 供应商不会自动勾上「关闭 auto mode 服务端检查」，需要的话在编辑器里勾选。新定价只回补之前按 $0 记录的请求，其余历史费用不会重算。
+
+**Claude Code 的聚合模式需要 2.1.243 或更新版本。** 聚合的模型通过 Claude Code 新增的 `modelPicker` 设置列进 `/model`，更早的版本会忽略它，`/model` 里就看不到聚合的模型。用 `claude --version` 查看版本，`claude update` 升级。
+
+**几个设置移除了。** 供应商成本倍率（中转站价格本身已经包含倍率，再乘一次只会算错）；连通性检查的高级设置（现在使用内置默认值）；Claude 的「Teammates」和「最大强度」两个快捷开关（每个 Claude Code 会话现在都自带团队功能；最大强度会把所有会话锁在最贵的档位，需要时在会话里用 `/effort max`）。已经写在配置里的变量不会被删除。
+
+---
+
+### 修复
+
+- **用 ChatGPT 账号的 Claude Code 对话报 400 中断。** 官方 Codex 后端在思考记录里多了一个字段，下一轮请求就被拒收。现在已经出错的对话会自动恢复
+- **Claude Code 映射到 GPT、Grok 后，关了思考仍然全力推理。** 现在关闭思考时推理强度降到 low，目标模型不支持的档位会自动调整，GPT-5.x pro 用 `/effort low` 不再报 400
+- macOS 上用 `⌘Q`、Dock「退出」或注销退出后，客户端仍然指向已经停止的本地路由
+- Codex 官方路由的回复迟迟不显示，用量记为 0
+- Codex 模型目录里的 GPT 模型丢失官方提示词、工具能力和推理档位
+- Codex 0.158 起，MCP 配置里的 `type` 字段导致报错，甚至无法启动
+- MiniMax 工具调用参数解析失败；部分模型的思考内容混在正文里显示
+- 部分上游在流式响应里混用 LF 和 CRLF 换行，工具调用丢失
+- 上游拒绝请求，却被报成「输出达到上限」；现在如实报告为上游错误并带上原因
+- Claude Desktop 用 OpenCode Go 报 `400 MissingSessionID`，本地路由会自动补上会话标识
+- 导入 Skill 时勾选的其他应用实际收不到；同步 Skills 时误删 OpenClaw 目录下的同名文件夹
+- 新增或导入提示词时，可能清空你手写的提示词文件
+- WSL 下的 Codex 拖慢启动和会话扫描
+- 时间 MCP 预设一启动就退出，改用 `uvx mcp-server-time`（已添加的服务器需手动把命令改成 `uvx`、参数改成 `mcp-server-time`）
+- 部分 CLI 升级时额外装出一份 npm 副本
+- 清理旧日志后，数据库文件没有缩小
+- 设置里「保存并重启服务」没有真正重启服务
+- macOS 上应用内更新或更改配置目录后重启，新窗口被压在其他应用后面（这次升级的重启仍由旧版执行，从下一次更新起生效）
+- Grok Build 的「获取 API Key」打开官网首页；Hermes、OpenClaw 的小米 MiMo 预设默认用了不支持图片的模型
+
+---
+
+### 相对 4.0.0 预览版的变化
+
+已经装过 4.0.0 到 4.0.3 预览版的用户，这一节列出预览期间的改动，上面的正文已经包含这些内容。
+
+**新增**：Claude Code「关闭 auto mode 服务端检查」快捷开关和每个开关的说明；MCP 同步到 Pi 1.0；MCP 和提示词整页编辑、离开前提醒保存；「其他备份」总览；Codex Credits 余额；OpenCode 2.0 新版供应商配置和思考档位；用量模型表格的成功率和速度列；OpenCode Zen、模力方舟预设；已安装 Skill 全选；切换日志；更新后显示更新摘要。
+
+**修复**：ChatGPT 账号对话报 400；关了思考仍全力推理；Claude Code 聚合模式下 `/model` 顶部是四行同一个模型；导入 Skill 勾选的应用收不到；其他工具改过 Codex 模型目录设置后，模型映射和聚合模型不生效；Gemini CLI 会话读不到；WSL 下的 Codex 拖慢扫描；上游错误被报成输出达到上限；Claude Desktop 用 OpenCode Go 报 400；流式工具调用丢失；用量表格没算缓存 token；写用量拖慢路由；时间 MCP 预设启动即退出；Codex 用量同步可能卡死；以及侧边栏动画、分隔线、推理等级多选撑宽、时间范围选择器边框、图标铺满等界面细节。
+
+**体验改进**：改了 Claude Code 的聚合模型不用再重启；供应商表单跟着所在标签页走，Codex 完整表单里获取的模型可以直接挑进模型映射表；去掉了 Claude 的「Teammates」和「最大强度」快捷开关。
+
+**4.0.4 新增的改动**：
+- macOS 上应用内更新或更改配置目录后重启，新窗口回到最前面
+- 新安装默认隐藏项目切换器
+- 用量页窗口较窄时，请求日志的速度列不再被挤到横向滚动区外
+- 「关于」页的 Star 提示改成单独一条，可以关闭
+
+---
+
+### 致谢
+
+感谢这一版的贡献者：
+
+[@Owlbay](https://github.com/Owlbay)（会话阅读页重做、用量页热力图与性能、整页编辑和未保存提醒、Pi 的 MCP 同步、时间 MCP 预设、MiMo 预设）、[@qyinter](https://github.com/qyinter)（大量 UI/UX 打磨）、[@allenxu09](https://github.com/allenxu09)、[@parkavenue9639](https://github.com/parkavenue9639)、[@ggbdpq](https://github.com/ggbdpq)、[@SailingLoong](https://github.com/SailingLoong)、[@DEAN-Cherry](https://github.com/DEAN-Cherry)、[@LystranG](https://github.com/LystranG)、[@lcgash](https://github.com/lcgash)、[@Chris-Xie369](https://github.com/Chris-Xie369)、[@fisHarly0](https://github.com/fisHarly0)、[@minc-nice-100](https://github.com/minc-nice-100)、[@funkpopo](https://github.com/funkpopo)、[@ISuuuu](https://github.com/ISuuuu)、[@tingfeng347](https://github.com/tingfeng347)、[@Hexc01](https://github.com/Hexc01)、[@zhengkaics](https://github.com/zhengkaics)、[@7ten7](https://github.com/7ten7)、[@2doright](https://github.com/2doright)、[@RemindZ](https://github.com/RemindZ)、[@M3chD09](https://github.com/M3chD09)、[@Richard-Zhang1019](https://github.com/Richard-Zhang1019)、[@YuxuZhou-CN](https://github.com/YuxuZhou-CN)、[@Eureka0w0v0](https://github.com/Eureka0w0v0)、[@Ne1ther](https://github.com/Ne1ther)、[@h6rime](https://github.com/h6rime)、[@bigben446](https://github.com/bigben446)、[@szupzj18](https://github.com/szupzj18)、[@AnxForever](https://github.com/AnxForever)
+
+感谢 [@PnutCN](https://github.com/PnutCN)、[@Aaron-WealthTech](https://github.com/Aaron-WealthTech)、[@RuriLothlorien](https://github.com/RuriLothlorien)、[@Ming-Sir-69](https://github.com/Ming-Sir-69)、[@juntaosun](https://github.com/juntaosun)、[@killServer0](https://github.com/killServer0)、[@shangchaovo](https://github.com/shangchaovo)、[@gsmchen](https://github.com/gsmchen)、[@winter-maple](https://github.com/winter-maple)、[@guangzh3n](https://github.com/guangzh3n)、[@AltCtrlFn](https://github.com/AltCtrlFn)、[@R-Tsubasa](https://github.com/R-Tsubasa)、[@Lingbou](https://github.com/Lingbou)、[@Enough1122](https://github.com/Enough1122)、[@IAld010](https://github.com/IAld010) 详细的问题报告、排查和建议，帮我们准确定位了问题。
+
+特别感谢 [opencodex](https://github.com/lidge-jun/opencodex) 项目，聚合模式的许多设计都受益于它的开源探索。
+
+也感谢每一位提交 issue、帮忙复现问题的用户。完整的技术细节请见 [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md)。
+
+## [4.0.3] - 2026-10-06
+
+#### 4.0 预览版的第三个修复版本
+
+这个版本修复了 Claude Code 映射到 GPT、Grok 后关了思考仍然全力推理，以及导入 Skill 时勾选的其他应用实际收不到的问题，Claude Desktop 也能正常用 OpenCode Go 了。Claude Code 的快捷开关新增「关闭 auto mode 服务端检查」，每个开关都配了说明。MCP 和提示词改成整页编辑，离开前会提醒保存；「备份与恢复」里能看到所有备份占了多少空间；ChatGPT 订阅会显示 Codex Credits 余额。预设新增 OpenCode Zen 和模力方舟。4.0 完整的更新内容请见 [v4.0 发布说明](https://github.com/farion1231/cc-switch/blob/main/docs/release-notes/v4.0.0-zh.md)。
+
+> **预览版不会自动更新。** 应用内更新只跟随正式版，已经装了 4.0.0 到 4.0.2 的话，请在本页手动下载 4.0.3 安装。
+
+---
+
+### 新增
+
+**Claude Code 快捷开关：关闭 auto mode 服务端检查。** Claude Code 2.1.281 起，auto mode 会先请求官方的服务端检查，经过第三方网关或本地路由时检查不了，每个会话都会先停下来提示一次「不符合条件」。现在 Claude 供应商编辑器里多了「关闭 auto mode 服务端检查」，勾选后直接用本机检查，不再提示。新建第三方供应商时默认勾上，官方和云厂商的供应商不勾，官方端点也不要勾。另外，以前供应商配置里写的 `CLAUDE_CODE_AUTO_MODE_SERVER` 切换时不会写进 `settings.json`，现在会跟着供应商切换。
+
+**每个快捷开关都有说明。** Claude 配置编辑器上方的每个快捷开关后面都加了「?」，用一句话说明它做什么、什么时候用，以及是全局设置还是跟着供应商切换。
+
+**MCP 和提示词改成整页编辑，离开前提醒保存。** 编辑 MCP 服务器和提示词不再是弹窗，而是在内容区打开整页，侧栏和窗口拖动区域照常可用；供应商编辑页也不再限制宽度，跟着窗口变宽。有未保存的修改时，点侧栏、按 ⌘, 或从托盘切走都会先问一句；返回、取消和 Esc 照旧直接关闭。
+
+**「备份与恢复」里能看到所有备份。** 以前这里只列数据库备份，`~/.cc-switch` 下其他备份一直在悄悄变大，Codex 会话迁移的备份就可能有好几 GB。现在数据库列表下方有一个可以展开的「其他备份」，列出 Skill 卸载备份、Codex 会话迁移备份、配置文件首次写入备份、Hermes 和 OpenClaw 的配置备份、旧版本遗留文件等，每项显示路径、大小和数量，可以在文件管理器里打开，也可以整类删除。删除前会说明删掉会失去什么，比如删了 Codex 会话统一迁移备份，关闭那个开关时就不能再「恢复备份」。
+
+**显示 ChatGPT 订阅的 Codex Credits 余额。** 有 Credits 余额时，展开的额度详情和「授权中心」里会多一行「Credits」，显示余额和按 API 价折算的美元数（1 Credit 约 0.04 美元）。Credits 只在额度用完后才扣，所以供应商卡片平时不显示，等某个额度用完才会出现。
+
+**OpenCode 2.0 的新版供应商配置。** OpenCode 2.0 支持在 `providers` 里写新格式的供应商，以前 CC Switch 只认旧的 `provider`，新格式的供应商看不到，写入也落在 OpenCode 不读的地方。现在两种格式都能读写，新格式的供应商在 JSON 编辑器里编辑，保存时会保留注释，格式有误会指出具体哪个字段。
+
+**用量统计的模型标签页加上成功率和速度。** 和供应商标签页一样，模型统计现在也有成功率和速度两列；「平均成本」列去掉了，鼠标悬停在成本上可以看到。
+
+**其他：**
+- 已安装 Skill 列表的表头加了全选框，作用于当前搜索和筛选出来的这些行。
+- 切换供应商和进出路由、聚合模式时，日志里会写明从哪切到哪、结果如何，排查「点了切换没反应」更方便。
+- 新增预设：OpenCode Zen（Claude Code、Codex，和 OpenCode Go 合成一行）、模力方舟（Claude Code、Codex、Pi、OpenCode、OpenClaw）。
+
+### 修复
+
+- **Claude Code 映射到 GPT、Grok 后，关了思考仍然全力推理。** Claude Code 关闭思考时仍会带上 `high` 的推理强度，转换成 OpenAI 格式后上游照样全力推理。现在关闭思考时推理强度降到 `low`；目标模型不支持的档位也会自动调到它能接受的档位，比如 GPT-5.x pro 不接受 `low`，以前用 `/effort low` 会直接报 400。Fable、Opus 5.5 这类没法关思考的模型，映射之后也会保持思考。
+- **导入 Skill 时勾选的其他应用，实际收不到这个 Skill。** 以前只记下了勾选状态，界面显示已启用，对应应用的 Skills 目录里却没有文件。现在导入时会直接复制过去；复制失败的应用不会标成已启用，并在导入结果里列出来。
+- **Claude Desktop 用 OpenCode Go 时报 `400 MissingSessionID`。** OpenCode Go 要求每个请求带会话标识，Claude Desktop 不带。现在发往 OpenCode 的请求缺少会话标识时，本地路由会自动补上，同一段对话始终用同一个标识。
+- **部分上游的流式响应里工具调用丢失。** 有的上游在流式响应里混用 LF 和 CRLF 换行，以前会切错事件，Claude Code 收不到 OpenAI Chat 上游的工具调用。
+- **用量统计的供应商和模型表格没算缓存 token。** 以前表格只加了新输入和输出，缓存命中率高时，各行加起来只有顶部总数的一小部分。现在和顶部的总 token 数对得上。
+- **没开路由时导入的用量，供应商名显示成英文。** 以前显示「Claude (Session)」这样的英文占位名，现在显示「Claude Code · 会话日志」，悬停会说明为什么分不出具体供应商；请求日志和请求详情里旁边已经写了应用，就只显示「会话日志」。
+- **硬盘慢时，写用量记录会拖慢路由服务。** 写入用量记录改到单独的线程，不再卡住同时进来的其他请求。
+- **macOS 上用量页切换标签时图表和图标抖动。**
+- **Hermes、OpenClaw 的小米 MiMo 预设默认用了不支持图片的模型**，现在和其他应用一样默认 `mimo-v2.6-pro`。
+- **OpenCode Go 预设的「获取 API Key」链接打开后显示推荐活动已结束的提示**，现在改为不带推荐码的链接。
+
+### 体验改进
+
+- **去掉了 Claude 的「Teammates」和「最大强度」两个快捷开关。** 现在每个 Claude Code 会话都自带团队功能，Teammates 开关只剩分屏显示的作用；最大强度开关会把每个会话都锁在最贵的档位，`/effort` 也会失效。需要时可以在会话里用 `/effort max`。已经写在配置里的这两个变量不会被删掉。
+
+### 升级说明
+
+**数据库结构没有变化**，仍然是 20，装回 4.0.2 没有问题。
+
+**预设的改动只影响新添加的供应商。** 已有的 Claude 供应商不会自动加上「关闭 auto mode 服务端检查」，需要的话在编辑器里勾选；已有的 Hermes、OpenClaw MiMo 供应商也不会改模型。
+
+---
+
+### 致谢
+
+感谢 [@SailingLoong](https://github.com/SailingLoong)（auto mode 设置跟着供应商切换）、[@Owlbay](https://github.com/Owlbay)（整页编辑和未保存提醒、MiMo 预设）、[@DEAN-Cherry](https://github.com/DEAN-Cherry)（OpenCode 2.0 新版供应商配置）、[@lcgash](https://github.com/lcgash)（模力方舟预设）、[@allenxu09](https://github.com/allenxu09)（切换日志、Skill 全选、用量页抖动）、[@Chris-Xie369](https://github.com/Chris-Xie369)（OpenCode Go 会话标识）、[@ggbdpq](https://github.com/ggbdpq)（用量写入不再卡住路由）、[@fisHarly0](https://github.com/fisHarly0)（混合换行的流式响应）、[@minc-nice-100](https://github.com/minc-nice-100)（Windows 测试隔离）的贡献，感谢 [@shangchaovo](https://github.com/shangchaovo)、[@gsmchen](https://github.com/gsmchen)、[@winter-maple](https://github.com/winter-maple)、[@guangzh3n](https://github.com/guangzh3n)、[@AltCtrlFn](https://github.com/AltCtrlFn)、[@R-Tsubasa](https://github.com/R-Tsubasa)、[@Lingbou](https://github.com/Lingbou)、[@Enough1122](https://github.com/Enough1122)、[@IAld010](https://github.com/IAld010) 报告问题和提出建议。
+
+完整的技术细节请见 [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md)。
+
+## [4.0.2] - 2026-10-06
+
+#### 4.0 预览版的第二个修复版本
+
+这个版本修复了用 ChatGPT 账号的 Claude Code 对话报 400 中断、Codex 的聚合模型不显示等问题。Claude Code 聚合模式下的 `/model` 列表只列聚合的模型，改了模型也不用再重启 Claude Code。MCP 服务器也可以同步到 Pi 1.0 了。从这一版起，更新后第一次打开会弹出一个简短的更新摘要。4.0 完整的更新内容请见 [v4.0 发布说明](https://github.com/farion1231/cc-switch/blob/main/docs/release-notes/v4.0.0-zh.md)。
+
+> **预览版不会自动更新。** 应用内更新只跟随正式版，已经装了 4.0.0 或 4.0.1 的话，请在本页手动下载 4.0.2 安装。
+
+---
+
+### 新增
+
+**MCP 服务器可以同步到 Pi 1.0 了。** Pi 1.0 内置了 MCP，配置格式和 Claude Code 相同，现在 MCP 页面里可以给 Pi 打开同步了。CC Switch 只写连接相关的字段，超时、工具暴露、OAuth 这些 Pi 自己的设置原样保留。关掉同步不会删掉条目，只是在 Pi 里标成停用，再打开时这些设置都还在。Pi 不支持的配置（SSE 传输、名称里有特殊字符）会直接提示，不会写进文件。
+
+**更新后显示简短的更新摘要。** 升级后第一次打开 CC Switch，会弹出一个窗口，用几句话列出上次打开以来每个版本的主要变化，点「详情」可以看到完整说明。之后想再看，可以在「设置 → 关于」里点「近期更新」。
+
+### 修复
+
+- **Claude Code 聚合模式下，`/model` 最上面是四行同一个模型。** 以前开启聚合模式后，Claude Code 的模型列表顶部会出现四行一样的模型（对应 Opus、Sonnet、Haiku、Fable 四个档位），后面才是聚合的模型。现在列表里只有「Default」和聚合的模型，每行写着模型名和上下文窗口。退出聚合模式时这份列表会一起删掉，Claude Code 回到它自己的默认列表。如果你在 `settings.json` 里手动写过 `modelPicker`，切换供应商或模式时会被覆盖。这需要 Claude Code 2.1.243 或更新的版本，见下方升级说明。
+- **用 ChatGPT 账号的 Claude Code 对话报 400 中断。** 10 月 3 日起，官方 Codex 后端在思考记录里多加了一个字段，下次请求时又拒收这个字段，所以通过 ChatGPT 账号（Codex OAuth）使用 Claude Code 时，对话的下一轮就会报 `400 Unknown parameter: 'input[N].status'`。现在回放思考记录时只保留必要的字段，已经出错的对话也会自动恢复，不需要任何操作。
+- **其他工具改过 Codex 的模型目录设置后，CC Switch 的模型映射和聚合模型不生效。** 其他同类工具（或旧版本的 CC Switch）会在 `config.toml` 里写一个 `model_catalog_json`，让 Codex 去读它们的模型目录。以前 CC Switch 遇到这一项就不动它，结果自己生成的模型目录不起作用，直连模式下连提示都没有。现在每次切换都会重写这一项：用到模型映射或聚合模式时指向 CC Switch 生成的模型目录，用不到时直接去掉，不管原来是谁写的。如果你确实要让某个供应商用自己的模型目录，请写在这个供应商的配置里。旧版本保存供应商时，可能把这一项误存进了供应商自己的配置；遇到这种情况，聚合模式的提示里会有「改用 CC Switch 的模型目录」按钮，点一下就清掉。
+- **时间 MCP 预设（time）一启动就退出。** 预设用的 npm 包其实不存在，现在改用官方发布的 `uvx mcp-server-time`。之前已经用这个预设添加的服务器不会自动更新，需要手动把命令改成 `uvx`、参数改成 `mcp-server-time`。
+- **Codex 模型目录里推理等级选多了，会把这一行撑宽。** 现在各行始终和表头对齐。连续选中的等级会缩写成「low → max」这样的形式，鼠标悬停可以看到完整列表和默认等级。
+- **用量统计的时间范围选择器**：选中的起止时间框里不再多出一圈灰色边框，和上方的快捷选项也拉开了间距。
+
+### 体验改进
+
+- **改了 Claude Code 的聚合模型，不用再重启。** 增删聚合的供应商或模型、换默认模型、改上下文窗口，正在运行的 Claude Code 都会马上生效，原来那些「请重启 Claude Code」的提示也去掉了。Codex 只在启动时读取模型目录，仍然需要重启。
+- **供应商表单跟着你所在的标签页走。** 在「聚合」标签页里添加或编辑供应商，用的是简化表单；从「直连」或「路由」标签页打开，用的是完整表单。原来那个手动切换表单的链接去掉了，用简化表单时标题会标出「（聚合模式）」。
+- **Codex 完整表单里，获取的模型可以直接挑进模型映射表。** 点「获取模型列表」之后，模型映射这一栏会出现和聚合表单一样的可搜索列表，勾选的模型直接变成新的一行，上下文窗口和推理等级也会自动填好。旁边的添加按钮改名叫「手动添加」，用来补列表里没有的模型。
+- **自带底色的供应商图标铺满图标框。** 88API、Qiniu 这类自带底色的图标，以前在边框里缩成一个小方块，现在会铺满整个图标框。透明底的图标也稍微放大了一些，几个四周留白太多的图标做了裁剪。
+
+### 升级说明
+
+**Claude Code 的聚合模式需要 2.1.243 或更新的版本。** 聚合的模型现在通过 Claude Code 2.1.243 新增的 `modelPicker` 设置列进 `/model`。更早的版本会忽略这项设置，`/model` 里就看不到聚合的模型，只能用默认模型，或者用 `/model <模型 ID>` 手动指定。可以在终端里运行 `claude --version` 查看当前版本，用 `claude update` 升级。
+
+**数据库版本升到了 20**，新增了一列记录 Pi 的同步开关，升级时不会往 Pi 写任何东西。4.0.2 打开过数据库之后，再装回 4.0.1、4.0.0 或 3.x 会提示「数据库版本过新」。升级前的数据库会自动备份在 `~/.cc-switch/backups/` 里（`db_backup_` 开头）。
+
+---
+
+### 致谢
+
+感谢 [@parkavenue9639](https://github.com/parkavenue9639) 和 [@ggbdpq](https://github.com/ggbdpq)（ChatGPT 账号 400 的修复）、[@Owlbay](https://github.com/Owlbay) 和 [@LystranG](https://github.com/LystranG)（Pi 的 MCP 同步，以及 Owlbay 的时间 MCP 预设修复）、[@allenxu09](https://github.com/allenxu09)（用量统计的时间范围选择器）的贡献，感谢 [@killServer0](https://github.com/killServer0) 报告时间 MCP 预设的问题。
+
+完整的技术细节请见 [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md)。
+
+## [4.0.1] - 2026-10-05
+
+#### 4.0 预览版的第一个修复版本
+
+感谢大家对 4.0 预览版的试用和反馈。这个版本修复了 Gemini CLI 会话读不到、WSL 下 Codex 启动变慢等问题，也让 OpenCode 能用上思考档位。4.0 完整的更新内容请见 [v4.0 发布说明](https://github.com/farion1231/cc-switch/blob/main/docs/release-notes/v4.0.0-zh.md)。
+
+> **预览版不会自动更新。** 应用内更新只跟随正式版，已经装了 4.0.0 的话，请在本页手动下载 4.0.1 安装。
+
+---
+
+### 新增
+
+**OpenCode 可以选择思考档位了。** OpenCode 只会给标记为「支持推理」的模型提供思考档位（Ctrl+T），而 CC Switch 写入的自定义供应商以前从不带这个标记，所以通过 CC Switch 添加的模型一直选不了档位。现在，预设和获取到的模型只要已知支持推理（以预设或 models.dev 为准），就会自动标记，档位由 OpenCode 自己生成，跟随 OpenCode 的版本更新。
+
+**「跳过 Claude Code 初次安装确认」有了说明。** 点开这一项的帮助图标，可以看到开关具体做了什么：在 `~/.claude.json` 里写入或删除 `hasCompletedOnboarding`。
+
+### 修复
+
+- **会话管理读不到 Gemini CLI 的会话。** 新版 Gemini CLI 把会话记录改成了 JSONL 格式，并会在恢复会话时把旧文件迁移过去，导致会话页看不到 Gemini 会话，用量同步也导入不到数据。现在完整支持新格式；旧文件和迁移后的新文件同时存在时只显示一份，删除时一起删掉。会话标题也会跳过 CLI 自动注入的上下文和斜杠命令。
+- **WSL 下的 Codex 拖慢启动和会话扫描。** Codex 配置目录放在 WSL 里时，Windows 无法给其中的 SQLite 数据库加锁，每次都要等 5 秒超时。历史迁移因此每次启动都重来一遍，扫描会话也会卡住。现在会跳过这类数据库，会话标题改从会话索引读取。
+- **上游拒绝请求，却被报成「输出达到上限」。** 有些 Responses 上游（比如 ChatGPT Codex 后端拒绝某个工具定义时）会在不处理请求的情况下返回「输出 token 达到上限」，用量全是 0，Claude Code 就提示了一个根本没碰到的上限。现在这种情况会如实报告为上游错误，并带上拒绝原因。
+- **Codex 用量同步可能卡死。** 一个无关的异常之后，同步带父会话的 Codex 记录时可能卡住不动，现在已修复。
+- **Grok Build 的「获取 API Key」打开的是官网首页。** 现在和其他应用一样，打开预设提供的注册页面。
+
+### 体验改进
+
+- **侧边栏收起和展开更流畅。** 动画改由合成层绘制，跟随屏幕刷新率，不再受限于 WebView 主线程的 60 帧。中途反向点击会从当前位置接着走。
+- **侧边栏底部分隔线**和上方的分隔线样式统一，选中「用量统计」时不再贴着线。
+- **重置次数的下拉箭头**单独占一行时，和上一行的倒计时时钟对齐。
+
+### 构建与发布
+
+macOS 两个架构改为并行编译，公证失败重试时不必从头编译；任何一个平台缺少更新签名时，构建会直接失败，不会再发布一个缺了某个平台的更新清单。
+
+---
+
+### 致谢
+
+感谢 [@allenxu09](https://github.com/allenxu09)（Gemini CLI 会话、侧边栏动画与分隔线）和 [@parkavenue9639](https://github.com/parkavenue9639)（上游拒绝的错误报告）的贡献，感谢 [@juntaosun](https://github.com/juntaosun) 第一时间报告 Gemini CLI 会话的问题。
+
+完整的技术细节请见 [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md)。
+
 ## [4.0.0] - 2026-10-04
 
 #### 全新界面，全新聚合模式，更稳的配置切换

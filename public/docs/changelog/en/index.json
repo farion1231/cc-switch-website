@@ -1,6 +1,30 @@
 {
   "versions": [
     {
+      "version": "4.0.4",
+      "date": "2026-10-07",
+      "isPreRelease": false,
+      "summary": ""
+    },
+    {
+      "version": "4.0.3",
+      "date": "2026-10-06",
+      "isPreRelease": false,
+      "summary": ""
+    },
+    {
+      "version": "4.0.2",
+      "date": "2026-10-06",
+      "isPreRelease": false,
+      "summary": ""
+    },
+    {
+      "version": "4.0.1",
+      "date": "2026-10-05",
+      "isPreRelease": false,
+      "summary": ""
+    },
+    {
       "version": "4.0.0",
       "date": "2026-10-04",
       "isPreRelease": false,

@@ -2,6 +2,387 @@
 
 Important release updates for CC Switch.
 
+## [4.0.4] - 2026-10-07
+
+#### Stable release (4.0.4): a new interface, the new Aggregation mode, and safer config switching
+
+This is the first stable release of v4.0, and the app will update to it automatically. It includes everything in the 4.0 preview, plus the fixes and additions made during the preview, from 4.0.1 to 4.0.4.
+
+This is the biggest CC Switch release yet. With it, we've rethought the core of the CC Switch experience: how you connect to models, how you switch providers, and how you manage a growing set of AI coding tools.
+
+The interface has been redesigned from the sidebar to the tray, giving apps, config, usage and sessions each a clear place. The new Aggregation mode puts models from several providers into one Claude Code or Codex model picker, so you can switch between them right inside the client. The Usage page has been redesigned too: every request is logged with its token usage, cost and output speed, and choosing the "All" time range shows the past year of daily usage as a heatmap. Session management has been rewritten from scratch: what the AI did in each turn, what it changed and which step failed are all visible at a glance. And the config-writing core has been rebuilt: switching providers now replaces only the key fields instead of rewriting the whole file, which removes a great deal of complexity and puts an end to a whole class of lost-settings problems. MCP servers can now be synced to Pi too, so one MCP config can serve 8 AI coding tools at once.
+
+> **Upgrading from 3.x?** How provider switching works, the database version and a few settings have changed. We suggest reading "Before You Upgrade" below first.
+
+---
+
+### A Redesigned Interface
+
+The new interface uses a sidebar layout and an orange theme. Switching apps, plus global features like MCP, Skills, Prompts, Sessions, Accounts and Usage, are all one click away in the sidebar.
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/main-en.png" alt="The new interface: sidebar, mode tabs and provider cards" width="720"></p>
+
+- **Modes at a glance**: Every app page has three tabs at the top: Direct / Routing / Aggregation. Clicking a tab only changes what you're looking at and never touches your config. The button that actually switches modes tells you what will happen, and going back to Direct takes one step and can be undone
+- **A home for your tools**: The new Apps page shows each AI coding tool's version, install location and source, with install, upgrade and batch upgrade
+- **A cleaner Add Provider panel**: Search, pick a preset, fill in the form. Search matches Chinese names and domains, and one vendor's plans and regions are merged into one row, so Claude's presets now take noticeably fewer rows. Preset providers are no longer highlighted as recommendations
+- **Quota shows what's left**: Cards read "5-hour 94% left" or "Balance 8.99 CNY", and each tier is followed by its reset countdown, like "⏱ 2h30m". Quota stays a quiet gray: a percentage turns bold when it drops below 10%, and a balance turns red only once it runs out. Click it to re-check and see the result. Codex subscriptions also show how many saved resets are left and when they expire, and ChatGPT subscriptions show their Codex Credits balance, converted to US dollars at API prices
+- **Tray organized by app**: Each row reads "name · mode · provider · quota", and submenus list only the providers you can switch to right now. The tray icon shows a dot only when something really needs your attention
+- **Settings grouped by purpose**: General, App config, Local routing, Network, Data, About. Local routing's service status, listen address and failover settings now live in one place
+- **Editing is no longer a dialog**: Providers, MCP servers and prompts open as a full page in the content area, and the sidebar keeps working. With unsaved changes, clicking the sidebar, pressing ⌘, or switching away from the tray asks first
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/apps-en.png" alt="The Apps page: versions, installs and upgrades for every AI coding tool in one place" width="720"></p>
+
+Upgrading users see a short note on first launch explaining where things have moved. After each update, the first launch also shows a summary of what changed. To see it again, click "Recent updates" in Settings → About.
+
+---
+
+### Aggregation: Many Providers, One Model Picker
+
+Until now, using another provider's model meant going back to CC Switch, switching providers, and returning to your client.
+
+Turn on **Aggregation**, add a few providers, and their models all show up together in the Claude Code or Codex model picker. Whichever model you pick, the request goes straight to that provider, without ever leaving the client.
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-codex-en.png" alt="Models from several providers listed together in Codex's model picker" width="560"></p>
+
+- **Add and remove anytime**: Click "Add" or "Remove" on a provider card, then choose one provider as the default to handle requests that don't name an aggregated model
+- **Know every model at a glance**: Each model name carries its provider, like "Kimi K3 (Kimi For Coding)", and its description shows the real upstream model ID and context window, like `kimi-k3 · 256K`
+- **A streamlined form**: When you add or edit a provider on the "Aggregation" tab, connection details and the model list sit on one page, and that's all you fill in. The "Direct" and "Routing" tabs use the full form
+- **Mix providers in Codex without errors**: Set your official account as the default, and official and third-party models are listed side by side. Switch back and forth between providers' models and context compaction and reasoning state carry over
+- **Switch models mid-session**: You can change to another model partway through a session. Note that after each switch, the new model has to build its prompt cache again, so the first turn after switching costs noticeably more
+- **Restart reminders**: When Codex's model list changes you're prompted to restart, and Codex CLI users can restart the background service from the banner in one click. Changes to Claude Code's aggregated models take effect right away, with no restart
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-en.png" alt="Aggregation: one default provider plus six added providers" width="720"></p>
+
+Aggregation is opt-in and currently supports Claude Code and Codex. Claude Code's aggregated model list needs Claude Code 2.1.243 or later. Aggregation routes each request by the model you pick, and does not offer failover.
+
+| Mode | How requests travel | Best for |
+|------|---------------------|----------|
+| **Direct** | The client talks to the provider directly | Everyday use |
+| **Routing** | Through local routing to one provider, with protocol conversion and failover | Incompatible protocols, or when you need failover |
+| **Aggregation** | Through local routing, dispatched by model to several providers | Mixing models from several providers in one session |
+
+> **A Tribute to opencodex**
+>
+> Aggregation learned a great deal from [opencodex](https://github.com/lidge-jun/opencodex) and builds directly on its ideas: prefixing model IDs with the provider so models from many providers can share the Claude Code and Codex pickers; letting Codex compact context on third-party models; and detecting when a background service is still using an old model list, then prompting a restart. All of these came out of opencodex's exploration. Our thanks to its author ([@lidge-jun](https://github.com/lidge-jun)) and contributors for open-sourcing this work, and our deepest respect for their open-source spirit!
+>
+> If you want a tool dedicated to bringing any model into Codex and Claude Code, we highly recommend giving opencodex a try!
+
+---
+
+### Usage
+
+**The Usage page** has redesigned metrics, a trend chart, a request log, and four paginated tables for providers, models and pricing. A new "All" time range shows your daily usage as a 53-week heatmap, and wide-range queries no longer freeze the window.
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/usage-en.png" alt="Usage: the 53-week heatmap and request log" width="720"></p>
+
+- **Output speed** is now measured over generation time only, without the wait for the first token. Even without routing, requests imported from Claude Code and Codex session logs get an estimated speed, marked with "≈"
+- **The model table gains Success Rate and Speed columns**. The "Average Cost" column is gone; hover over the cost to see it
+- **The provider and model tables count cache tokens**, so the rows add up to the total token count at the top
+- Usage imported from session logs without routing shows a provider name like "Claude Code · Session logs", and hovering explains why the specific provider cannot be told apart
+- Usage records are written on a separate thread, so a slow disk no longer slows down the routing service
+
+---
+
+### Switch Providers, Keep Your Config Intact
+
+This is the most important under-the-hood change in this release. It applies to Claude Code, Codex, Gemini CLI, Grok Build and Claude Desktop.
+
+CC Switch launched in August 2025, when the API ecosystem was far less mature than it is today. API formats often differed widely between official and third-party providers, so the original design rewrote the whole config file on every switch. That choice brought a series of problems and a lot of complexity. Now that the ecosystem has matured, it's time to rebuild.
+
+**Before**: Switching providers rewrote the entire config file from that provider's saved snapshot. Hooks, plugins and permissions you added to `settings.json`, or MCP servers you added to `config.toml`, were either lost on switch or absorbed into one provider's snapshot, disappearing as soon as you switched to another.
+
+**Now**: Switching replaces only the endpoint, credential, model and protocol, plus the provider's own switches. Everything else stays exactly where it was:
+
+- In TOML and `.env` files, untouched lines, comments and order included, stay byte for byte the same
+- In JSON files, every other key keeps its value and order
+- Shared settings simply stay in your config file, so the "common config snippet" feature is no longer needed
+
+**The editor previews what your config file will look like after switching**. Global settings you edit there are written to the config file, and before saving CC Switch checks whether another program has changed the file in the meantime.
+
+The new write engine also adds several layers of protection:
+
+- If a config file can't be parsed, writing stops and the original file is left untouched
+- External changes are checked before writing, so a file another program just saved is never overwritten
+- When several files change together, the intent is recorded first. If the app quits unexpectedly midway, the next launch finishes the job automatically instead of leaving things half-written
+- Each file is backed up as-is before the new version writes to it for the first time
+- Config files that hold keys are readable and writable only by you
+
+Turning routing on or off no longer relies on backing up and restoring your whole config. When Codex switches to a third-party provider, the ChatGPT login it overwrites is stashed locally and restored automatically when you switch back to your official account.
+
+---
+
+### Session Management: See Every AI Coding Session Clearly
+
+AI coding tools keep a complete record of every session on your machine, but the raw logs are thousands of lines of JSON and nearly impossible to read. This release rewrites session management from scratch to make those records as readable as possible, and adds token usage and cost for each session.
+
+<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/session-en.png" alt="The session reader: step summaries, tool call details and the conversation outline" width="720"></p>
+
+- **Nine clients, one way to read them**: Sessions from Claude Code, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes, Pi and MiniMax Code are parsed into structured content, with text, thinking, tool calls, tool results and images each shown in their own form
+- **One turn, one summary line**: A long run of AI actions folds into a single line, such as "Steps · 44 · 27 commands · 2 files changed · 1 failed · 27m45s". Failed commands are marked in red, and expanding one shows its parameters, output and exit code. Runs of file reads and searches merge into "Read N files, searched N times"
+- **Conversation outline**: The right-hand panel lists each of your prompts along with how many steps the turn took and what it concluded. Turns with failed steps get a red dot; click to jump there
+- **Three views**: "All" shows the full process, "Chat" shows only what you and the AI said, and "Changes" shows only which files were changed
+- **The whole session at a glance**: The header shows the project directory, start and end time, number of prompts and tool calls, model, total tokens and the cost at API prices
+- **Find in session**: Matches hidden inside folded tool output are expanded and scrolled into view automatically, and typing stays smooth even in long sessions
+- **From reading back to working**: Resume a session in your favorite terminal (Ghostty, for example) in one click, or copy the resume command. You can also export to Markdown and copy a single turn or the whole conversation
+- **An easier-to-search list**: Group by project or time, search titles, directories, first and last messages or session IDs, and delete in bulk
+- OpenCode 2.x sessions and Gemini CLI's new JSONL session format are now supported, and Hermes sessions open correctly again
+
+The session reader redesign was led by [@Owlbay](https://github.com/Owlbay). Many thanks to Owlbay for the enormous effort.
+
+---
+
+### MCP Sync to Pi
+
+Pi 1.0 has built-in MCP with the same config format as Claude Code. Turn on sync for Pi on the MCP page, and your existing MCP servers work in Pi right away. Together with Claude Code, Codex, Gemini CLI, Grok Build, OpenCode, Hermes and MiniMax Code, one MCP config can now manage 8 AI coding tools.
+
+- **Only connection fields are written**: Pi's own settings, such as timeouts, tool exposure and OAuth, are left as they are
+- **Turning sync off does not delete entries**: They are only marked disabled in Pi, and those settings are still there when you turn sync back on
+- **Unsupported configs are flagged right away**: Servers that use the SSE transport, which Pi does not support, or have special characters in their names are not written to the file
+
+MCP sync for Pi was built by [@Owlbay](https://github.com/Owlbay) and [@LystranG](https://github.com/LystranG).
+
+---
+
+### More Improvements
+
+- **Claude Code quick toggles**: New "Disable Auto Mode Server Checks". Starting with Claude Code 2.1.281, every session going through a third-party gateway or local routing first stopped once with a "not eligible" notice. With this checked, the check runs locally and the notice goes away. It is checked by default for new third-party providers; do not check it for official endpoints. Every quick toggle now has a "?" after it, explaining what it does and whether it is a global setting or follows the provider
+- **MCP**: Paste several server configs at once in JSON, TOML, Codex or OpenCode format. If writing to one app fails you can retry just that app, and one bad server no longer stops the others from syncing
+- **Skills**: "Installed" and "Discover" are merged into one page with one-click "Update all", and you can choose the sync method: automatic, symlink only or copy only. The installed list has a select-all checkbox in its header
+- **Prompts**: Manage prompts for eight apps on one page, copy them to other apps, import existing files, and undo a delete
+- **Accounts**: Accounts, re-login actions and remaining quota at a glance
+- **Backups at a glance**: "Backup & Restore" now has an expandable "Other Backups" section listing the path, size and item count of each kind of backup under `~/.cc-switch`. You can open where they are stored or delete a whole category, and before deleting it tells you what you would lose
+- **Model metadata autofill**: When you pick a fetched model, its context window, output limit, reasoning levels and input types are filled in from presets and models.dev, without overwriting anything you've already entered
+- **Claude Desktop**: With model mapping, the local routing service starts on its own and stops when no longer needed
+- **OpenCode**: OpenCode 2.0's new provider config is supported. Both the old and new formats can be read and written, and format errors point to the exact field. You can pick thinking variants: models known to support reasoning are marked automatically, and OpenCode generates the variants itself. Comments and formatting in `opencode.jsonc` survive sync, and OpenCode 2.x usage is tracked
+- **MiniMax Code**: Install and upgrade it from the Apps page, and choose your own provider key when creating a provider
+- **Presets and pricing**: New Command Code, OpenCode Zen (Claude Code and Codex; shares one row with OpenCode Go) and MoArk (Claude Code, Codex, Pi, OpenCode, OpenClaw) presets; updated pricing for Claude Opus 5.5, GPT-6 Sol / Luna, MiMo V2.6 and more; all existing presets now have proper icons
+- **Easier troubleshooting from logs**: Switching providers and entering or leaving Routing or Aggregation now logs where it switched from and to and how it went
+- **Project switcher hidden by default**: Most users don't need projects, so new installs no longer show the project switcher on the main page or in the tray. Turn it on in Settings when you need it. If you already use it, nothing changes
+
+---
+
+### Before You Upgrade
+
+**Where settings live has changed.** Shared settings now stay in the client's own config file, and the "common config snippet" feature has been removed. A model or reasoning effort you pick temporarily in the client goes back to the provider's value when you switch away and back. To keep it, save it in the provider editor.
+
+**Some fixes take effect after one switch.** The Codex model catalog and session history fixes apply the next time CC Switch writes the Codex config, so just switch providers once after upgrading. Re-sync your existing MCP config once to clear the old `type` field.
+
+**Restart when prompted after switching.** Codex, Gemini CLI and Grok Build need a restart after switching models, and Codex also needs a restart after its Aggregation list changes. Changes to Claude Code's aggregated models need no restart.
+
+**The database schema is now at 20.** The database is backed up automatically before the upgrade, under `~/.cc-switch/backups/` (files starting with `db_backup_`). Going back to 3.x afterwards shows "Database version is too new".
+
+**Existing cards stay as they are.** Preset updates only apply to newly created providers. For example, existing Claude providers do not get "Disable Auto Mode Server Checks" checked automatically; check it in the editor if you need it. New pricing only backfills requests previously recorded at $0; other historical costs are not recalculated.
+
+**Claude Code's Aggregation mode needs 2.1.243 or later.** Claude Code added a `modelPicker` setting in that version, and aggregated models are listed in `/model` through it. Earlier versions ignore it, so `/model` shows none of the aggregated models. Run `claude --version` to check your version and `claude update` to upgrade.
+
+**A few settings have been removed.** Per-provider cost multipliers (relay prices already include their multiplier, so applying another one only skews the numbers); the connectivity-check advanced settings (built-in defaults are used now); and Claude's "Teammates Mode" and "Max Effort Thinking" quick toggles (every Claude Code session now has team features built in, and max effort locked every session to the most expensive level; use `/effort max` in a session when you need it). Variables already written in your config are not removed.
+
+---
+
+### Fixes
+
+- **Claude Code conversations on a ChatGPT account broke with a 400 error.** The official Codex backend added a field to its reasoning records, and the next request was then rejected. Conversations that already failed now recover on their own
+- **With Claude Code mapped to GPT or Grok, turning thinking off still left it reasoning at full effort.** Turning thinking off now lowers the reasoning effort to low, levels the target model does not support are adjusted automatically, and `/effort low` on GPT-5.x pro no longer fails with a 400
+- After quitting with `⌘Q`, the Dock's "Quit" or logging out on macOS, clients stayed pointed at the stopped local routing service
+- Replies on the Codex official route appeared only after a long delay, with usage recorded as 0
+- GPT models in the Codex model catalog lost their official prompts, tool capabilities and reasoning levels
+- Since Codex 0.158, the `type` field in MCP config caused errors and could even stop Codex from starting
+- MiniMax tool calls failed to parse their arguments, and some models' thinking showed up mixed into the reply text
+- Some upstreams mix LF and CRLF line breaks in streaming responses, which made tool calls go missing
+- An upstream rejection was reported as "output limit reached"; it is now reported as the upstream error it is, with the reason
+- Claude Desktop with OpenCode Go failed with `400 MissingSessionID`; local routing now adds the session ID automatically
+- Other apps checked when importing a Skill never actually got it, and syncing Skills deleted same-named folders inside OpenClaw's directory
+- Adding or importing a prompt could empty a prompt file you wrote by hand
+- Codex under WSL slowed down startup and session scans
+- The time MCP preset exited right after it started; it now runs `uvx mcp-server-time` (for servers you already added, change the command to `uvx` and the argument to `mcp-server-time` by hand)
+- Upgrading some CLIs installed an extra npm copy
+- The database file didn't shrink after old logs were pruned
+- "Save and restart service" in settings didn't actually restart the service
+- On macOS, after an in-app update or a config directory change, the restarted window opened behind other apps (the restart for this upgrade is still run by the old version, so the fix takes effect from the next update)
+- Grok Build's "Get API Key" opened the plain homepage, and the Xiaomi MiMo presets for Hermes and OpenClaw defaulted to a model without image support
+
+---
+
+### Changes Since the 4.0.0 Preview
+
+If you already installed a preview from 4.0.0 to 4.0.3, this section lists what changed during the preview. The notes above already include all of it.
+
+**New**: Claude Code's "Disable Auto Mode Server Checks" quick toggle and an explanation for every toggle; MCP sync to Pi 1.0; full-page editing for MCP servers and prompts, with a reminder to save before leaving; the "Other Backups" overview; Codex Credits balance; OpenCode 2.0's new provider config and thinking variants; Success Rate and Speed columns in the Usage model table; OpenCode Zen and MoArk presets; select-all for installed Skills; switch logging; an update summary after each update.
+
+**Fixes**: ChatGPT account conversations failing with a 400; reasoning at full effort with thinking off; four rows of the same model at the top of `/model` in Claude Code's Aggregation mode; apps checked when importing a Skill not getting it; model mapping and aggregated models not working after another tool changed Codex's model catalog setting; Gemini CLI sessions not showing up; Codex under WSL slowing down scans; upstream errors reported as an output limit; Claude Desktop with OpenCode Go failing with a 400; tool calls lost in streaming; usage tables leaving out cache tokens; usage writes slowing down routing; the time MCP preset exiting at startup; Codex usage sync possibly hanging; plus UI details such as the sidebar animation, the divider, rows stretched by picking many reasoning levels, the time range picker border and icons filling their box.
+
+**Polish**: Changing Claude Code's aggregated models no longer needs a restart; the provider form follows the tab you are on, and models fetched in the full Codex form can be picked straight into the model mapping table; Claude's "Teammates Mode" and "Max Effort Thinking" quick toggles are removed.
+
+**New in 4.0.4**:
+- On macOS, after an in-app update or a config directory change, the restarted window comes to the front
+- New installs hide the project switcher by default
+- In a narrow Usage window, the request log's Speed column no longer gets pushed out into the horizontal scroll area
+- The Star prompt on the About page is now a strip of its own that you can dismiss
+
+---
+
+### Thanks
+
+Thanks to everyone who contributed to this release:
+
+[@Owlbay](https://github.com/Owlbay) (session reader redesign, usage heatmap and performance, full-page editing and the unsaved-changes reminder, MCP sync for Pi, the time MCP preset, the MiMo presets), [@qyinter](https://github.com/qyinter) (extensive UI/UX polish), [@allenxu09](https://github.com/allenxu09), [@parkavenue9639](https://github.com/parkavenue9639), [@ggbdpq](https://github.com/ggbdpq), [@SailingLoong](https://github.com/SailingLoong), [@DEAN-Cherry](https://github.com/DEAN-Cherry), [@LystranG](https://github.com/LystranG), [@lcgash](https://github.com/lcgash), [@Chris-Xie369](https://github.com/Chris-Xie369), [@fisHarly0](https://github.com/fisHarly0), [@minc-nice-100](https://github.com/minc-nice-100), [@funkpopo](https://github.com/funkpopo), [@ISuuuu](https://github.com/ISuuuu), [@tingfeng347](https://github.com/tingfeng347), [@Hexc01](https://github.com/Hexc01), [@zhengkaics](https://github.com/zhengkaics), [@7ten7](https://github.com/7ten7), [@2doright](https://github.com/2doright), [@RemindZ](https://github.com/RemindZ), [@M3chD09](https://github.com/M3chD09), [@Richard-Zhang1019](https://github.com/Richard-Zhang1019), [@YuxuZhou-CN](https://github.com/YuxuZhou-CN), [@Eureka0w0v0](https://github.com/Eureka0w0v0), [@Ne1ther](https://github.com/Ne1ther), [@h6rime](https://github.com/h6rime), [@bigben446](https://github.com/bigben446), [@szupzj18](https://github.com/szupzj18), [@AnxForever](https://github.com/AnxForever)
+
+Thanks also to [@PnutCN](https://github.com/PnutCN), [@Aaron-WealthTech](https://github.com/Aaron-WealthTech), [@RuriLothlorien](https://github.com/RuriLothlorien), [@Ming-Sir-69](https://github.com/Ming-Sir-69), [@juntaosun](https://github.com/juntaosun), [@killServer0](https://github.com/killServer0), [@shangchaovo](https://github.com/shangchaovo), [@gsmchen](https://github.com/gsmchen), [@winter-maple](https://github.com/winter-maple), [@guangzh3n](https://github.com/guangzh3n), [@AltCtrlFn](https://github.com/AltCtrlFn), [@R-Tsubasa](https://github.com/R-Tsubasa), [@Lingbou](https://github.com/Lingbou), [@Enough1122](https://github.com/Enough1122), [@IAld010](https://github.com/IAld010) for detailed bug reports, investigation and suggestions that helped us pin down the problems.
+
+Special thanks to the [opencodex](https://github.com/lidge-jun/opencodex) project; much of Aggregation's design benefits from its open-source exploration.
+
+And thanks to everyone who filed an issue or helped reproduce a bug. For the full technical details, see the [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md).
+
+## [4.0.3] - 2026-10-06
+
+#### The third fix release for the 4.0 preview
+
+This release fixes Claude Code still reasoning at full effort with thinking turned off after being mapped to GPT or Grok, and Skills imported with other apps checked never actually reaching those apps; Claude Desktop now works with OpenCode Go too. Claude Code's quick toggles gain "Disable Auto Mode Server Checks", and every toggle now comes with an explanation. MCP servers and prompts are edited on a full page that reminds you to save before leaving; "Backup & Restore" shows how much space all backups take; ChatGPT subscriptions show their Codex Credits balance. New presets: OpenCode Zen and MoArk. For everything new in 4.0, see the [v4.0 release notes](https://github.com/farion1231/cc-switch/blob/main/docs/release-notes/v4.0.0-en.md).
+
+> **Preview builds do not update automatically.** In-app updates follow stable releases only. If you installed any version from 4.0.0 to 4.0.2, download 4.0.3 from this page and install it manually.
+
+---
+
+### New
+
+**New Claude Code quick toggle: Disable Auto Mode Server Checks.** Starting with Claude Code 2.1.281, auto mode first asks for an official server-side check, which cannot get through a third-party gateway or local routing, so every session stopped once with a "not eligible" notice. The Claude provider editor now has "Disable Auto Mode Server Checks"; with it checked, the check runs locally and the notice goes away. It is checked by default for new third-party providers and left unchecked for official and cloud providers; do not check it for official endpoints either. Also, a `CLAUDE_CODE_AUTO_MODE_SERVER` written in a provider's config used to be left out of `settings.json` on switch; it now switches along with the provider.
+
+**Every quick toggle is explained.** Each quick toggle above the Claude config editor now has a "?" after it, saying in one sentence what it does, when to use it, and whether it is a global setting or follows the provider.
+
+**MCP servers and prompts are edited on a full page, with a reminder to save before leaving.** Editing MCP servers and prompts no longer opens a dialog; a full page opens in the content area, and the sidebar and the window drag area keep working. The provider edit page is no longer width-limited either and grows with the window. With unsaved changes, clicking the sidebar, pressing ⌘, or switching away from the tray asks first; Back, Cancel and Esc still close right away.
+
+**"Backup & Restore" shows every backup.** This section used to list only database backups, while the other backups under `~/.cc-switch` quietly kept growing; the Codex session migration backups alone can take several GB. Below the database list there is now an expandable "Other Backups" section listing Skill uninstall backups, Codex session migration backups, config first-write backups, Hermes and OpenClaw config backups, files left by older versions and more, each with its path, size and item count. You can open each one in the file manager or delete a whole category. Before deleting, it tells you what you lose: for example, after deleting the Codex session unify migration backups, "Restore backup" is no longer available when you turn that switch off.
+
+**Codex Credits balance for ChatGPT subscriptions.** When you have a Credits balance, the expanded quota details and the Accounts page gain a "Credits" row showing the balance and its US dollar value at API prices (1 Credit is about $0.04). Credits are spent only after your limits run out, so the provider card normally does not show them; they appear once one of the limits is used up.
+
+**OpenCode 2.0's new provider config.** OpenCode 2.0 supports providers written in a new format under `providers`. CC Switch used to understand only the old `provider`, so providers in the new format did not show up, and writes landed where OpenCode does not read them. Both formats can now be read and written; providers in the new format are edited in the JSON editor, comments are kept on save, and format errors point to the exact field.
+
+**Success Rate and Speed on the Models tab of Usage.** Like the Providers tab, model statistics now have Success Rate and Speed columns; the "Average Cost" column is gone, and you can see it by hovering over the cost.
+
+**Other:**
+- The installed Skills list has a select-all checkbox in its header, which applies to the rows the current search and filters show.
+- Switching providers and entering or leaving Routing or Aggregation mode now logs where it switched from and to and how it went, which makes "I clicked switch and nothing happened" easier to track down.
+- New presets: OpenCode Zen (Claude Code and Codex; shares one row with OpenCode Go) and MoArk (Claude Code, Codex, Pi, OpenCode, OpenClaw).
+
+### Fixes
+
+- **With Claude Code mapped to GPT or Grok, turning thinking off still left it reasoning at full effort.** With thinking off, Claude Code still sends a `high` reasoning effort, so after conversion to the OpenAI format the upstream reasoned at full effort anyway. Turning thinking off now lowers the effort to `low`, and levels the target model does not support are moved to one it accepts: GPT-5.x pro, for example, does not accept `low`, so `/effort low` used to fail with a 400. Models whose thinking cannot be turned off, such as Fable and Opus 5.5, keep thinking after mapping as well.
+- **Other apps checked when importing a Skill never actually got it.** Only the checked state was recorded: the UI showed the Skill as enabled, but that app's Skills directory had no files. Importing now copies the Skill over right away; apps where the copy fails are not marked enabled and are listed in the import result.
+- **Claude Desktop with OpenCode Go failed with `400 MissingSessionID`.** OpenCode Go requires a session ID on every request, and Claude Desktop does not send one. When a request to OpenCode is missing it, local routing now adds one, keeping the same ID throughout a conversation.
+- **Tool calls went missing from some upstreams' streaming responses.** Some upstreams mix LF and CRLF line breaks in their streaming responses, which used to split events in the wrong places, so Claude Code never received tool calls from OpenAI Chat upstreams.
+- **The provider and model tables in Usage left out cache tokens.** The tables used to add up only new input and output, so with a high cache hit rate the rows summed to a small fraction of the total at the top. They now match the total token count at the top.
+- **Usage imported without routing showed a placeholder provider name.** It used to show a placeholder like "Claude (Session)"; it now shows "Claude Code · Session logs", and hovering explains why the provider cannot be told apart. In the request log and request details, where the app is already shown next to it, only "Session logs" appears.
+- **On a slow disk, writing usage records slowed down the routing service.** Usage records are now written on a separate thread and no longer hold up other requests coming in at the same time.
+- **Charts and icons jittered when switching tabs on the Usage page on macOS.**
+- **The Xiaomi MiMo presets for Hermes and OpenClaw defaulted to a model without image support**; they now default to `mimo-v2.6-pro`, like the other apps.
+- **The "Get API Key" link of the OpenCode Go presets opened a page saying the referral program had ended**; it now links without the referral code.
+
+### Polish
+
+- **Claude's "Teammates Mode" and "Max Effort Thinking" quick toggles are removed.** Every Claude Code session now has team features built in, so the Teammates toggle only controlled split-pane display; the max effort toggle locked every session to the most expensive level and stopped `/effort` from working. Use `/effort max` in a session when you need it. If these two variables are already in your config, they are not removed.
+
+### Upgrade Notes
+
+**The database schema is unchanged**, still at 20, so going back to 4.0.2 is fine.
+
+**Preset changes only affect newly added providers.** Existing Claude providers do not get "Disable Auto Mode Server Checks" checked automatically; check it in the editor if you need it. Existing Hermes and OpenClaw MiMo providers keep their model as well.
+
+---
+
+### Thanks
+
+Thanks to [@SailingLoong](https://github.com/SailingLoong) (auto mode setting following the provider), [@Owlbay](https://github.com/Owlbay) (full-page editing with the unsaved-changes reminder, the MiMo presets), [@DEAN-Cherry](https://github.com/DEAN-Cherry) (OpenCode 2.0's new provider config), [@lcgash](https://github.com/lcgash) (the MoArk presets), [@allenxu09](https://github.com/allenxu09) (switch logging, Skill select-all, the Usage page jitter), [@Chris-Xie369](https://github.com/Chris-Xie369) (the OpenCode Go session ID), [@ggbdpq](https://github.com/ggbdpq) (usage writes no longer holding up routing), [@fisHarly0](https://github.com/fisHarly0) (streaming responses with mixed line breaks) and [@minc-nice-100](https://github.com/minc-nice-100) (Windows test isolation) for their contributions, and to [@shangchaovo](https://github.com/shangchaovo), [@gsmchen](https://github.com/gsmchen), [@winter-maple](https://github.com/winter-maple), [@guangzh3n](https://github.com/guangzh3n), [@AltCtrlFn](https://github.com/AltCtrlFn), [@R-Tsubasa](https://github.com/R-Tsubasa), [@Lingbou](https://github.com/Lingbou), [@Enough1122](https://github.com/Enough1122) and [@IAld010](https://github.com/IAld010) for reporting issues and making suggestions.
+
+For the full technical details, see the [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md).
+
+## [4.0.2] - 2026-10-06
+
+#### The second fix release for the 4.0 preview
+
+This release fixes Claude Code conversations on a ChatGPT account breaking with a 400 error and Codex aggregated models not showing up, among other issues. In Claude Code's Aggregation mode, `/model` now lists just the aggregated models, and changing them no longer needs a Claude Code restart. MCP servers can also be synced to Pi 1.0. Starting with this release, the first launch after an update shows a short summary of what changed. For everything new in 4.0, see the [v4.0 release notes](https://github.com/farion1231/cc-switch/blob/main/docs/release-notes/v4.0.0-en.md).
+
+> **Preview builds do not update automatically.** In-app updates follow stable releases only. If you installed 4.0.0 or 4.0.1, download 4.0.2 from this page and install it manually.
+
+---
+
+### New
+
+**MCP servers can be synced to Pi 1.0.** Pi 1.0 has built-in MCP with the same config format as Claude Code, so the MCP page can now turn on sync for Pi. CC Switch writes only the connection fields and leaves Pi's own settings, such as timeouts, tool exposure and OAuth, as they are. Turning sync off does not delete the entry; it is marked disabled in Pi, and those settings are still there when you turn it back on. Configurations Pi does not support (the SSE transport, special characters in the name) are flagged right away and never written to the file.
+
+**A short summary after updating.** The first time you open CC Switch after an upgrade, a window lists the main changes of every version since you last opened it, a few lines each; click "Details" for the full notes. To see it again later, click "Recent updates" in Settings → About.
+
+### Fixes
+
+- **In Claude Code's Aggregation mode, `/model` opened with four rows of the same model.** After turning on Aggregation mode, the top of Claude Code's model list showed four identical rows (one for each of the Opus, Sonnet, Haiku and Fable tiers) before the aggregated models. Now the list holds only "Default" and the aggregated models, each row showing the model name and its context window. Leaving Aggregation mode removes this list, and Claude Code goes back to its own default list. If you wrote a `modelPicker` into `settings.json` by hand, switching providers or modes replaces it. This needs Claude Code 2.1.243 or later; see the upgrade notes below.
+- **Claude Code conversations on a ChatGPT account broke with a 400 error.** Since October 3, the official Codex backend adds a field to its reasoning records and then rejects that same field on the next request, so when Claude Code ran on a ChatGPT account (Codex OAuth), the next turn of every conversation failed with `400 Unknown parameter: 'input[N].status'`. Reasoning records are now replayed with only the fields that are needed, and conversations that already failed recover on their own, with nothing for you to do.
+- **After another tool changed Codex's model catalog setting, CC Switch's model mapping and aggregated models stopped working.** Similar tools (and older versions of CC Switch) write a `model_catalog_json` into `config.toml` that points Codex at their own model catalog. CC Switch used to leave that entry alone, so the catalog it generated never took effect, without even a warning in Direct mode. Now every switch rewrites the entry, whoever wrote it before: it points at CC Switch's generated catalog when model mapping or Aggregation mode needs one, and is removed otherwise. If you do want a provider to use its own model catalog, put the entry in that provider's config. Older versions could also save this entry into a provider's own config by mistake; in that case, the Aggregation mode notice offers a "Use CC Switch's model catalog" button that clears it in one click.
+- **The time MCP preset exited right after it started.** The npm package the preset used does not actually exist; it now runs the officially published `uvx mcp-server-time`. Servers you already added from this preset are not updated automatically: change the command to `uvx` and the argument to `mcp-server-time` by hand.
+- **Picking many reasoning levels stretched a row of the Codex model catalog.** Rows now always line up with the header. Consecutive levels are shortened to something like "low → max", and hovering shows the full list and the default level.
+- **Usage time range picker**: the selected start and end fields no longer show an extra gray border, and they sit a little further below the presets.
+
+### Polish
+
+- **No more restarts after changing Claude Code's aggregated models.** Adding or removing aggregated providers or models, changing the default model and editing context windows all take effect in a running Claude Code right away, and the "restart Claude Code" hints are gone. Codex reads its model catalog only at startup, so it still needs a restart.
+- **The provider form follows the tab you are on.** Adding or editing a provider from the "Aggregation" tab uses the simple form; opening it from the "Direct" or "Routing" tab uses the full form. The link for switching between the two forms is gone, and while the simple form is in use, its title reads "(Aggregation mode)".
+- **Fetched models can be picked straight into the model mapping table of the full Codex form.** After "Fetch Models", the model mapping section shows the same searchable list as the Aggregation form; each model you check becomes a new row, with its context window and reasoning levels filled in. The add button next to it is now called "Add manually", for models the list does not have.
+- **Provider icons with their own background fill the icon box.** Icons that come with a background color, such as 88API and Qiniu, used to shrink to a small square inside the border; they now fill the whole box. Icons on a transparent background are a little larger, and a few with too much empty space around them are cropped.
+
+### Upgrade Notes
+
+**Claude Code's Aggregation mode needs Claude Code 2.1.243 or later.** Aggregated models are now listed in `/model` through the `modelPicker` setting, which Claude Code added in 2.1.243. Earlier versions ignore this setting, so `/model` shows none of the aggregated models: you can only use the default model, or pick another one by hand with `/model <model ID>`. Run `claude --version` in a terminal to check your version and `claude update` to upgrade.
+
+**The database version is now 20**, with a new column for Pi's sync switch; upgrading writes nothing to Pi. Once 4.0.2 has opened the database, going back to 4.0.1, 4.0.0 or 3.x shows "Database version is too new". The database is backed up automatically before the upgrade, under `~/.cc-switch/backups/` (files starting with `db_backup_`).
+
+---
+
+### Thanks
+
+Thanks to [@parkavenue9639](https://github.com/parkavenue9639) and [@ggbdpq](https://github.com/ggbdpq) (the ChatGPT account 400 fix), [@Owlbay](https://github.com/Owlbay) and [@LystranG](https://github.com/LystranG) (MCP sync for Pi, plus Owlbay's fix for the time MCP preset) and [@allenxu09](https://github.com/allenxu09) (the usage time range picker) for their contributions, and to [@killServer0](https://github.com/killServer0) for reporting the time MCP preset issue.
+
+For the full technical details, see the [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md).
+
+## [4.0.1] - 2026-10-05
+
+#### The first fix release for the 4.0 preview
+
+Thanks to everyone who tried the 4.0 preview and sent feedback. This release fixes Gemini CLI sessions not showing up and Codex slowing down startup under WSL, among other issues, and lets OpenCode offer thinking variants. For everything new in 4.0, see the [v4.0 release notes](https://github.com/farion1231/cc-switch/blob/main/docs/release-notes/v4.0.0-en.md).
+
+> **Preview builds do not update automatically.** In-app updates follow stable releases only. If you installed 4.0.0, download 4.0.1 from this page and install it manually.
+
+---
+
+### New
+
+**OpenCode offers thinking variants.** OpenCode only offers thinking variants (Ctrl+T) for models marked as reasoning-capable, and the custom providers CC Switch wrote never carried that mark, so models added through CC Switch never had any variants to pick. Now presets and fetched models that are known to reason (going by the preset or models.dev) are marked automatically. OpenCode generates the variants itself, so they keep up with OpenCode releases.
+
+**"Skip Claude Code first-run confirmation" now explains itself.** Its help icon shows what the toggle actually does: it writes or removes `hasCompletedOnboarding` in `~/.claude.json`.
+
+### Fixes
+
+- **Session Management could not read Gemini CLI sessions.** Newer Gemini CLI versions record sessions as JSONL and migrate old files when a session is resumed, so the Sessions page showed no Gemini sessions and usage sync imported nothing. The new format is now fully supported. When an old file and its migrated copy both exist, only one is shown, and deleting the session removes both. Session titles also skip context the CLI injects automatically and slash commands.
+- **Codex under WSL slowed down startup and session scans.** When the Codex config directory lives inside WSL, Windows cannot lock the SQLite databases there, and every open waited out a 5-second timeout. The history migration started over on every launch, and session scans stalled. Such databases are now skipped, and session titles come from the session index instead.
+- **An upstream rejection was reported as an output limit.** Some Responses upstreams (for example, the ChatGPT Codex backend rejecting a tool definition) return "max output tokens reached" without processing the request, with zero usage, so Claude Code reported a limit that was never hit. This is now reported as the upstream error it is, with the rejection details.
+- **Codex usage sync could hang.** After an unrelated error, syncing Codex records with a parent session could get stuck. This is fixed.
+- **Grok Build's "Get API Key" opened the plain homepage.** Like the other apps, it now opens the sign-up page the preset provides.
+
+### Polish
+
+- **Smoother sidebar collapse and expand.** The animation is drawn on the compositor and runs at the display's refresh rate instead of being capped at the WebView main thread's 60 fps. Clicking again mid-animation continues from where the edge is.
+- **The sidebar's bottom divider** matches the one above it, so a selected "Usage" row no longer touches the line.
+- **The reset-credits dropdown arrow** lines up with the countdown clock of the row above when it sits on its own row.
+
+### Build and Release
+
+macOS now builds both architectures in parallel, so a notarization retry no longer recompiles from scratch. If any platform is missing its update signature, the build fails outright instead of publishing an update manifest that leaves that platform out.
+
+---
+
+### Thanks
+
+Thanks to [@allenxu09](https://github.com/allenxu09) (Gemini CLI sessions, sidebar animation and divider) and [@parkavenue9639](https://github.com/parkavenue9639) (error reporting for upstream rejections) for their contributions, and to [@juntaosun](https://github.com/juntaosun) for reporting the Gemini CLI session issue right away.
+
+For the full technical details, see the [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md).
+
 ## [4.0.0] - 2026-10-04
 
 #### A redesigned interface, the new Aggregation mode, and safer config switching
