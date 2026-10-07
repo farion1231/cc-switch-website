@@ -46,6 +46,7 @@ export interface SampleSkill {
   update?: boolean;
 }
 
+// Seven rows: the whole list fits the demo window, so each column's count matches the visible ticks.
 export const INSTALLED_SKILLS: SampleSkill[] = [
   {
     name: 'baoyu-cover-image',
@@ -57,13 +58,7 @@ export const INSTALLED_SKILLS: SampleSkill[] = [
     name: 'brainstorming',
     description: { zh: '写代码前先把需求和方案聊清楚', en: 'Talk through requirements and the plan before coding', ja: 'コードを書く前に要件と方針を詰める' },
     repo: 'obra/superpowers',
-    apps: ['claude', 'codex', 'opencode'],
-  },
-  {
-    name: 'docx',
-    description: { zh: '读写 Word 文档，保留修订和批注', en: 'Read and write Word documents, keeping tracked changes', ja: 'Word 文書を読み書きし、変更履歴を保持' },
-    repo: 'anthropics/skills',
-    apps: ['claude'],
+    apps: ['claude', 'codex', 'opencode', 'mcode'],
   },
   {
     name: 'frontend-design',
@@ -97,12 +92,6 @@ export const INSTALLED_SKILLS: SampleSkill[] = [
     description: { zh: '团队的提交与代码规范', en: "Your team's commit and code conventions", ja: 'チームのコミットとコードの規約' },
     repo: null,
     apps: ['claude', 'codex', 'opencode', 'hermes', 'pi', 'mcode'],
-  },
-  {
-    name: 'test-driven-development',
-    description: { zh: '先写失败的测试，再写实现', en: 'Write a failing test first, then the code', ja: '失敗するテストを先に書き、実装する' },
-    repo: 'obra/superpowers',
-    apps: ['claude', 'mcode'],
   },
 ];
 
