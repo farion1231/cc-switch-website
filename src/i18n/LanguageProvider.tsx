@@ -24,25 +24,20 @@ function getStoredOrBrowserLanguage(): Language {
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
   const pathLanguage = getLanguageFromPathname(location.pathname);
-  const [language, setLanguageState] = useState<Language>(() => pathLanguage ?? getStoredOrBrowserLanguage());
-
-  const setLanguage = (nextLanguage: Language) => {
-    setLanguageState(nextLanguage);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
-    }
-  };
+  // Only for paths without a language prefix (such as "/"): the last language used, else the browser's.
+  const [fallbackLanguage, setFallbackLanguage] = useState<Language>(getStoredOrBrowserLanguage);
+  // The URL decides. Keeping a second copy in state let a switch flash old → new → old → new:
+  // React Router commits navigations in a transition, so the copy changed a frame before the URL.
+  const language = pathLanguage ?? fallbackLanguage;
 
   useEffect(() => {
-    if (!pathLanguage || pathLanguage === language) return;
-
-    setLanguageState(pathLanguage);
+    if (!pathLanguage) return;
+    setFallbackLanguage(pathLanguage);
     localStorage.setItem(LANGUAGE_STORAGE_KEY, pathLanguage);
-  }, [language, pathLanguage]);
+  }, [pathLanguage]);
 
   const value: LanguageContextValue = {
     language,
-    setLanguage,
     t: translations[language],
   };
 

@@ -17,8 +17,8 @@ type Widen<T> = T extends string
 export type Translations = Widen<typeof translations.zh>;
 
 export interface LanguageContextValue {
+  /** Follows the URL's language prefix; switch languages by navigating. */
   language: Language;
-  setLanguage: (language: Language) => void;
   t: Translations;
 }
 

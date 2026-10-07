@@ -14,7 +14,7 @@ const languages: { code: Language; label: string; flag: string }[] = [
 ];
 
 export function LanguageSwitcher() {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +72,7 @@ export function LanguageSwitcher() {
                     <button
                       type="button"
                       onClick={() => {
-                        setLanguage(lang.code);
+                        // The language follows the URL; LanguageProvider remembers it.
                         navigate(`${getLocalizedPath(location.pathname, lang.code)}${location.search}${location.hash}`);
                         setIsOpen(false);
                       }}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getDocSections } from '@/content/docs/navigation';
 import { getLocalizedPath, stripLanguageFromPathname, SUPPORTED_LANGUAGES } from '@/i18n/routes';
@@ -294,9 +294,14 @@ export function Seo() {
     };
   }, [language, location.pathname, location.search, t]);
 
+  // Before paint, together with the new text: system fonts pick CJK glyphs by `lang`, so a
+  // late update re-renders Chinese and Japanese text a frame after a language switch.
+  useLayoutEffect(() => {
+    document.documentElement.lang = htmlLang[language];
+  }, [language]);
+
   useEffect(() => {
     document.title = seo.title;
-    document.documentElement.lang = htmlLang[language];
 
     upsertMeta('name', 'description', seo.description);
     upsertMeta('name', 'robots', seo.robots);
