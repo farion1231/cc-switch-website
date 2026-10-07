@@ -169,10 +169,17 @@ export const translations = {
         },
         quota: {
           tierLeft: '{label}剩余 {value}%',
+          tierShort: '{label} {value}%',
           balance: '余额 {value}',
           tiers: {
             fiveHour: '5 小时',
             weekly: '每周',
+            fable: 'Fable',
+          },
+          shortTiers: {
+            fiveHour: '5 小时',
+            weekly: '每周',
+            fable: 'Fable',
           },
         },
         usage: {
@@ -804,10 +811,17 @@ export const translations = {
         },
         quota: {
           tierLeft: '{label} {value}% left',
+          tierShort: '{label} {value}%',
           balance: 'Balance {value}',
           tiers: {
             fiveHour: '5-hour',
             weekly: 'Weekly',
+            fable: 'Fable',
+          },
+          shortTiers: {
+            fiveHour: '5h',
+            weekly: 'Wk',
+            fable: 'Fable',
           },
         },
         usage: {
@@ -1439,10 +1453,17 @@ export const translations = {
         },
         quota: {
           tierLeft: '{label} 残り {value}%',
+          tierShort: '{label} {value}%',
           balance: '残高 {value}',
           tiers: {
             fiveHour: '5時間',
             weekly: '週間',
+            fable: 'Fable',
+          },
+          shortTiers: {
+            fiveHour: '5h',
+            weekly: '週',
+            fable: 'Fable',
           },
         },
         usage: {

@@ -79,6 +79,8 @@ export const claudeProviders: Provider[] = [
       tiers: [
         { label: '5h', utilization: 36, resetsIn: '2h10m' },
         { label: '7d', utilization: 64, resetsIn: '3d8h' },
+        // Claude's model-scoped weekly limit (cc-switch tier seven_day_fable).
+        { label: 'fable', utilization: 48, resetsIn: '3d8h' },
       ],
     },
     isUrl: true,

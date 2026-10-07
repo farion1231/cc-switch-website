@@ -142,29 +142,57 @@ export function DemoProviderCard({ provider, current, chips = [], status, button
   );
 }
 
+const TIER_KEY = { '5h': 'fiveHour', '7d': 'weekly', fable: 'fable' } as const;
+
+/**
+ * The card's quota column (cc-switch QuotaLines / cardRows): two lines at most. With more tiers the
+ * shortest window keeps its own line and the rest share the second one by short name
+ * ("Weekly 36% · Fable 52%").
+ */
 function QuotaSummary({ provider }: { provider: Provider }) {
   const { t } = useLanguage();
   const quota = t.demo.window.quota;
-  const tierName = (label: string) => (label === '5h' ? quota.tiers.fiveHour : label === '7d' ? quota.tiers.weekly : label);
 
-  const lines = provider.quota
-    ? provider.quota.tiers.map((tier) => {
-        const left = Math.max(0, Math.round(100 - tier.utilization));
-        return { text: fill(quota.tierLeft, { label: tierName(tier.label), value: left }), low: left <= 10 };
-      })
-    : provider.remaining
-      ? [{ text: fill(quota.balance, { value: `${provider.remaining} USD` }), low: false }]
-      : [];
+  type Line = { key: string; text: string; short: string; low: boolean };
+  const tiers: Line[] = (provider.quota?.tiers ?? []).map((tier) => {
+    const left = Math.max(0, Math.round(100 - tier.utilization));
+    const key = TIER_KEY[tier.label as keyof typeof TIER_KEY];
+    return {
+      key: tier.label,
+      text: fill(quota.tierLeft, { label: key ? quota.tiers[key] : tier.label, value: left }),
+      short: fill(quota.tierShort, { label: key ? quota.shortTiers[key] : tier.label, value: left }),
+      low: left <= 10,
+    };
+  });
+  const rows: Line[][] =
+    tiers.length > 2
+      ? [[tiers[0]], tiers.slice(1)]
+      : tiers.length > 0
+        ? tiers.map((line) => [line])
+        : provider.remaining
+          ? [[{ key: 'balance', text: fill(quota.balance, { value: `${provider.remaining} USD` }), short: '', low: false }]]
+          : [];
 
-  if (lines.length === 0) return null;
+  if (rows.length === 0) return null;
 
   return (
     <div className="hidden shrink-0 flex-col items-end gap-0.5 text-right text-[13px] tabular-nums text-muted-foreground md:flex">
-      {lines.map((line) => (
-        <span key={line.text} className={cn('whitespace-nowrap', line.low && 'text-destructive')}>
-          {line.text}
-        </span>
-      ))}
+      {rows.map((row) =>
+        row.length === 1 ? (
+          <span key={row[0].key} className={cn('whitespace-nowrap', row[0].low && 'text-destructive')}>
+            {row[0].text}
+          </span>
+        ) : (
+          <span key={row.map((line) => line.key).join('+')} className="whitespace-nowrap">
+            {row.map((line, index) => (
+              <span key={line.key}>
+                {index > 0 && ' · '}
+                <span className={cn(line.low && 'text-destructive')}>{line.short}</span>
+              </span>
+            ))}
+          </span>
+        ),
+      )}
     </div>
   );
 }
