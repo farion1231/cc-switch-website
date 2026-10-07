@@ -38,7 +38,7 @@ const docSections = [
   },
   {
     id: 'proxy',
-    items: ['service', 'routing', 'failover', 'usage', 'model-test'],
+    items: ['service', 'routing', 'failover', 'usage', 'model-test', 'aggregation'],
   },
   {
     id: 'faq',

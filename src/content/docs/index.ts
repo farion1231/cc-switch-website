@@ -35,6 +35,7 @@ const docPathMap: Record<string, Record<string, string>> = {
     failover: '4-proxy/4.3-failover.md',
     usage: '4-proxy/4.4-usage.md',
     'model-test': '4-proxy/4.5-model-test.md',
+    aggregation: '4-proxy/4.6-aggregation.md',
   },
   faq: {
     default: '5-faq/5.2-questions.md',
@@ -128,6 +129,11 @@ function resolveDocLink(currentRelativePath: string, href: string) {
 
 function processDocContent(content: string, currentRelativePath: string) {
   return content
+    // Release screenshots live in the main repo's root assets/, like the changelog's.
+    .replace(
+      /!\[([^\]]*)\]\((?:\.\.\/){4}assets\/(release-notes\/[^)]+)\)/g,
+      '![$1](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/$2)'
+    )
     .replace(
       /!\[([^\]]*)\]\(\.\.\/(?:\.\.\/)?assets\/([^)]+)\)/g,
       '![$1](/docs/assets/$2)'

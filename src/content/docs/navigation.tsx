@@ -59,6 +59,7 @@ export const defaultDocSections: DocSection[] = [
       { id: 'failover', title: '故障转移' },
       { id: 'usage', title: '用量统计' },
       { id: 'model-test', title: '连通检测' },
+      { id: 'aggregation', title: '聚合模式' },
     ],
   },
   {

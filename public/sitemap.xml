@@ -649,6 +649,30 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/docs?section=proxy&amp;item=model-test" />
   </url>
   <url>
+    <loc>https://ccswitch.io/zh/docs?section=proxy&amp;item=aggregation</loc>
+    <lastmod>2026-10-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/docs?section=proxy&amp;item=aggregation" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/docs?section=proxy&amp;item=aggregation</loc>
+    <lastmod>2026-10-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/docs?section=proxy&amp;item=aggregation" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/docs?section=proxy&amp;item=aggregation</loc>
+    <lastmod>2026-10-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/docs?section=proxy&amp;item=aggregation" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/docs?section=proxy&amp;item=aggregation" />
+  </url>
+  <url>
     <loc>https://ccswitch.io/zh/docs?section=faq&amp;item=config-files</loc>
     <lastmod>2026-10-07</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/docs?section=faq&amp;item=config-files" />
