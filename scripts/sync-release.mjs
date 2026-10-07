@@ -117,6 +117,12 @@ function toChangelogEntry(markdown, language, date, docRoutes) {
         return;
       }
     }
+    // GitHub-only HTML (`<p align="center"><img …></p>`) shows up as raw text here.
+    const html = /^<p align="center"><img src="([^"]+)" alt="([^"]*)"[^>]*><\/p>$/.exec(line.trim());
+    if (html) {
+      out.push(`![${html[2].replace(/[[\]]/g, '\\$&')}](${html[1]})`);
+      return;
+    }
     const demoted = /^#{2,5} /.test(line) ? `#${line}` : line;
     out.push(demoted.replace(/\]\(([^)\s]+)\)/g, (_, href) => `](${rewriteLink(href, language, docRoutes)})`));
   });

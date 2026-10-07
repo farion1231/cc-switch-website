@@ -20,7 +20,7 @@ The interface has been redesigned from the sidebar to the tray, giving apps, con
 
 The new interface uses a sidebar layout and an orange theme. Switching apps, plus global features like MCP, Skills, Prompts, Sessions, Accounts and Usage, are all one click away in the sidebar.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/main-en.png" alt="The new interface: sidebar, mode tabs and provider cards" width="720"></p>
+![The new interface: sidebar, mode tabs and provider cards](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/main-en.png)
 
 - **Modes at a glance**: Every app page has three tabs at the top: Direct / Routing / Aggregation. Clicking a tab only changes what you're looking at and never touches your config. The button that actually switches modes tells you what will happen, and going back to Direct takes one step and can be undone
 - **A home for your tools**: The new Apps page shows each AI coding tool's version, install location and source, with install, upgrade and batch upgrade
@@ -30,7 +30,7 @@ The new interface uses a sidebar layout and an orange theme. Switching apps, plu
 - **Settings grouped by purpose**: General, App config, Local routing, Network, Data, About. Local routing's service status, listen address and failover settings now live in one place
 - **Editing is no longer a dialog**: Providers, MCP servers and prompts open as a full page in the content area, and the sidebar keeps working. With unsaved changes, clicking the sidebar, pressing ⌘, or switching away from the tray asks first
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/apps-en.png" alt="The Apps page: versions, installs and upgrades for every AI coding tool in one place" width="720"></p>
+![The Apps page: versions, installs and upgrades for every AI coding tool in one place](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/apps-en.png)
 
 Upgrading users see a short note on first launch explaining where things have moved. After each update, the first launch also shows a summary of what changed. To see it again, click "Recent updates" in Settings → About.
 
@@ -42,7 +42,7 @@ Until now, using another provider's model meant going back to CC Switch, switchi
 
 Turn on **Aggregation**, add a few providers, and their models all show up together in the Claude Code or Codex model picker. Whichever model you pick, the request goes straight to that provider, without ever leaving the client.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-codex-en.png" alt="Models from several providers listed together in Codex's model picker" width="560"></p>
+![Models from several providers listed together in Codex's model picker](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-codex-en.png)
 
 - **Add and remove anytime**: Click "Add" or "Remove" on a provider card, then choose one provider as the default to handle requests that don't name an aggregated model
 - **Know every model at a glance**: Each model name carries its provider, like "Kimi K3 (Kimi For Coding)", and its description shows the real upstream model ID and context window, like `kimi-k3 · 256K`
@@ -51,7 +51,7 @@ Turn on **Aggregation**, add a few providers, and their models all show up toget
 - **Switch models mid-session**: You can change to another model partway through a session. Note that after each switch, the new model has to build its prompt cache again, so the first turn after switching costs noticeably more
 - **Restart reminders**: When Codex's model list changes you're prompted to restart, and Codex CLI users can restart the background service from the banner in one click. Changes to Claude Code's aggregated models take effect right away, with no restart
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-en.png" alt="Aggregation: one default provider plus six added providers" width="720"></p>
+![Aggregation: one default provider plus six added providers](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-en.png)
 
 Aggregation is opt-in and currently supports Claude Code and Codex. Claude Code's aggregated model list needs Claude Code 2.1.243 or later. Aggregation routes each request by the model you pick, and does not offer failover.
 
@@ -73,7 +73,7 @@ Aggregation is opt-in and currently supports Claude Code and Codex. Claude Code'
 
 **The Usage page** has redesigned metrics, a trend chart, a request log, and four paginated tables for providers, models and pricing. A new "All" time range shows your daily usage as a 53-week heatmap, and wide-range queries no longer freeze the window.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/usage-en.png" alt="Usage: the 53-week heatmap and request log" width="720"></p>
+![Usage: the 53-week heatmap and request log](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/usage-en.png)
 
 - **Output speed** is now measured over generation time only, without the wait for the first token. Even without routing, requests imported from Claude Code and Codex session logs get an estimated speed, marked with "≈"
 - **The model table gains Success Rate and Speed columns**. The "Average Cost" column is gone; hover over the cost to see it
@@ -115,7 +115,7 @@ Turning routing on or off no longer relies on backing up and restoring your whol
 
 AI coding tools keep a complete record of every session on your machine, but the raw logs are thousands of lines of JSON and nearly impossible to read. This release rewrites session management from scratch to make those records as readable as possible, and adds token usage and cost for each session.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/session-en.png" alt="The session reader: step summaries, tool call details and the conversation outline" width="720"></p>
+![The session reader: step summaries, tool call details and the conversation outline](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/session-en.png)
 
 - **Nine clients, one way to read them**: Sessions from Claude Code, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes, Pi and MiniMax Code are parsed into structured content, with text, thinking, tool calls, tool results and images each shown in their own form
 - **One turn, one summary line**: A long run of AI actions folds into a single line, such as "Steps · 44 · 27 commands · 2 files changed · 1 failed · 27m45s". Failed commands are marked in red, and expanding one shows its parameters, output and exit code. Runs of file reads and searches merge into "Read N files, searched N times"
@@ -397,7 +397,7 @@ The interface has been redesigned from the sidebar to the tray, giving apps, con
 
 The new interface uses a sidebar layout and an orange theme. Switching apps, plus global features like MCP, Skills, Prompts, Sessions, Accounts and Usage, are all one click away in the sidebar.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/main-en.png" alt="The new interface: sidebar, mode tabs and provider cards" width="720"></p>
+![The new interface: sidebar, mode tabs and provider cards](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/main-en.png)
 
 - **Modes at a glance**: Every app page has three tabs at the top: Direct / Routing / Aggregation. Clicking a tab only changes what you're looking at and never touches your config. The button that actually switches modes tells you what will happen, and going back to Direct takes one step and can be undone
 - **A home for your tools**: The new Apps page shows each AI coding tool's version, install location and source, with install, upgrade and batch upgrade
@@ -406,7 +406,7 @@ The new interface uses a sidebar layout and an orange theme. Switching apps, plu
 - **Tray organized by app**: Each row reads "name · mode · provider · quota", and submenus list only the providers you can switch to right now. The tray icon shows a dot only when something really needs your attention
 - **Settings grouped by purpose**: General, App config, Local routing, Network, Data, About. Local routing's service status, listen address and failover settings now live in one place
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/apps-en.png" alt="The Apps page: versions, installs and upgrades for every AI coding tool in one place" width="720"></p>
+![The Apps page: versions, installs and upgrades for every AI coding tool in one place](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/apps-en.png)
 
 Upgrading users see a short note on first launch explaining where things have moved.
 
@@ -418,7 +418,7 @@ Until now, using another provider's model meant going back to CC Switch, switchi
 
 Turn on **Aggregation**, add a few providers, and their models all show up together in the Claude Code or Codex model picker. Whichever model you pick, the request goes straight to that provider, without ever leaving the client.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-codex-en.png" alt="Models from several providers listed together in Codex's model picker" width="560"></p>
+![Models from several providers listed together in Codex's model picker](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-codex-en.png)
 
 - **Add and remove anytime**: Click "Add" or "Remove" on a provider card, then choose one provider as the default to handle requests that don't name an aggregated model
 - **Know every model at a glance**: Each model name carries its provider, like "Kimi K3 (Kimi For Coding)", and its description shows the real upstream model ID and context window, like `kimi-k3 · 256K`
@@ -427,7 +427,7 @@ Turn on **Aggregation**, add a few providers, and their models all show up toget
 - **Switch models mid-session**: You can change to another model partway through a session. Note that after each switch, the new model has to build its prompt cache again, so the first turn after switching costs noticeably more
 - **Restart reminders**: When the model list changes you're prompted to restart the client, and Codex CLI users can restart the background service from the banner in one click
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-en.png" alt="Aggregation: one default provider plus six added providers" width="720"></p>
+![Aggregation: one default provider plus six added providers](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/agg-en.png)
 
 Aggregation is opt-in and currently supports Claude Code and Codex. It routes each request by the model you pick, and does not offer failover.
 
@@ -449,7 +449,7 @@ Aggregation is opt-in and currently supports Claude Code and Codex. It routes ea
 
 AI coding tools keep a complete record of every session on your machine, but the raw logs are thousands of lines of JSON and nearly impossible to read. This release rewrites session management from scratch to make those records as readable as possible, and adds token usage and cost for each session.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/session-en.png" alt="The session reader: step summaries, tool call details and the conversation outline" width="720"></p>
+![The session reader: step summaries, tool call details and the conversation outline](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/session-en.png)
 
 - **Nine clients, one way to read them**: Sessions from Claude Code, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes, Pi and MiniMax Code are parsed into structured content, with text, thinking, tool calls, tool results and images each shown in their own form
 - **One turn, one summary line**: A long run of AI actions folds into a single line, such as "Steps · 44 · 27 commands · 2 files changed · 1 failed · 27m45s". Failed commands are marked in red, and expanding one shows its parameters, output and exit code. Runs of file reads and searches merge into "Read N files, searched N times"
@@ -497,7 +497,7 @@ Turning routing on or off no longer relies on backing up and restoring your whol
 
 **The Usage page** has redesigned metrics, a trend chart, a request log, and four paginated tables for providers, models and pricing. A new "All" time range shows your daily usage as a 53-week heatmap, and wide-range queries no longer freeze the window.
 
-<p align="center"><img src="https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/usage-en.png" alt="Usage: the 53-week heatmap and request log" width="720"></p>
+![Usage: the 53-week heatmap and request log](https://raw.githubusercontent.com/farion1231/cc-switch/main/assets/release-notes/v4.0.0/usage-en.png)
 
 **Output speed** is now measured over generation time only, without the wait for the first token. Even without routing, requests imported from Claude Code and Codex session logs get an estimated speed, marked with "≈".
 
