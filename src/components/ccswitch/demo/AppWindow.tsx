@@ -39,6 +39,7 @@ import { ShellContext, type DemoToast, type GlobalPage } from './shellContext';
 import { SkillsIcon, SkillsPane } from './SkillsPane';
 import { initialAppState, type AppDemoState } from './state';
 import { UsagePane } from './UsagePane';
+import { todayCost, usd } from './usageData';
 
 export type DemoScene = 'provider' | 'proxy' | 'stats';
 
@@ -371,7 +372,7 @@ function Sidebar({ page, states, visibleApps, collapsed, onToggle, onSelectApp, 
           w.nav.usage,
           BarChart3,
           <span className={cn('shrink-0 text-[11px] font-normal tabular-nums text-muted-foreground', collapsed ? 'hidden' : 'hidden lg:inline')}>
-            {fill(w.nav.todayCost, { cost: '$128.49' })}
+            {fill(w.nav.todayCost, { cost: usd(todayCost()) })}
           </span>,
         )}
       </div>

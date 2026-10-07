@@ -3,8 +3,11 @@ import { BarChart3, ChevronDown, CircleHelp, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import { AppGlyph } from './AppGlyph';
-import { demoAppById, demoApps, type AppId } from './apps';
+import { demoAppById, demoApps, fill, type AppId } from './apps';
 import { useHoverTip } from './hoverTipContext';
+import { UsageRangePicker } from './UsageRangePicker';
+import { APP_TOTALS, SERIES_APPS, bucketUsage, compact, niceMax, seeded, sumTotals, usd } from './usageData';
+import { LOCALE, rangeBuckets, useRangeLabel, type Bucket, type RangeSelection } from './usageRange';
 
 type Metric = 'tokens' | 'requests' | 'cost';
 type Filter = 'all' | AppId;
@@ -12,12 +15,6 @@ type Filter = 'all' | AppId;
 const WEEKS = 53;
 const HEAT = ['bg-[var(--app-subtle)]', 'bg-sky-200', 'bg-sky-400', 'bg-sky-600', 'bg-sky-800'];
 const HEAT_DARK = ['', 'dark:bg-sky-950', 'dark:bg-sky-800', 'dark:bg-sky-600', 'dark:bg-sky-400'];
-
-// Fixed pseudo-random numbers so the heatmap looks the same on every render and in SSR.
-function seeded(seed: number) {
-  const x = Math.sin(seed * 9301 + 49297) * 233280;
-  return x - Math.floor(x);
-}
 
 interface LogRow {
   time: string;
@@ -42,26 +39,16 @@ const LOGS: LogRow[] = [
   { time: '14:51:09', app: 'opencode', provider: 'Kimi For Coding', model: 'kimi-k3', input: 340, output: 512, cacheRead: '72K', cost: '$0.0081', speed: '61' },
 ];
 
-const TOTALS: Record<Filter, { cost: string; requests: string; tokens: string; hit: string }> = {
-  all: { cost: '$2,731.44', requests: '27,538', tokens: '3.25B', hit: '95.0%' },
-  claude: { cost: '$1,682.10', requests: '14,206', tokens: '2.01B', hit: '96.2%' },
-  'claude-desktop': { cost: '$0.00', requests: '0', tokens: '0', hit: '—' },
-  codex: { cost: '$802.37', requests: '9,114', tokens: '0.97B', hit: '93.1%' },
-  gemini: { cost: '$96.25', requests: '1,840', tokens: '0.11B', hit: '88.4%' },
-  grokbuild: { cost: '$84.06', requests: '1,262', tokens: '0.09B', hit: '90.7%' },
-  opencode: { cost: '$41.18', requests: '688', tokens: '0.05B', hit: '91.5%' },
-  openclaw: { cost: '$0.00', requests: '0', tokens: '0', hit: '—' },
-  hermes: { cost: '$12.40', requests: '214', tokens: '0.01B', hit: '86.0%' },
-  pi: { cost: '$9.31', requests: '146', tokens: '0.01B', hit: '84.9%' },
-  mcode: { cost: '$3.77', requests: '68', tokens: '0.00B', hit: '82.3%' },
-};
-
 export function UsagePane() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { tip } = useHoverTip();
   const u = t.demo.window.usage;
+  const locale = LOCALE[language];
   const [metric, setMetric] = useState<Metric>('tokens');
   const [filter, setFilter] = useState<Filter>('all');
+  // Opens on "All" (the app opens on today): the year-long heatmap shows off the page best.
+  const [range, setRange] = useState<RangeSelection>({ preset: 'all' });
+  const rangeLabel = useRangeLabel(range);
   const [tab, setTab] = useState<keyof typeof u.tabs>('logs');
   const filterApps = demoApps.filter((app) => app.id !== 'claude-desktop' && app.id !== 'openclaw');
 
@@ -89,7 +76,17 @@ export function UsagePane() {
     return labels;
   }, [u.months]);
 
-  const totals = TOTALS[filter];
+  const apps = useMemo(() => (filter === 'all' ? SERIES_APPS : SERIES_APPS.filter((app) => app === filter)), [filter]);
+  const buckets = useMemo(() => (range.preset === 'all' ? [] : rangeBuckets(range, language)), [range, language]);
+  // Per-bar usage summed over the filtered apps; "all" reads the all-time figures directly.
+  const series = useMemo(
+    () => buckets.map((bucket) => sumTotals(apps.map((app) => bucketUsage(app, bucket)), true)),
+    [buckets, apps],
+  );
+  const totals =
+    range.preset === 'all'
+      ? sumTotals(apps.map((app) => APP_TOTALS[app]!), true)
+      : sumTotals(series, true);
   const rows = filter === 'all' ? LOGS : LOGS.filter((row) => row.app === filter);
 
   return (
@@ -108,8 +105,8 @@ export function UsagePane() {
         </button>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-4 sm:px-6">
-        <div className="inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-[10px] bg-[var(--app-subtle)] p-[3px]">
+      <div className="flex min-h-12 shrink-0 flex-wrap items-center gap-1.5 px-4 py-2 sm:px-6">
+        <div className="inline-flex min-w-0 max-w-full items-center gap-0.5 overflow-x-auto rounded-[10px] bg-[var(--app-subtle)] p-[3px]">
           <button
             type="button"
             onClick={() => setFilter('all')}
@@ -141,12 +138,17 @@ export function UsagePane() {
           ))}
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <span className="min-w-2 flex-1" />
+        <UsageRangePicker value={range} onChange={setRange} />
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-1 sm:px-6">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           {[
-            { label: u.totalCost, value: totals.cost },
-            { label: u.totalRequests, value: totals.requests },
-            { label: u.realTokens, value: totals.tokens },
-            { label: u.cacheHitRate, value: totals.hit },
+            { label: u.totalCost, value: usd(totals.cost) },
+            { label: u.totalRequests, value: new Intl.NumberFormat(locale).format(Math.round(totals.requests)) },
+            { label: u.realTokens, value: compact(totals.tokens, locale) },
+            { label: u.cacheHitRate, value: totals.tokens > 0 ? `${totals.hit.toFixed(1)}%` : '—' },
           ].map((card) => (
             <div key={card.label} className="rounded-xl border border-border bg-card px-4 py-3">
               <div className="truncate text-[13px] text-muted-foreground">{card.label}</div>
@@ -155,60 +157,57 @@ export function UsagePane() {
           ))}
         </div>
 
-        <div className="mt-4 rounded-xl border border-border bg-card p-4">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <div className="text-sm font-semibold text-foreground">{u.heatmapTitle}</div>
-              <div className="text-xs text-muted-foreground">{u.heatmapSubtitle}</div>
+        {/* "All" shows the long-run heatmap; shorter ranges get the bar chart, as in the app. */}
+        {range.preset !== 'all' ? (
+          <TrendChart
+            title={fill(u.trendTitle, { range: rangeLabel })}
+            buckets={buckets}
+            values={series.map((item) => item[metric])}
+            metric={metric}
+            onMetric={setMetric}
+          />
+        ) : (
+          <div className="mt-4 rounded-xl border border-border bg-card p-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <div className="text-sm font-semibold text-foreground">{u.heatmapTitle}</div>
+                <div className="text-xs text-muted-foreground">{u.heatmapSubtitle}</div>
+              </div>
+              <MetricToggle value={metric} onChange={setMetric} />
             </div>
-            <div className="inline-flex rounded-lg bg-[var(--app-subtle)] p-[3px]">
-              {(['tokens', 'requests', 'cost'] as Metric[]).map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setMetric(key)}
-                  className={cn(
-                    'h-7 rounded-md px-2.5 text-xs font-medium',
-                    metric === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
-                  )}
-                >
-                  {u.metrics[key]}
-                </button>
-              ))}
-            </div>
-          </div>
 
-          <div className="mt-3 overflow-x-auto">
-            <div className="min-w-[620px]">
-              <div className="relative ml-7 h-4 text-[10px] text-muted-foreground">
-                {monthLabels.map((label) => (
-                  <span key={label.week} className="absolute" style={{ left: `${(label.week / WEEKS) * 100}%` }}>
-                    {label.text}
-                  </span>
-                ))}
-              </div>
-              <div className="flex gap-1">
-                <div className="grid w-6 shrink-0 grid-rows-7 gap-[3px] text-[10px] leading-[9px] text-muted-foreground">
-                  {u.weekdays.map((day, index) => (
-                    <span key={index}>{day}</span>
+            <div className="mt-3 overflow-x-auto">
+              <div className="min-w-[620px]">
+                <div className="relative ml-7 h-4 text-[10px] text-muted-foreground">
+                  {monthLabels.map((label) => (
+                    <span key={label.week} className="absolute" style={{ left: `${(label.week / WEEKS) * 100}%` }}>
+                      {label.text}
+                    </span>
                   ))}
                 </div>
-                <div className="grid flex-1 grid-flow-col grid-rows-7 gap-[3px]">
-                  {levels.map((level, index) => (
-                    <span key={index} className={cn('aspect-square rounded-[2px]', HEAT[level], HEAT_DARK[level])} />
-                  ))}
+                <div className="flex gap-1">
+                  <div className="grid w-6 shrink-0 grid-rows-7 gap-[3px] text-[10px] leading-[9px] text-muted-foreground">
+                    {u.weekdays.map((day, index) => (
+                      <span key={index}>{day}</span>
+                    ))}
+                  </div>
+                  <div className="grid flex-1 grid-flow-col grid-rows-7 gap-[3px]">
+                    {levels.map((level, index) => (
+                      <span key={index} className={cn('aspect-square rounded-[2px]', HEAT[level], HEAT_DARK[level])} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="mt-2 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
-                {u.less}
-                {HEAT.map((cls, index) => (
-                  <span key={cls} className={cn('h-2.5 w-2.5 rounded-[2px]', cls, HEAT_DARK[index])} />
-                ))}
-                {u.more}
+                <div className="mt-2 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
+                  {u.less}
+                  {HEAT.map((cls, index) => (
+                    <span key={cls} className={cn('h-2.5 w-2.5 rounded-[2px]', cls, HEAT_DARK[index])} />
+                  ))}
+                  {u.more}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="mt-5 flex gap-5 border-b border-border text-sm">
           {(Object.keys(u.tabs) as Array<keyof typeof u.tabs>).map((key) => (
@@ -277,6 +276,105 @@ export function UsagePane() {
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function MetricToggle({ value, onChange }: { value: Metric; onChange: (metric: Metric) => void }) {
+  const { t } = useLanguage();
+  const u = t.demo.window.usage;
+  return (
+    <div className="inline-flex shrink-0 rounded-lg bg-[var(--app-subtle)] p-[3px]">
+      {(['tokens', 'requests', 'cost'] as Metric[]).map((key) => (
+        <button
+          key={key}
+          type="button"
+          onClick={() => onChange(key)}
+          className={cn(
+            'h-7 rounded-md px-2.5 text-xs font-medium',
+            value === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
+          )}
+        >
+          {u.metrics[key]}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** cc-switch UsageTrendChart: one bar per hour (up to a day) or per day, three gridlines. */
+function TrendChart({
+  title,
+  buckets,
+  values,
+  metric,
+  onMetric,
+}: {
+  title: string;
+  buckets: Bucket[];
+  values: number[];
+  metric: Metric;
+  onMetric: (metric: Metric) => void;
+}) {
+  const { t, language } = useLanguage();
+  const { tip } = useHoverTip();
+  const u = t.demo.window.usage;
+  const locale = LOCALE[language];
+  const top = niceMax(Math.max(0, ...values));
+  const legend = metric === 'requests' ? u.requestsLegend : u.metrics[metric];
+  const format = (value: number) =>
+    metric === 'cost' ? usd(value, 4) : new Intl.NumberFormat(locale).format(Math.round(value));
+  const tick = (value: number) => (metric === 'cost' ? `$${compact(value, 'en-US')}` : compact(value, locale));
+  // Thin the axis to about eight labels.
+  const every = Math.max(1, Math.ceil(buckets.length / 8));
+
+  return (
+    <div className="mt-4 rounded-xl border border-border bg-card px-4 py-2.5">
+      <div className="flex min-h-7 flex-wrap items-center gap-x-3.5 gap-y-1">
+        <span className="whitespace-nowrap text-xs font-semibold text-[var(--app-fg2)]">{title}</span>
+        <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs text-[var(--app-fg2)]">
+          <span className="h-2.5 w-2.5 rounded-[2px] bg-[var(--app-chart)]" />
+          {legend}
+        </span>
+        <span className="flex-1" />
+        <MetricToggle value={metric} onChange={onMetric} />
+      </div>
+
+      <div className="mt-1 flex h-[132px] gap-1.5 pt-1.5">
+        <div className="relative w-10 shrink-0 text-end text-[10px] tabular-nums text-[var(--app-fg3)]">
+          {[1, 0.5, 0].map((ratio) => (
+            <span key={ratio} className="absolute end-0 -translate-y-1/2" style={{ top: `${(1 - ratio) * 100}%` }}>
+              {tick(top * ratio)}
+            </span>
+          ))}
+        </div>
+        <div className="relative min-w-0 flex-1">
+          {[0, 50, 100].map((top) => (
+            <span key={top} className="absolute inset-x-0 h-px bg-[var(--app-chart-grid)]" style={{ top: `${top}%` }} />
+          ))}
+          <div className="absolute inset-0 flex items-end gap-[3px]">
+            {buckets.map((bucket, index) => (
+              <div
+                key={bucket.key}
+                {...tip(`${legend}  ${format(values[index])}`, bucket.heading)}
+                className="flex h-full min-w-0 flex-1 items-end justify-center rounded-t-[3px] hover:bg-[var(--app-subtle)]"
+              >
+                <span
+                  className="w-full max-w-[36px] rounded-t-[3px] bg-[var(--app-chart)] transition-[height] duration-300"
+                  style={{ height: `${(values[index] / top) * 100}%` }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="ms-[46px] mt-1.5 flex gap-[3px] text-[10px] tabular-nums text-[var(--app-fg3)]">
+        {buckets.map((bucket, index) => (
+          <span key={bucket.key} className="min-w-0 flex-1 overflow-visible whitespace-nowrap text-center">
+            {index % every === 0 ? bucket.label : ''}
+          </span>
+        ))}
       </div>
     </div>
   );

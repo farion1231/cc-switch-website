@@ -365,6 +365,14 @@ export function Floating({
     setPos({ x: align === 'end' ? rect.right : rect.left, y: up ? rect.top - 4 : rect.bottom + 4, up });
   }, [open, anchor, align]);
 
+  // A wide panel on a narrow screen: once it has a size, nudge it back inside an 8px margin.
+  useLayoutEffect(() => {
+    if (!pos || !panel.current) return;
+    const rect = panel.current.getBoundingClientRect();
+    const shift = rect.left < 8 ? 8 - rect.left : rect.right > window.innerWidth - 8 ? window.innerWidth - 8 - rect.right : 0;
+    if (Math.round(shift) !== 0) setPos({ ...pos, x: pos.x + shift });
+  }, [pos]);
+
   useEffect(() => {
     if (!open) return;
     const onDown = (event: MouseEvent) => {
