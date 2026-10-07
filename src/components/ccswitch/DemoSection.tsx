@@ -1,39 +1,30 @@
-import { lazy, Suspense, useState, type ComponentType } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { BarChart3, Layers, Server } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { motion } from 'framer-motion';
+import { BarChart3, Layers, Plug } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
-import { ProviderContent } from './demo/ProviderDemo';
-import { ProxyContent } from './demo/ProxyDemo';
-import { MacOsWindowBar } from './MacOsWindowBar';
+import { AppWindow, type DemoScene } from './demo/AppWindow';
 import { SectionHeader } from './SectionHeader';
 
-type DemoTabId = 'provider' | 'proxy' | 'stats';
-
-const StatsContent = lazy(() => import('./demo/StatsDemo').then((module) => ({ default: module.StatsContent })));
-
-const demoPanels: Record<DemoTabId, ComponentType> = {
-  provider: ProviderContent,
-  proxy: ProxyContent,
-  stats: StatsContent,
-};
-
 const tabIcons = {
-  provider: Layers,
-  proxy: Server,
+  provider: Plug,
+  proxy: Layers,
   stats: BarChart3,
 };
 
 export function DemoSection() {
-  const [activeTab, setActiveTab] = useState<DemoTabId>('provider');
+  // The tabs jump to a scene; the window reports back where the visitor clicked to.
+  const [activeTab, setActiveTab] = useState<DemoScene | null>('provider');
+  const [request, setRequest] = useState<{ scene: DemoScene; nonce: number }>();
   const { t } = useLanguage();
-  const ActivePanel = demoPanels[activeTab];
+  const showScene = (scene: DemoScene) => setRequest((current) => ({ scene, nonce: (current?.nonce ?? 0) + 1 }));
+  const onSceneChange = useCallback((scene: DemoScene | null) => setActiveTab(scene), []);
 
   const tabs = [
     { id: 'provider', label: t.demo.tabs.provider, icon: tabIcons.provider },
     { id: 'proxy', label: t.demo.tabs.proxy, icon: tabIcons.proxy },
     { id: 'stats', label: t.demo.tabs.stats, icon: tabIcons.stats },
-  ] satisfies Array<{ id: DemoTabId; label: string; icon: typeof Layers }>;
+  ] satisfies Array<{ id: DemoScene; label: string; icon: typeof Layers }>;
 
   return (
     <section className="section-y bg-muted/30 overflow-hidden">
@@ -56,7 +47,8 @@ export function DemoSection() {
               <button
                 key={tab.id}
                 type="button"
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => showScene(tab.id)}
+                aria-pressed={activeTab === tab.id}
                 className={cn(
                   'flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all md:px-6 md:py-3 md:text-base',
                   activeTab === tab.id
@@ -80,27 +72,11 @@ export function DemoSection() {
         >
           <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-blue-500/15 to-sky-500/10 opacity-50 blur-3xl sm:-inset-4" />
 
-          <div className="ccswitch-app-demo relative flex h-[590px] flex-col overflow-hidden rounded-xl border border-border bg-background text-foreground shadow-2xl sm:h-[620px] sm:rounded-2xl md:h-[650px]">
-            <MacOsWindowBar
-              responsive
-              className="h-7 shrink-0 bg-background px-3 sm:px-4"
-            />
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="min-h-0 flex-1 overflow-auto"
-              >
-                <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-muted-foreground" />}>
-                  <ActivePanel />
-                </Suspense>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <AppWindow
+            request={request}
+            onSceneChange={onSceneChange}
+            className="relative h-[640px] rounded-xl border border-border shadow-2xl sm:rounded-2xl md:h-[650px]"
+          />
         </motion.div>
       </div>
     </section>

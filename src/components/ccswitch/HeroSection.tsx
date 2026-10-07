@@ -5,20 +5,13 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/i18n/useLanguage';
 import { getLocalizedPath } from '@/i18n/routes';
 import ccSwitchLogo from '@/assets/cc-switch-logo.png';
-import { ProviderContent } from './demo/ProviderDemo';
-import { MacOsWindowBar } from './MacOsWindowBar';
+import { AppWindow } from './demo/AppWindow';
 import { useGitHubStats } from '@/hooks/useGitHubStars';
 
 function AppPreview() {
   return (
     <div className="relative h-[468px] w-full max-w-[720px] overflow-hidden rounded-[17px] xl:h-[546px] xl:max-w-[840px] xl:rounded-[20px] 2xl:h-[598px] 2xl:max-w-[920px] 2xl:rounded-[22px]">
-      <div className="ccswitch-app-demo relative flex h-[650px] w-[1000px] origin-top-left scale-[0.72] flex-col overflow-hidden rounded-2xl border border-border bg-background text-foreground shadow-2xl backdrop-blur-2xl xl:scale-[0.84] 2xl:scale-[0.92]">
-        <MacOsWindowBar className="h-7 shrink-0 bg-background px-4" />
-
-        <div className="min-h-0 flex-1 overflow-hidden">
-          <ProviderContent />
-        </div>
-      </div>
+      <AppWindow className="relative h-[650px] w-[1000px] origin-top-left scale-[0.72] rounded-2xl border border-border shadow-2xl xl:scale-[0.84] 2xl:scale-[0.92]" />
     </div>
   );
 }

@@ -43,6 +43,8 @@ export interface Provider {
       resetsIn?: string;
     }>;
   };
+  /** The tool's own login: never routed, and only ever the default in Aggregation. */
+  official?: boolean;
   isUrl?: boolean;
   isText?: boolean;
   isSvgUrl?: boolean;
@@ -69,6 +71,7 @@ export const claudeProviders: Provider[] = [
     iconBg: 'bg-blue-500/20',
     iconColor: '#D4915D',
     name: 'Claude Official',
+    official: true,
     subtitle: 'https://www.anthropic.com/claude-code',
     time: '1',
     quota: {
@@ -142,6 +145,7 @@ export const claudeDesktopProviders: Provider[] = [
     iconBg: 'bg-amber-500/20',
     iconColor: '#D4915D',
     name: 'Claude Desktop Official',
+    official: true,
     subtitle: 'https://claude.ai/download',
     isUrl: true,
     isSvgUrl: true,
@@ -205,6 +209,7 @@ export const codexProviders: Provider[] = [
     iconBg: 'bg-slate-500/20',
     iconColor: 'currentColor',
     name: 'OpenAI Official',
+    official: true,
     subtitle: 'https://chatgpt.com/codex',
     time: '2',
     quota: {
@@ -276,6 +281,7 @@ export const geminiProviders: Provider[] = [
     icon: geminiIcon,
     iconBg: 'bg-blue-500/20',
     name: 'Google Official',
+    official: true,
     subtitle: 'https://ai.google.dev/',
     time: '4',
     quota: {
@@ -530,6 +536,7 @@ export const grokBuildProviders: Provider[] = [
     iconBg: 'bg-slate-500/20',
     iconColor: 'currentColor',
     name: 'Grok Official',
+    official: true,
     subtitle: 'https://x.ai/grok',
     isUrl: true,
     isSvgUrl: true,
