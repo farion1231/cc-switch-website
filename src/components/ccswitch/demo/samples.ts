@@ -549,6 +549,10 @@ export interface SampleAccount {
   isDefault?: boolean;
   needsReauth?: boolean;
   quota: Array<{ tier: 'premium' | 'fiveHour' | 'weekly'; left: number }>;
+  /** ChatGPT's saved limit resets, grouped by expiry day (earliest first). */
+  resetCredits?: Array<{ date: L; inTime: string; count: number; expiringSoon?: boolean }>;
+  /** Codex Credits balance bought on the ChatGPT plan. */
+  credits?: number;
   checkedMinutesAgo: number;
 }
 
@@ -576,6 +580,11 @@ export const ACCOUNTS: Record<AuthService, SampleAccount[]> = {
         { tier: 'fiveHour', left: 64 },
         { tier: 'weekly', left: 81 },
       ],
+      resetCredits: [
+        { date: { zh: '10月12日', en: 'Oct 12', ja: '10月12日' }, inTime: '4d6h', count: 2 },
+        { date: { zh: '11月2日', en: 'Nov 2', ja: '11月2日' }, inTime: '25d', count: 1 },
+      ],
+      credits: 62500,
       checkedMinutesAgo: 1,
     },
     {
@@ -586,6 +595,7 @@ export const ACCOUNTS: Record<AuthService, SampleAccount[]> = {
         { tier: 'fiveHour', left: 8 },
         { tier: 'weekly', left: 40 },
       ],
+      resetCredits: [{ date: { zh: '10月9日', en: 'Oct 9', ja: '10月9日' }, inTime: '1d20h', count: 1, expiringSoon: true }],
       checkedMinutesAgo: 6,
     },
   ],

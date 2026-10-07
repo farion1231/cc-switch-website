@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Copy, ExternalLink, KeyRound, Loader2, Plus, RefreshCw } from 'lucide-react';
+import { ChevronDown, Copy, ExternalLink, KeyRound, Loader2, Plus, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import copilotIconSvg from '@/assets/icons/githubcopilot.svg?raw';
@@ -7,7 +7,7 @@ import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 import { fill } from './apps';
-import { Btn, HelpTip, IconBtn, MoreMenu, PaneHeader, Pill, Segmented } from './parts';
+import { Btn, Floating, HelpTip, IconBtn, MoreMenu, PaneHeader, Pill, Segmented } from './parts';
 import { ACCOUNTS, type AuthService, type SampleAccount } from './samples';
 import { useShell } from './shellContext';
 
@@ -237,6 +237,8 @@ function AccountRow({
                 </div>
               );
             })}
+            {account.resetCredits && <ResetCreditsRow groups={account.resetCredits} />}
+            {account.credits && <CreditsRow balance={account.credits} />}
           </div>
           <div className="hidden w-[84px] shrink-0 items-center justify-end gap-0.5 text-xs text-[var(--app-fg3)] sm:flex">
             <span className="truncate">
@@ -304,6 +306,84 @@ function CopilotChooser({ onCancel, onLogin }: { onCancel: () => void; onLogin: 
           {a.loginWithGitHub}
         </Btn>
       </div>
+    </div>
+  );
+}
+
+/** 1 Credit = $0.04 at API prices (cc-switch quotaRules.ts CODEX_USD_PER_CREDIT). */
+const USD_PER_CREDIT = 0.04;
+const QUOTA_ROW = 'flex h-[18px] items-center gap-2 text-xs';
+
+/**
+ * ChatGPT's saved limit resets (cc-switch AccountQuota + QuotaBreakdown): the row shows the
+ * earliest expiry; with more than one reset the whole row opens the per-day list.
+ */
+function ResetCreditsRow({ groups }: { groups: NonNullable<SampleAccount['resetCredits']> }) {
+  const { t, language } = useLanguage();
+  const a = t.demo.window.pages.auth;
+  const [open, setOpen] = useState(false);
+  const anchor = useRef<HTMLButtonElement>(null);
+  const count = groups.reduce((sum, group) => sum + group.count, 0);
+  const soon = groups[0].expiringSoon;
+  const value = fill(a.resetValue, { count });
+  const cells = (
+    <>
+      <span className="min-w-[52px] shrink-0 whitespace-nowrap text-[var(--app-fg2)]">{a.resetLabel}</span>
+      <span className="flex min-w-0 flex-1 items-center gap-0.5 text-[var(--app-fg3)]">
+        <span className="truncate">{fill(a.resetExpiresOn, { date: groups[0].date[language] })}</span>
+        {count > 1 && <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', open && 'rotate-180')} strokeWidth={1.5} />}
+      </span>
+      <span className={cn('w-14 shrink-0 whitespace-nowrap text-end tabular-nums', soon ? 'text-[var(--app-warning-text)]' : 'text-foreground')}>
+        {value}
+      </span>
+    </>
+  );
+
+  // A single reset is already spelled out in the row; nothing to open.
+  if (count === 1) return <div className={QUOTA_ROW}>{cells}</div>;
+
+  return (
+    <>
+      <button
+        ref={anchor}
+        type="button"
+        aria-label={fill(a.resetShowAll, { count })}
+        onClick={() => setOpen((current) => !current)}
+        className={cn(QUOTA_ROW, '-mx-1 rounded-md px-1 text-start transition-colors hover:bg-[var(--app-subtle)]', open && 'bg-[var(--app-subtle)]')}
+      >
+        {cells}
+      </button>
+      <Floating anchor={anchor} open={open} onClose={() => setOpen(false)} align="start" className="w-[236px] p-3">
+        <div className="mb-2 flex items-baseline justify-between gap-3 text-xs">
+          <span className="font-medium text-foreground">{a.resetTitle}</span>
+          <span className="whitespace-nowrap tabular-nums text-[var(--app-fg2)]">{value}</span>
+        </div>
+        <ul className="flex flex-col gap-1 text-xs">
+          {groups.map((group) => (
+            <li key={group.date.en} className="flex items-center gap-2">
+              <span className={cn('whitespace-nowrap', group.expiringSoon ? 'text-[var(--app-warning-text)]' : 'text-foreground')}>
+                {group.date[language]}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-[var(--app-fg3)]">{fill(a.resetInTime, { time: group.inTime })}</span>
+              <span className="whitespace-nowrap text-end tabular-nums text-[var(--app-fg2)]">{fill(a.resetTimes, { count: group.count })}</span>
+            </li>
+          ))}
+        </ul>
+      </Floating>
+    </>
+  );
+}
+
+/** Codex Credits balance: the count where the bar would be, then the dollar figure last. */
+function CreditsRow({ balance }: { balance: number }) {
+  const { t, language } = useLanguage();
+  const a = t.demo.window.pages.auth;
+  const usd = Math.round(balance * USD_PER_CREDIT);
+  return (
+    <div className={QUOTA_ROW}>
+      <span className="min-w-[52px] shrink-0 whitespace-nowrap text-[var(--app-fg2)]">{a.creditsLabel}</span>
+      <span className="min-w-0 flex-1 truncate text-[var(--app-fg3)]">{new Intl.NumberFormat(language).format(balance)}</span>
+      <span className="w-14 shrink-0 whitespace-nowrap text-end tabular-nums text-foreground">{fill(a.creditsUsd, { usd: `$${usd}` })}</span>
     </div>
   );
 }
