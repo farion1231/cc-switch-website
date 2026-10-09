@@ -1665,6 +1665,12 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/changelog/3.6.0" />
   </url>
   <url>
+    <loc>https://ccswitch.io/zh/tutorials/aggregation-mode-guide</loc>
+    <lastmod>2026-10-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/aggregation-mode-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/aggregation-mode-guide" />
+  </url>
+  <url>
     <loc>https://ccswitch.io/zh/tutorials/cc-switch-cli-headless-guide</loc>
     <lastmod>2026-10-08</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/cc-switch-cli-headless-guide" />

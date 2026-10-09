@@ -66,6 +66,28 @@ const tutorialIcons = {
 
 export const tutorials: Tutorial[] = [
   {
+    slug: 'aggregation-mode-guide',
+    title: {
+      zh: 'CC Switch 聚合模式使用指南',
+      en: 'CC Switch Aggregation Mode Guide',
+      ja: 'CC Switch 集約モード利用ガイド',
+    },
+    summary: {
+      zh: '把多家供应商的模型放进 Claude Code 和 Codex 的同一个模型列表，在应用内无感切换。图文介绍模型列表获取、models.dev 自动补全、默认供应商、官方订阅支持范围和客户端重启。',
+      en: 'Bring models from multiple providers into one model picker in Claude Code and Codex. This illustrated guide covers model fetching, models.dev metadata, default providers, official subscription support, and client restarts.',
+      ja: '複数プロバイダーのモデルを Claude Code と Codex のモデル一覧にまとめ、アプリ内で切り替え。モデル一覧の取得、models.dev による補完、既定プロバイダー、公式サブスクリプションの対応範囲、再起動を図解します。',
+    },
+    author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/aggregation-mode-guide-zh.md' },
+    date: '2026-10-09',
+    category: 'practice',
+    source: 'official',
+    readMinutes: 10,
+    languages: ['zh'],
+    accent: 'purple',
+    coverIcons: [tutorialIcons.ccSwitch, tutorialIcons.claude, tutorialIcons.codex],
+    featured: true,
+  },
+  {
     slug: 'claude-codex-routing-guide',
     title: {
       zh: '通过 CC Switch 在 Claude Code 中使用 GPT 模型',
