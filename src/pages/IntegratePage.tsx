@@ -16,88 +16,11 @@ import { useLanguage } from '@/i18n/useLanguage';
 import { getLocalizedPath } from '@/i18n/routes';
 import { cn } from '@/lib/utils';
 
-// 先只出中文：英文、日文定稿后再把文案挪进 translations.ts
-const copy = {
-  hero: {
-    badge: '站长接入',
-    title: '让你的用户一键接入 CC Switch',
-    subtitle:
-      '在控制台放一个「导入到 CC Switch」按钮：用户点一下，你的地址、Key、模型和余额查询就加进 Claude Code、Codex 等应用，不用再手动填表。接入免费，不需要向我们申请。',
-    generator: '打开链接生成器',
-    guide: '阅读接入指南',
-  },
-  flow: {
-    title: '用户点了按钮之后',
-    steps: [
-      {
-        title: '唤起 CC Switch',
-        description: '浏览器询问是否打开 CC Switch，用户同意后弹出导入确认框。没开着的 CC Switch 会先启动。',
-      },
-      {
-        title: '核对后导入',
-        description: '确认框列出地址、打码后的 Key、模型和余额查询脚本，可疑内容标黄提示。用户确认无误再点「导入」。',
-      },
-      {
-        title: '直接看到余额',
-        description: '链接带了用量查询脚本，导入后供应商卡片就会显示余额或套餐用量，切换也只要点一下。',
-      },
-    ],
-  },
-  builtin: {
-    title: '已经在用 New API 或 Sub2API？',
-    subtitle: '这两个系统的 Key 列表里都自带「导入到 CC Switch」按钮，开箱即用，不用自己开发。',
-    items: [
-      {
-        name: 'New API',
-        apps: '支持 Claude Code、Codex、Gemini CLI',
-        usage: '链接不带用量查询脚本，用户导入后卡片上看不到余额。用户可以在 CC Switch 的「配置用量查询」里选 NewAPI 模板补上，需要填系统访问令牌和用户 ID。',
-      },
-      {
-        name: 'Sub2API',
-        apps: '支持 Claude Code、Codex、Gemini CLI、Grok Build',
-        usage: '链接自带用量查询脚本，导入后直接显示余额。CC Switch v4.0.10 起也内置了 Sub2API 模板，用户手动添加时一样能选用。',
-      },
-    ],
-    note: '想补上余额、带上你的图标，或者支持 OpenCode、Pi 等更多应用，可以按接入指南自己生成链接。',
-  },
-  diy: {
-    title: '自己做按钮：三步',
-    steps: [
-      {
-        title: '后端按用户生成链接',
-        description: '导入供应商时 API Key 是必填的，所以链接要由后端用这个用户自己的 Key 拼出来，按钮只放在登录后的控制台里。',
-      },
-      {
-        title: '点击时取链接并跳转',
-        description: '按钮本身不带链接。用户点击时向后端要链接，拿到后跳转，Key 不会写进页面源码。',
-      },
-      {
-        title: '带上余额查询',
-        description: '把一段用量查询脚本放进链接，用户导入后就能看到余额。NewAPI、Sub2API 系的站有现成脚本可以照抄。',
-      },
-    ],
-    codeCaption: '最短的写法（Node.js）',
-  },
-  notes: {
-    title: '接入前要知道',
-    items: [
-      '带 Key 的链接等同于 Key 本身，只在用户登录后生成，不要放进公开页面、邮件或社群公告。',
-      '一条链接只导入到一个应用。同时支持 Claude Code、Codex 等几个应用时，每个应用放一个按钮。',
-      '网页无法判断用户是否装了 CC Switch。按钮旁边常驻一句提示，并附上下载地址。',
-      '接口格式（apiFormat）、自定义图标（iconUrl）和 Pi 供应商需要 CC Switch v4.0.10 及以上。',
-    ],
-  },
-  sponsor: {
-    title: '想出现在 CC Switch 的预设列表里？',
-    description:
-      '放导入按钮不需要任何合作。CC Switch 应用内的供应商预设只收录原厂、云平台和大型聚合平台；中转和聚合服务想进入预设列表、获得推荐位，请了解赞助计划。',
-    cta: '了解赞助计划',
-  },
-};
-
 const STEP_ICONS = [MousePointerClick, ShieldCheck, Wallet];
 
-const CODE = `// 后端：按当前登录用户返回链接
+// 代码注释跟随页面语言，其余部分保持原样
+function buildCode(backendComment: string, frontendComment: string) {
+  return `${backendComment}
 app.post("/api/ccswitch-link", requireLogin, (req, res) => {
   const params = new URLSearchParams({
     resource: "provider",
@@ -110,12 +33,13 @@ app.post("/api/ccswitch-link", requireLogin, (req, res) => {
   res.json({ link: \`ccswitch://v1/import?\${params}\` });
 });
 
-// 前端：用户点击时再取链接，然后跳转
+${frontendComment}
 async function importToCcSwitch() {
   const res = await fetch("/api/ccswitch-link", { method: "POST" });
   const { link } = await res.json();
   window.location.href = link;
 }`;
+}
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -125,7 +49,8 @@ const fadeIn = {
 };
 
 export default function IntegratePage() {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
+  const copy = t.integratePage;
   const guideHref = getLocalizedPath('/tutorials/deeplink-site-integration-guide', language);
 
   return (
@@ -251,7 +176,7 @@ export default function IntegratePage() {
               <motion.figure {...fadeIn} className="min-w-0">
                 <figcaption className="mb-2 text-xs font-medium text-muted-foreground">{copy.diy.codeCaption}</figcaption>
                 <pre className="max-w-full overflow-x-auto rounded-xl border border-border bg-card p-4 font-mono text-xs leading-relaxed text-foreground md:text-sm">
-                  <code>{CODE}</code>
+                  <code>{buildCode(copy.diy.codeBackend, copy.diy.codeFrontend)}</code>
                 </pre>
               </motion.figure>
             </div>

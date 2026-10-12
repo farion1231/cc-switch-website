@@ -37,8 +37,7 @@ export function SiteNavbar() {
     { label: t.nav.docs, href: getLocalizedPath('/docs', language) },
     { label: t.nav.tutorials, href: getLocalizedPath('/tutorials', language) },
     { label: t.nav.changelog, href: getLocalizedPath('/changelog', language) },
-    // 站长接入页暂时只有中文，英文、日文定稿后再在导航里露出
-    ...(language === 'zh' ? [{ label: t.nav.integrate, href: getLocalizedPath('/integrate', language) }] : []),
+    { label: t.nav.integrate, href: getLocalizedPath('/integrate', language) },
     { label: t.nav.sponsors, href: getLocalizedPath('/sponsors', language) },
     { label: t.nav.download, href: downloadHref, mobileCta: true },
   ];

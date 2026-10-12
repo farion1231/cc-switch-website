@@ -145,6 +145,30 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/sponsors" />
   </url>
   <url>
+    <loc>https://ccswitch.io/zh/integrate</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/integrate" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/integrate" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/integrate" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/integrate" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/integrate</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/integrate" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/integrate" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/integrate" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/integrate" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/integrate</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/integrate" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/integrate" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/integrate" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/integrate" />
+  </url>
+  <url>
     <loc>https://ccswitch.io/zh/docs?section=getting-started&amp;item=introduction</loc>
     <lastmod>2026-10-12</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/docs?section=getting-started&amp;item=introduction" />
@@ -1962,6 +1986,24 @@
     <loc>https://ccswitch.io/zh/tutorials/deeplink-site-integration-guide</loc>
     <lastmod>2026-10-12</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/deeplink-site-integration-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/en/tutorials/deeplink-site-integration-guide</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/deeplink-site-integration-guide" />
+  </url>
+  <url>
+    <loc>https://ccswitch.io/ja/tutorials/deeplink-site-integration-guide</loc>
+    <lastmod>2026-10-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ccswitch.io/en/tutorials/deeplink-site-integration-guide" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ccswitch.io/ja/tutorials/deeplink-site-integration-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/deeplink-site-integration-guide" />
   </url>
 </urlset>

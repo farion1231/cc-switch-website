@@ -69,8 +69,8 @@ export const tutorials: Tutorial[] = [
     slug: 'deeplink-site-integration-guide',
     title: {
       zh: '在你的网站上放「一键导入 CC Switch」按钮：站长接入指南',
-      en: 'Add an "Import to CC Switch" Button to Your Site: Integration Guide for Providers',
-      ja: 'サイトに「CC Switch にインポート」ボタンを置く：サービス提供者向け連携ガイド',
+      en: 'Add an "Import to CC Switch" Button to Your Site: Integration Guide for Site Owners',
+      ja: 'サイトに「CC Switch にワンクリックでインポート」ボタンを置く：サイト運営者向け連携ガイド',
     },
     summary: {
       zh: '给中转站、聚合平台和自建网关的站长：按用户生成 ccswitch:// 导入链接，用户点一下就把地址、Key、模型和余额查询加进 Claude Code、Codex 等应用。讲清楚链接参数、各应用支持的接口格式、用量查询脚本、按钮怎么接，以及哪些写法会被拒绝。',
@@ -82,7 +82,7 @@ export const tutorials: Tutorial[] = [
     category: 'integration',
     source: 'official',
     readMinutes: 15,
-    languages: ['zh'],
+    languages: ['zh', 'en', 'ja'],
     accent: 'amber',
     coverIcons: [tutorialIcons.ccSwitch],
   },

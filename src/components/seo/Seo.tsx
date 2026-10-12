@@ -279,9 +279,7 @@ export function Seo() {
       : copy.description;
     const isCanonical = INDEXABLE_PATHS.has(basePath) || basePath.startsWith('/tutorials/') || basePath.startsWith('/changelog/');
     const canonicalUrl = absoluteUrl(`${getLocalizedPath(isCanonical ? basePath : '/', language)}${normalizedSearch}`);
-    // 站长接入页暂时只有中文，英文、日文路径先不进搜索索引
-    const untranslated = routeKey === 'integrate' && language !== 'zh';
-    const robots = routeKey === 'notFound' || untranslated ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+    const robots = routeKey === 'notFound' ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 
     return {
       routeKey,

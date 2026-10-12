@@ -424,6 +424,84 @@ export const translations = {
       copyright: '© 2025–{year} CC Switch. 基于 MIT 协议开源。',
       madeWith: 'Made with ❤️ by CC Switch Team',
     },
+    // For Providers (/integrate) Page
+    integratePage: {
+      hero: {
+        badge: '站长接入',
+        title: '让你的用户一键接入 CC Switch',
+        subtitle: '在控制台放一个「导入到 CC Switch」按钮：用户点一下，你的地址、Key、模型和余额查询就加进 Claude Code、Codex 等应用，不用再手动填表。接入免费，不需要向我们申请。',
+        generator: '打开链接生成器',
+        guide: '阅读接入指南',
+      },
+      flow: {
+        title: '用户点了按钮之后',
+        steps: [
+          {
+            title: '唤起 CC Switch',
+            description: '浏览器询问是否打开 CC Switch，用户同意后弹出导入确认框。没开着的 CC Switch 会先启动。',
+          },
+          {
+            title: '核对后导入',
+            description: '确认框列出地址、打码后的 Key、模型和余额查询脚本，可疑内容标黄提示。用户确认无误再点「导入」。',
+          },
+          {
+            title: '直接看到余额',
+            description: '链接带了用量查询脚本，导入后供应商卡片就会显示余额或套餐用量，切换也只要点一下。',
+          },
+        ],
+      },
+      builtin: {
+        title: '已经在用 New API 或 Sub2API？',
+        subtitle: '这两个系统的 Key 列表里都自带「导入到 CC Switch」按钮，开箱即用，不用自己开发。',
+        items: [
+          {
+            name: 'New API',
+            apps: '支持 Claude Code、Codex、Gemini CLI',
+            usage: '链接不带用量查询脚本，用户导入后卡片上看不到余额。用户可以在 CC Switch 的「配置用量查询」里选 NewAPI 模板补上，需要填系统访问令牌和用户 ID。',
+          },
+          {
+            name: 'Sub2API',
+            apps: '支持 Claude Code、Codex、Gemini CLI、Grok Build',
+            usage: '链接自带用量查询脚本，导入后直接显示余额。CC Switch v4.0.10 起也内置了 Sub2API 模板，用户手动添加时一样能选用。',
+          },
+        ],
+        note: '想补上余额、带上你的图标，或者支持 OpenCode、Pi 等更多应用，可以按接入指南自己生成链接。',
+      },
+      diy: {
+        title: '自己做按钮：三步',
+        steps: [
+          {
+            title: '后端按用户生成链接',
+            description: '导入供应商时 API Key 是必填的，所以链接要由后端用这个用户自己的 Key 拼出来，按钮只放在登录后的控制台里。',
+          },
+          {
+            title: '点击时取链接并跳转',
+            description: '按钮本身不带链接。用户点击时向后端要链接，拿到后跳转，Key 不会写进页面源码。',
+          },
+          {
+            title: '带上余额查询',
+            description: '把一段用量查询脚本放进链接，用户导入后就能看到余额。NewAPI、Sub2API 系的站有现成脚本可以照抄。',
+          },
+        ],
+        codeCaption: '最短的写法（Node.js）',
+        codeBackend: '// 后端：按当前登录用户返回链接',
+        codeFrontend: '// 前端：用户点击时再取链接，然后跳转',
+      },
+      notes: {
+        title: '接入前要知道',
+        items: [
+          '带 Key 的链接等同于 Key 本身，只在用户登录后生成，不要放进公开页面、邮件或社群公告。',
+          '一条链接只导入到一个应用。同时支持 Claude Code、Codex 等几个应用时，每个应用放一个按钮。',
+          '网页无法判断用户是否装了 CC Switch。按钮旁边常驻一句提示，并附上下载地址。',
+          '接口格式（apiFormat）、自定义图标（iconUrl）和 Pi 供应商需要 CC Switch v4.0.10 及以上。',
+        ],
+      },
+      sponsor: {
+        title: '想出现在 CC Switch 的预设列表里？',
+        description: '放导入按钮不需要任何合作。CC Switch 应用内的供应商预设只收录原厂、云平台和大型聚合平台；中转和聚合服务想进入预设列表、获得推荐位，请了解赞助计划。',
+        cta: '了解赞助计划',
+      },
+    },
     // Sponsors Page
     sponsorsPage: {
       section: {
@@ -1067,6 +1145,84 @@ export const translations = {
       copyright: '© 2025–{year} CC Switch. Open source under MIT license.',
       madeWith: 'Made with ❤️ by CC Switch Team',
     },
+    // For Providers (/integrate) Page
+    integratePage: {
+      hero: {
+        badge: 'For Providers',
+        title: 'Let your users add your service to CC Switch in one click',
+        subtitle: 'Put an "Import to CC Switch" button in your dashboard. One click adds your endpoint, key, models, and balance query to Claude Code, Codex, and more, with no forms to fill in. It is free and needs no approval from us.',
+        generator: 'Open the link generator',
+        guide: 'Read the integration guide',
+      },
+      flow: {
+        title: 'What happens after the click',
+        steps: [
+          {
+            title: 'CC Switch opens',
+            description: 'The browser asks whether to open CC Switch. Once the user agrees, the import confirmation appears. If CC Switch is not running, it starts first.',
+          },
+          {
+            title: 'Review, then import',
+            description: 'The confirmation lists the endpoint, the masked key, the models, and the balance query script, and highlights anything suspicious. The user clicks "Import" once it looks right.',
+          },
+          {
+            title: 'Balance right away',
+            description: 'When the link carries a usage query script, the provider card shows the balance or plan usage right after import, and switching is a single click.',
+          },
+        ],
+      },
+      builtin: {
+        title: 'Already on New API or Sub2API?',
+        subtitle: 'Both ship an "Import to CC Switch" button in their key list. It works out of the box, with nothing to build.',
+        items: [
+          {
+            name: 'New API',
+            apps: 'Supports Claude Code, Codex, Gemini CLI',
+            usage: 'The link has no usage query script, so users see no balance after import. They can add one in CC Switch under "Configure usage query" with the NewAPI template, which needs a system access token and user ID.',
+          },
+          {
+            name: 'Sub2API',
+            apps: 'Supports Claude Code, Codex, Gemini CLI, Grok Build',
+            usage: 'The link includes a usage query script, so the balance shows right after import. Since CC Switch v4.0.10 there is also a built-in Sub2API template for users who add your service by hand.',
+          },
+        ],
+        note: 'To add the balance, bring your own icon, or support more apps such as OpenCode and Pi, generate the links yourself by following the integration guide.',
+      },
+      diy: {
+        title: 'Build your own button in three steps',
+        steps: [
+          {
+            title: 'Generate the link per user on your backend',
+            description: 'An API key is required to import a provider, so your backend builds the link with that user\'s own key, and the button lives only in the signed-in dashboard.',
+          },
+          {
+            title: 'Fetch the link on click, then open it',
+            description: 'The button holds no link. On click it asks your backend for the link and opens it, so the key never sits in the page source.',
+          },
+          {
+            title: 'Include the balance query',
+            description: 'Put a usage query script in the link and users see their balance after import. New API and Sub2API style sites can copy a ready-made script.',
+          },
+        ],
+        codeCaption: 'The shortest version (Node.js)',
+        codeBackend: '// Backend: return the link for the signed-in user',
+        codeFrontend: '// Frontend: fetch the link on click, then open it',
+      },
+      notes: {
+        title: 'Before you integrate',
+        items: [
+          'A link with a key is as sensitive as the key itself. Generate it only after the user signs in, and never put it on public pages, in emails, or in community posts.',
+          'One link imports into one app. If you support Claude Code, Codex, and others, give each app its own button.',
+          'A web page cannot tell whether CC Switch is installed. Keep a short hint with a download link next to the button.',
+          'API format (apiFormat), custom icons (iconUrl), and Pi providers need CC Switch v4.0.10 or later.',
+        ],
+      },
+      sponsor: {
+        title: 'Want to appear in CC Switch\'s preset list?',
+        description: 'Adding an import button needs no partnership. The in-app provider presets only include model vendors, cloud platforms, and large aggregators. Relays and aggregators that want a place in the preset list or a featured spot can look at the sponsor program.',
+        cta: 'See the sponsor program',
+      },
+    },
     // Sponsors Page
     sponsorsPage: {
       section: {
@@ -1709,6 +1865,84 @@ export const translations = {
       },
       copyright: '© 2025–{year} CC Switch. MIT ライセンスでオープンソース。',
       madeWith: 'Made with ❤️ by CC Switch Team',
+    },
+    // For Providers (/integrate) Page
+    integratePage: {
+      hero: {
+        badge: 'サービス提供者向け',
+        title: 'ユーザーがワンクリックで CC Switch に追加できるように',
+        subtitle: 'ダッシュボードに「CC Switch にインポート」ボタンを置くだけで、ユーザーはクリック 1 回でエンドポイント、キー、モデル、残高照会を Claude Code や Codex などに追加できます。手入力は不要です。利用は無料で、申請もいりません。',
+        generator: 'リンク生成ツールを開く',
+        guide: '連携ガイドを読む',
+      },
+      flow: {
+        title: 'ボタンを押したあとの流れ',
+        steps: [
+          {
+            title: 'CC Switch が開く',
+            description: 'ブラウザが CC Switch を開くか確認し、ユーザーが許可するとインポート確認ダイアログが表示されます。CC Switch が起動していなければ先に起動します。',
+          },
+          {
+            title: '確認してからインポート',
+            description: '確認ダイアログには、エンドポイント、マスクされたキー、モデル、残高照会スクリプトが表示され、不審な内容は強調されます。ユーザーは内容を確かめてから「インポート」を押します。',
+          },
+          {
+            title: 'すぐに残高を表示',
+            description: 'リンクに使用量クエリのスクリプトが含まれていれば、インポート直後からプロバイダーカードに残高やプランの使用量が表示されます。切り替えもワンクリックです。',
+          },
+        ],
+      },
+      builtin: {
+        title: 'New API や Sub2API をお使いですか？',
+        subtitle: 'どちらもキー一覧に「CC Switch にインポート」ボタンを標準で備えています。そのまま使え、開発は不要です。',
+        items: [
+          {
+            name: 'New API',
+            apps: '対応：Claude Code、Codex、Gemini CLI',
+            usage: 'リンクに使用量クエリのスクリプトが含まれないため、インポート後のカードに残高は表示されません。ユーザーは CC Switch の「利用状況を設定」で NewAPI テンプレートを選べば追加できます（システムアクセストークンとユーザー ID が必要です）。',
+          },
+          {
+            name: 'Sub2API',
+            apps: '対応：Claude Code、Codex、Gemini CLI、Grok Build',
+            usage: 'リンクに使用量クエリのスクリプトが含まれ、インポート直後から残高が表示されます。CC Switch v4.0.10 以降は Sub2API テンプレートも内蔵しており、ユーザーが手動で追加する場合も選べます。',
+          },
+        ],
+        note: '残高の表示、独自アイコン、OpenCode や Pi などほかのアプリへの対応を加えたい場合は、連携ガイドに沿ってリンクを自分で生成してください。',
+      },
+      diy: {
+        title: '自前でボタンを作る 3 ステップ',
+        steps: [
+          {
+            title: 'バックエンドでユーザーごとにリンクを生成',
+            description: 'プロバイダーのインポートには API キーが必須です。リンクはバックエンドでそのユーザー自身のキーから組み立て、ボタンはログイン後のダッシュボードにだけ置きます。',
+          },
+          {
+            title: 'クリック時にリンクを取得して開く',
+            description: 'ボタン自体にはリンクを持たせません。クリックされたらバックエンドからリンクを取得して開くので、キーがページのソースに残りません。',
+          },
+          {
+            title: '残高照会を含める',
+            description: 'リンクに使用量クエリのスクリプトを入れておけば、インポート後に残高が表示されます。New API 系・Sub2API 系のサイト向けには既製のスクリプトがあります。',
+          },
+        ],
+        codeCaption: '最短の書き方（Node.js）',
+        codeBackend: '// バックエンド：ログイン中のユーザーのリンクを返す',
+        codeFrontend: '// フロントエンド：クリック時にリンクを取得して開く',
+      },
+      notes: {
+        title: '連携の前に知っておくこと',
+        items: [
+          'キー入りのリンクはキーそのものと同じ扱いです。ユーザーのログイン後にだけ生成し、公開ページ、メール、コミュニティへの告知には載せないでください。',
+          '1 つのリンクでインポートできるアプリは 1 つです。Claude Code や Codex など複数に対応する場合は、アプリごとにボタンを用意してください。',
+          'Web ページからは CC Switch がインストール済みかどうか判別できません。ボタンの横に短い案内とダウンロードリンクを常に表示してください。',
+          'API 形式（apiFormat）、独自アイコン（iconUrl）、Pi プロバイダーには CC Switch v4.0.10 以降が必要です。',
+        ],
+      },
+      sponsor: {
+        title: 'CC Switch のプリセット一覧に載りたい場合は',
+        description: 'インポートボタンの設置に提携は不要です。アプリ内のプロバイダープリセットに収録するのは、モデル提供元、クラウドプラットフォーム、大規模アグリゲーターのみです。中継・アグリゲーションサービスがプリセット一覧への掲載やおすすめ枠を希望する場合は、スポンサープログラムをご覧ください。',
+        cta: 'スポンサープログラムを見る',
+      },
     },
     // Sponsors Page
     sponsorsPage: {
