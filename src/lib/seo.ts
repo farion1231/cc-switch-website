@@ -39,7 +39,7 @@ type SeoCopy = {
   keywords?: string;
 };
 
-export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound', SeoCopy>> = {
+export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'changelog' | 'sponsors' | 'integrate' | 'tutorials' | 'notFound', SeoCopy>> = {
   zh: {
     home: {
       title: 'CC Switch 官方网站 - AI 编程工具统一管理平台',
@@ -65,6 +65,11 @@ export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'ch
       title: 'CC Switch 赞助商 - 感谢支持开源的合作伙伴',
       description: '了解支持 CC Switch 持续开发的赞助商与合作伙伴，查看赞助级别、合作详情，以及如何成为 CC Switch 赞助商。',
       keywords: 'CC Switch 赞助商,CC Switch 合作伙伴,开源赞助,GitHub Sponsors,AI CLI 工具赞助',
+    },
+    integrate: {
+      title: 'CC Switch 站长接入 - 给你的用户一键导入按钮',
+      description: '中转站、聚合平台和自建网关的站长：在控制台放一个「导入到 CC Switch」按钮，用户点一下就把地址、Key、模型和余额查询加进 Claude Code、Codex 等应用。附链接生成器和接入指南。',
+      keywords: 'CC Switch 站长接入,CC Switch 一键导入,ccswitch 深链接,API 中转站,New API,Sub2API,Claude Code 导入',
     },
     tutorials: {
       title: 'CC Switch 攻略 - 官方与社区教程合集',
@@ -102,6 +107,11 @@ export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'ch
       description: 'Meet the sponsors and partners who keep CC Switch growing. Explore sponsor tiers, partnership details, and how to become a CC Switch sponsor.',
       keywords: 'CC Switch sponsors,CC Switch partners,open source sponsorship,GitHub Sponsors,AI CLI tool sponsorship',
     },
+    integrate: {
+      title: 'CC Switch for Providers - One-Click Import Button for Your Users',
+      description: 'For API relays, aggregators, and self-hosted gateways: add an "Import to CC Switch" button so users bring your endpoint, key, models, and balance query into Claude Code, Codex, and more in one click.',
+      keywords: 'CC Switch integration,CC Switch import button,ccswitch deep link,API relay,New API,Sub2API,Claude Code import',
+    },
     tutorials: {
       title: 'CC Switch Tutorials - Official and Community Guides',
       description: 'Curated tutorials for CC Switch covering getting started, practice setups, integrations, troubleshooting, and video walkthroughs from the team and community.',
@@ -137,6 +147,11 @@ export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'ch
       title: 'CC Switch スポンサー - プロジェクトを支えるパートナー',
       description: 'CC Switch の開発を支えるスポンサーとパートナーをご紹介します。スポンサー階層、提携の詳細、スポンサーになる方法を確認できます。',
       keywords: 'CC Switch スポンサー,CC Switch パートナー,オープンソース支援,GitHub Sponsors,AI CLI ツール支援',
+    },
+    integrate: {
+      title: 'CC Switch サービス提供者向け - ワンクリックインポートボタン',
+      description: 'API 中継サービス、アグリゲーター、自前ゲートウェイの運営者向け。「CC Switch にインポート」ボタンを置けば、ユーザーはエンドポイント、キー、モデル、残高照会をワンクリックで Claude Code や Codex に追加できます。',
+      keywords: 'CC Switch 連携,CC Switch インポートボタン,ccswitch ディープリンク,API 中継,New API,Sub2API,Claude Code インポート',
     },
     tutorials: {
       title: 'CC Switch チュートリアル - 公式とコミュニティの活用ガイド',

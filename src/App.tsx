@@ -14,6 +14,7 @@ const DownloadPage = lazy(() => import("./pages/DownloadPage"));
 const DocsPage = lazy(() => import("./pages/DocsPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const SponsorsPage = lazy(() => import("./pages/SponsorsPage"));
+const IntegratePage = lazy(() => import("./pages/IntegratePage"));
 const TutorialsPage = lazy(() => import("./pages/TutorialsPage"));
 const TutorialDetailPage = lazy(() => import("./pages/TutorialDetailPage"));
 
@@ -68,6 +69,10 @@ const App = () => (
           <Route path="/zh/sponsors" element={<SponsorsPage />} />
           <Route path="/en/sponsors" element={<SponsorsPage />} />
           <Route path="/ja/sponsors" element={<SponsorsPage />} />
+          <Route path="/integrate" element={<IntegratePage />} />
+          <Route path="/zh/integrate" element={<IntegratePage />} />
+          <Route path="/en/integrate" element={<IntegratePage />} />
+          <Route path="/ja/integrate" element={<IntegratePage />} />
           <Route path="/tutorials" element={<TutorialsPage />} />
           <Route path="/tutorials/:slug" element={<TutorialDetailPage />} />
           <Route path="/zh/tutorials" element={<TutorialsPage />} />

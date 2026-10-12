@@ -20,9 +20,9 @@ import {
 import type { Language } from '@/i18n/translations';
 
 const JSON_LD_ID = 'cc-switch-jsonld';
-const INDEXABLE_PATHS = new Set(['/', '/download', '/docs', '/changelog', '/sponsors', '/tutorials']);
+const INDEXABLE_PATHS = new Set(['/', '/download', '/docs', '/changelog', '/sponsors', '/integrate', '/tutorials']);
 
-type RouteKey = 'home' | 'download' | 'docs' | 'changelog' | 'sponsors' | 'tutorials' | 'notFound';
+type RouteKey = 'home' | 'download' | 'docs' | 'changelog' | 'sponsors' | 'integrate' | 'tutorials' | 'notFound';
 
 function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {
   let element = document.head.querySelector(`meta[${attribute}="${key}"]`) as HTMLMetaElement | null;
@@ -96,6 +96,7 @@ function getRouteKey(basePath: string): RouteKey {
   if (basePath === '/docs') return 'docs';
   if (basePath === '/changelog' || basePath.startsWith('/changelog/')) return 'changelog';
   if (basePath === '/sponsors') return 'sponsors';
+  if (basePath === '/integrate') return 'integrate';
   if (basePath === '/tutorials' || basePath.startsWith('/tutorials/')) return 'tutorials';
   return 'notFound';
 }
@@ -278,7 +279,9 @@ export function Seo() {
       : copy.description;
     const isCanonical = INDEXABLE_PATHS.has(basePath) || basePath.startsWith('/tutorials/') || basePath.startsWith('/changelog/');
     const canonicalUrl = absoluteUrl(`${getLocalizedPath(isCanonical ? basePath : '/', language)}${normalizedSearch}`);
-    const robots = routeKey === 'notFound' ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+    // 站长接入页暂时只有中文，英文、日文路径先不进搜索索引
+    const untranslated = routeKey === 'integrate' && language !== 'zh';
+    const robots = routeKey === 'notFound' || untranslated ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 
     return {
       routeKey,

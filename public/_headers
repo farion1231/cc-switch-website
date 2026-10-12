@@ -39,6 +39,10 @@
   Cache-Control: no-cache
 /sponsors/
   Cache-Control: no-cache
+/integrate
+  Cache-Control: no-cache
+/integrate/
+  Cache-Control: no-cache
 /tutorials
   Cache-Control: no-cache
 /tutorials/
