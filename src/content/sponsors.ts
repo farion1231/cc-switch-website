@@ -24,6 +24,7 @@ import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
 import code0Icon from '@/assets/icons/sponsors/code0.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
+import openmodelIcon from '@/assets/icons/sponsors/openmodel.jpg';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
@@ -89,6 +90,7 @@ const sponsorDisplayOrder = [
   'pateway',
   'fenno',
   'runapi',
+  'openmodel',
   'shengsuanyun',
   'aigocode',
   'aicoding',
@@ -705,6 +707,31 @@ export const sponsors: Sponsor[] = ([
       en: '10% off first top-up',
       ja: '初回チャージ 10% オフ',
     },
+  },
+  {
+    id: 'openmodel',
+    name: 'OpenModel',
+    icon: openmodelIcon,
+    url: 'https://www.openmodel.ai?ref=cc-switch',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    tagline: {
+      zh: 'Codex 与 Claude Code 专属折扣',
+      en: 'Client-specific discounts for Codex and Claude Code',
+      ja: 'Codex / Claude Code 向け専用割引',
+    },
+    description: {
+      zh: 'OpenModel 为 Codex 和 Claude Code 提供客户端专属折扣，所支持的模型通过 Codex 调用最高优惠 90%、通过 Claude Code 调用最高优惠 60%，帮助开发者在不改变工作方式的前提下降低 API 成本。填入 OpenModel API Key 后，系统会自动识别客户端并应用折扣路由，也可为每个 API Key 单独设置回退策略。',
+      en: 'OpenModel offers client-specific discounts of up to 90% for Codex and 60% for Claude Code across supported models, helping developers reduce API costs without changing how they work. Connect an OpenModel API key and supported clients are detected automatically with discounted routes applied, plus per-key fallback controls.',
+      ja: 'OpenModel は Codex と Claude Code 向けにクライアント専用割引を提供し、対応モデルを Codex 経由で使うと最大 90% オフ、Claude Code 経由で使うと最大 60% オフになります。OpenModel API Key を設定するだけで対応クライアントを自動判別して割引ルートを適用し、API Key ごとのフォールバック策略も設定できます。',
+    },
+    perk: {
+      zh: '优惠码 cc-switch，首次充值 9 折',
+      en: '10% off first top-up with code cc-switch',
+      ja: 'コード cc-switch で初回チャージ 10% オフ',
+    },
+    couponCode: 'cc-switch',
   },
   {
     id: 'fluxa',
