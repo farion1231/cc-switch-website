@@ -498,7 +498,7 @@ export const translations = {
       },
       sponsor: {
         title: '想出现在 CC Switch 的预设列表里？',
-        description: '放导入按钮不需要任何合作。CC Switch 应用内的供应商预设只收录原厂、云平台和大型聚合平台；中转和聚合服务想进入预设列表、获得推荐位，请了解赞助计划。',
+        description: '如果您想进一步方便用户将您的站点收录进 CC Switch 预设列表的话，可以了解赞助计划。',
         cta: '了解赞助计划',
       },
     },
@@ -1219,7 +1219,7 @@ export const translations = {
       },
       sponsor: {
         title: 'Want to appear in CC Switch\'s preset list?',
-        description: 'Adding an import button needs no partnership. The in-app provider presets only include model vendors, cloud platforms, and large aggregators. Relays and aggregators that want a place in the preset list or a featured spot can look at the sponsor program.',
+        description: 'If you want to make it even easier for users by getting your site into the CC Switch preset list, take a look at the sponsor program.',
         cta: 'See the sponsor program',
       },
     },
@@ -1940,7 +1940,7 @@ export const translations = {
       },
       sponsor: {
         title: 'CC Switch のプリセット一覧に載りたい場合は',
-        description: 'インポートボタンの設置に提携は不要です。アプリ内のプロバイダープリセットに収録するのは、モデル提供元、クラウドプラットフォーム、大規模アグリゲーターのみです。中継・アグリゲーションサービスがプリセット一覧への掲載やおすすめ枠を希望する場合は、スポンサープログラムをご覧ください。',
+        description: 'ユーザーがさらに手軽に使えるよう、サイトを CC Switch のプリセット一覧に掲載したい場合は、スポンサープログラムをご覧ください。',
         cta: 'スポンサープログラムを見る',
       },
     },
