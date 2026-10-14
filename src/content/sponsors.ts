@@ -20,11 +20,10 @@ import crazyrouterIcon from '@/assets/icons/sponsors/crazyrouter.svg';
 import rightcodeIcon from '@/assets/icons/sponsors/rightcode.svg';
 import sssaicodeIcon from '@/assets/icons/sponsors/sssaicode.svg';
 import micuIcon from '@/assets/icons/sponsors/micu.svg';
-import claudeapiIcon from '@/assets/icons/sponsors/claudeapi.png';
-import code0Icon from '@/assets/icons/sponsors/code0.png';
 import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
 import openmodelIcon from '@/assets/icons/sponsors/openmodel.jpg';
+import groorouteIcon from '@/assets/icons/sponsors/grooroute.jpg';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
@@ -91,6 +90,7 @@ const sponsorDisplayOrder = [
   'fenno',
   'runapi',
   'openmodel',
+  'grooroute',
   'shengsuanyun',
   'aigocode',
   'aicoding',
@@ -99,8 +99,6 @@ const sponsorDisplayOrder = [
   '88api',
   'apikey-fun',
   '9527code',
-  'claudeapi',
-  'code0',
   'teamorouter',
   'ppio',
   'new-api',
@@ -229,7 +227,7 @@ export const sponsors: Sponsor[] = ([
     id: 'aigocode',
     name: 'AIGoCode',
     icon: aigocodeIcon,
-    url: 'https://aigocode.app/invite/CC-SWITCH',
+    url: 'https://aigocode.net/invite/CC-SWITCH',
     tier: 'standard',
     category: 'aggregator',
     featured: true,
@@ -615,52 +613,6 @@ export const sponsors: Sponsor[] = ([
     couponCode: 'ccswitch',
   },
   {
-    id: 'claudeapi',
-    name: 'Claude API',
-    icon: claudeapiIcon,
-    url: 'https://console.apito.ai/agent/register/pQBql2buaqiX3dDS',
-    tier: 'standard',
-    category: 'relay',
-    tagline: {
-      zh: '官方渠道直供，零降智零逆向',
-      en: 'Official-channel relay, zero degradation',
-      ja: '公式チャネル直供、劣化・逆向きなし',
-    },
-    description: {
-      zh: 'Claude API 直连，三分钟接入 Claude Code 与 Agent 应用。基于 Anthropic 官方 Key + AWS Bedrock 官方渠道，非逆向、非降智，支持 Opus / Sonnet / Haiku 全系列模型，保留 Tool Use、1M 上下文等官方能力。适合 Claude Code 深度用户、Agent 工程师与企业技术团队，支持开票和团队对接。',
-      en: 'Direct Claude API access — connect Claude Code and Agent apps in 3 minutes. Powered by official Anthropic API keys + AWS Bedrock channels. No reverse engineering, no model degradation. Full Opus / Sonnet / Haiku lineup with Tool Use, 1M context, and more. Built for Claude Code power users, Agent engineers, and enterprise teams. Invoicing and team support available.',
-      ja: 'Claude API 直結 — わずか 3 分で Claude Code や Agent アプリに接続可能。Anthropic 公式キーおよび AWS Bedrock 公式チャネルに基づき、リバースエンジニアリングや性能劣化なし。Opus / Sonnet / Haiku 全モデルをサポートし、Tool Use や 1M コンテキストなどの公式機能を保持。ヘビーユーザー、Agent エンジニア、企業チームに最適。請求書発行およびチーム対応可能。',
-    },
-    perk: {
-      zh: '新用户可领取免费测试额度',
-      en: 'Free trial credit for new users',
-      ja: '新規ユーザーに無料テストクレジット',
-    },
-  },
-  {
-    id: 'code0',
-    name: 'code0.ai',
-    icon: code0Icon,
-    url: 'https://code0.ai/agent/register/B2XHxGjGmRvqgznY',
-    tier: 'standard',
-    category: 'aggregator',
-    tagline: {
-      zh: 'AI 编程服务平台',
-      en: 'AI coding service platform',
-      ja: 'AI コーディングサービスプラットフォーム',
-    },
-    description: {
-      zh: 'code0.ai 是专为开发者打造的 AI 编程服务平台，支持 Claude Code、Codex、Gemini 等主流 AI 编程能力，帮助个人开发者和团队更稳定、更高效地使用 AI Agent 完成代码开发、调试、重构与自动化任务。',
-      en: 'code0.ai is an AI coding service platform built for developers, supporting Claude Code, Codex, Gemini, and other mainstream AI coding capabilities. It helps individual developers and teams use AI agents more stably and efficiently for coding, debugging, refactoring, and automation workflows.',
-      ja: 'code0.ai は開発者向けの AI コーディングサービスプラットフォームです。Claude Code、Codex、Gemini などの主要な AI コーディング機能に対応し、個人開発者やチームがコーディング、デバッグ、リファクタリング、自動化ワークフローで AI Agent をより安定かつ効率的に活用できるよう支援します。',
-    },
-    perk: {
-      zh: '联系客服领取测试额度',
-      en: 'Contact support to claim trial credits',
-      ja: 'サポート連絡でテストクレジットを取得',
-    },
-  },
-  {
     id: 'claudecn',
     name: 'ClaudeCN',
     icon: claudecnIcon,
@@ -732,6 +684,30 @@ export const sponsors: Sponsor[] = ([
       ja: 'コード cc-switch で初回チャージ 10% オフ',
     },
     couponCode: 'cc-switch',
+  },
+  {
+    id: 'grooroute',
+    name: 'GrooRoute Pro',
+    icon: groorouteIcon,
+    url: 'https://grooroute.pro/sign-up?aff=qqm9',
+    tier: 'standard',
+    category: 'relay',
+    iconBg: 'light',
+    tagline: {
+      zh: '稳定流畅的多模型 API 中转',
+      en: 'Reliable, responsive multi-model API relay',
+      ja: '安定・快適なマルチモデル API 中継',
+    },
+    description: {
+      zh: 'GrooRoute Pro 是可靠流畅的 AI API 中转服务平台，接入 OpenAI、Claude、DeepSeek 等主流大模型。平台采用海外服务器部署，支持倍率档位自选，提供按量计费与订阅套餐两种方案，线路稳定、响应迅速。',
+      en: 'GrooRoute Pro is a reliable AI API relay platform with access to OpenAI, Claude, DeepSeek, and other mainstream models. Deployed on overseas servers, it offers selectable pricing-multiplier tiers, pay-as-you-go billing, and subscription plans with stable routes and fast responses.',
+      ja: 'GrooRoute Pro は OpenAI、Claude、DeepSeek などの主要モデルに対応する、信頼性の高い AI API 中継プラットフォームです。海外サーバーで運用され、料金倍率のプランを自由に選択でき、従量課金とサブスクリプションの両方を提供します。安定した回線と高速な応答で利用できます。',
+    },
+    perk: {
+      zh: '专属链接注册即送 ¥5 体验额度',
+      en: '¥5 in free trial credit via the exclusive signup link',
+      ja: '専用リンクから登録で 5 元分の無料お試しクレジット',
+    },
   },
   {
     id: 'fluxa',
