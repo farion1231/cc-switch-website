@@ -36,6 +36,7 @@ import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
 import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
 import soleapiIcon from '@/assets/icons/sponsors/soleapi.svg';
 import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
+import modelflareIcon from '@/assets/icons/sponsors/modelflare.jpg';
 import ppioIcon from '@/assets/icons/sponsors/ppio.png';
 import fluxaIcon from '@/assets/icons/sponsors/fluxa.png';
 import api88Icon from '@/assets/icons/sponsors/88api.png';
@@ -118,6 +119,7 @@ const sponsorDisplayOrder = [
   'qiniu',
   'sudocode',
   'xycai',
+  'modelflare',
 ] as const;
 
 const sponsorDisplayRank = new Map<string, number>(
@@ -1041,6 +1043,31 @@ export const sponsors: Sponsor[] = ([
       en: 'Automatic SLA compensation and 100% abnormal cache refunds',
       ja: 'SLA 自動補償、異常キャッシュ料金を 100% 返金',
     },
+  },
+  {
+    id: 'modelflare',
+    name: 'Modelflare',
+    icon: modelflareIcon,
+    url: 'https://modelflare.dev/sign-up?utm_medium=referral&utm_source=ccswitch',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'dark',
+    tagline: {
+      zh: '稳定、低成本的 AI 模型网关',
+      en: 'Stable, lower-cost AI model gateway',
+      ja: '安定・低コストの AI モデルゲートウェイ',
+    },
+    description: {
+      zh: 'Modelflare 是稳定、低成本的 AI 网关，一个 API Key 即可调用 GPT、Claude、Gemini、Grok 等主流大模型以及图像、视频生成模型，兼容 Chat Completions、Responses、Anthropic Messages 与 Gemini 原生接口，支持分组故障转移，每次请求的 Token、图像与视频费用都能在控制台逐条查看。',
+      en: 'Modelflare is a stable, lower-cost AI gateway: one API key reaches GPT, Claude, Gemini, Grok, and leading image and video models over Chat Completions, Responses, Anthropic Messages, and the native Gemini API. It supports group failover, and every request’s token, image, and video cost is tracked in one console.',
+      ja: 'Modelflare は安定・低コストの AI ゲートウェイです。1 つの API キーで GPT、Claude、Gemini、Grok などの主要モデルや画像・動画生成モデルを利用でき、Chat Completions、Responses、Anthropic Messages、Gemini ネイティブ API に対応します。グループ単位のフェイルオーバーを備え、リクエストごとのトークン・画像・動画の費用をコンソールで確認できます。',
+    },
+    perk: {
+      zh: '首次充值 9 折',
+      en: '10% off your first top-up',
+      ja: '初回チャージ 10% オフ',
+    },
+    couponCode: 'CCSWITCH',
   },
 ] satisfies Sponsor[]).sort(
   (left, right) =>
