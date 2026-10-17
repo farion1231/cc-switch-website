@@ -38,6 +38,7 @@ import soleapiIcon from '@/assets/icons/sponsors/soleapi.svg';
 import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
 import modelflareIcon from '@/assets/icons/sponsors/modelflare.jpg';
 import everyapiIcon from '@/assets/icons/sponsors/everyapi.svg';
+import alltokensIcon from '@/assets/icons/sponsors/alltokens.png';
 import ppioIcon from '@/assets/icons/sponsors/ppio.png';
 import fluxaIcon from '@/assets/icons/sponsors/fluxa.png';
 import api88Icon from '@/assets/icons/sponsors/88api.png';
@@ -122,6 +123,7 @@ const sponsorDisplayOrder = [
   'xycai',
   'modelflare',
   'everyapi',
+  'alltokens',
 ] as const;
 
 const sponsorDisplayRank = new Map<string, number>(
@@ -1094,6 +1096,30 @@ export const sponsors: Sponsor[] = ([
       ja: '支払い時にさらに 20% オフ（期限なし）',
     },
     couponCode: 'ccswitch',
+  },
+  {
+    id: 'alltokens',
+    name: 'AllTokens',
+    icon: alltokensIcon,
+    url: 'https://alltokens.cc/register',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'dark',
+    tagline: {
+      zh: '稳定为基，真实为本',
+      en: 'Built on stability and honesty',
+      ja: '安定を基に、誠実を本に',
+    },
+    description: {
+      zh: 'AllTokens 的愿景是让每一次 AI 调用都稳定、真实、值得托付，做一家服务可靠、计费透明、让人放心的 AI Token 中转站。一个平台接入 GPT、Claude、Gemini、Grok、DeepSeek、GLM、Kimi 等主流模型，兼容 OpenAI、Anthropic 与 Gemini 接口；多上游智能调度、自动切换，按量计费、支持配额上限，团队用量一目了然。',
+      en: 'AllTokens aims to make every AI call stable, genuine, and trustworthy: an AI token relay with reliable service and transparent billing you can depend on. One platform reaches GPT, Claude, Gemini, Grok, DeepSeek, GLM, Kimi, and other leading models over OpenAI-, Anthropic-, and Gemini-compatible APIs, with smart scheduling and automatic failover across upstreams, pay-as-you-go pricing, spending caps, and clear team usage.',
+      ja: 'AllTokens は、すべての AI 呼び出しを安定的で正直、安心して任せられるものにし、信頼できるサービスと透明な課金で安心して使える AI トークン中継サービスを目指しています。GPT、Claude、Gemini、Grok、DeepSeek、GLM、Kimi などの主要モデルを 1 つのプラットフォームで利用でき、OpenAI・Anthropic・Gemini 互換の API に対応します。複数の上流をスマートに振り分けて自動で切り替え、従量課金と利用上限の設定、チームの使用量の可視化に対応しています。',
+    },
+    perk: {
+      zh: '注册送 1 美元体验金',
+      en: '$1 free trial credit on sign-up',
+      ja: '登録で 1 ドル分のお試しクレジット',
+    },
   },
 ] satisfies Sponsor[]).sort(
   (left, right) =>
