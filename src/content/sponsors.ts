@@ -37,6 +37,7 @@ import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
 import soleapiIcon from '@/assets/icons/sponsors/soleapi.svg';
 import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
 import modelflareIcon from '@/assets/icons/sponsors/modelflare.jpg';
+import everyapiIcon from '@/assets/icons/sponsors/everyapi.svg';
 import ppioIcon from '@/assets/icons/sponsors/ppio.png';
 import fluxaIcon from '@/assets/icons/sponsors/fluxa.png';
 import api88Icon from '@/assets/icons/sponsors/88api.png';
@@ -120,6 +121,7 @@ const sponsorDisplayOrder = [
   'sudocode',
   'xycai',
   'modelflare',
+  'everyapi',
 ] as const;
 
 const sponsorDisplayRank = new Map<string, number>(
@@ -1068,6 +1070,30 @@ export const sponsors: Sponsor[] = ([
       ja: '初回チャージ 10% オフ',
     },
     couponCode: 'CCSWITCH',
+  },
+  {
+    id: 'everyapi',
+    name: 'EveryAPI',
+    icon: everyapiIcon,
+    url: 'https://app.everyapi.ai/signin?aff=FqlMa2eVVY&utm_source=ccswitch&utm_medium=invite',
+    tier: 'standard',
+    category: 'aggregator',
+    tagline: {
+      zh: '自带客户端，一键接好所有 AI 工具',
+      en: 'Its own client wires up every AI tool in one click',
+      ja: '専用クライアントで、すべての AI ツールをワンクリック接続',
+    },
+    description: {
+      zh: '装上 EveryAPI 桌面客户端，Claude Code、Codex、Cursor 等 20 多个工具自动配置好，不用手动改 API 地址和环境变量。一把密钥直接调用 Claude、GPT、DeepSeek、GLM、MiniMax、Kimi、豆包，换模型不用改配置；自建节点直连，不折腾网络，额度用不完还能自己挂渠道对外供货。注册即送 14 元额度，首充额外加送 20%，支持支付宝、USDT，10 美元起充，用完即停、不自动续费。',
+      en: 'Install the EveryAPI desktop client and Claude Code, Codex, Cursor, and 20+ other tools are configured for you, with no API URLs or environment variables to edit by hand. One key reaches Claude, GPT, DeepSeek, GLM, MiniMax, Kimi, and Doubao, so switching models needs no config changes. Self-hosted nodes connect directly without network workarounds, and unused credit can be resold through your own channel. Get ¥14 in free credit on sign-up and an extra 20% on your first top-up; pay with Alipay or USDT from $10, pay-as-you-go with no auto-renewal.',
+      ja: 'EveryAPI のデスクトップクライアントを入れるだけで、Claude Code、Codex、Cursor など 20 以上のツールが自動設定され、API アドレスや環境変数を手で書き換える必要はありません。1 つのキーで Claude、GPT、DeepSeek、GLM、MiniMax、Kimi、Doubao を利用でき、モデルを切り替えても設定変更は不要です。自社ノードに直結するのでネットワーク設定に悩まず、使い切れないクレジットは自分のチャネルとして外部に提供することもできます。登録で 14 元分のクレジットを進呈、初回チャージはさらに 20% 増量。Alipay・USDT に対応し、10 ドルからチャージ可能、使い切りで自動更新はありません。',
+    },
+    perk: {
+      zh: '付款再打 8 折，不限时',
+      en: 'Extra 20% off at checkout, no expiry',
+      ja: '支払い時にさらに 20% オフ（期限なし）',
+    },
+    couponCode: 'ccswitch',
   },
 ] satisfies Sponsor[]).sort(
   (left, right) =>
