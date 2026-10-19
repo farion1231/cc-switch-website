@@ -39,6 +39,7 @@ import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
 import modelflareIcon from '@/assets/icons/sponsors/modelflare.jpg';
 import everyapiIcon from '@/assets/icons/sponsors/everyapi.svg';
 import alltokensIcon from '@/assets/icons/sponsors/alltokens.png';
+import alltokensSiIcon from '@/assets/icons/sponsors/alltokens-si.png';
 import ppioIcon from '@/assets/icons/sponsors/ppio.png';
 import fluxaIcon from '@/assets/icons/sponsors/fluxa.png';
 import api88Icon from '@/assets/icons/sponsors/88api.png';
@@ -124,6 +125,7 @@ const sponsorDisplayOrder = [
   'modelflare',
   'everyapi',
   'alltokens',
+  'alltokens-si',
 ] as const;
 
 const sponsorDisplayRank = new Map<string, number>(
@@ -1119,6 +1121,24 @@ export const sponsors: Sponsor[] = ([
       zh: '注册送 1 美元体验金',
       en: '$1 free trial credit on sign-up',
       ja: '登録で 1 ドル分のお試しクレジット',
+    },
+  },
+  {
+    id: 'alltokens-si',
+    name: 'AllTokens SI',
+    icon: alltokensSiIcon,
+    url: 'https://alltokens.si',
+    tier: 'standard',
+    category: 'aggregator',
+    tagline: {
+      zh: '稳定为基，真实为本——企业 AI Token 中转服务',
+      en: 'Built on stability and honesty: an enterprise AI token relay',
+      ja: '安定を基に、誠実を本に――企業向け AI トークン中継サービス',
+    },
+    description: {
+      zh: '专为企业打造的 AI 团队协作平台：成员、密钥、用量与余额统一纳入企业控制台，以清晰的权限与额度配置，让团队协作有据可查、安心可控。一个 API Key 即可调用 GPT、Claude、Gemini、Grok 等主流模型，兼容 OpenAI 与 Anthropic 接口。',
+      en: 'An AI collaboration platform built for companies: members, keys, usage, and balance all live in one company console, and clear permissions and spending limits keep team usage traceable and under control. One API key reaches GPT, Claude, Gemini, Grok, and other leading models over OpenAI- and Anthropic-compatible APIs.',
+      ja: '企業向けに設計された AI チーム協業プラットフォームです。メンバー、キー、使用量、残高を企業コンソールで一元管理し、明確な権限と利用上限の設定により、チームの利用を追跡可能で安心して管理できます。1 つの API キーで GPT、Claude、Gemini、Grok などの主要モデルを利用でき、OpenAI 互換と Anthropic 互換の API に対応します。',
     },
   },
 ] satisfies Sponsor[]).sort(
