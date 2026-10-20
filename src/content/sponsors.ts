@@ -34,6 +34,7 @@ import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
 import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
 import sudocodeIcon from '@/assets/icons/sponsors/sudocode.png';
+import sudocodeUsIcon from '@/assets/icons/sponsors/sudocode-us.png';
 import soleapiIcon from '@/assets/icons/sponsors/soleapi.svg';
 import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
 import modelflareIcon from '@/assets/icons/sponsors/modelflare.jpg';
@@ -121,6 +122,7 @@ const sponsorDisplayOrder = [
   'dmxapi',
   'qiniu',
   'sudocode',
+  'sudocode-us',
   'xycai',
   'modelflare',
   'everyapi',
@@ -1006,7 +1008,7 @@ export const sponsors: Sponsor[] = ([
   },
   {
     id: 'sudocode',
-    name: 'SudoCode',
+    name: 'SudoCode.chat',
     icon: sudocodeIcon,
     url: 'https://sudocode.chat/sign-up?aff=CC-SWITCH&utm_source=cc-switch&utm_medium=sponsor&utm_campaign=ccswitch',
     tier: 'standard',
@@ -1025,6 +1027,25 @@ export const sponsors: Sponsor[] = ([
       zh: '注册并加入 QQ 群 726213516，联系群主领取 ¥10 试用额度',
       en: 'Sign up, join QQ group 726213516, and contact the group owner for CNY ¥10 trial credit',
       ja: '登録後 QQ グループ 726213516 に参加し、管理者へ連絡すると CNY ¥10 のトライアルクレジットを進呈',
+    },
+  },
+  {
+    id: 'sudocode-us',
+    name: 'SudoCode.us',
+    icon: sudocodeUsIcon,
+    url: 'https://sudocode.us',
+    tier: 'standard',
+    category: 'relay',
+    iconBg: 'dark',
+    tagline: {
+      zh: '面向 AI 编程工具的 API 中转服务',
+      en: 'API relay for AI coding tools',
+      ja: 'AI コーディングツール向け API 中継',
+    },
+    description: {
+      zh: 'SudoCode.us 提供 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes 和 Pi 的 API 接入，支持通过 CC Switch 的对应预设配置，并提供 sudocode.run 备用接入地址。',
+      en: 'SudoCode.us provides API access for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes, and Pi through their CC Switch presets, with sudocode.run available as an alternative endpoint.',
+      ja: 'SudoCode.us は Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes、Pi 向けの API 接続を提供します。CC Switch の対応プリセットから設定でき、代替接続先として sudocode.run も利用できます。',
     },
   },
   {
@@ -1127,7 +1148,7 @@ export const sponsors: Sponsor[] = ([
     id: 'alltokens-si',
     name: 'AllTokens SI',
     icon: alltokensSiIcon,
-    url: 'https://alltokens.si',
+    url: 'https://alltokens.si/enterprise-register',
     tier: 'standard',
     category: 'aggregator',
     tagline: {
