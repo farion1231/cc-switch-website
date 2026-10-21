@@ -29,6 +29,7 @@ import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
+import haoaiIcon from '@/assets/icons/sponsors/haoai.svg';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
@@ -91,6 +92,7 @@ const sponsorDisplayOrder = [
   'apinebula',
   'aicodemirror',
   'pateway',
+  'haoai',
   'fenno',
   'runapi',
   'openmodel',
@@ -910,6 +912,29 @@ export const sponsors: Sponsor[] = ([
       zh: '企业用户免费领 1200万 Token',
       en: 'Enterprise users can claim 12M free tokens',
       ja: '企業ユーザーは 1,200 万 Token を無料取得可能',
+    },
+  },
+  {
+    id: 'haoai',
+    name: 'hao.ai',
+    icon: haoaiIcon,
+    url: 'https://hao.ai/invite/DTBZS3OR',
+    tier: 'standard',
+    category: 'aggregator',
+    tagline: {
+      zh: '高速稳定的大模型统一 API 网关',
+      en: 'Fast, stable unified LLM API gateway',
+      ja: '高速で安定した LLM 統合 API ゲートウェイ',
+    },
+    description: {
+      zh: 'hao.ai 是面向开发者与团队的高速、稳定大模型统一 API 网关。通过一个 API Key 和统一接口，即可接入 GPT、Claude、xAI Grok 等主流模型，兼容 OpenAI、Anthropic 等常用协议与 SDK。平台提供模型路由、故障回退、团队管理及完整调用日志，模型价格低至官方参考价的 1.5 折，帮助用户更简单、更稳定、更低成本地构建 AI 应用。',
+      en: 'hao.ai is a fast, stable unified LLM API gateway for developers and teams. One API key and a unified interface reach GPT, Claude, xAI Grok, and other leading models, compatible with common protocols and SDKs such as OpenAI and Anthropic. The platform offers model routing, failover, team management, and complete request logs, with prices as low as 15% of official reference rates, making AI apps simpler, more stable, and cheaper to build.',
+      ja: 'hao.ai は開発者とチーム向けの高速で安定した LLM 統合 API ゲートウェイです。1 つの API キーと統一インターフェースで GPT、Claude、xAI Grok などの主要モデルにアクセスでき、OpenAI や Anthropic などの一般的なプロトコルと SDK に対応しています。モデルルーティング、フェイルオーバー、チーム管理、完全な呼び出しログを備え、価格は公式参考価格の最大 85% オフ。AI アプリをよりシンプルに、安定して、低コストで構築できます。',
+    },
+    perk: {
+      zh: '专属链接注册，首单享 5% 赠送额度',
+      en: '5% bonus credit on your first order via the exclusive link',
+      ja: '専用リンクから登録で初回注文に 5% のボーナスクレジット',
     },
   },
   {
