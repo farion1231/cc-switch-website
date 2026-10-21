@@ -75,7 +75,7 @@ export const demoApps: DemoApp[] = [
     kind: 'switch',
     modes: ['direct', 'route', 'stack'],
     providers: claudeProviders,
-    stack: { default: 'Kimi For Coding', members: { 'Kimi For Coding': 2, PackyCode: 3, ZetaAPI: 2 } },
+    stack: { default: 'Kimi For Coding', members: { 'Kimi For Coding': 2, PackyCode: 3, APINebula: 2 } },
   },
   {
     id: 'claude-desktop',

@@ -24,12 +24,12 @@ import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
 import openmodelIcon from '@/assets/icons/sponsors/openmodel.jpg';
 import groorouteIcon from '@/assets/icons/sponsors/grooroute.jpg';
+import ditIcon from '@/assets/icons/sponsors/dit.svg';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
-import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
 import subrouterIcon from '@/assets/icons/sponsors/subrouter.svg';
@@ -88,7 +88,6 @@ export interface Sponsor {
 const sponsorDisplayOrder = [
   'kimi-k2-7-code',
   'packycode',
-  'zetaapi',
   'apinebula',
   'aicodemirror',
   'pateway',
@@ -97,6 +96,7 @@ const sponsorDisplayOrder = [
   'openmodel',
   'everyapi',
   'grooroute',
+  'dit',
   'shengsuanyun',
   'aigocode',
   'aicoding',
@@ -380,31 +380,6 @@ export const sponsors: Sponsor[] = ([
       en: '¥10 voucher after identity verification, plus up to 15% referral cashback',
       ja: '本人確認で ¥10 クーポン、紹介チャージで最大 15% キャッシュバック',
     },
-  },
-  {
-    id: 'zetaapi',
-    name: 'ZetaAPI',
-    icon: zetaapiIcon,
-    url: 'https://zetaapi.ai/go/u117',
-    tier: 'standard',
-    category: 'aggregator',
-    iconBg: 'light',
-    tagline: {
-      zh: '模型保真，低至官方价 35 折',
-      en: 'Real model fidelity from 35% of official pricing',
-      ja: 'モデル品質を保ち、公式価格の 35% から',
-    },
-    description: {
-      zh: 'ZetaAPI 主打模型不掺水、保真不降智，价格低至官方价 35 折，平台不混量、不暗中替换低质量模型、不做虚假路由。一个 Key 可接入 Claude Code、Codex、Gemini、ChatGPT 等主流模型，并提供企业级 SLA 稳定性、标准接口兼容与按量计费。',
-      en: 'ZetaAPI focuses on real, undegraded model access at as low as 35% of official pricing, with no traffic mixing, hidden low-quality substitutions, or fake model routing. One key connects Claude Code, Codex, Gemini, ChatGPT, and other mainstream models with SLA-backed stability, standard API compatibility, and pay-as-you-go billing.',
-      ja: 'ZetaAPI は、モデルを水増し・劣化させず、公式価格の 35% から利用できることを重視した API プラットフォームです。トラフィック混在、低品質モデルへの隠れた差し替え、虚偽ルーティングを行わず、1 つのキーで Claude Code、Codex、Gemini、ChatGPT などを利用できます。',
-    },
-    perk: {
-      zh: '首次充值 9 折，优惠码 CC-SWITCH',
-      en: '10% off first top-up with code CC-SWITCH',
-      ja: '初回チャージ 10% オフ（コード CC-SWITCH）',
-    },
-    couponCode: 'CC-SWITCH',
   },
   {
     id: 'byteplus',
@@ -718,6 +693,31 @@ export const sponsors: Sponsor[] = ([
       en: '¥5 in free trial credit via the exclusive signup link',
       ja: '専用リンクから登録で 5 元分の無料お試しクレジット',
     },
+  },
+  {
+    id: 'dit',
+    name: 'DIT.ai',
+    icon: ditIcon,
+    url: 'https://dit.ai/register',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    tagline: {
+      zh: '多供应商实时竞价的 AI Token 交易市场',
+      en: 'AI token exchange with real-time multi-provider routing',
+      ja: '複数プロバイダーがリアルタイムで競う AI トークン取引所',
+    },
+    description: {
+      zh: 'DIT.ai 是一个 AI Token 交易市场，通过多供应商路由降低调用成本。一个 OpenAI 兼容 API 即可调用 GPT、Claude、Gemini、DeepSeek、Grok、Llama 等 50 多个主流模型，覆盖文本、图像、视频和音频；合格供应商在 160 多条线路上为每个请求竞价，DIT 实时选出性价比最优的线路，价格通常比官方定价低 30–70%。只需更换 Base URL 和 API Key，即可在现有技术栈上享受自动路由与故障转移。',
+      en: 'DIT.ai is an AI token exchange and marketplace for lower-cost multi-provider routing. One OpenAI-compatible API reaches 50+ leading models, including GPT, Claude, Gemini, DeepSeek, Grok, and Llama, across text, image, video, and audio. Qualified providers compete for each request across 160+ routes, and DIT picks the best price-to-quality option in real time, typically 30–70% below official list pricing. Change your base URL and API key, keep your existing stack, and get automatic routing and failover.',
+      ja: 'DIT.ai は、複数プロバイダーのルーティングでコストを抑える AI トークン取引マーケットです。OpenAI 互換の API 1 つで GPT、Claude、Gemini、DeepSeek、Grok、Llama など 50 以上の主要モデルをテキスト・画像・動画・音声にわたって利用できます。審査済みのプロバイダーが 160 以上のルートでリクエストごとに競い合い、DIT がリアルタイムで最適なルートを選ぶため、通常は公式価格より 30〜70% 安くなります。Base URL と API Key を変えるだけで、既存の構成のまま自動ルーティングとフェイルオーバーを利用できます。',
+    },
+    perk: {
+      zh: '注册并使用优惠码领取 5 美元新人券',
+      en: 'Claim a $5 welcome coupon with the promo code',
+      ja: 'プロモコードで 5 ドルのウェルカムクーポン',
+    },
+    couponCode: 'ccswitch',
   },
   {
     id: 'fluxa',

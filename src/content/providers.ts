@@ -17,7 +17,6 @@ import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
 import kimiIconSvg from '@/assets/icons/sponsors/kimi.svg?raw';
 import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
-import zetaapiIcon from '@/assets/icons/sponsors/zetaapi-icon.png';
 import zhipuIcon from '@/assets/icons/zhipu.svg';
 import zhipuIconSvg from '@/assets/icons/zhipu.svg?raw';
 import { sponsors, type LocalizedText } from '@/content/sponsors';
@@ -116,15 +115,6 @@ export const claudeProviders: Provider[] = [
     time: '10',
     used: '672',
     remaining: '66',
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  {
-    icon: zetaapiIcon,
-    iconBg: 'bg-sky-500/15',
-    name: 'ZetaAPI',
-    subtitle: 'https://zetaapi.ai',
-    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -393,15 +383,6 @@ export const opencodeProviders: Provider[] = [
     isSvgUrl: true,
   },
   {
-    icon: zetaapiIcon,
-    iconBg: 'bg-sky-500/15',
-    name: 'ZetaAPI',
-    subtitle: 'https://zetaapi.ai',
-    href: sponsorHref('zetaapi'),
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  {
     icon: apinebulaIcon,
     iconBg: 'bg-indigo-500/15',
     name: 'APINebula',
@@ -453,15 +434,6 @@ export const openClawProviders: Provider[] = [
     time: '7',
     used: '93',
     remaining: '407',
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  {
-    icon: zetaapiIcon,
-    iconBg: 'bg-sky-500/15',
-    name: 'ZetaAPI',
-    subtitle: 'https://zetaapi.ai',
-    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -529,15 +501,6 @@ export const hermesProviders: Provider[] = [
     isSvgUrl: true,
   },
   {
-    icon: zetaapiIcon,
-    iconBg: 'bg-sky-500/15',
-    name: 'ZetaAPI',
-    subtitle: 'https://zetaapi.ai',
-    href: sponsorHref('zetaapi'),
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
     iconBg: 'bg-orange-500/20',
@@ -572,15 +535,6 @@ export const grokBuildProviders: Provider[] = [
     time: '6',
     used: '184',
     remaining: '316',
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  {
-    icon: zetaapiIcon,
-    iconBg: 'bg-sky-500/15',
-    name: 'ZetaAPI',
-    subtitle: 'https://zetaapi.ai',
-    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
@@ -633,15 +587,6 @@ export const piProviders: Provider[] = [
     name: 'PackyCode',
     subtitle: 'https://www.packyapi.ai',
     href: sponsorHref('packycode'),
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  {
-    icon: zetaapiIcon,
-    iconBg: 'bg-sky-500/15',
-    name: 'ZetaAPI',
-    subtitle: 'https://zetaapi.ai',
-    href: sponsorHref('zetaapi'),
     isUrl: true,
     isSvgUrl: true,
   },
