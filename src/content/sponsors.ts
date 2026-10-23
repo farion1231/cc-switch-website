@@ -700,7 +700,7 @@ export const sponsors: Sponsor[] = ([
     id: 'dit',
     name: 'DIT.ai',
     icon: ditIcon,
-    url: 'https://dit.ai/register',
+    url: 'https://dit.ai?utm_source=ccswitch',
     tier: 'standard',
     category: 'aggregator',
     iconBg: 'light',
