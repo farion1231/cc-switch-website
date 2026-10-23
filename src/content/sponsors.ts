@@ -26,6 +26,7 @@ import openmodelIcon from '@/assets/icons/sponsors/openmodel.jpg';
 import groorouteIcon from '@/assets/icons/sponsors/grooroute.jpg';
 import ditIcon from '@/assets/icons/sponsors/dit.svg';
 import buytokenIcon from '@/assets/icons/sponsors/buytoken.svg';
+import vapiIcon from '@/assets/icons/sponsors/vapi.svg';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
@@ -101,6 +102,7 @@ const sponsorDisplayOrder = [
   'grooroute',
   'dit',
   'buytoken',
+  'vapi',
   'shengsuanyun',
   'aigocode',
   'aicoding',
@@ -744,6 +746,30 @@ export const sponsors: Sponsor[] = ([
       zh: '专属链接注册送 3 元体验额度，首充 9 折',
       en: '¥3 trial credit via the exclusive link, 10% off your first top-up',
       ja: '専用リンクから登録で 3 元分のお試しクレジット、初回チャージ 10% オフ',
+    },
+  },
+  {
+    id: 'vapi',
+    name: 'V-API',
+    icon: vapiIcon,
+    url: 'https://gpt.ge/signup?aff=URNP',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'dark',
+    tagline: {
+      zh: '三年老品牌，支持合同签约与正规开票',
+      en: 'Three-year-old brand with contracts and official invoices',
+      ja: '3 年の実績、契約締結と正規の請求書発行に対応',
+    },
+    description: {
+      zh: 'V-API 三年老品牌，致力于为个人、开发者和企业提供稳定、快速、安全的高品质的大语言模型 API 服务平台，支持合同签约、正规开票（普票 / 专票）。',
+      en: 'V-API is a three-year-old brand dedicated to providing individuals, developers, and businesses with a stable, fast, and secure platform for high-quality LLM API services, with formal contracts and official invoices (general / special VAT).',
+      ja: 'V-API は 3 年の実績を持つブランドで、個人・開発者・企業向けに安定・高速・安全な高品質 LLM API サービスプラットフォームを提供し、契約締結と正規の請求書発行（普通 / 専用）に対応しています。',
+    },
+    perk: {
+      zh: '专属链接注册，首单减 2 元并享 9 折',
+      en: '¥2 off plus 10% off your first order via the exclusive link',
+      ja: '専用リンクから登録で初回注文 2 元引き＋10% オフ',
     },
   },
   {
