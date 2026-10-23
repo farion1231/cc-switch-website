@@ -25,6 +25,7 @@ import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
 import openmodelIcon from '@/assets/icons/sponsors/openmodel.jpg';
 import groorouteIcon from '@/assets/icons/sponsors/grooroute.jpg';
 import ditIcon from '@/assets/icons/sponsors/dit.svg';
+import buytokenIcon from '@/assets/icons/sponsors/buytoken.svg';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
@@ -99,6 +100,7 @@ const sponsorDisplayOrder = [
   'everyapi',
   'grooroute',
   'dit',
+  'buytoken',
   'shengsuanyun',
   'aigocode',
   'aicoding',
@@ -720,6 +722,29 @@ export const sponsors: Sponsor[] = ([
       ja: 'プロモコードで 5 ドルのウェルカムクーポン',
     },
     couponCode: 'ccswitch',
+  },
+  {
+    id: 'buytoken',
+    name: 'BuyToken',
+    icon: buytokenIcon,
+    url: 'https://buytoken.work/sign-up?aff=cc-switch',
+    tier: 'standard',
+    category: 'relay',
+    tagline: {
+      zh: '支持企业级并发与极速开票的稳定中转',
+      en: 'Stable relay with enterprise concurrency and fast invoicing',
+      ja: '企業級の同時実行と迅速な請求書発行に対応した安定リレー',
+    },
+    description: {
+      zh: 'BuyToken 提供 Claude Code、Codex、DeepSeek 等各类中转服务，支持企业级并发、可极速开票，做的就是稳定长久站。',
+      en: 'BuyToken offers relay services for Claude Code, Codex, DeepSeek, and more, with enterprise-grade concurrency and fast invoicing, built to be a stable, long-running service.',
+      ja: 'BuyToken は Claude Code、Codex、DeepSeek などの各種中継サービスを提供し、エンタープライズ級の同時実行と迅速な請求書発行に対応、安定して長く続くサービスを目指しています。',
+    },
+    perk: {
+      zh: '专属链接注册送 3 元体验额度，首充 9 折',
+      en: '¥3 trial credit via the exclusive link, 10% off your first top-up',
+      ja: '専用リンクから登録で 3 元分のお試しクレジット、初回チャージ 10% オフ',
+    },
   },
   {
     id: 'fluxa',
