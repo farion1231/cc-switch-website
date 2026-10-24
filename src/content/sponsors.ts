@@ -41,7 +41,6 @@ import sudocodeUsIcon from '@/assets/icons/sponsors/sudocode-us.png';
 import soleapiIcon from '@/assets/icons/sponsors/soleapi.svg';
 import xycaiIcon from '@/assets/icons/sponsors/xycai-icon.png';
 import modelflareIcon from '@/assets/icons/sponsors/modelflare.jpg';
-import everyapiIcon from '@/assets/icons/sponsors/everyapi.svg';
 import alltokensIcon from '@/assets/icons/sponsors/alltokens.png';
 import alltokensSiIcon from '@/assets/icons/sponsors/alltokens-si.png';
 import ppioIcon from '@/assets/icons/sponsors/ppio.png';
@@ -98,7 +97,6 @@ const sponsorDisplayOrder = [
   'fenno',
   'runapi',
   'openmodel',
-  'everyapi',
   'grooroute',
   'dit',
   'buytoken',
@@ -1171,30 +1169,6 @@ export const sponsors: Sponsor[] = ([
       ja: '初回チャージ 10% オフ',
     },
     couponCode: 'CCSWITCH',
-  },
-  {
-    id: 'everyapi',
-    name: 'EveryAPI',
-    icon: everyapiIcon,
-    url: 'https://app.everyapi.ai/signin?aff=FqlMa2eVVY&utm_source=ccswitch&utm_medium=invite',
-    tier: 'standard',
-    category: 'aggregator',
-    tagline: {
-      zh: '自带客户端，一键接好所有 AI 工具',
-      en: 'Its own client wires up every AI tool in one click',
-      ja: '専用クライアントで、すべての AI ツールをワンクリック接続',
-    },
-    description: {
-      zh: 'EveryAPI 致力于为开发者提供稳定、高效、高性价比的 API 中转服务，支持 Claude、Codex、Gemini 等主流 AI 编程工具及多种先进模型。无需复杂配置，轻松接入，助力开发者高效编程、快速构建 AI 应用。无论是日常开发、项目调试还是 AI 辅助编程，EveryAPI 都能提供便捷、流畅的使用体验。CC Switch 用户注册即送 14 元，GPT 低至 1.5 折。',
-      en: 'EveryAPI is dedicated to providing developers with a stable, efficient, and cost-effective API relay service, supporting mainstream AI coding tools such as Claude, Codex, and Gemini along with a range of advanced models. No complex setup is needed: connect in moments to code faster and build AI applications sooner. Whether for day-to-day development, project debugging, or AI-assisted programming, EveryAPI delivers a convenient, smooth experience. CC Switch users get ¥14 in free credit on sign-up and GPT models from just 15% of the official price.',
-      ja: 'EveryAPI は、開発者に安定・高効率・高コストパフォーマンスな API 中継サービスを提供することに力を注いでおり、Claude、Codex、Gemini などの主要な AI コーディングツールと多数の先進的なモデルに対応しています。複雑な設定は不要で手軽に接続でき、効率的なコーディングと AI アプリケーションの迅速な構築を支援します。日々の開発、プロジェクトのデバッグ、AI 支援プログラミングのいずれにおいても、便利でスムーズな利用体験を提供します。CC Switch ユーザーは登録で 14 元分のクレジットを進呈、GPT は公式価格の 15% から利用できます。',
-    },
-    perk: {
-      zh: '首充享 20% 优惠，不限时',
-      en: '20% off your first top-up, no expiry',
-      ja: '初回チャージ 20% オフ（期限なし）',
-    },
-    couponCode: 'ccswitch',
   },
   {
     id: 'alltokens',
