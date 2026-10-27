@@ -550,14 +550,25 @@ export const SESSIONS: SampleSession[] = [
 
 /* ---------- Accounts ---------- */
 
+export type QuotaTier = 'premium' | 'fiveHour' | 'weekly' | 'geminiFiveHour' | 'geminiWeekly' | 'claudeGptWeekly';
+
 export interface SampleAccount {
   login: string;
   host?: string;
+  /** Sign-in day: "{date} signed in" for Copilot / ChatGPT / xAI, "Added {date}" for Claude / Antigravity. */
   signedIn: L;
-  usedBy: number;
+  /** Providers using the account (Copilot / ChatGPT / xAI only). */
+  usedBy?: number;
+  /** Claude subscription plan shown first in the details. */
+  plan?: string;
+  /** Kimi sign-in region, and whether it is Kimi Code's own login. */
+  region?: 'mainland-cn' | 'global';
+  primary?: boolean;
+  /** Kimi account without a coding plan: the quota column says so instead of bars. */
+  noSubscription?: boolean;
   isDefault?: boolean;
   needsReauth?: boolean;
-  quota: Array<{ tier: 'premium' | 'fiveHour' | 'weekly'; left: number }>;
+  quota: Array<{ tier: QuotaTier; left: number }>;
   /** ChatGPT's saved limit resets, grouped by expiry day (earliest first). */
   resetCredits?: Array<{ date: L; inTime: string; count: number; expiringSoon?: boolean }>;
   /** Codex Credits balance bought on the ChatGPT plan. */
@@ -565,9 +576,32 @@ export interface SampleAccount {
   checkedMinutesAgo: number;
 }
 
-export type AuthService = 'copilot' | 'chatgpt' | 'xai';
+/** Auth Center groups, in the app's order (AuthCenterPanel). */
+export type AuthService = 'claude' | 'copilot' | 'chatgpt' | 'xai' | 'kimi' | 'agy';
 
 export const ACCOUNTS: Record<AuthService, SampleAccount[]> = {
+  claude: [
+    {
+      login: 'jason@example.com',
+      plan: 'Max 20x',
+      signedIn: { zh: '9月18日', en: 'Sep 18', ja: '9月18日' },
+      quota: [
+        { tier: 'fiveHour', left: 46 },
+        { tier: 'weekly', left: 71 },
+      ],
+      checkedMinutesAgo: 2,
+    },
+    {
+      login: 'dev@acme.dev',
+      plan: 'Team',
+      signedIn: { zh: '10月20日', en: 'Oct 20', ja: '10月20日' },
+      quota: [
+        { tier: 'fiveHour', left: 88 },
+        { tier: 'weekly', left: 15 },
+      ],
+      checkedMinutesAgo: 5,
+    },
+  ],
   copilot: [
     {
       login: 'octocat',
@@ -617,6 +651,41 @@ export const ACCOUNTS: Record<AuthService, SampleAccount[]> = {
       needsReauth: true,
       quota: [{ tier: 'weekly', left: 55 }],
       checkedMinutesAgo: 0,
+    },
+  ],
+  kimi: [
+    {
+      login: 'Moonshot Dev',
+      region: 'mainland-cn',
+      primary: true,
+      signedIn: { zh: '10月2日', en: 'Oct 2', ja: '10月2日' },
+      isDefault: true,
+      quota: [
+        { tier: 'fiveHour', left: 62 },
+        { tier: 'weekly', left: 90 },
+      ],
+      checkedMinutesAgo: 1,
+    },
+    {
+      login: 'kimi-global',
+      region: 'global',
+      signedIn: { zh: '10月15日', en: 'Oct 15', ja: '10月15日' },
+      noSubscription: true,
+      quota: [],
+      checkedMinutesAgo: 4,
+    },
+  ],
+  agy: [
+    {
+      login: 'dev@gmail.com',
+      signedIn: { zh: '10月8日', en: 'Oct 8', ja: '10月8日' },
+      isDefault: true,
+      quota: [
+        { tier: 'geminiFiveHour', left: 80 },
+        { tier: 'geminiWeekly', left: 66 },
+        { tier: 'claudeGptWeekly', left: 12 },
+      ],
+      checkedMinutesAgo: 3,
     },
   ],
 };

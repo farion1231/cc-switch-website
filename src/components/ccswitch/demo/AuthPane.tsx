@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Copy, ExternalLink, KeyRound, Loader2, Plus, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
+import antigravityIcon from '@/assets/icons/antigravity.svg';
+import claudeIcon from '@/assets/icons/claude.svg';
 import copilotIconSvg from '@/assets/icons/githubcopilot.svg?raw';
+import kimiCodeIconSvg from '@/assets/icons/kimi-code.svg?raw';
 import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
@@ -12,13 +15,43 @@ import { Btn, Floating, HelpTip, IconBtn, MoreMenu, PaneHeader, Pill, Segmented 
 import { ACCOUNTS, type AuthService, type SampleAccount } from './samples';
 import { useShell } from './shellContext';
 
-const SERVICES: Array<{ id: AuthService; name: string; icon: string }> = [
-  { id: 'copilot', name: 'GitHub Copilot', icon: copilotIconSvg },
-  { id: 'chatgpt', name: 'ChatGPT', icon: openaiIconSvg },
-  { id: 'xai', name: 'xAI', icon: grokIconSvg },
+interface ServiceDef {
+  id: AuthService;
+  name: string;
+  icon: { svg: string } | { src: string };
+  /** Device code shown in the card (Copilot / ChatGPT / xAI / Kimi) or a browser sign-in page (Claude / Antigravity). */
+  login: 'device' | 'browser';
+  /** Picked before signing in: Copilot's deployment, Kimi's region. */
+  chooser?: 'copilot' | 'kimi';
+}
+
+/** AuthCenterPanel order; Antigravity only exists on macOS in the app. */
+const SERVICES: ServiceDef[] = [
+  { id: 'claude', name: 'Claude', icon: { src: claudeIcon }, login: 'browser' },
+  { id: 'copilot', name: 'GitHub Copilot', icon: { svg: copilotIconSvg }, login: 'device', chooser: 'copilot' },
+  { id: 'chatgpt', name: 'ChatGPT', icon: { svg: openaiIconSvg }, login: 'device' },
+  { id: 'xai', name: 'xAI', icon: { svg: grokIconSvg }, login: 'device' },
+  { id: 'kimi', name: 'Kimi Code', icon: { svg: kimiCodeIconSvg }, login: 'device', chooser: 'kimi' },
+  { id: 'agy', name: 'Antigravity', icon: { src: antigravityIcon }, login: 'browser' },
 ];
 
-/** What the card is waiting for: a device-code sign-in, or the Copilot deployment chooser. */
+/** The account a finished demo sign-in adds to each group. */
+const NEW_ACCOUNT: Record<AuthService, Omit<SampleAccount, 'signedIn' | 'checkedMinutesAgo'>> = {
+  claude: { login: 'me@example.com', plan: 'Pro', quota: [{ tier: 'fiveHour', left: 100 }, { tier: 'weekly', left: 100 }] },
+  copilot: { login: 'mona', host: 'github.com', usedBy: 0, quota: [{ tier: 'premium', left: 100 }] },
+  chatgpt: { login: 'me@example.com', usedBy: 0, quota: [{ tier: 'fiveHour', left: 100 }, { tier: 'weekly', left: 100 }] },
+  xai: { login: 'grok-dev', usedBy: 0, quota: [{ tier: 'weekly', left: 100 }] },
+  kimi: { login: 'kimi-new', region: 'mainland-cn', quota: [{ tier: 'fiveHour', left: 100 }, { tier: 'weekly', left: 100 }] },
+  agy: {
+    login: 'me@gmail.com',
+    quota: [
+      { tier: 'geminiFiveHour', left: 100 },
+      { tier: 'claudeGptWeekly', left: 100 },
+    ],
+  },
+};
+
+/** What the card is waiting for: a sign-in, or the chooser that comes before it. */
 type Pending = { kind: 'add' | 'reauth'; login?: string } | { kind: 'choose' } | null;
 
 export function AuthPane() {
@@ -49,16 +82,35 @@ export function AuthPane() {
   );
 }
 
-function ServiceCard({ service }: { service: (typeof SERVICES)[number] }) {
+function ServiceIcon({ service }: { service: ServiceDef }) {
+  if ('svg' in service.icon) {
+    return <InlineSvgIcon svg={service.icon.svg} label={service.name} color="currentColor" className="h-5 w-5" />;
+  }
+  return <img src={service.icon.src} alt={service.name} className="h-5 w-5 object-contain" />;
+}
+
+function ServiceCard({ service }: { service: ServiceDef }) {
   const { t } = useLanguage();
   const { toast } = useShell();
   const p = t.demo.window.pages;
   const a = p.auth;
   const [accounts, setAccounts] = useState<SampleAccount[]>(ACCOUNTS[service.id]);
   const [pending, setPending] = useState<Pending>(null);
-  const help = { copilot: a.copilotHelp, chatgpt: a.chatgptHelp, xai: a.xaiHelp }[service.id];
+  const help = {
+    claude: a.claudeHelp,
+    copilot: a.copilotHelp,
+    chatgpt: a.chatgptHelp,
+    xai: a.xaiHelp,
+    kimi: a.kimiHelp,
+    agy: a.agyHelp,
+  }[service.id];
+  const emptyText = {
+    claude: a.claudeEmpty,
+    kimi: a.kimiEmpty,
+    agy: a.agyEmpty,
+  }[service.id as 'claude' | 'kimi' | 'agy'] ?? fill(a.empty, { service: service.name });
 
-  // The demo "authorizes" a few seconds after the code shows up.
+  // The demo "authorizes" a few seconds after the sign-in starts.
   useEffect(() => {
     if (!pending || pending.kind === 'choose') return;
     const timer = window.setTimeout(() => {
@@ -68,16 +120,13 @@ function ServiceCard({ service }: { service: (typeof SERVICES)[number] }) {
         );
         toast({ text: fill(a.toastReauthed, { login: pending.login ?? '' }) });
       } else {
-        const login = service.id === 'copilot' ? 'mona' : service.id === 'chatgpt' ? 'me@example.com' : 'grok-dev';
         setAccounts((current) => [
-          ...current,
+          ...current.filter((account) => account.login !== NEW_ACCOUNT[service.id].login),
           {
-            login,
-            host: service.id === 'copilot' ? 'github.com' : undefined,
+            ...NEW_ACCOUNT[service.id],
             signedIn: { zh: '今天', en: 'today', ja: '今日' },
-            usedBy: 0,
-            isDefault: current.length === 0,
-            quota: service.id === 'chatgpt' ? [{ tier: 'fiveHour', left: 100 }, { tier: 'weekly', left: 100 }] : service.id === 'copilot' ? [{ tier: 'premium', left: 100 }] : [{ tier: 'weekly', left: 100 }],
+            // Claude has no default account; the other groups' first account becomes it.
+            isDefault: service.id !== 'claude' && current.length === 0,
             checkedMinutesAgo: 0,
           },
         ]);
@@ -88,27 +137,26 @@ function ServiceCard({ service }: { service: (typeof SERVICES)[number] }) {
     return () => window.clearTimeout(timer);
   }, [pending, service, a, toast]);
 
-  const startAdd = () => setPending(service.id === 'copilot' ? { kind: 'choose' } : { kind: 'add' });
+  const startAdd = () => setPending(service.chooser ? { kind: 'choose' } : { kind: 'add' });
+
+  const setDefault = (login: string) => {
+    setAccounts((current) => current.map((other) => ({ ...other, isDefault: other.login === login })));
+    if (service.id === 'agy') toast({ text: a.agySwitched });
+  };
 
   return (
     <section className="rounded-[10px] border border-border bg-[var(--app-surface)]">
       <div className="flex h-[52px] items-center gap-3 pe-2.5 ps-4">
         <span className="flex h-7 w-7 items-center justify-center">
-          <InlineSvgIcon svg={service.icon} label={service.name} color="currentColor" className="h-5 w-5" />
+          <ServiceIcon service={service} />
         </span>
-        <div className="flex min-w-0 items-center gap-0.5">
+        <div className="flex min-w-0 flex-1 items-center gap-0.5">
           <h4 className="truncate text-sm font-semibold text-foreground">{service.name}</h4>
           <HelpTip title={fill(a.groupHelpTitle, { service: service.name })} body={help} />
         </div>
-        <span className="flex-1" />
-        {accounts.length > 0 && (
-          <Btn compact icon={Plus} className="pe-3 ps-2.5" onClick={startAdd} hideLabelOnMobile>
-            {a.addAccount}
-          </Btn>
-        )}
-        {accounts.length > 1 && (
-          <MoreMenu label={t.demo.window.more} width="w-[168px]" items={[{ label: a.removeAll, danger: true, onSelect: () => setAccounts([]) }]} />
-        )}
+        <Btn compact icon={Plus} className="pe-3 ps-2.5" onClick={() => !pending && startAdd()} hideLabelOnMobile>
+          {a.addAccount}
+        </Btn>
       </div>
 
       {accounts.map((account) => (
@@ -116,22 +164,22 @@ function ServiceCard({ service }: { service: (typeof SERVICES)[number] }) {
           key={account.login}
           service={service.id}
           account={account}
-          onSetDefault={() => setAccounts((current) => current.map((other) => ({ ...other, isDefault: other.login === account.login })))}
+          onSetDefault={() => setDefault(account.login)}
           onReauth={() => setPending({ kind: 'reauth', login: account.login })}
           onRemove={() => setAccounts((current) => current.filter((other) => other.login !== account.login))}
         />
       ))}
 
-      {accounts.length === 0 && !pending && (
-        <div className="flex items-center gap-4 border-t border-border py-3.5 pe-3 ps-4">
-          <span className="flex-1 text-xs text-[var(--app-fg2)]">{fill(a.empty, { service: service.name })}</span>
-          <Btn compact onClick={startAdd}>
-            {{ copilot: a.loginWithGitHub, chatgpt: a.loginWithChatGPT, xai: a.loginWithXai }[service.id]}
-          </Btn>
-        </div>
+      {accounts.length === 0 && (
+        <div className="border-t border-border py-3.5 pe-3 ps-4 text-xs text-[var(--app-fg2)]">{emptyText}</div>
       )}
 
-      {pending?.kind === 'choose' && <CopilotChooser onCancel={() => setPending(null)} onLogin={() => setPending({ kind: 'add' })} />}
+      {pending?.kind === 'choose' &&
+        (service.chooser === 'kimi' ? (
+          <KimiChooser onCancel={() => setPending(null)} onLogin={() => setPending({ kind: 'add' })} />
+        ) : (
+          <CopilotChooser onCancel={() => setPending(null)} onLogin={() => setPending({ kind: 'add' })} />
+        ))}
 
       {pending && pending.kind !== 'choose' && (
         <div className="mx-3 mb-3 flex flex-col gap-2 rounded-lg bg-[var(--app-subtle)] px-3.5 py-3">
@@ -140,23 +188,32 @@ function ServiceCard({ service }: { service: (typeof SERVICES)[number] }) {
             <span className="min-w-0 flex-1 truncate text-[13px] font-medium">
               {pending.kind === 'reauth'
                 ? fill(a.pendingReauth, { login: pending.login ?? '' })
-                : accounts.length === 0
-                  ? fill(a.pendingLogin, { service: service.name })
-                  : fill(a.pendingAdd, { service: service.name })}
+                : fill(a.pendingAdd, { service: service.name })}
             </span>
             <Btn compact onClick={() => setPending(null)}>
               {p.common.cancel}
             </Btn>
           </div>
-          <div className="flex flex-wrap items-center gap-2 text-[13px]">
-            <span className="text-[var(--app-fg2)]">{a.enterCode}</span>
-            <span className="inline-flex h-7 items-center rounded-md border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-2.5 font-mono text-[15px] tracking-[1px]">
-              8F2K-4QXM
-            </span>
-            <IconBtn icon={Copy} label={a.copyCode} onClick={() => toast({ text: a.codeCopied })} />
-            <IconBtn icon={ExternalLink} label={a.openPage} />
-          </div>
-          <p className="text-xs text-[var(--app-fg2)]">{fill(a.pendingNote, { service: service.name })}</p>
+          {service.login === 'browser' ? (
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--app-fg2)]">
+              <span className="min-w-0 flex-1">{fill(a.browserNote, { service: service.name })}</span>
+              <Btn compact variant="quiet" icon={ExternalLink}>
+                {a.reopenPage}
+              </Btn>
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-wrap items-center gap-2 text-[13px]">
+                <span className="text-[var(--app-fg2)]">{a.enterCode}</span>
+                <span className="inline-flex h-7 items-center rounded-md border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-2.5 font-mono text-[15px] tracking-[1px]">
+                  8F2K-4QXM
+                </span>
+                <IconBtn icon={Copy} label={a.copyCode} onClick={() => toast({ text: a.codeCopied })} />
+                <IconBtn icon={ExternalLink} label={a.openPage} />
+              </div>
+              <p className="text-xs text-[var(--app-fg2)]">{fill(a.pendingNote, { service: service.name })}</p>
+            </>
+          )}
         </div>
       )}
     </section>
@@ -193,9 +250,23 @@ function AccountRow({
     }, 900);
   };
 
-  const meta = [account.host, fill(a.signedInOn, { date: account.signedIn[language] }), fill(a.usedBy, { count: account.usedBy })]
-    .filter(Boolean)
-    .join(' · ');
+  // Each group words its row the way its section in the app does.
+  const signedIn = account.signedIn[language];
+  const details =
+    service === 'claude'
+      ? [account.plan, fill(a.addedOn, { date: signedIn })]
+      : service === 'kimi'
+        ? [account.region === 'global' ? a.kimiGlobal : a.kimiMainland, account.primary ? a.kimiPrimary : undefined]
+        : service === 'agy'
+          ? [fill(a.addedOn, { date: signedIn })]
+          : [account.host, fill(a.signedInOn, { date: signedIn }), fill(a.usedBy, { count: account.usedBy ?? 0 })];
+  const meta = details.filter(Boolean).join(' · ');
+  const defaultLabel = service === 'kimi' ? a.kimiCurrent : service === 'agy' ? a.agyCurrent : a.default;
+  const setDefaultLabel = service === 'kimi' ? a.kimiUseAccount : service === 'agy' ? a.agySwitchTo : a.setDefault;
+  // Claude has no default account; Copilot can't sign in again; Claude only offers it once expired.
+  const canSetDefault = service !== 'claude' && !account.isDefault && !account.needsReauth;
+  const canReauth = service !== 'copilot' && (service !== 'claude' || account.needsReauth);
+  const removeLabel = service === 'kimi' && account.primary ? a.kimiDismiss : a.removeAccount;
 
   return (
     <div className="flex min-h-[56px] items-center gap-3 border-t border-border py-2 pe-2.5 ps-4">
@@ -205,36 +276,36 @@ function AccountRow({
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex min-w-0 items-center gap-1.5">
           <span className="truncate text-[13px] font-medium text-foreground">{account.login}</span>
-          {account.isDefault && <Pill>{a.default}</Pill>}
+          {account.isDefault && <Pill>{defaultLabel}</Pill>}
           {account.needsReauth && <Pill tone="danger">{a.needsReauth}</Pill>}
         </div>
         <span className="truncate text-xs text-[var(--app-fg2)]">{account.needsReauth ? a.xaiReauthNote : meta}</span>
       </div>
 
       {account.needsReauth ? (
-        <Btn compact onClick={onReauth} className="hidden sm:inline-flex">
-          {a.reauth}
-        </Btn>
+        canReauth && (
+          <Btn compact onClick={onReauth} className="hidden sm:inline-flex">
+            {a.reauth}
+          </Btn>
+        )
       ) : (
         <>
           <div className="hidden w-[212px] shrink-0 flex-col gap-0.5 md:flex">
-            {account.quota.map((quota) => {
-              const label = quota.tier === 'premium' ? a.premium : quota.tier === 'fiveHour' ? a.fiveHour : a.weekly;
-              return (
-                <div key={quota.tier} className="flex h-[18px] items-center gap-2 text-xs">
-                  <span className="min-w-[52px] text-[var(--app-fg2)]">{label}</span>
-                  <span className="relative h-1 flex-1 rounded-full bg-[var(--app-chart-grid)]">
-                    <span
-                      className={cn('absolute inset-y-0 start-0 rounded-full', QUOTA_TONE_FILL[quotaTone(quota.left)])}
-                      style={{ width: `${quota.left}%` }}
-                    />
-                  </span>
-                  <span className={cn('w-14 text-end tabular-nums', QUOTA_TONE_TEXT[quotaTone(quota.left)])}>
-                    {quota.left === 0 ? a.usedUp : fill(a.quotaLeft, { value: quota.left })}
-                  </span>
-                </div>
-              );
-            })}
+            {account.noSubscription && <span className="text-end text-xs text-[var(--app-fg2)]">{a.kimiNoSubscription}</span>}
+            {account.quota.map((quota) => (
+              <div key={quota.tier} className="flex h-[18px] items-center gap-2 text-xs">
+                <span className="min-w-[52px] shrink-0 whitespace-nowrap text-[var(--app-fg2)]">{a[quota.tier]}</span>
+                <span className="relative h-1 min-w-[24px] flex-1 rounded-full bg-[var(--app-chart-grid)]">
+                  <span
+                    className={cn('absolute inset-y-0 start-0 rounded-full', QUOTA_TONE_FILL[quotaTone(quota.left)])}
+                    style={{ width: `${quota.left}%` }}
+                  />
+                </span>
+                <span className={cn('min-w-14 shrink-0 whitespace-nowrap text-end tabular-nums', QUOTA_TONE_TEXT[quotaTone(quota.left)])}>
+                  {quota.left === 0 ? a.usedUp : fill(a.quotaLeft, { value: quota.left })}
+                </span>
+              </div>
+            ))}
             {account.resetCredits && <ResetCreditsRow groups={account.resetCredits} />}
             {account.credits && <CreditsRow balance={account.credits} />}
           </div>
@@ -256,13 +327,46 @@ function AccountRow({
 
       <MoreMenu
         label={t.demo.window.more}
-        width="w-[160px]"
+        width="w-[176px]"
         items={[
-          ...(!account.isDefault && !account.needsReauth ? [{ label: a.setDefault, onSelect: onSetDefault }] : []),
-          ...(service !== 'copilot' ? [{ label: a.reauth, onSelect: onReauth }] : []),
-          { label: a.removeAccount, danger: true, onSelect: onRemove },
+          ...(canSetDefault ? [{ label: setDefaultLabel, onSelect: onSetDefault }] : []),
+          ...(canReauth ? [{ label: a.reauth, onSelect: onReauth }] : []),
+          { label: removeLabel, danger: true, onSelect: onRemove },
         ]}
       />
+    </div>
+  );
+}
+
+/** Kimi asks for the sign-in region first (KimiAccountLogin). */
+function KimiChooser({ onCancel, onLogin }: { onCancel: () => void; onLogin: () => void }) {
+  const { t } = useLanguage();
+  const p = t.demo.window.pages;
+  const a = p.auth;
+  const [region, setRegion] = useState<'mainland-cn' | 'global'>('mainland-cn');
+  return (
+    <div className="mx-3 mb-3 flex flex-col gap-2.5 rounded-lg border border-border px-3.5 py-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-[13px] text-[var(--app-fg2)]">{a.kimiRegion}</span>
+        <Segmented
+          small
+          layoutId="demo-kimi-region"
+          value={region}
+          onChange={setRegion}
+          items={[
+            { id: 'mainland-cn', label: a.kimiMainland },
+            { id: 'global', label: a.kimiGlobal },
+          ]}
+        />
+      </div>
+      <div className="flex justify-end gap-2">
+        <Btn compact onClick={onCancel}>
+          {p.common.cancel}
+        </Btn>
+        <Btn compact variant="solid" onClick={onLogin}>
+          {a.kimiSignIn}
+        </Btn>
+      </div>
     </div>
   );
 }

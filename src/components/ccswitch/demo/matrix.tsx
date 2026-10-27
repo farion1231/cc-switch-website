@@ -1,13 +1,16 @@
 import { useRef, useState } from 'react';
-import { Check } from 'lucide-react';
+import { BookOpen, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import { AppGlyph } from './AppGlyph';
 import { fill, type DemoApp } from './apps';
 import { useHoverTip } from './hoverTipContext';
-import { Btn, Floating } from './parts';
+import { Btn, Floating, HelpTip } from './parts';
 
 /* The app-column matrix shared by MCP and Skills (cc-switch src/components/mcp/AppMatrix.tsx). */
+
+/** Oh My Pi also discovers MCP servers and skills from other agents' folders (cc-switch ompDiscoveryColumnNote). */
+const OMP_DISCOVERY_DOCS_URL = 'https://github.com/can1357/oh-my-pi/blob/main/docs/context-files.md#disabling-discovery-providers';
 
 export function MatrixCell({
   on,
@@ -124,6 +127,7 @@ export function MatrixColumnHeader({
           <div className="flex items-center gap-2">
             <AppGlyph app={app} size={16} badgeClassName="border-[var(--app-surface)] bg-[var(--app-surface)]" />
             <span className="text-[13px] font-semibold">{app.label}</span>
+            {app.id === 'omp' && <HelpTip title={m.ompTitle} body={m.ompHelp} />}
           </div>
           <p className="text-xs text-[var(--app-fg2)]">{fill(m.popCount, { on, total, noun })}</p>
           <div className="flex gap-2">
@@ -159,6 +163,17 @@ export function MatrixColumnHeader({
             >
               {extraLink.label}
             </button>
+          )}
+          {app.id === 'omp' && (
+            <a
+              href={OMP_DISCOVERY_DOCS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-start gap-1 self-start text-xs text-[var(--app-fg2)] underline-offset-2 hover:text-foreground hover:underline"
+            >
+              <BookOpen className="mt-0.5 h-3 w-3 shrink-0" strokeWidth={1.75} />
+              {m.ompDocs}
+            </a>
           )}
           <p className="text-xs text-[var(--app-fg3)]">{scope}</p>
         </div>

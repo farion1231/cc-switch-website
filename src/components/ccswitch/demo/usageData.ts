@@ -55,8 +55,20 @@ export function bucketUsage(app: AppId, bucket: Bucket): Totals {
     tokens: base.tokens * share,
     requests: base.requests * share * (0.85 + seeded(day * 31 + appSeed + 5) * 0.3),
     cost: base.cost * share * (0.85 + seeded(day * 37 + appSeed + 9) * 0.3),
-    hit: base.hit,
+    // The hit rate wobbles a little from bar to bar, so the hit-rate chart isn't flat.
+    hit: Math.min(99.5, base.hit + (seeded(day * 41 + (bucket.hourly ? bucket.date.getHours() : 0) + appSeed) - 0.5) * 6),
   };
+}
+
+/**
+ * The four parts of the token total for the "More metrics" row: output is a small slice, and the
+ * hit rate is cache hits over everything sent in (fresh input + cache writes + cache hits).
+ */
+export function tokenParts(totals: Totals) {
+  const output = totals.tokens * 0.012;
+  const cacheRead = (totals.tokens - output) * (totals.hit / 100);
+  const rest = totals.tokens - output - cacheRead;
+  return { freshInput: rest * 0.35, output, cacheWrite: rest * 0.65, cacheRead };
 }
 
 export function sumTotals(items: Totals[], weightedHit: boolean): Totals {
