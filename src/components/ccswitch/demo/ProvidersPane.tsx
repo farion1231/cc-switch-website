@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import type { Provider } from '@/content/providers';
 import { AppGlyph } from './AppGlyph';
-import { blockedFromRouting, fill, type AppMode, type DemoApp } from './apps';
+import { blockedFromRouting, fill, needsRouting, type AppMode, type DemoApp } from './apps';
 import type { AppDemoState } from './state';
 import { DemoProviderCard, type DemoCardProps } from './DemoProviderCard';
 import { useHoverTip } from './hoverTipContext';
@@ -45,8 +45,8 @@ export function ProvidersPane({ app, state, onChange }: ProvidersPaneProps) {
     <div className="flex h-full min-h-0 flex-col">
       <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border px-4 sm:px-6">
         <AppGlyph app={app} size={22} badgeClassName="border-background bg-background" />
-        <h3 className="truncate text-lg font-semibold text-foreground">{app.label}</h3>
-        <span className="hidden text-sm text-muted-foreground sm:inline">{w.providers}</span>
+        <h3 className="shrink-0 truncate text-lg font-semibold text-foreground">{app.label}</h3>
+        {app.kind === 'switch' && <ModeBadge app={app} state={state} />}
         <span className="flex-1" />
         <button
           type="button"
@@ -68,8 +68,8 @@ export function ProvidersPane({ app, state, onChange }: ProvidersPaneProps) {
 
       {app.kind === 'switch' ? (
         <SwitchModeBody app={app} state={state} onChange={onChange} />
-      ) : app.kind === 'desktop' ? (
-        <DesktopBody app={app} state={state} onChange={onChange} />
+      ) : app.kind === 'launch' ? (
+        <LaunchBody app={app} />
       ) : (
         <AdditiveBody app={app} state={state} onChange={onChange} />
       )}
@@ -87,19 +87,10 @@ function SwitchModeBody({ app, state, onChange }: ProvidersPaneProps) {
   const set = (patch: Partial<AppDemoState>) => onChange({ ...state, ...patch });
 
   const stackNames = Object.keys(state.stack);
-  const stackModels = Object.values(state.stack).reduce((sum, count) => sum + count, 0);
-
-  const status =
-    view !== active
-      ? null
-      : active === 'direct'
-        ? { lead: w.status.directLead, value: state.direct }
-        : active === 'route'
-          ? { lead: w.status.routeLead, value: `→ ${state.route}` }
-          : {
-              lead: w.status.stackLead,
-              value: fill(w.status.stackValue, { name: state.stackDefault, count: stackNames.length, models: stackModels }),
-            };
+  const routeReason = (provider: Provider) =>
+    needsRouting(app, provider)
+      ? fill(w.reason.needsRoute, { reason: app.id === 'claude-desktop' ? w.reason.desktopMapping : w.reason.openaiChat })
+      : undefined;
 
   const activate = () => {
     if (view === 'direct') set({ active: 'direct' });
@@ -115,20 +106,30 @@ function SwitchModeBody({ app, state, onChange }: ProvidersPaneProps) {
       <CardList>
         {app.providers.map((provider) => {
           const isPointer = provider.name === state.direct;
-          const props: DemoCardProps = { provider, chips: officialChip(provider, w.chip.official) };
+          const reason = routeReason(provider);
+          const props: DemoCardProps = {
+            provider,
+            chips: [...officialChip(provider, w.chip.official), ...(reason ? [{ label: w.chip.needsRoute }] : [])],
+          };
           if (active === 'direct') {
             if (isPointer) {
               props.current = 'direct';
               props.status = { label: w.cardStatus.inUse, tone: 'direct' };
             } else {
-              props.button = { key: 'switch', label: w.action.switch, onClick: () => set({ direct: provider.name }) };
+              props.button = {
+                key: 'switch',
+                label: w.action.switch,
+                onClick: () => set({ direct: provider.name }),
+                disabledReason: reason,
+              };
             }
           } else {
-            if (isPointer) props.chips = [...(props.chips ?? []), { label: w.chip.direct }];
+            if (isPointer) props.chips = [...(props.chips ?? []), { label: w.chip.directWhenDirect }];
             props.button = {
               key: 'exitAndUse',
               label: w.action.exitAndUse,
               onClick: () => set({ active: 'direct', view: 'direct', direct: provider.name }),
+              disabledReason: reason,
             };
           }
           return <DemoProviderCard key={provider.name} {...props} />;
@@ -145,7 +146,6 @@ function SwitchModeBody({ app, state, onChange }: ProvidersPaneProps) {
             props.current = 'route';
             props.status = { label: w.cardStatus.routing, tone: 'route' };
           } else if (active === 'route') {
-            if (provider.name === state.direct) props.chips = [...(props.chips ?? []), { label: w.chip.direct }];
             props.button = {
               key: 'routeHere',
               label: w.action.routeHere,
@@ -172,14 +172,18 @@ function SwitchModeBody({ app, state, onChange }: ProvidersPaneProps) {
 
     body = (
       <>
-        <SectionTitle title={w.section.stackDefault} help={w.modeHelp.stack} />
+        <SectionTitle title={live ? w.section.stackDefault : w.section.stackDefaultAfterSwitch} help={w.modeHelp.stack} />
         <CardList>
           {defaultProvider && (
             <DemoProviderCard
               provider={defaultProvider}
               current={live ? 'stack' : undefined}
               chips={[{ label: w.chip.default, tone: 'stack' }, ...officialChip(defaultProvider, w.chip.official)]}
-              status={live ? { label: w.cardStatus.currentDefault, tone: 'stack' } : undefined}
+              status={
+                live
+                  ? { label: w.cardStatus.currentDefault, tone: 'stack' }
+                  : { label: w.cardStatus.defaultAfterSwitch, tone: 'muted' }
+              }
             />
           )}
         </CardList>
@@ -207,7 +211,12 @@ function SwitchModeBody({ app, state, onChange }: ProvidersPaneProps) {
                     key: 'add',
                     label: w.action.add,
                     onClick: () => set({ stack: { ...state.stack, [provider.name]: 2 } }),
-                    disabledReason: provider.official ? w.reason.officialStack : undefined,
+                    // Claude's subscriptions can't be in Aggregation at all; Codex's can only be the default.
+                    disabledReason: blockedFromRouting(app.id, provider)
+                      ? w.reason.noStack
+                      : provider.official
+                        ? w.reason.officialStack
+                        : undefined,
                   }}
                 />
               ))}
@@ -260,12 +269,6 @@ function SwitchModeBody({ app, state, onChange }: ProvidersPaneProps) {
         >
           <CircleHelp className="h-4 w-4" strokeWidth={1.75} />
         </button>
-        {status && (
-          <div className="hidden min-w-0 flex-1 items-center gap-1 text-[13px] text-muted-foreground lg:flex">
-            <span className="truncate">{status.lead}</span>
-            <span className="max-w-full shrink-0 truncate">{status.value}</span>
-          </div>
-        )}
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-3 sm:px-6">
@@ -292,59 +295,58 @@ function SwitchModeBody({ app, state, onChange }: ProvidersPaneProps) {
   );
 }
 
-function DesktopBody({ app, state, onChange }: ProvidersPaneProps) {
+/** The mode in effect, next to the title; the full sentence is in the hover tip (cc-switch SwitchModePanel). */
+function ModeBadge({ app, state }: { app: DemoApp; state: AppDemoState }) {
   const { t } = useLanguage();
   const { tip } = useHoverTip();
   const w = t.demo.window;
-  const isMapping = (name: string) => app.mapping?.includes(name) ?? false;
-  const currentMode = isMapping(state.direct) ? 'route' : 'direct';
+  const { active } = state;
+  const others = Object.keys(state.stack);
+  const models = Object.values(state.stack).reduce((sum, count) => sum + count, 0);
+  const sentence =
+    active === 'direct'
+      ? `${w.status.directLead} ${state.direct}`
+      : active === 'route'
+        ? `${w.status.routeLead} → ${state.route}`
+        : `${w.status.stackLead} ${fill(w.status.stackValue, { name: state.stackDefault, count: others.length, models })}`;
+  const name = active === 'direct' ? state.direct : active === 'route' ? state.route : state.stackDefault;
 
   return (
-    <>
-      <div className="flex min-h-12 shrink-0 items-center gap-2 px-4 pt-3 text-[13px] text-muted-foreground sm:px-6">
-        <span className={cn('h-1.5 w-1.5 rounded-full', MODE_DOT[currentMode])} />
-        <span className="truncate">
-          {fill(w.status.desktopCurrent, {
-            name: state.direct,
-            mode: isMapping(state.direct) ? w.modes.mapping : w.modes.direct,
-          })}
-        </span>
-        <button
-          type="button"
-          {...tip(`${w.modeHelp.title}\n${w.modeHelp.direct}\n${w.modes.mapping}: ${w.modeHelp.route}`)}
-          aria-label={w.modeHelp.title}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <CircleHelp className="h-4 w-4" strokeWidth={1.75} />
-        </button>
-      </div>
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-3 sm:px-6">
-        <CardList>
-          {app.providers.map((provider) => {
-            const current = provider.name === state.direct;
-            const mapped = isMapping(provider.name);
-            return (
-              <DemoProviderCard
-                key={provider.name}
-                provider={provider}
-                current={current ? (mapped ? 'route' : 'direct') : undefined}
-                chips={
-                  provider.official
-                    ? [{ label: w.chip.official }]
-                    : [{ label: mapped ? w.chip.mapping : w.chip.direct }]
-                }
-                status={current ? { label: w.cardStatus.inUse, tone: mapped ? 'route' : 'direct' } : undefined}
-                button={
-                  current
-                    ? undefined
-                    : { key: 'switch', label: w.action.switch, onClick: () => onChange({ ...state, direct: provider.name }) }
-                }
-              />
-            );
-          })}
-        </CardList>
-      </div>
-    </>
+    <span
+      key={app.id}
+      tabIndex={0}
+      {...tip(sentence)}
+      aria-label={sentence}
+      className="hidden min-w-0 items-center gap-1 rounded-full border border-border bg-[var(--app-surface)] px-2.5 py-1 text-[13px] sm:inline-flex"
+    >
+      <span aria-hidden="true" className={cn('me-1 h-1.5 w-1.5 shrink-0 rounded-full', MODE_DOT[active])} />
+      <span className="shrink-0 text-[var(--app-fg2)]">{w.modes[active]}</span>
+      <span aria-hidden="true" className="text-[var(--app-fg3)]">
+        ·
+      </span>
+      <span className="min-w-0 truncate font-medium text-foreground">{name}</span>
+    </span>
+  );
+}
+
+/** Antigravity: a key only reaches the agy that CC Switch starts, so every card just opens a terminal. */
+function LaunchBody({ app }: { app: DemoApp }) {
+  const { t } = useLanguage();
+  const w = t.demo.window;
+
+  return (
+    <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-4 sm:px-6">
+      <CardList>
+        {app.providers.map((provider) => (
+          <DemoProviderCard
+            key={provider.name}
+            provider={provider}
+            chips={officialChip(provider, w.chip.official)}
+            button={{ key: 'openTerminal', label: w.action.openTerminal, onClick: () => undefined }}
+          />
+        ))}
+      </CardList>
+    </div>
   );
 }
 
@@ -365,6 +367,7 @@ function AdditiveBody({ app, state, onChange }: ProvidersPaneProps) {
           <DemoProviderCard
             key={provider.name}
             provider={provider}
+            chips={officialChip(provider, w.chip.official)}
             button={{
               key: 'remove',
               label: w.action.remove,

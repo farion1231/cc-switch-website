@@ -5,6 +5,7 @@ import { useLanguage } from '@/i18n/useLanguage';
 import { AppGlyph } from './AppGlyph';
 import { demoAppById, demoApps, fill, type AppId } from './apps';
 import { useHoverTip } from './hoverTipContext';
+import { useShell } from './shellContext';
 import { UsageRangePicker } from './UsageRangePicker';
 import { APP_TOTALS, SERIES_APPS, bucketUsage, compact, niceMax, seeded, sumTotals, usd } from './usageData';
 import { LOCALE, rangeBuckets, useRangeLabel, type Bucket, type RangeSelection } from './usageRange';
@@ -42,6 +43,7 @@ const LOGS: LogRow[] = [
 export function UsagePane() {
   const { t, language } = useLanguage();
   const { tip } = useHoverTip();
+  const { visibleApps } = useShell();
   const u = t.demo.window.usage;
   const locale = LOCALE[language];
   const [metric, setMetric] = useState<Metric>('tokens');
@@ -50,7 +52,8 @@ export function UsagePane() {
   const [range, setRange] = useState<RangeSelection>({ preset: 'all' });
   const rangeLabel = useRangeLabel(range);
   const [tab, setTab] = useState<keyof typeof u.tabs>('logs');
-  const filterApps = demoApps.filter((app) => app.id !== 'claude-desktop' && app.id !== 'openclaw');
+  // Only apps the usage page tracks, and of those only the ones shown on the Apps page.
+  const filterApps = demoApps.filter((app) => app.id in APP_TOTALS && visibleApps.includes(app.id));
 
   const levels = useMemo(() => {
     const seedBase = metric === 'tokens' ? 1 : metric === 'requests' ? 2 : 3;

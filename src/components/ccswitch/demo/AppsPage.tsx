@@ -46,6 +46,103 @@ export function AppsPage() {
   }, [busy]);
 
   const visibleCount = visibleApps.length;
+  // Installed first, as in the app; Claude Desktop counts as installed once it's hooked up.
+  const isInstalled = (tool: SampleTool) => tool.app === 'claude-desktop' || Boolean(tool.version);
+  const sections = [
+    { key: 'installed', title: ap.sectionInstalled, rows: tools.filter(isInstalled) },
+    { key: 'notInstalled', title: ap.sectionNotInstalled, rows: tools.filter((tool) => !isInstalled(tool)) },
+  ]
+    .filter((section) => section.rows.length > 0)
+    .map((section) => ({ ...section, title: fill(section.title, { count: section.rows.length }) }));
+
+  const renderRow = (tool: SampleTool) => {
+    const app = demoAppById[tool.app];
+    const visible = visibleApps.includes(tool.app);
+    const isBusy = busy.includes(tool.app);
+    const desktop = tool.app === 'claude-desktop';
+    return (
+      <div key={tool.app} className="px-4 py-3">
+        <div className="flex items-center gap-4">
+          <AppGlyph app={app} size={20} badgeClassName="border-[var(--app-surface)] bg-[var(--app-surface)]" />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <div className="flex min-w-0 items-center gap-1.5 text-sm font-medium text-foreground">
+              <span className="truncate">{app.label}</span>
+              {tool.source && <Pill>{tool.source}</Pill>}
+              {desktop && <HelpTip title={app.label} body={ap.desktopHelp} />}
+            </div>
+            {!desktop && (
+              <div className="mt-0.5 flex min-w-0 items-center gap-2 text-xs text-[var(--app-fg2)]">
+                {tool.path ? (
+                  <span className="truncate font-mono">{tool.path}</span>
+                ) : (
+                  <span className="truncate">{tool.installHint === 'script' ? ap.installHintScript : ap.installHintNpm}</span>
+                )}
+                {tool.conflict && (
+                  <button
+                    type="button"
+                    onClick={() => setOpenConflict((current) => (current === tool.app ? null : tool.app))}
+                    className="inline-flex shrink-0 items-center gap-0.5 font-medium text-[var(--app-warning-text)]"
+                  >
+                    {fill(ap.otherInstalls, { count: 1 })}
+                    <ChevronDown className={cn('h-3 w-3 transition-transform', openConflict === tool.app && 'rotate-180')} />
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="hidden w-[150px] shrink-0 flex-col items-end sm:flex">
+            {desktop ? (
+              <span className="text-xs text-[var(--app-fg2)]">{ap.desktopConnected}</span>
+            ) : isBusy ? (
+              <Loader2 className="h-4 w-4 animate-spin text-[var(--app-fg3)]" />
+            ) : tool.version ? (
+              <>
+                <span className="font-mono text-[13px] font-medium tabular-nums text-foreground">{tool.version}</span>
+                {tool.latest && <span className="text-xs text-[var(--app-fg2)]">{fill(ap.newVersion, { version: tool.latest })}</span>}
+              </>
+            ) : (
+              <span className="text-xs text-[var(--app-fg2)]">{ap.notInstalled}</span>
+            )}
+          </div>
+          <div className="flex w-[88px] shrink-0 justify-end">
+            {!desktop && !isBusy && !tool.version && (
+              <Btn compact icon={Download} onClick={() => setBusy((current) => [...current, tool.app])}>
+                {ap.install}
+              </Btn>
+            )}
+            {!desktop && !isBusy && tool.latest && (
+              <Btn compact icon={ArrowUpCircle} onClick={() => setBusy((current) => [...current, tool.app])}>
+                {ap.update}
+              </Btn>
+            )}
+          </div>
+          <div className="flex w-[56px] shrink-0 justify-end">
+            <DemoSwitch
+              small
+              neutral
+              checked={visible}
+              disabled={visible && visibleCount === 1}
+              label={fill(ap.showInSidebar, { name: app.label })}
+              onChange={(on) => setAppVisible(tool.app, on)}
+            />
+          </div>
+        </div>
+        {tool.conflict && openConflict === tool.app && (
+          <div className="ms-9 mt-2 rounded-md bg-[var(--app-warning-soft)] p-2.5 text-xs">
+            <p className="mb-1 font-medium text-[var(--app-warning-text)]">{fill(ap.installsFound, { count: 2 })}</p>
+            <p className="flex gap-2 font-mono text-foreground">
+              <span className="truncate">{tool.path}</span>
+              <span className="text-[var(--app-fg2)]">{tool.version}</span>
+            </p>
+            <p className="flex gap-2 font-mono text-foreground">
+              <span className="truncate">{tool.conflict.path}</span>
+              <span className="text-[var(--app-fg2)]">{tool.conflict.version}</span>
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -72,7 +169,7 @@ export function AppsPage() {
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-10 pt-4 sm:px-6">
         <div className="flex h-8 items-center gap-4 px-4 text-xs font-medium text-[var(--app-fg2)]">
-          <span className="flex-1">{ap.columnApp}</span>
+          <span className="flex-1">{sections[0]?.title}</span>
           <span className="hidden w-[150px] text-end sm:block">{ap.columnVersion}</span>
           <span className="w-[88px]" />
           <span className="flex w-[56px] items-center justify-end gap-0.5">
@@ -80,96 +177,16 @@ export function AppsPage() {
             <HelpTip title={ap.columnVisible} body={ap.visibleHelp} />
           </span>
         </div>
-        <div className="divide-y divide-border overflow-hidden rounded-[10px] border border-border bg-[var(--app-surface)]">
-          {tools.map((tool) => {
-            const app = demoAppById[tool.app];
-            const visible = visibleApps.includes(tool.app);
-            const isBusy = busy.includes(tool.app);
-            const desktop = tool.app === 'claude-desktop';
-            return (
-              <div key={tool.app} className="px-4 py-3">
-                <div className="flex items-center gap-4">
-                  <AppGlyph app={app} size={20} badgeClassName="border-[var(--app-surface)] bg-[var(--app-surface)]" />
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <div className="flex min-w-0 items-center gap-1.5 text-sm font-medium text-foreground">
-                      <span className="truncate">{app.label}</span>
-                      {tool.source && <Pill>{tool.source}</Pill>}
-                      {desktop && <HelpTip title={app.label} body={ap.desktopHelp} />}
-                    </div>
-                    {!desktop && (
-                      <div className="mt-0.5 flex min-w-0 items-center gap-2 text-xs text-[var(--app-fg2)]">
-                        {tool.path ? (
-                          <span className="truncate font-mono">{tool.path}</span>
-                        ) : (
-                          <span className="truncate">{tool.installHint === 'script' ? ap.installHintScript : ap.installHintNpm}</span>
-                        )}
-                        {tool.conflict && (
-                          <button
-                            type="button"
-                            onClick={() => setOpenConflict((current) => (current === tool.app ? null : tool.app))}
-                            className="inline-flex shrink-0 items-center gap-0.5 font-medium text-[var(--app-warning-text)]"
-                          >
-                            {fill(ap.otherInstalls, { count: 1 })}
-                            <ChevronDown className={cn('h-3 w-3 transition-transform', openConflict === tool.app && 'rotate-180')} />
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  <div className="hidden w-[150px] shrink-0 flex-col items-end sm:flex">
-                    {desktop ? (
-                      <span className="text-xs text-[var(--app-fg2)]">{ap.desktopConnected}</span>
-                    ) : isBusy ? (
-                      <Loader2 className="h-4 w-4 animate-spin text-[var(--app-fg3)]" />
-                    ) : tool.version ? (
-                      <>
-                        <span className="font-mono text-[13px] font-medium tabular-nums text-foreground">{tool.version}</span>
-                        {tool.latest && <span className="text-xs text-[var(--app-fg2)]">{fill(ap.newVersion, { version: tool.latest })}</span>}
-                      </>
-                    ) : (
-                      <span className="text-xs text-[var(--app-fg2)]">{ap.notInstalled}</span>
-                    )}
-                  </div>
-                  <div className="flex w-[88px] shrink-0 justify-end">
-                    {!desktop && !isBusy && !tool.version && (
-                      <Btn compact icon={Download} onClick={() => setBusy((current) => [...current, tool.app])}>
-                        {ap.install}
-                      </Btn>
-                    )}
-                    {!desktop && !isBusy && tool.latest && (
-                      <Btn compact icon={ArrowUpCircle} onClick={() => setBusy((current) => [...current, tool.app])}>
-                        {ap.update}
-                      </Btn>
-                    )}
-                  </div>
-                  <div className="flex w-[56px] shrink-0 justify-end">
-                    <DemoSwitch
-                      small
-                      neutral
-                      checked={visible}
-                      disabled={visible && visibleCount === 1}
-                      label={fill(ap.showInSidebar, { name: app.label })}
-                      onChange={(on) => setAppVisible(tool.app, on)}
-                    />
-                  </div>
-                </div>
-                {tool.conflict && openConflict === tool.app && (
-                  <div className="ms-9 mt-2 rounded-md bg-[var(--app-warning-soft)] p-2.5 text-xs">
-                    <p className="mb-1 font-medium text-[var(--app-warning-text)]">{fill(ap.installsFound, { count: 2 })}</p>
-                    <p className="flex gap-2 font-mono text-foreground">
-                      <span className="truncate">{tool.path}</span>
-                      <span className="text-[var(--app-fg2)]">{tool.version}</span>
-                    </p>
-                    <p className="flex gap-2 font-mono text-foreground">
-                      <span className="truncate">{tool.conflict.path}</span>
-                      <span className="text-[var(--app-fg2)]">{tool.conflict.version}</span>
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        {sections.map((section, index) => (
+          <section key={section.key} aria-label={section.title}>
+            {index > 0 && (
+              <div className="mt-4 flex h-8 items-center px-4 text-xs font-medium text-[var(--app-fg2)]">{section.title}</div>
+            )}
+            <div className="divide-y divide-border overflow-hidden rounded-[10px] border border-border bg-[var(--app-surface)]">
+              {section.rows.map(renderRow)}
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );

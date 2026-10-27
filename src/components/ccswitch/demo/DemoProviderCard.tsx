@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Minus, MoreHorizontal, Pencil, Play, Plug, Plus, Power, Route, type LucideIcon } from 'lucide-react';
+import { Minus, MoreHorizontal, Pencil, Play, Plug, Plus, Power, Route, SquareTerminal, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import type { Provider } from '@/content/providers';
@@ -7,8 +7,9 @@ import { resolveSponsorUrl } from '@/content/sponsors';
 import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 import { fill, type AppMode } from './apps';
 import { useHoverTip } from './hoverTipContext';
+import { QUOTA_TONE_TEXT, quotaTone, type QuotaTone } from './quotaTone';
 
-export type CardButtonKey = 'switch' | 'exitAndUse' | 'routeHere' | 'add' | 'remove' | 'enable';
+export type CardButtonKey = 'switch' | 'exitAndUse' | 'routeHere' | 'add' | 'remove' | 'enable' | 'openTerminal';
 
 const BUTTON_ICON: Record<CardButtonKey, LucideIcon> = {
   switch: Play,
@@ -17,6 +18,7 @@ const BUTTON_ICON: Record<CardButtonKey, LucideIcon> = {
   add: Plus,
   remove: Minus,
   enable: Power,
+  openTerminal: SquareTerminal,
 };
 
 /** Mode colors only mark the current card, as in the app. */
@@ -62,7 +64,12 @@ export function DemoProviderCard({ provider, current, chips = [], status, button
         current ? TONE[current].card : 'border-border hover:border-foreground/20',
       )}
     >
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background">
+      <div
+        className={cn(
+          'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border',
+          provider.logoOnWhite ? 'bg-white' : 'bg-background',
+        )}
+      >
         <ProviderLogo provider={provider} />
       </div>
 
@@ -153,41 +160,60 @@ function QuotaSummary({ provider }: { provider: Provider }) {
   const { t } = useLanguage();
   const quota = t.demo.window.quota;
 
-  type Line = { key: string; text: string; short: string; low: boolean };
+  type Line = { key: string; label: string; shortLabel: string; value: number; tone: QuotaTone };
   const tiers: Line[] = (provider.quota?.tiers ?? []).map((tier) => {
     const left = Math.max(0, Math.round(100 - tier.utilization));
     const key = TIER_KEY[tier.label as keyof typeof TIER_KEY];
     return {
       key: tier.label,
-      text: fill(quota.tierLeft, { label: key ? quota.tiers[key] : tier.label, value: left }),
-      short: fill(quota.tierShort, { label: key ? quota.shortTiers[key] : tier.label, value: left }),
-      low: left <= 10,
+      label: key ? quota.tiers[key] : tier.label,
+      shortLabel: key ? quota.shortTiers[key] : tier.label,
+      value: left,
+      tone: quotaTone(left),
     };
   });
-  const rows: Line[][] =
-    tiers.length > 2
-      ? [[tiers[0]], tiers.slice(1)]
-      : tiers.length > 0
-        ? tiers.map((line) => [line])
-        : provider.remaining
-          ? [[{ key: 'balance', text: fill(quota.balance, { value: `${provider.remaining} USD` }), short: '', low: false }]]
-          : [];
+  const rows: Line[][] = tiers.length > 2 ? [[tiers[0]], tiers.slice(1)] : tiers.map((line) => [line]);
 
-  if (rows.length === 0) return null;
+  if (rows.length === 0) {
+    if (!provider.remaining) return null;
+    return (
+      <div className="hidden shrink-0 text-right text-[13px] tabular-nums text-muted-foreground md:block">
+        <span className="whitespace-nowrap">{fill(quota.balance, { value: `${provider.remaining} USD` })}</span>
+      </div>
+    );
+  }
+
+  // The tier name stays gray; only the percentage takes the quota color.
+  const render = (template: string, line: Line, label: string) => {
+    // cc-switch labelSp: a tier name ending in a letter or digit gets a space before CJK text ("Pro 剩余").
+    const spaced = /[A-Za-z0-9]$/.test(label) ? template.replace(/\{label\}(?=[^\s{])/, '{label} ') : template;
+    const [before, rest = ''] = fill(spaced, { label }).split('{value}');
+    const percent = rest.startsWith('%');
+    return (
+      <>
+        {before}
+        <span className={QUOTA_TONE_TEXT[line.tone]}>
+          {line.value}
+          {percent && '%'}
+        </span>
+        {percent ? rest.slice(1) : rest}
+      </>
+    );
+  };
 
   return (
     <div className="hidden shrink-0 flex-col items-end gap-0.5 text-right text-[13px] tabular-nums text-muted-foreground md:flex">
       {rows.map((row) =>
         row.length === 1 ? (
-          <span key={row[0].key} className={cn('whitespace-nowrap', row[0].low && 'text-destructive')}>
-            {row[0].text}
+          <span key={row[0].key} className="whitespace-nowrap">
+            {render(quota.tierLeft, row[0], row[0].label)}
           </span>
         ) : (
           <span key={row.map((line) => line.key).join('+')} className="whitespace-nowrap">
             {row.map((line, index) => (
               <span key={line.key}>
                 {index > 0 && ' · '}
-                <span className={cn(line.low && 'text-destructive')}>{line.short}</span>
+                {render(quota.tierShort, line, line.shortLabel)}
               </span>
             ))}
           </span>

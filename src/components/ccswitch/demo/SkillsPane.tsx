@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, ChevronRight, Download, Info, Loader2, Plus, RefreshCw, X } from 'lucide-react';
+import { ArrowUpCircle, ChevronDown, ChevronRight, Download, Info, Loader2, Plus, RefreshCw, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import { demoAppById, fill, type AppId } from './apps';
 import { useHoverTip } from './hoverTipContext';
 import { MatrixCell, MatrixColumnHeader } from './matrix';
-import { Btn, Checkbox, HelpTip, IconBtn, MenuTrigger, MoreMenu, Notice, PaneHeader, Pill, SearchField, Segmented } from './parts';
+import { Btn, Checkbox, Floating, HelpTip, IconBtn, MenuTrigger, MoreMenu, Notice, PaneHeader, Pill, SearchField, Segmented } from './parts';
 import { DISCOVER_SKILLS, INSTALLED_SKILLS, MATRIX_APPS, type SampleSkill } from './samples';
 import { useShell } from './shellContext';
 
@@ -15,6 +15,7 @@ type Status = 'all' | 'updates' | 'none';
 
 const INSTALL_TARGETS: AppId[] = ['claude', 'codex'];
 const UNMANAGED = 3;
+const BACKUP_DIR = '~/.cc-switch/skill-backups';
 
 /** The app's own Skills icon (a scroll), not a lucide one. */
 export function SkillsIcon({ className }: { className?: string }) {
@@ -40,21 +41,37 @@ export function SkillsPane() {
   const [query, setQuery] = useState('');
   const [bannerOpen, setBannerOpen] = useState(true);
   const [checking, setChecking] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; names: string[] } | null>(null);
   const [hoverCol, setHoverCol] = useState<AppId | null>(null);
+  const updateButton = useRef<HTMLSpanElement>(null);
 
+  // Updates found go straight to the confirmation, as in the app; no toast.
   useEffect(() => {
     if (!checking) return;
     const timer = window.setTimeout(() => {
       setChecking(false);
-      const count = skills.filter((skill) => skill.update).length;
-      toast({ text: count > 0 ? fill(sk.updatesFound, { count }) : sk.noUpdates });
+      if (skills.some((skill) => skill.update)) setConfirmOpen(true);
+      else toast({ text: sk.noUpdates });
     }, 1200);
     return () => window.clearTimeout(timer);
   }, [checking, skills, sk, toast]);
 
+  // One Skill at a time, so the button can count "Updating 1/3…".
+  useEffect(() => {
+    if (!progress) return;
+    const timer = window.setTimeout(() => {
+      const name = progress.names[progress.done];
+      setSkills((current) => current.map((skill) => (skill.name === name ? { ...skill, update: false } : skill)));
+      setProgress(progress.done + 1 < progress.names.length ? { ...progress, done: progress.done + 1 } : null);
+    }, 700);
+    return () => window.clearTimeout(timer);
+  }, [progress]);
+
   const columns = MATRIX_APPS.filter((app) => visibleApps.includes(app));
   const appName = (app: AppId) => demoAppById[app].label;
-  const updates = skills.filter((skill) => skill.update).length;
+  const pending = skills.filter((skill) => skill.update);
+  const updates = pending.length;
   const repos = Array.from(new Set(skills.map((skill) => skill.repo).filter((repo): repo is string => Boolean(repo))));
   const q = query.trim().toLowerCase();
 
@@ -180,10 +197,50 @@ export function SkillsPane() {
             {view === 'installed' ? (
               <>
                 <SearchField value={query} onChange={setQuery} placeholder={sk.searchPlaceholder} className="w-[240px] min-w-[140px] shrink" />
-                <Btn variant="quiet" icon={checking ? undefined : RefreshCw} onClick={() => setChecking(true)} className="hidden lg:inline-flex">
-                  {checking && <Loader2 className="me-1.5 inline h-4 w-4 animate-spin" />}
-                  {checking ? sk.checking : sk.checkUpdates}
-                </Btn>
+                {/* With updates known the button is "Update all"; checking again is in the ⋯ menu. */}
+                <span ref={updateButton} className="hidden lg:inline-flex">
+                  {progress ? (
+                    <Btn disabled>
+                      <Loader2 className="me-1.5 inline h-4 w-4 animate-spin" />
+                      {fill(sk.updatingProgress, { done: progress.done + 1, total: progress.names.length })}
+                    </Btn>
+                  ) : updates > 0 && !checking ? (
+                    <Btn icon={ArrowUpCircle} onClick={() => setConfirmOpen(true)}>
+                      {fill(sk.updateAllCount, { count: updates })}
+                    </Btn>
+                  ) : (
+                    <Btn variant="quiet" icon={checking ? undefined : RefreshCw} onClick={() => setChecking(true)}>
+                      {checking && <Loader2 className="me-1.5 inline h-4 w-4 animate-spin" />}
+                      {checking ? sk.checking : sk.checkUpdates}
+                    </Btn>
+                  )}
+                </span>
+                <Floating anchor={updateButton} open={confirmOpen && updates > 0} onClose={() => setConfirmOpen(false)} className="w-[340px] p-4">
+                  <p className="text-[15px] font-semibold text-foreground">{fill(sk.confirmUpdateAll, { count: updates })}</p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--app-fg2)]">{fill(sk.confirmUpdateBody, { path: BACKUP_DIR })}</p>
+                  <ul className="mt-3 max-h-48 divide-y divide-border overflow-y-auto rounded-md border border-border">
+                    {pending.map((skill) => (
+                      <li key={skill.name} className="flex items-baseline gap-2 px-3 py-2 text-[13px]">
+                        <span className="min-w-0 truncate font-medium text-foreground">{skill.name}</span>
+                        {skill.repo && <span className="ms-auto shrink-0 font-mono text-xs text-[var(--app-fg3)]">{skill.repo}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-4 flex justify-end gap-2">
+                    <Btn variant="quiet" onClick={() => setConfirmOpen(false)}>
+                      {p.common.cancel}
+                    </Btn>
+                    <Btn
+                      variant="solid"
+                      onClick={() => {
+                        setConfirmOpen(false);
+                        setProgress({ done: 0, names: pending.map((skill) => skill.name) });
+                      }}
+                    >
+                      {fill(sk.confirmUpdateButton, { count: updates })}
+                    </Btn>
+                  </div>
+                </Floating>
               </>
             ) : (
               <Btn trailingIcon={ChevronDown} className="hidden lg:inline-flex">
@@ -275,11 +332,6 @@ export function SkillsPane() {
                           </Btn>
                         )}
                       />
-                      {status === 'updates' && updates > 0 && (
-                        <Btn compact onClick={() => setSkills((current) => current.map((skill) => ({ ...skill, update: false })))}>
-                          {fill(sk.updateAllCount, { count: updates })}
-                        </Btn>
-                      )}
                     </div>
                   )}
                   {columns.map((app) => (

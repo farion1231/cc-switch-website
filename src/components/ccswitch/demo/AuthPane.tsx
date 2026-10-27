@@ -7,6 +7,7 @@ import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 import { fill } from './apps';
+import { QUOTA_TONE_FILL, QUOTA_TONE_TEXT, quotaTone } from './quotaTone';
 import { Btn, Floating, HelpTip, IconBtn, MoreMenu, PaneHeader, Pill, Segmented } from './parts';
 import { ACCOUNTS, type AuthService, type SampleAccount } from './samples';
 import { useShell } from './shellContext';
@@ -224,14 +225,11 @@ function AccountRow({
                   <span className="min-w-[52px] text-[var(--app-fg2)]">{label}</span>
                   <span className="relative h-1 flex-1 rounded-full bg-[var(--app-chart-grid)]">
                     <span
-                      className={cn(
-                        'absolute inset-y-0 start-0 rounded-full',
-                        quota.left === 0 ? 'bg-[var(--app-danger)]' : quota.left < 10 ? 'bg-[var(--app-warning)]' : 'bg-[var(--app-chart)]',
-                      )}
+                      className={cn('absolute inset-y-0 start-0 rounded-full', QUOTA_TONE_FILL[quotaTone(quota.left)])}
                       style={{ width: `${quota.left}%` }}
                     />
                   </span>
-                  <span className="w-14 text-end tabular-nums text-foreground">
+                  <span className={cn('w-14 text-end tabular-nums', QUOTA_TONE_TEXT[quotaTone(quota.left)])}>
                     {quota.left === 0 ? a.usedUp : fill(a.quotaLeft, { value: quota.left })}
                   </span>
                 </div>

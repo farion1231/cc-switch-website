@@ -6,7 +6,7 @@ Official source repository: https://github.com/farion1231/cc-switch
 
 ccswitch.io is the only official website of CC Switch. Other domains using the CC Switch name are not affiliated with the project.
 
-CC Switch is a free, open source (MIT) desktop app for Windows, macOS, and Linux that manages AI coding tools from one place. It supports 10 tools: Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build (switch mode, one active provider at a time), plus OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code (coexist mode, several providers at once).
+CC Switch is a free, open source (MIT) desktop app for Windows, macOS, and Linux that manages AI coding tools from one place. It supports 13 tools: Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build (switch mode, one active provider at a time); OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, and Oh My Pi (coexist mode, several providers at once); and Antigravity (each provider card opens a terminal running agy with that provider).
 
 Core capabilities:
 

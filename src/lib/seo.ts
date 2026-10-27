@@ -43,8 +43,8 @@ export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'ch
   zh: {
     home: {
       title: 'CC Switch 官方网站 - AI 编程工具统一管理平台',
-      description: 'CC Switch 官方网站。统一管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi 和 MiniMax Code 的供应商配置、本地路由、MCP、Skills、会话与用量统计。',
-      keywords: 'CC Switch 官方网站,AI 编程工具,Claude Code,Claude Desktop,Codex,Gemini CLI,Grok Build,OpenCode,OpenClaw,Hermes Agent,Pi,MiniMax Code,MCP,Skills,本地路由,供应商切换',
+      description: 'CC Switch 官方网站。统一管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Antigravity 和 Oh My Pi 的供应商配置、本地路由、MCP、Skills、会话与用量统计。',
+      keywords: 'CC Switch 官方网站,AI 编程工具,Claude Code,Claude Desktop,Codex,Gemini CLI,Grok Build,OpenCode,OpenClaw,Hermes Agent,Pi,MiniMax Code,Kimi Code,Antigravity,Oh My Pi,MCP,Skills,本地路由,供应商切换',
     },
     download: {
       title: 'CC Switch 下载 - macOS / Windows / Linux 官方安装包',
@@ -84,8 +84,8 @@ export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'ch
   en: {
     home: {
       title: 'CC Switch Official Website - AI Coding Tool Control Surface',
-      description: 'The official CC Switch website. Manage providers, local routing, MCP, Skills, sessions, and usage for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code.',
-      keywords: 'CC Switch official website,AI coding tools,Claude Code,Claude Desktop,Codex,Gemini CLI,Grok Build,OpenCode,OpenClaw,Hermes Agent,Pi,MiniMax Code,MCP,Skills,local routing,provider switcher',
+      description: 'The official CC Switch website. Manage providers, local routing, MCP, Skills, sessions, and usage for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, Antigravity, and Oh My Pi.',
+      keywords: 'CC Switch official website,AI coding tools,Claude Code,Claude Desktop,Codex,Gemini CLI,Grok Build,OpenCode,OpenClaw,Hermes Agent,Pi,MiniMax Code,Kimi Code,Antigravity,Oh My Pi,MCP,Skills,local routing,provider switcher',
     },
     download: {
       title: 'Download CC Switch - Official Installers for macOS / Windows / Linux',
@@ -125,8 +125,8 @@ export const seoCopy: Record<Language, Record<'home' | 'download' | 'docs' | 'ch
   ja: {
     home: {
       title: 'CC Switch 公式サイト - AI コーディングツール統合管理',
-      description: 'CC Switch 公式サイト。Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code のプロバイダー、ローカルルーティング、MCP、Skills、セッション、使用量を統合管理します。',
-      keywords: 'CC Switch 公式サイト,AI コーディングツール,Claude Code,Claude Desktop,Codex,Gemini CLI,Grok Build,OpenCode,OpenClaw,Hermes Agent,Pi,MiniMax Code,MCP,Skills,ローカルルーティング,プロバイダー切替',
+      description: 'CC Switch 公式サイト。Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Antigravity、Oh My Pi のプロバイダー、ローカルルーティング、MCP、Skills、セッション、使用量を統合管理します。',
+      keywords: 'CC Switch 公式サイト,AI コーディングツール,Claude Code,Claude Desktop,Codex,Gemini CLI,Grok Build,OpenCode,OpenClaw,Hermes Agent,Pi,MiniMax Code,Kimi Code,Antigravity,Oh My Pi,MCP,Skills,ローカルルーティング,プロバイダー切替',
     },
     download: {
       title: 'CC Switch ダウンロード - macOS / Windows / Linux 公式インストーラー',

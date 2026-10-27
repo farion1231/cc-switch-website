@@ -41,8 +41,8 @@ export const translations = {
       subtitle: '一个应用管理供应商、路由、用量、会话和技能',
       items: [
         {
-          title: '一个应用，十个工具',
-          description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi 和 MiniMax Code 的供应商配置。',
+          title: '一个应用，十三个工具',
+          description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Antigravity 和 Oh My Pi 的供应商配置。',
         },
         {
           title: '告别手动编辑',
@@ -96,7 +96,6 @@ export const translations = {
         stats: '用量统计',
       },
       window: {
-        providers: '供应商',
         addProvider: '添加供应商',
         more: '更多',
         edit: '编辑',
@@ -117,13 +116,12 @@ export const translations = {
           direct: '直连',
           route: '路由',
           stack: '聚合',
-          mapping: '模型映射',
         },
         modeHelp: {
           title: '连接模式的区别',
-          direct: '直连：客户端直接连所选那家，切换即改写配置。',
-          route: '路由：请求先过本机的 CC Switch，可开故障转移。',
-          stack: '聚合：多家模型同列在 /model，不做故障转移。',
+          direct: '直连：CC Switch 不经手任何请求，客户端直接连所选供应商，体验最原生。',
+          route: '路由：请求经本机 CC Switch 转发，可热切换供应商，并支持故障转移、格式转换等高级功能。',
+          stack: '聚合：多家供应商的模型同列在 /model，在客户端内即可无感切换。',
         },
         activate: {
           viewing: '你在查看「{view}」，{app} 目前是{active}。',
@@ -136,19 +134,20 @@ export const translations = {
           routeLead: '路由生效中',
           stackLead: '聚合生效中 · 默认',
           stackValue: '{name} · 另有 {count} 家共 {models} 个模型',
-          desktopCurrent: '当前：{name} · {mode}',
         },
         chip: {
           official: '官方',
           default: '默认',
           models: '{count} 个模型',
           direct: '直连',
-          mapping: '模型映射',
+          directWhenDirect: '直连时使用',
+          needsRoute: '需要路由',
         },
         cardStatus: {
           inUse: '使用中',
           routing: '路由中',
           currentDefault: '当前默认',
+          defaultAfterSwitch: '切换后默认',
         },
         action: {
           switch: '切换',
@@ -158,15 +157,21 @@ export const translations = {
           remove: '移除',
           enable: '启用',
           exitAndUse: '回到直连并使用',
+          openTerminal: '使用此供应商打开终端',
         },
         section: {
           stackDefault: '默认供应商',
+          stackDefaultAfterSwitch: '切换到聚合模式后的默认供应商',
           added: '已添加 · {count}',
           available: '可添加 · {count}',
         },
         reason: {
           noRoute: '官方订阅不经过路由，回到直连后可用。',
           officialStack: '官方账号只能做默认，不能加入聚合。',
+          noStack: '官方订阅不能用于聚合模式。',
+          needsRoute: '需要路由：{reason}，不能直连。',
+          openaiChat: '使用 OpenAI Chat 接口格式',
+          desktopMapping: '使用模型映射（Claude Desktop 只认 Claude 模型名）',
         },
         quota: {
           tierLeft: '{label}剩余 {value}%',
@@ -255,7 +260,7 @@ export const translations = {
         },
         {
           question: '支持哪些 AI 编程工具？',
-          answer: '目前支持 10 个工具：Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build 为切换式，同一时间只启用一个供应商；OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code 为共存式，可以同时添加多个供应商。各工具支持的功能（MCP、Skills、提示词、本地路由等）不完全相同，详见 GitHub README 的「各工具支持的功能」一节。',
+          answer: '目前支持 13 个工具：Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build 为切换式，同一时间只启用一个供应商；OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Oh My Pi 为共存式，可以同时添加多个供应商；Antigravity 不改写配置，在供应商卡片上点「打开终端」，就用这家启动 agy。各工具支持的功能（MCP、Skills、提示词、本地路由等）不完全相同，详见 GitHub README 的「各工具支持的功能」一节。',
         },
         {
           question: '我的 API Key 安全吗？',
@@ -762,8 +767,8 @@ export const translations = {
       subtitle: 'One app for providers, routing, usage, sessions, and skills',
       items: [
         {
-          title: 'One App, Ten Tools',
-          description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code from one interface.',
+          title: 'One App, Thirteen Tools',
+          description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, Antigravity, and Oh My Pi from one interface.',
         },
         {
           title: 'No More Manual Editing',
@@ -817,7 +822,6 @@ export const translations = {
         stats: 'Usage',
       },
       window: {
-        providers: 'Providers',
         addProvider: 'Add Provider',
         more: 'More',
         edit: 'Edit',
@@ -838,13 +842,12 @@ export const translations = {
           direct: 'Direct',
           route: 'Routing',
           stack: 'Aggregation',
-          mapping: 'Model mapping',
         },
         modeHelp: {
           title: 'How the connection modes differ',
-          direct: 'Direct: the client connects straight to the chosen provider; switching rewrites its config.',
-          route: 'Routing: requests go through CC Switch on this machine first; failover is available.',
-          stack: 'Aggregation: models from several providers are listed together in /model; no failover.',
+          direct: 'Direct: CC Switch never touches your requests; the client talks to the chosen provider itself for the most native experience.',
+          route: 'Routing: requests go through CC Switch on this machine, unlocking hot-switching providers, failover, format conversion, and other advanced features.',
+          stack: 'Aggregation: models from several providers sit together in /model, so you can switch between them seamlessly inside the client.',
         },
         activate: {
           viewing: "You're viewing “{view}”. {app} is currently on {active}.",
@@ -857,19 +860,20 @@ export const translations = {
           routeLead: 'Routing is active',
           stackLead: 'Aggregation is active · default',
           stackValue: '{name} · {count} more with {models} models',
-          desktopCurrent: 'Current: {name} · {mode}',
         },
         chip: {
           official: 'Official',
           default: 'Default',
           models: '{count} models',
           direct: 'Direct',
-          mapping: 'Model mapping',
+          directWhenDirect: 'Used when direct',
+          needsRoute: 'Needs routing',
         },
         cardStatus: {
           inUse: 'In use',
           routing: 'Routing',
           currentDefault: 'Current default',
+          defaultAfterSwitch: 'Default after switching',
         },
         action: {
           switch: 'Switch',
@@ -879,15 +883,21 @@ export const translations = {
           remove: 'Remove',
           enable: 'Enable',
           exitAndUse: 'Back to direct and use',
+          openTerminal: 'Open Terminal with This Provider',
         },
         section: {
           stackDefault: 'Default provider',
+          stackDefaultAfterSwitch: 'Default provider after switching to Aggregation',
           added: 'Added · {count}',
           available: 'Available · {count}',
         },
         reason: {
           noRoute: "Official subscriptions don't go through routing; available again in direct mode.",
           officialStack: "Official accounts can only be the default; they can't join the aggregation.",
+          noStack: "Official subscriptions can't be used in Aggregation.",
+          needsRoute: "Needs routing: {reason}; can't connect directly.",
+          openaiChat: 'uses OpenAI Chat API format',
+          desktopMapping: 'uses model mapping (Claude Desktop only accepts Claude model names)',
         },
         quota: {
           tierLeft: '{label} {value}% left',
@@ -976,7 +986,7 @@ export const translations = {
         },
         {
           question: 'Which AI coding tools are supported?',
-          answer: 'CC Switch supports 10 tools. Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build are switch-mode tools with one active provider at a time; OpenCode, OpenClaw, Hermes Agent, Pi, and MiniMax Code are coexist-mode tools that can hold several providers at once. Supported features (MCP, Skills, Prompts, Local Routing, and more) vary by tool — see “Supported Features by Tool” in the GitHub README.',
+          answer: 'CC Switch supports 13 tools. Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build are switch-mode tools with one active provider at a time; OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, and Oh My Pi are coexist-mode tools that can hold several providers at once; Antigravity leaves its config alone — click “Open Terminal” on a provider card to start agy with that provider. Supported features (MCP, Skills, Prompts, Local Routing, and more) vary by tool — see “Supported Features by Tool” in the GitHub README.',
         },
         {
           question: 'Is my API Key secure?',
@@ -1483,8 +1493,8 @@ export const translations = {
       subtitle: 'プロバイダー、ルーティング、使用量、セッション、Skills を1つに',
       items: [
         {
-          title: '1つのアプリで10のツール',
-          description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code のプロバイダーを1つの画面で管理できます。',
+          title: '1つのアプリで13のツール',
+          description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Antigravity、Oh My Pi のプロバイダーを1つの画面で管理できます。',
         },
         {
           title: '手動編集は不要',
@@ -1538,7 +1548,6 @@ export const translations = {
         stats: '使用量',
       },
       window: {
-        providers: 'プロバイダー',
         addProvider: 'プロバイダーを追加',
         more: 'その他',
         edit: '編集',
@@ -1559,13 +1568,12 @@ export const translations = {
           direct: '直接接続',
           route: 'ルーティング',
           stack: '集約',
-          mapping: 'モデルマッピング',
         },
         modeHelp: {
           title: '接続モードの違い',
-          direct: '直接接続：クライアントが選んだプロバイダーに直接つながります。切り替えると設定を書き換えます。',
-          route: 'ルーティング：リクエストはまずこのマシンの CC Switch を通ります。フェイルオーバーを使えます。',
-          stack: '集約：複数のプロバイダーのモデルを /model に並べます。フェイルオーバーはしません。',
+          direct: '直接接続：CC Switch はリクエストに一切関与せず、クライアントが選んだプロバイダーに直接つながる、最もネイティブな使い方です。',
+          route: 'ルーティング：リクエストはこのマシンの CC Switch を経由し、プロバイダーのホットスイッチ、フェイルオーバー、フォーマット変換などの高度な機能が使えます。',
+          stack: '集約：複数のプロバイダーのモデルが /model に並び、クライアント内でシームレスに切り替えられます。',
         },
         activate: {
           viewing: '「{view}」を表示中です。{app} は現在{active}です。',
@@ -1578,19 +1586,20 @@ export const translations = {
           routeLead: 'ルーティングが有効',
           stackLead: '集約が有効 · 既定',
           stackValue: '{name} · ほか {count} 社、{models} モデル',
-          desktopCurrent: '現在：{name} · {mode}',
         },
         chip: {
           official: '公式',
           default: '既定',
           models: '{count} モデル',
           direct: '直接接続',
-          mapping: 'モデルマッピング',
+          directWhenDirect: '直接接続時に使用',
+          needsRoute: 'ルーティングが必要',
         },
         cardStatus: {
           inUse: '使用中',
           routing: '転送中',
           currentDefault: '現在の既定',
+          defaultAfterSwitch: '切り替え後の既定',
         },
         action: {
           switch: '切り替え',
@@ -1600,15 +1609,21 @@ export const translations = {
           remove: '削除',
           enable: '有効化',
           exitAndUse: '直接接続に戻して使う',
+          openTerminal: 'このプロバイダーでターミナルを開く',
         },
         section: {
           stackDefault: '既定のプロバイダー',
+          stackDefaultAfterSwitch: '集約に切り替えた後の既定のプロバイダー',
           added: '追加済み · {count}',
           available: '追加できるもの · {count}',
         },
         reason: {
           noRoute: '公式サブスクリプションはルーティングを通りません。直接接続に戻すと使えます。',
           officialStack: '公式アカウントは既定にだけでき、集約には追加できません。',
+          noStack: '公式サブスクリプションは集約では使えません。',
+          needsRoute: 'ルーティングが必要：{reason}。直接接続はできません。',
+          openaiChat: 'OpenAI Chat API フォーマットを使用しており',
+          desktopMapping: 'モデルマッピングを使っており（Claude Desktop は Claude のモデル名しか受け付けません）',
         },
         quota: {
           tierLeft: '{label} 残り {value}%',
@@ -1697,7 +1712,7 @@ export const translations = {
         },
         {
           question: 'どの AI コーディングツールに対応していますか？',
-          answer: '10 のツールに対応しています。Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build は切り替え型で、同時に有効にできるプロバイダーは 1 つです。OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code は共存型で、複数のプロバイダーを同時に追加できます。対応機能（MCP、Skills、プロンプト、ローカルルーティングなど）はツールごとに異なります。詳しくは GitHub README の「ツール別の対応機能」をご覧ください。',
+          answer: '13 のツールに対応しています。Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build は切り替え型で、同時に有効にできるプロバイダーは 1 つです。OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Oh My Pi は共存型で、複数のプロバイダーを同時に追加できます。Antigravity は設定を書き換えず、プロバイダーカードの「ターミナルを開く」から、そのプロバイダーで agy を起動します。対応機能（MCP、Skills、プロンプト、ローカルルーティングなど）はツールごとに異なります。詳しくは GitHub README の「ツール別の対応機能」をご覧ください。',
         },
         {
           question: 'API キーは安全ですか？',

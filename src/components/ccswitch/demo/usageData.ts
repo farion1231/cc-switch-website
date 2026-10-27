@@ -17,16 +17,20 @@ export interface Totals {
   hit: number;
 }
 
-/** All-time figures per app; shorter ranges are drawn from these. */
+/**
+ * All-time figures per app; shorter ranges are drawn from these. Only the apps the real usage page
+ * tracks (cc-switch KNOWN_APP_TYPES): no Claude Desktop, OpenClaw, Hermes or Oh My Pi.
+ */
 export const APP_TOTALS: Partial<Record<AppId, Totals>> = {
   claude: { cost: 16821.04, requests: 142060, tokens: 20.1e9, hit: 96.2 },
   codex: { cost: 8023.69, requests: 91140, tokens: 9.7e9, hit: 93.1 },
   gemini: { cost: 962.47, requests: 18400, tokens: 1.1e9, hit: 88.4 },
   grokbuild: { cost: 840.63, requests: 12620, tokens: 0.9e9, hit: 90.7 },
   opencode: { cost: 411.82, requests: 6880, tokens: 0.5e9, hit: 91.5 },
-  hermes: { cost: 124.05, requests: 2140, tokens: 0.1e9, hit: 86.0 },
   pi: { cost: 93.14, requests: 1460, tokens: 0.1e9, hit: 84.9 },
   mcode: { cost: 37.69, requests: 680, tokens: 36e6, hit: 82.3 },
+  kimi: { cost: 124.05, requests: 2140, tokens: 0.1e9, hit: 86.0 },
+  agy: { cost: 58.31, requests: 940, tokens: 52e6, hit: 83.6 },
 };
 export const SERIES_APPS = Object.keys(APP_TOTALS) as AppId[];
 

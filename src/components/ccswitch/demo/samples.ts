@@ -7,7 +7,7 @@ export type L = Record<Language, string>;
 /* ---------- MCP & Skills ---------- */
 
 /** MCP and Skills have columns for these apps, in this order (Claude Desktop and OpenClaw have none). */
-export const MATRIX_APPS: AppId[] = ['claude', 'codex', 'gemini', 'grokbuild', 'opencode', 'hermes', 'pi', 'mcode'];
+export const MATRIX_APPS: AppId[] = ['claude', 'codex', 'gemini', 'grokbuild', 'opencode', 'hermes', 'pi', 'mcode', 'kimi', 'agy', 'omp'];
 
 export interface SampleMcp {
   id: string;
@@ -17,10 +17,10 @@ export interface SampleMcp {
 }
 
 export const MCP_SERVERS: SampleMcp[] = [
-  { id: 'context7', transport: 'http', summary: 'mcp.context7.com/mcp', apps: ['claude', 'codex', 'grokbuild', 'opencode'] },
+  { id: 'context7', transport: 'http', summary: 'mcp.context7.com/mcp', apps: ['claude', 'codex', 'grokbuild', 'opencode', 'kimi', 'omp'] },
   { id: 'fetch', transport: 'stdio', summary: 'uvx mcp-server-fetch', apps: ['claude', 'codex', 'gemini', 'hermes'] },
   { id: 'figma', transport: 'http', summary: '127.0.0.1:3845/mcp', apps: ['claude'] },
-  { id: 'github', transport: 'http', summary: 'api.githubcopilot.com/mcp/', apps: ['claude', 'codex', 'opencode', 'mcode'] },
+  { id: 'github', transport: 'http', summary: 'api.githubcopilot.com/mcp/', apps: ['claude', 'codex', 'opencode', 'mcode', 'agy'] },
   { id: 'memory', transport: 'stdio', summary: 'npx -y @modelcontextprotocol/server-memory', apps: [] },
   { id: 'playwright', transport: 'stdio', summary: 'npx -y @playwright/mcp@latest', apps: ['claude', 'codex'] },
   {
@@ -33,7 +33,7 @@ export const MCP_SERVERS: SampleMcp[] = [
     id: 'serena',
     transport: 'stdio',
     summary: 'uvx --from git+https://github.com/oraios/serena serena start-mcp-server',
-    apps: ['claude', 'codex', 'hermes', 'pi'],
+    apps: ['claude', 'codex', 'hermes', 'pi', 'omp'],
   },
 ];
 
@@ -58,7 +58,7 @@ export const INSTALLED_SKILLS: SampleSkill[] = [
     name: 'brainstorming',
     description: { zh: '写代码前先把需求和方案聊清楚', en: 'Talk through requirements and the plan before coding', ja: 'コードを書く前に要件と方針を詰める' },
     repo: 'obra/superpowers',
-    apps: ['claude', 'codex', 'opencode', 'mcode'],
+    apps: ['claude', 'codex', 'opencode', 'mcode', 'kimi'],
   },
   {
     name: 'frontend-design',
@@ -84,14 +84,14 @@ export const INSTALLED_SKILLS: SampleSkill[] = [
     name: 'systematic-debugging',
     description: { zh: '先定位根因再动手修', en: 'Find the root cause before fixing', ja: '原因を突き止めてから修正する' },
     repo: 'obra/superpowers',
-    apps: ['claude', 'codex', 'grokbuild', 'pi'],
+    apps: ['claude', 'codex', 'grokbuild', 'pi', 'agy', 'omp'],
     update: true,
   },
   {
     name: 'team-conventions',
     description: { zh: '团队的提交与代码规范', en: "Your team's commit and code conventions", ja: 'チームのコミットとコードの規約' },
     repo: null,
-    apps: ['claude', 'codex', 'opencode', 'hermes', 'pi', 'mcode'],
+    apps: ['claude', 'codex', 'opencode', 'hermes', 'pi', 'mcode', 'kimi', 'omp'],
   },
 ];
 
@@ -117,7 +117,7 @@ export const DISCOVER_SKILLS: SampleDiscoverSkill[] = [
 /* ---------- Prompts ---------- */
 
 /** Prompts have no Claude Desktop (it uses Claude Code's) and no OpenClaw (its own Workspace). */
-export const PROMPT_APPS: AppId[] = ['claude', 'codex', 'gemini', 'grokbuild', 'opencode', 'hermes', 'pi', 'mcode'];
+export const PROMPT_APPS: AppId[] = ['claude', 'codex', 'gemini', 'grokbuild', 'opencode', 'hermes', 'pi', 'mcode', 'kimi', 'agy', 'omp'];
 
 export const PROMPT_TARGET: Record<string, { file: string; path: string }> = {
   claude: { file: 'CLAUDE.md', path: '~/.claude/CLAUDE.md' },
@@ -128,6 +128,10 @@ export const PROMPT_TARGET: Record<string, { file: string; path: string }> = {
   hermes: { file: 'SOUL.md', path: '~/.hermes/SOUL.md' },
   pi: { file: 'AGENTS.md', path: '~/.pi/agent/AGENTS.md' },
   mcode: { file: 'AGENTS.md', path: '~/.minimax/AGENTS.md' },
+  kimi: { file: 'AGENTS.md', path: '~/.kimi-code/AGENTS.md' },
+  // Antigravity's own file, not Gemini CLI's GEMINI.md.
+  agy: { file: 'AGENTS.md', path: '~/.gemini/config/AGENTS.md' },
+  omp: { file: 'AGENTS.md', path: '~/.omp/agent/AGENTS.md' },
 };
 
 export interface SamplePrompt {
@@ -218,12 +222,28 @@ export const PROMPTS: Record<string, { items: SamplePrompt[]; enabled: string | 
   },
   pi: { enabled: 'team', items: [{ id: 'team', ...P.team, size: '718 B', updated: day(9, 28, 'Sep') }] },
   mcode: { enabled: null, items: [{ id: 'team', ...P.team, size: '718 B', updated: day(9, 28, 'Sep') }] },
+  kimi: { enabled: 'team', items: [{ id: 'team', ...P.team, size: '718 B', updated: day(10, 24, 'Oct') }] },
+  agy: { enabled: null, items: [{ id: 'team', ...P.team, size: '718 B', updated: day(10, 21, 'Oct') }] },
+  omp: { enabled: 'team', items: [{ id: 'team', ...P.team, size: '718 B', updated: day(10, 24, 'Oct') }] },
 };
 
 /* ---------- Sessions ---------- */
 
 /** The session picker includes OpenClaw; Claude Desktop shows Claude Code's sessions. */
-export const SESSION_APPS: AppId[] = ['claude', 'codex', 'opencode', 'hermes', 'gemini', 'pi', 'grokbuild', 'openclaw', 'mcode'];
+export const SESSION_APPS: AppId[] = [
+  'claude',
+  'codex',
+  'opencode',
+  'hermes',
+  'gemini',
+  'pi',
+  'omp',
+  'grokbuild',
+  'openclaw',
+  'mcode',
+  'kimi',
+  'agy',
+];
 
 export type Bucket = 'today' | 'yesterday' | 'thisWeek' | 'earlier';
 
@@ -633,4 +653,7 @@ export const TOOLS: SampleTool[] = [
   { app: 'hermes', path: '~/.local/bin/hermes', version: '0.9.2' },
   { app: 'pi', source: 'npm', path: '~/.npm-global/bin/pi', version: '1.0.4' },
   { app: 'mcode', installHint: 'script' },
+  { app: 'kimi', path: '~/.local/bin/kimi', version: '1.6.0' },
+  { app: 'agy', path: '~/.local/bin/agy', version: '0.4.2' },
+  { app: 'omp', source: 'npm', path: '~/.npm-global/bin/omp', version: '0.12.3' },
 ];

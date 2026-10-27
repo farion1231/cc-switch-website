@@ -5,6 +5,8 @@ import geminiIcon from '@/assets/icons/gemini-2.svg';
 import grokIcon from '@/assets/icons/grok.svg';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import hermesIcon from '@/assets/icons/hermes.png';
+import kimiCodeIcon from '@/assets/icons/kimi-code.svg';
+import kimiCodeIconSvg from '@/assets/icons/kimi-code.svg?raw';
 import minimaxIcon from '@/assets/icons/minimax.svg';
 import openaiIcon from '@/assets/icons/openai.svg';
 import openaiIconSvg from '@/assets/icons/openai.svg?raw';
@@ -12,6 +14,7 @@ import openRouterIcon from '@/assets/icons/openrouter.svg';
 import openRouterIconSvg from '@/assets/icons/openrouter.svg?raw';
 import packyCodeIcon from '@/assets/icons/packycode.svg';
 import packyCodeIconSvg from '@/assets/icons/packycode.svg?raw';
+import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import aicodemirrorIcon from '@/assets/icons/sponsors/aicodemirror.svg';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
@@ -44,6 +47,8 @@ export interface Provider {
   };
   /** The tool's own login: never routed, and only ever the default in Aggregation. */
   official?: boolean;
+  /** A dark-on-transparent logo that needs a white tile to show in dark mode. */
+  logoOnWhite?: boolean;
   isUrl?: boolean;
   isText?: boolean;
   isSvgUrl?: boolean;
@@ -52,6 +57,18 @@ export interface Provider {
 // Sponsor cards show the official domain but link to the referral URL kept in
 // sponsors.ts, so the two never drift apart.
 const sponsorHref = (id: string) => sponsors.find((sponsor) => sponsor.id === id)?.url;
+
+// A6API has presets for every app except MiniMax Code; it sits just before OpenRouter in each list.
+const a6api: Provider = {
+  icon: a6apiIcon,
+  iconBg: 'bg-white',
+  logoOnWhite: true,
+  name: 'A6API',
+  subtitle: 'https://www.a6api.com',
+  href: sponsorHref('a6api'),
+  isUrl: true,
+  isSvgUrl: true,
+};
 
 // The demo cards show the Kimi Code plan, not the API platform in sponsors.ts.
 const KIMI_CODE_HREF: LocalizedText = {
@@ -71,7 +88,9 @@ export const claudeProviders: Provider[] = [
     iconColor: '#D4915D',
     name: 'Claude Official',
     official: true,
-    subtitle: 'https://www.anthropic.com/claude-code',
+    // With the quota query on, the app appends the subscription plan to the subtitle.
+    subtitle: 'https://www.anthropic.com/claude-code · Max 20x',
+    href: 'https://www.anthropic.com/claude-code',
     time: '1',
     quota: {
       updatedMinutes: 1,
@@ -136,6 +155,7 @@ export const claudeProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -200,6 +220,7 @@ export const claudeDesktopProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -274,6 +295,7 @@ export const codexProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -336,6 +358,7 @@ export const geminiProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -391,6 +414,7 @@ export const opencodeProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -446,6 +470,7 @@ export const openClawProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -500,6 +525,7 @@ export const hermesProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -547,6 +573,7 @@ export const grokBuildProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -600,6 +627,7 @@ export const piProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
+  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -670,5 +698,45 @@ export const mcodeProviders: Provider[] = [
     isSvgUrl: true,
   },
 ];
+
+// Kimi Code: its own login first, then the API-key presets it shares with Pi.
+export const kimiCodeProviders: Provider[] = [
+  {
+    icon: kimiCodeIcon,
+    iconSvg: kimiCodeIconSvg,
+    iconBg: 'bg-sky-500/15',
+    iconColor: 'currentColor',
+    name: 'Kimi Official',
+    official: true,
+    subtitle: 'https://www.kimi.com/code',
+    href: KIMI_CODE_HREF,
+    time: '2',
+    quota: {
+      updatedMinutes: 2,
+      tiers: [
+        { label: '5h', utilization: 31, resetsIn: '3h40m' },
+        { label: '7d', utilization: 46, resetsIn: '4d6h' },
+      ],
+    },
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  ...piProviders.filter((provider) => provider.name !== 'Kimi For Coding' && provider.name !== 'OpenRouter'),
+  {
+    icon: deepseekIcon,
+    iconBg: 'bg-blue-500/15',
+    name: 'DeepSeek',
+    subtitle: 'https://platform.deepseek.com',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  ...piProviders.filter((provider) => provider.name === 'OpenRouter'),
+];
+
+// Antigravity takes the Gemini presets: third-party addresses must speak the Gemini API.
+export const agyProviders: Provider[] = geminiProviders;
+
+// Oh My Pi reuses Pi's provider form and presets.
+export const ompProviders: Provider[] = piProviders;
 
 export const defaultProviders = claudeProviders;

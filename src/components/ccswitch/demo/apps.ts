@@ -1,23 +1,29 @@
 import { Monitor, Terminal, type LucideIcon } from 'lucide-react';
 import {
+  agyProviders,
   claudeDesktopProviders,
   claudeProviders,
   codexProviders,
   geminiProviders,
   grokBuildProviders,
   hermesProviders,
+  kimiCodeProviders,
   mcodeProviders,
+  ompProviders,
   openClawProviders,
   opencodeProviders,
   piProviders,
   type Provider,
 } from '@/content/providers';
 
+import antigravityIcon from '@/assets/icons/antigravity.svg';
 import claudeIcon from '@/assets/icons/claude.svg';
 import geminiIcon from '@/assets/icons/gemini.svg';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import hermesIcon from '@/assets/icons/hermes.png';
+import kimiCodeIconSvg from '@/assets/icons/kimi-code.svg?raw';
 import minimaxIcon from '@/assets/icons/minimax.svg';
+import ompIcon from '@/assets/icons/omp.svg';
 import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import openClawIcon from '@/assets/icons/openclaw.svg';
 import openCodeIcon from '@/assets/icons/opencode.svg';
@@ -33,17 +39,20 @@ export type AppId =
   | 'openclaw'
   | 'hermes'
   | 'pi'
-  | 'mcode';
+  | 'mcode'
+  | 'kimi'
+  | 'agy'
+  | 'omp';
 
 export type AppMode = 'direct' | 'route' | 'stack';
 
 /**
  * How the app's page works, as in the real app:
  * - switch: one provider at a time, with the Direct / Routing (/ Aggregation) tabs
- * - desktop: Claude Desktop, one provider at a time, access set per provider
  * - additive: several providers written at once, Add / Remove
+ * - launch: Antigravity, no provider in use; every card opens a terminal with it
  */
-export type AppKind = 'switch' | 'desktop' | 'additive';
+export type AppKind = 'switch' | 'additive' | 'launch';
 
 export interface DemoApp {
   id: AppId;
@@ -62,8 +71,8 @@ export interface DemoApp {
   added?: string[];
   /** Pi says Enable instead of Add. */
   enableLabel?: boolean;
-  /** Claude Desktop providers that go through model mapping. */
-  mapping?: string[];
+  /** Providers that can't be used directly (format conversion, Desktop model mapping). */
+  needsRoute?: string[];
 }
 
 export const demoApps: DemoApp[] = [
@@ -82,9 +91,11 @@ export const demoApps: DemoApp[] = [
     label: 'Claude Desktop',
     icon: claudeIcon,
     badge: Monitor,
-    kind: 'desktop',
+    kind: 'switch',
+    modes: ['direct', 'route', 'stack'],
     providers: claudeDesktopProviders,
-    mapping: ['APINebula', 'PatewayAI', 'OpenRouter'],
+    stack: { default: 'Kimi For Coding', members: { 'Kimi For Coding': 2, APINebula: 2, OpenRouter: 3 } },
+    needsRoute: ['APINebula', 'PatewayAI', 'OpenRouter'],
   },
   {
     id: 'codex',
@@ -96,6 +107,8 @@ export const demoApps: DemoApp[] = [
     providers: codexProviders,
     initialMode: 'stack',
     stack: { default: 'OpenAI Official', members: { 'OpenAI Official': 6, 'Kimi For Coding': 2, PackyCode: 3, AICodeMirror: 2 } },
+    // The OpenRouter preset speaks OpenAI Chat, which Codex can only reach through routing.
+    needsRoute: ['OpenRouter'],
   },
   { id: 'gemini', label: 'Gemini CLI', icon: geminiIcon, kind: 'switch', modes: ['direct', 'route'], providers: geminiProviders },
   {
@@ -149,12 +162,39 @@ export const demoApps: DemoApp[] = [
     providers: mcodeProviders,
     added: ['MiniMax', 'Kimi For Coding'],
   },
+  {
+    id: 'kimi',
+    label: 'Kimi Code',
+    icon: '',
+    iconSvg: kimiCodeIconSvg,
+    kind: 'additive',
+    providers: kimiCodeProviders,
+    added: ['Kimi Official', 'Zhipu GLM'],
+  },
+  {
+    id: 'agy',
+    label: 'Antigravity',
+    icon: antigravityIcon,
+    kind: 'launch',
+    providers: agyProviders,
+  },
+  {
+    id: 'omp',
+    label: 'Oh My Pi',
+    icon: ompIcon,
+    kind: 'additive',
+    providers: ompProviders,
+    added: ['Kimi For Coding', 'PackyCode'],
+    enableLabel: true,
+  },
 ];
 
 export const demoAppById = Object.fromEntries(demoApps.map((app) => [app.id, app])) as Record<AppId, DemoApp>;
 
 /** Official logins never go through routing; Codex's is the one exception. */
 export const blockedFromRouting = (app: AppId, provider: Provider) => Boolean(provider.official) && app !== 'codex';
+
+export const needsRouting = (app: DemoApp, provider: Provider) => app.needsRoute?.includes(provider.name) ?? false;
 
 /** `{name}` placeholders in the demo strings. */
 export function fill(template: string, values: Record<string, string | number>) {

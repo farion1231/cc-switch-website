@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
 import { useGitHubStats } from '@/hooks/useGitHubStars';
+import { demoApps } from './demo/apps';
 import { SectionHeader } from './SectionHeader';
 
 const featureIcons: LucideIcon[] = [Layers, SlidersHorizontal, Route, Puzzle, BarChart3, Monitor];
@@ -69,7 +70,7 @@ export function FeaturesSection() {
             </div>
             <div className="flex items-center gap-2 text-foreground">
               <Layers className="w-5 h-5 text-success" />
-              <span className="font-semibold">10</span>
+              <span className="font-semibold">{demoApps.length}</span>
               <span className="text-muted-foreground">{t.hero.supportedCli}</span>
             </div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-warm/10 border border-accent-warm/30 text-accent-warm text-sm font-medium">
