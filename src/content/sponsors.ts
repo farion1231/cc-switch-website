@@ -712,16 +712,16 @@ export const sponsors: Sponsor[] = ([
       ja: '複数プロバイダーがリアルタイムで競う AI トークン取引所',
     },
     description: {
-      zh: 'DIT.ai 是一个 AI Token 交易市场，通过多供应商路由降低调用成本。一个 OpenAI 兼容 API 即可调用 GPT、Claude、Gemini、DeepSeek、Grok、Llama 等 50 多个主流模型，覆盖文本、图像、视频和音频；合格供应商在 160 多条线路上为每个请求竞价，DIT 实时选出性价比最优的线路，价格通常比官方定价低 30–70%。只需更换 Base URL 和 API Key，即可在现有技术栈上享受自动路由与故障转移。',
-      en: 'DIT.ai is an AI token exchange and marketplace for lower-cost multi-provider routing. One OpenAI-compatible API reaches 50+ leading models, including GPT, Claude, Gemini, DeepSeek, Grok, and Llama, across text, image, video, and audio. Qualified providers compete for each request across 160+ routes, and DIT picks the best price-to-quality option in real time, typically 30–70% below official list pricing. Change your base URL and API key, keep your existing stack, and get automatic routing and failover.',
-      ja: 'DIT.ai は、複数プロバイダーのルーティングでコストを抑える AI トークン取引マーケットです。OpenAI 互換の API 1 つで GPT、Claude、Gemini、DeepSeek、Grok、Llama など 50 以上の主要モデルをテキスト・画像・動画・音声にわたって利用できます。審査済みのプロバイダーが 160 以上のルートでリクエストごとに競い合い、DIT がリアルタイムで最適なルートを選ぶため、通常は公式価格より 30〜70% 安くなります。Base URL と API Key を変えるだけで、既存の構成のまま自動ルーティングとフェイルオーバーを利用できます。',
+      zh: '同样的模型，更低的账单，一个 OpenAI 兼容 API 即可调用 GPT、Claude、Gemini 等 50 多个模型，并在 160 多家供应商之间路由到性价比最优的选项，价格通常比官方定价低 30–70%。只需更换 Base URL 和 API Key，即可在保留现有技术栈的情况下开始调用。',
+      en: 'Same models. Often a much lower bill. One OpenAI-compatible API for 50+ models: GPT, Claude, Gemini, and more, with routing across 160+ providers to the best available price-to-quality option, typically 30–70% below official list pricing. Change your base URL and API key, keep your stack, and start calling.',
+      ja: '同じモデルを、多くの場合はるかに安く。OpenAI 互換の API 1 つで GPT、Claude、Gemini など 50 以上のモデルを利用でき、160 以上のプロバイダーの中から価格と品質のバランスが最も良い選択肢へルーティングされるため、通常は公式価格より 30〜70% 安くなります。Base URL と API キーを変えるだけで、既存のスタックはそのままですぐに呼び出せます。',
     },
     perk: {
-      zh: '注册并使用优惠码领取 5 美元新人券',
-      en: 'Claim a $5 welcome coupon with the promo code',
-      ja: 'プロモコードで 5 ドルのウェルカムクーポン',
+      zh: '使用优惠码新人首充享 7 折',
+      en: '30% off your welcome top-up with the code',
+      ja: 'コード入力で初回チャージ 30% オフ',
     },
-    couponCode: 'ccswitch',
+    couponCode: 'cc-switch',
   },
   {
     id: 'buytoken',
