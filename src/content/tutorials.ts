@@ -66,6 +66,28 @@ const tutorialIcons = {
 
 export const tutorials: Tutorial[] = [
   {
+    slug: 'claude-official-accounts-guide',
+    title: {
+      zh: '使用 CC Switch 切换多个 Claude 官方订阅以及合规问题',
+      en: 'Switching Between Multiple Claude Subscriptions with CC Switch, and Compliance',
+      ja: 'CC Switch で複数の Claude 公式サブスクリプションを切り替える方法とコンプライアンス',
+    },
+    summary: {
+      zh: '工作账号、个人账号随卡片即时切换，或从卡片「打开终端」让几个号在不同窗口同时用。逐条对照 Anthropic 关于订阅登录与凭据使用的规定：登录走官方流程、令牌只留在本机 Claude Code 里、不转发请求。只支持 Claude Code CLI 和 IDE 插件。',
+      en: 'Switch Claude Code between work and personal accounts by switching cards, or use "Open Terminal" to run several accounts in separate windows at once. Maps each part against Anthropic\'s rules on subscription sign-in and credential use: official sign-in flow, tokens stay in Claude Code on your machine, no request forwarding. Claude Code CLI and IDE extensions only.',
+      ja: '仕事用と個人用のアカウントをカードの切り替えで即座に切り替えたり、カードの「ターミナルを開く」で複数のアカウントを別々のウィンドウで同時に使ったりできます。サブスクリプションのログインと認証情報の利用に関する Anthropic の規定と項目ごとに対照します：公式のログイン手順、トークンはこのパソコンの Claude Code の中だけ、リクエストの転送なし。Claude Code CLI と IDE 拡張のみ対応。',
+    },
+    author: { name: 'CC Switch Team', url: 'https://github.com/farion1231/cc-switch/blob/main/docs/guides/claude-official-accounts-guide-zh.md' },
+    date: '2026-10-27',
+    category: 'practice',
+    source: 'official',
+    readMinutes: 8,
+    languages: ['zh'],
+    accent: 'rose',
+    coverIcons: [tutorialIcons.ccSwitch, tutorialIcons.claude],
+    featured: true,
+  },
+  {
     slug: 'deeplink-site-integration-guide',
     title: {
       zh: '在你的网站上放「一键导入 CC Switch」按钮：站长接入指南',

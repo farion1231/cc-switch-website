@@ -2127,6 +2127,12 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/claude-codex-routing-guide" />
   </url>
   <url>
+    <loc>https://ccswitch.io/zh/tutorials/claude-official-accounts-guide</loc>
+    <lastmod>2026-10-26</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/claude-official-accounts-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ccswitch.io/zh/tutorials/claude-official-accounts-guide" />
+  </url>
+  <url>
     <loc>https://ccswitch.io/zh/tutorials/codex-claude-routing-guide</loc>
     <lastmod>2026-10-26</lastmod>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ccswitch.io/zh/tutorials/codex-claude-routing-guide" />
