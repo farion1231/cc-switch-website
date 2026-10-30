@@ -27,6 +27,7 @@ import groorouteIcon from '@/assets/icons/sponsors/grooroute.jpg';
 import ditIcon from '@/assets/icons/sponsors/dit.svg';
 import buytokenIcon from '@/assets/icons/sponsors/buytoken.svg';
 import vapiIcon from '@/assets/icons/sponsors/vapi.svg';
+import ospreyaiIcon from '@/assets/icons/sponsors/ospreyai.png';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
@@ -106,6 +107,7 @@ const sponsorDisplayOrder = [
   'teamorouter',
   'aicoding',
   'subrouter',
+  'ospreyai',
   'shengsuanyun',
   '88api',
   'apikey-fun',
@@ -283,6 +285,30 @@ export const sponsors: Sponsor[] = ([
       zh: '首充 8 折，企业最高 7.5 折',
       en: '20% off first recharge (up to 25% for enterprise)',
       ja: '初回 20% オフ（法人は最大 25% オフ）',
+    },
+  },
+  {
+    id: 'ospreyai',
+    name: 'OspreyAI',
+    icon: ospreyaiIcon,
+    url: 'https://open.ospreyai.cn',
+    tier: 'standard',
+    category: 'aggregator',
+    iconBg: 'light',
+    tagline: {
+      zh: '一站式多模型 API 服务平台',
+      en: 'One-stop multi-model API platform',
+      ja: 'ワンストップ・マルチモデル API プラットフォーム',
+    },
+    description: {
+      zh: '面向开发者和企业，一个 API Key 即可调用 Claude、Gemini、GPT、GLM、Kimi、Qwen、DeepSeek、腾讯混元等国内外主流模型，兼容 OpenAI、Anthropic 协议；支持统一充值、统一账单、用量查询和模型灵活切换。',
+      en: 'For developers and businesses: one API key for Claude, Gemini, GPT, GLM, Kimi, Qwen, DeepSeek, Tencent Hunyuan and more, compatible with OpenAI and Anthropic protocols, with unified top-ups, billing, usage tracking, and flexible model switching.',
+      ja: '開発者と企業向け。1 つの API Key で Claude、Gemini、GPT、GLM、Kimi、Qwen、DeepSeek、Tencent Hunyuan など国内外の主要モデルを利用でき、OpenAI・Anthropic プロトコルに対応。チャージと請求の一元化、使用量の確認、モデルの柔軟な切り替えにも対応。',
+    },
+    perk: {
+      zh: '海外模型省 20%—40%，国内模型省 30%—50%',
+      en: 'Save 20–40% on international models and 30–50% on Chinese models',
+      ja: '海外モデル 20〜40%、中国国内モデル 30〜50% お得',
     },
   },
   {
