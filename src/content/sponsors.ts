@@ -319,19 +319,19 @@ export const sponsors: Sponsor[] = ([
     featured: true,
     iconBg: 'light',
     tagline: {
-      zh: '官方直连高品质 API 中转',
-      en: 'Direct-source high-quality relay',
-      ja: '公式直結の高品質 API 中継',
+      zh: '官方渠道高质量 API 中转',
+      en: 'Official-channel high-quality relay',
+      ja: '公式チャネルの高品質 API 中継',
     },
     description: {
-      zh: '面向重度 AI 开发者，专注官方直连高品质模型 API 中转。Claude 全系列与 Codex 系列 100% 官方源直供，Token 级账单可逐笔核验，企业可签合同开票。',
-      en: 'For heavy AI developers — direct-source relay for the full Claude and Codex lineup with token-level auditable bills and enterprise contracts/invoices.',
-      ja: 'ヘビーユーザー向けの公式直結中継。Claude 全系列と Codex を 100% 公式ソースで提供し、トークン単位で監査可能な請求と法人契約書・インボイスにも対応。',
+      zh: '面向资深 AI 开发者，完整支持 Claude、GPT 系列与国内主流模型。所有模型来自官方高质量渠道，绝无稀释、绝无伪造，计费明细透明可查；支持企业级并发、专属管理后台、正式合同与发票。',
+      en: 'For experienced AI developers, with full support for Claude, GPT, and mainstream Chinese models from official high-quality channels — never diluted, never faked, with transparent billing, enterprise concurrency, a dedicated admin console, and contracts/invoices.',
+      ja: '経験豊富な AI 開発者向け。Claude、GPT シリーズ、中国の主要モデルを公式の高品質チャネルからフルサポートし、希釈や偽装は一切なし。課金明細は透明で、企業向け並列処理・専用管理コンソール・契約書とインボイスにも対応。',
     },
     perk: {
-      zh: '注册即送 $3，充值低至 6 折',
-      en: 'Free $3 on signup, top-ups as low as 60% of the original price',
-      ja: '登録で $3、チャージは最安で元価格の 60%',
+      zh: '注册送 $1 试用，经济模式低至 0.5 折，邀请奖励最高 $150',
+      en: 'Free $1 trial on signup, economy mode from 5% of the price, referral bonus up to $150',
+      ja: '登録で $1 トライアル、エコノミーモードは最安 5%、紹介報酬は最大 $150',
     },
   },
   {
