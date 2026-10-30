@@ -246,19 +246,19 @@ export const sponsors: Sponsor[] = ([
     category: 'aggregator',
     featured: true,
     tagline: {
-      zh: '一站式 AI 编程平台',
-      en: 'All-in-one AI coding platform',
-      ja: 'オールインワン AI コーディングプラットフォーム',
+      zh: '订阅制 AI 编程平台',
+      en: 'Subscription-based AI coding platform',
+      ja: 'サブスクリプション型 AI コーディングプラットフォーム',
     },
     description: {
-      zh: 'AIGoCode 集成了 Claude Code、Codex 以及 Gemini 最新模型的一站式平台，提供稳定、高效且高性价比的 AI 编程服务。国内直连无需魔法，零封号风险，极速响应。',
-      en: 'AIGoCode is an all-in-one platform integrating the latest Claude Code, Codex, and Gemini models. Stable, fast, and cost-effective access with direct mainland China connections and zero account-suspension risk.',
-      ja: 'AIGoCode は Claude Code、Codex、Gemini の最新モデルを統合したオールインワンプラットフォーム。中国本土から直接接続でき、安定・高速・低コストで AI コーディングを利用できます。',
+      zh: '订阅制 AI 编程平台，不只按 token 算钱。一个账号包月畅用 Claude Code、Codex、Gemini，国内直连、响应快。',
+      en: 'A subscription-based AI coding platform, not just pay-per-token. One account, one monthly plan for Claude Code, Codex and Gemini, with direct connection on the mainland and fast responses.',
+      ja: 'トークン従量課金だけではない、サブスクリプション型の AI コーディングプラットフォーム。1 つのアカウント・月額プランで Claude Code、Codex、Gemini を使い放題、中国本土から直接接続でき、レスポンスも高速。',
     },
     perk: {
-      zh: '首充额外 +10% 奖励额度',
-      en: '+10% bonus on first recharge',
-      ja: '初回チャージ +10% ボーナス',
+      zh: '通过链接订阅额外送 10% 额度',
+      en: 'Extra 10% credits when you subscribe via the link',
+      ja: 'リンクからのサブスクリプションで 10% クレジット追加',
     },
   },
   {
