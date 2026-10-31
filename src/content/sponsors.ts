@@ -143,7 +143,7 @@ const sponsorDisplayRank = new Map<string, number>(
 export const sponsors: Sponsor[] = ([
   {
     id: 'kimi-k2-7-code',
-    name: 'Kimi K3',
+    name: 'Kimi K3.1 Pro',
     icon: kimiIcon,
     url: {
       zh: 'https://platform.kimi.com?track_id=track-7cf2b91dcde043eda6ef9a95951a042c&aff=cc-switch',
@@ -175,14 +175,14 @@ export const sponsors: Sponsor[] = ([
       },
     ],
     tagline: {
-      zh: 'Moonshot AI 最强开源 3T 级模型',
-      en: "Moonshot AI's most capable open 3T-class model",
-      ja: 'Moonshot AI 史上最強のオープン 3T クラスモデル',
+      zh: 'Moonshot AI 迄今最强的 3T 级开放权重模型',
+      en: "Moonshot AI's most capable 3T-class open-weight model",
+      ja: 'Moonshot AI 史上最高性能の 3T クラス・オープンウェイトモデル',
     },
     description: {
-      zh: 'Kimi K3 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型。K3 拥有 2.8T 参数、原生视觉能力与 100 万 Token 上下文，在长程编码、知识工作和推理任务中展现前沿性能。使用 CC Switch，可以在各类 Agent 工具中便捷配置和切换 Kimi。',
-      en: "Kimi K3 is Moonshot AI's most capable model and the world's first open 3T-class model. With 2.8 trillion parameters, native vision, and a 1-million-token context window, K3 delivers frontier performance across long-horizon coding, knowledge work, and reasoning. CC Switch makes it easy to configure and switch to Kimi across agentic tools.",
-      ja: 'Kimi K3 は Moonshot AI がこれまでに開発した中で最も高性能なモデルであり、世界初のオープンソース 3T クラスモデルです。2.8 兆パラメータ、ネイティブな視覚能力、100 万トークンのコンテキストウィンドウを備え、長期にわたるコーディング、ナレッジワーク、推論タスクにおいてフロンティア級の性能を発揮します。CC Switch を使えば、さまざまなエージェントツールで Kimi を手軽に設定・切り替えできます。',
+      zh: 'Kimi K3.1 Pro 是 Moonshot AI 迄今最强的 3T 级开放权重模型，支持 100 万 Token 上下文。基于 Kimi K3，通过更大规模的后训练计算，K3.1 Pro 在编程、Agent 工作流、3D 创作和推理等方面实现持续提升。借助 CC Switch，你可以在各种 Agentic 工具中轻松配置并切换至 Kimi K3.1 Pro。',
+      en: "Kimi K3.1 Pro is Moonshot AI's most capable 3T-class open-weight model to date, with a 1-million-token context window. Built on Kimi K3 with substantially larger post-training compute, it delivers consistent gains across coding, agentic workflows, 3D creation, and reasoning. CC Switch makes it easy to configure and switch to Kimi K3.1 Pro across agentic tools.",
+      ja: 'Kimi K3.1 Pro は、Moonshot AI がこれまでに開発した中で最も高性能な 3T クラスのオープンウェイトモデルで、100 万トークンのコンテキストウィンドウに対応しています。Kimi K3 をベースに、より大規模な事後学習の計算資源を投入したことで、コーディング、エージェントワークフロー、3D 制作、推論の各分野で着実に性能が向上しています。CC Switch を使えば、さまざまなエージェントツールで Kimi K3.1 Pro を手軽に設定・切り替えできます。',
     },
     perk: {
       zh: 'API 新用户首充返 10% 额度，最高 ¥1000',
