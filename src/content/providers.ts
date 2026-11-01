@@ -64,7 +64,7 @@ const a6api: Provider = {
   iconBg: 'bg-white',
   logoOnWhite: true,
   name: 'A6API',
-  subtitle: 'https://www.a6api.com',
+  subtitle: 'https://www.a6api.vip',
   href: sponsorHref('a6api'),
   isUrl: true,
   isSvgUrl: true,

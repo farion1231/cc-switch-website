@@ -1040,7 +1040,7 @@ export const sponsors: Sponsor[] = ([
     id: 'a6api',
     name: 'A6API',
     icon: a6apiIcon,
-    url: 'https://a6api.com/register?aff=AqNr',
+    url: 'https://a6api.vip/register?aff=AqNr',
     tier: 'standard',
     category: 'aggregator',
     iconBg: 'light',
