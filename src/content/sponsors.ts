@@ -24,7 +24,6 @@ import claudecnIcon from '@/assets/icons/sponsors/claudecn.png';
 import runapiIcon from '@/assets/icons/sponsors/runapi.jpg';
 import openmodelIcon from '@/assets/icons/sponsors/openmodel.jpg';
 import groorouteIcon from '@/assets/icons/sponsors/grooroute.jpg';
-import ditIcon from '@/assets/icons/sponsors/dit.svg';
 import buytokenIcon from '@/assets/icons/sponsors/buytoken.svg';
 import vapiIcon from '@/assets/icons/sponsors/vapi.svg';
 import ospreyaiIcon from '@/assets/icons/sponsors/ospreyai.png';
@@ -97,7 +96,6 @@ const sponsorDisplayOrder = [
   'haoai',
   'fenno',
   'runapi',
-  'dit',
   'openmodel',
   'grooroute',
   'buytoken',
@@ -723,31 +721,6 @@ export const sponsors: Sponsor[] = ([
       en: '¥5 in free trial credit via the exclusive signup link',
       ja: '専用リンクから登録で 5 元分の無料お試しクレジット',
     },
-  },
-  {
-    id: 'dit',
-    name: 'DIT.ai',
-    icon: ditIcon,
-    url: 'https://dit.ai?utm_source=ccswitch',
-    tier: 'standard',
-    category: 'aggregator',
-    iconBg: 'light',
-    tagline: {
-      zh: '多供应商实时竞价的 AI Token 交易市场',
-      en: 'AI token exchange with real-time multi-provider routing',
-      ja: '複数プロバイダーがリアルタイムで競う AI トークン取引所',
-    },
-    description: {
-      zh: '同样的模型，更低的账单，一个 OpenAI 兼容 API 即可调用 GPT、Claude、Gemini 等 50 多个模型，并在 160 多家供应商之间路由到性价比最优的选项，价格通常比官方定价低 30–70%。只需更换 Base URL 和 API Key，即可在保留现有技术栈的情况下开始调用。',
-      en: 'Same models. Often a much lower bill. One OpenAI-compatible API for 50+ models: GPT, Claude, Gemini, and more, with routing across 160+ providers to the best available price-to-quality option, typically 30–70% below official list pricing. Change your base URL and API key, keep your stack, and start calling.',
-      ja: '同じモデルを、多くの場合はるかに安く。OpenAI 互換の API 1 つで GPT、Claude、Gemini など 50 以上のモデルを利用でき、160 以上のプロバイダーの中から価格と品質のバランスが最も良い選択肢へルーティングされるため、通常は公式価格より 30〜70% 安くなります。Base URL と API キーを変えるだけで、既存のスタックはそのままですぐに呼び出せます。',
-    },
-    perk: {
-      zh: '使用优惠码新人首充享 7 折',
-      en: '30% off your welcome top-up with the code',
-      ja: 'コード入力で初回チャージ 30% オフ',
-    },
-    couponCode: 'cc-switch',
   },
   {
     id: 'buytoken',
