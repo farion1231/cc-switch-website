@@ -29,7 +29,6 @@ import vapiIcon from '@/assets/icons/sponsors/vapi.svg';
 import ospreyaiIcon from '@/assets/icons/sponsors/ospreyai.png';
 import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
-import ccsubIcon from '@/assets/icons/sponsors/ccsub.svg';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import haoaiIcon from '@/assets/icons/sponsors/haoai.svg';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
@@ -95,7 +94,6 @@ const sponsorDisplayOrder = [
   'pateway',
   'haoai',
   'fenno',
-  'runapi',
   'openmodel',
   'grooroute',
   'buytoken',
@@ -105,6 +103,7 @@ const sponsorDisplayOrder = [
   'teamorouter',
   'aicoding',
   'subrouter',
+  'runapi',
   'ospreyai',
   'shengsuanyun',
   '88api',
@@ -117,7 +116,6 @@ const sponsorDisplayOrder = [
   'siliconflow',
   'a6api',
   'ucloud',
-  'ccsub',
   'sssaicode',
   'soleapi',
   'micu',
@@ -912,30 +910,6 @@ export const sponsors: Sponsor[] = ([
       zh: '专属链接注册即送体验额度，邀请好友充值持续返现',
       en: 'Free trial credits on signup, plus ongoing referral cashback',
       ja: '専用リンク登録で無料体験クレジット、友人紹介で継続キャッシュバック',
-    },
-  },
-  {
-    id: 'ccsub',
-    name: 'CCSub',
-    icon: ccsubIcon,
-    url: 'https://www.ccsub.net/register?ref=Y6Z8DXEA',
-    tier: 'standard',
-    category: 'relay',
-    iconBg: 'dark',
-    tagline: {
-      zh: '稳定实惠的 AI API 中转平台',
-      en: 'Stable, affordable AI API relay',
-      ja: '安定・低価格の AI API リレー',
-    },
-    description: {
-      zh: 'CCSub 是稳定、实惠的 AI API 中转平台，可作为 Claude Code 官方订阅的替代方案。一个 API Key 覆盖 Claude、GPT-5、Gemini、DeepSeek 等模型，兼容 Claude Code、Codex、Cursor、Cline、Continue、Windsurf 等主流 AI 编程工具。',
-      en: 'CCSub is a stable, affordable AI API relay and a drop-in replacement for Claude.ai subscriptions. One API key covers Claude, GPT-5, Gemini, DeepSeek, and more, with support for Claude Code, Codex, Cursor, Cline, Continue, Windsurf, and other major AI coding tools.',
-      ja: 'CCSub は安定した低価格の AI API リレーサービスで、Claude Code 公式サブスクリプションの代替として利用できます。1 つの API キーで Claude、GPT-5、Gemini、DeepSeek などを利用でき、Claude Code、Codex、Cursor、Cline、Continue、Windsurf など主要な AI コーディングツールに対応します。',
-    },
-    perk: {
-      zh: '专属链接注册即送 $5 体验额度',
-      en: 'Free $5 credit on signup via exclusive link',
-      ja: '専用リンク登録で $5 の無料クレジット',
     },
   },
   {
