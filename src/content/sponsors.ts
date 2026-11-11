@@ -521,6 +521,7 @@ export const sponsors: Sponsor[] = ([
     url: 'https://www.compshare.cn/coding-plan?ytag=GPU_YY_YX_git_cc-switch',
     tier: 'standard',
     category: 'subscription',
+    iconTile: true,
     tagline: {
       zh: 'UCloud 旗下 AI 云平台',
       en: 'AI cloud platform by UCloud',
@@ -591,6 +592,7 @@ export const sponsors: Sponsor[] = ([
     url: 'https://sssaicodeapi.com/register?ref=DCP0SM',
     tier: 'standard',
     category: 'relay',
+    iconTile: true,
     tagline: {
       zh: '稳定平价的 Claude / CodeX 中转',
       en: 'Affordable Claude / CodeX relay',
@@ -735,6 +737,7 @@ export const sponsors: Sponsor[] = ([
     url: 'https://buytoken.work/sign-up?aff=cc-switch',
     tier: 'standard',
     category: 'relay',
+    iconTile: true,
     tagline: {
       zh: '支持企业级并发与极速开票的稳定中转',
       en: 'Stable relay with enterprise concurrency and fast invoicing',
@@ -1046,6 +1049,7 @@ export const sponsors: Sponsor[] = ([
     url: 'https://subrouter.ai/register?aff=l3ri',
     tier: 'standard',
     category: 'aggregator',
+    iconTile: true,
     tagline: {
       zh: 'AI 服务公开市场与智能路由平台',
       en: 'AI service marketplace and smart routing',
