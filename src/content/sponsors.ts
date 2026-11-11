@@ -81,6 +81,14 @@ export interface Sponsor {
     primary?: boolean;
   }>;
   iconBg?: 'light' | 'dark' | 'auto';
+  /**
+   * The icon is a full-bleed tile that already carries its own background
+   * (a square/circle/squircle filling the whole viewBox). Render it edge to
+   * edge instead of shrinking it to the transparent-logo size, and skip the
+   * decorative plate behind it — otherwise the tile floats inside a visible
+   * ring. Mirrors `shape: "tile"` in the main app's icon metadata.
+   */
+  iconTile?: boolean;
   iconFollowsTheme?: boolean;
   featured?: boolean;
 }
@@ -943,6 +951,7 @@ export const sponsors: Sponsor[] = ([
     url: 'https://hao.ai/invite/DTBZS3OR',
     tier: 'standard',
     category: 'aggregator',
+    iconTile: true,
     tagline: {
       zh: '高速稳定的大模型统一 API 网关',
       en: 'Fast, stable unified LLM API gateway',

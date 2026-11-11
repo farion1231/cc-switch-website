@@ -16,7 +16,12 @@ import { SponsorLogo } from './SponsorLogo';
 const lightLogoBg = 'bg-white dark:bg-white/95 p-1';
 const darkLogoBg = 'bg-[#0b0b10] p-1';
 
-function logoBgClass(iconBg?: 'light' | 'dark' | 'auto'): string {
+function logoBgClass(
+  iconBg?: 'light' | 'dark' | 'auto',
+  iconTile?: boolean,
+): string {
+  // 自带底色的 tile 图标铺满框，不再垫衬底（否则框里嵌一块更小的方块）
+  if (iconTile) return '';
   if (iconBg === 'light') return lightLogoBg;
   if (iconBg === 'dark') return darkLogoBg;
   return 'bg-primary/10';
@@ -129,14 +134,19 @@ export function SponsorPerksTable() {
                           <div
                             className={cn(
                               'flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg',
-                              logoBgClass(sponsor.iconBg),
+                              logoBgClass(sponsor.iconBg, sponsor.iconTile),
                             )}
                           >
                             <SponsorLogo
                               src={iconSrc}
                               name={name}
                               followsTheme={sponsor.iconFollowsTheme}
-                              className="h-full w-full object-contain"
+                              className={cn(
+                                'h-full w-full',
+                                sponsor.iconTile
+                                  ? 'object-cover'
+                                  : 'object-contain',
+                              )}
                               loading="lazy"
                             />
                           </div>
@@ -196,14 +206,17 @@ export function SponsorPerksTable() {
                     <div
                       className={cn(
                         'flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg',
-                        logoBgClass(sponsor.iconBg),
+                        logoBgClass(sponsor.iconBg, sponsor.iconTile),
                       )}
                     >
                       <SponsorLogo
                         src={iconSrc}
                         name={name}
                         followsTheme={sponsor.iconFollowsTheme}
-                        className="h-full w-full object-contain"
+                        className={cn(
+                          'h-full w-full',
+                          sponsor.iconTile ? 'object-cover' : 'object-contain',
+                        )}
                         loading="lazy"
                       />
                     </div>
