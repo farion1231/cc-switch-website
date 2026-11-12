@@ -96,9 +96,9 @@ export interface Sponsor {
 // Mirrors the main project's README order, followed by website-only sponsors.
 const sponsorDisplayOrder = [
   'kimi-k2-7-code',
+  'aicodemirror',
   'packycode',
   'apinebula',
-  'aicodemirror',
   'pateway',
   'haoai',
   'fenno',
