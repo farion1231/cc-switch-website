@@ -854,7 +854,7 @@ export const sponsors: Sponsor[] = ([
     id: '9527code',
     name: '9527CODE',
     icon: code9527Icon,
-    url: 'https://9527.codes/register?aff=e5zI',
+    url: 'https://9527.codes/register?channel=ccs',
     tier: 'standard',
     category: 'aggregator',
     iconFollowsTheme: true,
