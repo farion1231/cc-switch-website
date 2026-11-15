@@ -41,8 +41,8 @@ export const translations = {
       subtitle: '一个应用管理供应商、路由、用量、会话和技能',
       items: [
         {
-          title: '一个应用，十三个工具',
-          description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Antigravity 和 Oh My Pi 的供应商配置。',
+          title: '一个应用，十六个工具',
+          description: '一个界面管理 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、DeepSeek Harness、Antigravity、Oh My Pi、GitHub Copilot CLI 和 WorkBuddy 的供应商配置。',
         },
         {
           title: '告别手动编辑',
@@ -286,7 +286,7 @@ export const translations = {
         },
         {
           question: '支持哪些 AI 编程工具？',
-          answer: '目前支持 13 个工具：Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build 为切换式，同一时间只启用一个供应商；OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Oh My Pi 为共存式，可以同时添加多个供应商；Antigravity 不改写配置，在供应商卡片上点「打开终端」，就用这家启动 agy。各工具支持的功能（MCP、Skills、提示词、本地路由等）不完全相同，详见 GitHub README 的「各工具支持的功能」一节。',
+          answer: '目前支持 16 个工具：Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build 为切换式，同一时间只启用一个供应商；OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、DeepSeek Harness、Oh My Pi、WorkBuddy 为共存式，可以同时添加多个供应商；Antigravity 不改写配置，在供应商卡片上点「打开终端」，就用这家启动 agy；GitHub Copilot CLI 两种都有：自带模型的供应商可以同时添加，官方登录卡只用来打开终端。各工具支持的功能（MCP、Skills、提示词、本地路由等）不完全相同，详见 GitHub README 的「各工具支持的功能」一节。',
         },
         {
           question: '我的 API Key 安全吗？',
@@ -793,8 +793,8 @@ export const translations = {
       subtitle: 'One app for providers, routing, usage, sessions, and skills',
       items: [
         {
-          title: 'One App, Thirteen Tools',
-          description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, Antigravity, and Oh My Pi from one interface.',
+          title: 'One App, Sixteen Tools',
+          description: 'Manage providers for Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, DeepSeek Harness, Antigravity, Oh My Pi, GitHub Copilot CLI, and WorkBuddy from one interface.',
         },
         {
           title: 'No More Manual Editing',
@@ -1038,7 +1038,7 @@ export const translations = {
         },
         {
           question: 'Which AI coding tools are supported?',
-          answer: 'CC Switch supports 13 tools. Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build are switch-mode tools with one active provider at a time; OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, and Oh My Pi are coexist-mode tools that can hold several providers at once; Antigravity leaves its config alone — click “Open Terminal” on a provider card to start agy with that provider. Supported features (MCP, Skills, Prompts, Local Routing, and more) vary by tool — see “Supported Features by Tool” in the GitHub README.',
+          answer: 'CC Switch supports 16 tools. Claude Code, Claude Desktop, Codex, Gemini CLI, and Grok Build are switch-mode tools with one active provider at a time; OpenCode, OpenClaw, Hermes Agent, Pi, MiniMax Code, Kimi Code, DeepSeek Harness, Oh My Pi, and WorkBuddy are coexist-mode tools that can hold several providers at once; Antigravity leaves its config alone — click “Open Terminal” on a provider card to start agy with that provider; GitHub Copilot CLI does both: bring-your-own-model providers coexist, while its official sign-in card only opens a terminal. Supported features (MCP, Skills, Prompts, Local Routing, and more) vary by tool — see “Supported Features by Tool” in the GitHub README.',
         },
         {
           question: 'Is my API Key secure?',
@@ -1545,8 +1545,8 @@ export const translations = {
       subtitle: 'プロバイダー、ルーティング、使用量、セッション、Skills を1つに',
       items: [
         {
-          title: '1つのアプリで13のツール',
-          description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Antigravity、Oh My Pi のプロバイダーを1つの画面で管理できます。',
+          title: '1つのアプリで16のツール',
+          description: 'Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、DeepSeek Harness、Antigravity、Oh My Pi、GitHub Copilot CLI、WorkBuddy のプロバイダーを1つの画面で管理できます。',
         },
         {
           title: '手動編集は不要',
@@ -1790,7 +1790,7 @@ export const translations = {
         },
         {
           question: 'どの AI コーディングツールに対応していますか？',
-          answer: '13 のツールに対応しています。Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build は切り替え型で、同時に有効にできるプロバイダーは 1 つです。OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、Oh My Pi は共存型で、複数のプロバイダーを同時に追加できます。Antigravity は設定を書き換えず、プロバイダーカードの「ターミナルを開く」から、そのプロバイダーで agy を起動します。対応機能（MCP、Skills、プロンプト、ローカルルーティングなど）はツールごとに異なります。詳しくは GitHub README の「ツール別の対応機能」をご覧ください。',
+          answer: '16 のツールに対応しています。Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build は切り替え型で、同時に有効にできるプロバイダーは 1 つです。OpenCode、OpenClaw、Hermes Agent、Pi、MiniMax Code、Kimi Code、DeepSeek Harness、Oh My Pi、WorkBuddy は共存型で、複数のプロバイダーを同時に追加できます。Antigravity は設定を書き換えず、プロバイダーカードの「ターミナルを開く」から、そのプロバイダーで agy を起動します。GitHub Copilot CLI は両方の形を持ち、独自モデルのプロバイダーは共存型で追加でき、公式ログインカードはターミナルを開くだけです。対応機能（MCP、Skills、プロンプト、ローカルルーティングなど）はツールごとに異なります。詳しくは GitHub README の「ツール別の対応機能」をご覧ください。',
         },
         {
           question: 'API キーは安全ですか？',
