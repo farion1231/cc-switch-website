@@ -115,6 +115,8 @@ export const demoApps: DemoApp[] = [
     kind: 'switch',
     modes: ['direct', 'route', 'stack'],
     providers: claudeDesktopProviders,
+    // Opens in Routing, so the sidebar shows the tag and model-mapping providers are usable.
+    initialMode: 'route',
     stack: { default: 'Kimi For Coding', members: { 'Kimi For Coding': 2, APINebula: 2, OpenRouter: 3 } },
     needsRoute: ['APINebula', 'PatewayAI', 'OpenRouter'],
   },
