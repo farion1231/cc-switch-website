@@ -1,16 +1,30 @@
 import { motion } from 'framer-motion';
-import { Database, Code, TestTube } from 'lucide-react';
+import { ShieldCheck, Scale, Feather, Plug } from 'lucide-react';
 import { useLanguage } from '@/i18n/useLanguage';
 import { MacOsWindowBar } from './MacOsWindowBar';
 
-const techIcons = [Database, Code, TestTube];
-const techColors = ['bg-info', 'bg-primary', 'bg-success'];
+const techIcons = [ShieldCheck, Scale, Feather, Plug];
+const techColors = ['bg-success', 'bg-info', 'bg-primary', 'bg-warning'];
+
+// ~/.claude/settings.json after a switch: `changed` lines are the key fields CC Switch writes, the rest is the user's own.
+const settingsLines: { text: string; changed?: boolean }[] = [
+  { text: '{' },
+  { text: '  "env": {' },
+  { text: '    "ANTHROPIC_BASE_URL": "https://api.moonshot.cn/anthropic",', changed: true },
+  { text: '    "ANTHROPIC_AUTH_TOKEN": "sk-••••••••",', changed: true },
+  { text: '    "ANTHROPIC_MODEL": "kimi-k3"', changed: true },
+  { text: '  },' },
+  { text: '  "permissions": { "allow": ["Bash(git:*)"] },' },
+  { text: '  "enabledPlugins": { "...": true },' },
+  { text: '  "statusLine": { "type": "command", "command": "..." }' },
+  { text: '}' },
+];
 
 export function TechSection() {
   const { t } = useLanguage();
 
   return (
-    <section className="section-y bg-background">
+    <section id="principles" className="section-y scroll-mt-16 bg-background">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
           {/* Left: Code Example */}
@@ -43,17 +57,24 @@ export function TechSection() {
               <MacOsWindowBar size="sm" className="px-4 py-3 bg-[#252525] border-b border-white/10">
                 <span className="text-xs text-white/50 ml-2">~/.claude/settings.json</span>
               </MacOsWindowBar>
-              <pre className="p-4 md:p-6 overflow-x-auto text-xs md:text-sm">
-                <code className="text-green-400 font-mono">
-                  {`{
-  "env": {
-    "ANTHROPIC_AUTH_TOKEN": "PROXY_MANAGED",
-    "ANTHROPIC_BASE_URL": "http://127.0.0.1:15721"
-  }
-}`}
+              <pre className="py-4 md:py-6 overflow-x-auto text-xs md:text-sm">
+                <code className="block min-w-max font-mono">
+                  {settingsLines.map((line, index) => (
+                    <span
+                      key={index}
+                      className={
+                        line.changed
+                          ? 'block border-l-2 border-green-400 bg-green-400/10 px-4 md:px-6 text-green-300'
+                          : 'block border-l-2 border-transparent px-4 md:px-6 text-white/45'
+                      }
+                    >
+                      {line.text}
+                    </span>
+                  ))}
                 </code>
               </pre>
             </div>
+            <p className="mt-3 text-sm text-muted-foreground">{t.tech.codeNote}</p>
           </motion.div>
 
           {/* Right: Feature List */}

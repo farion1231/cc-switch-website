@@ -68,21 +68,27 @@ export const translations = {
     },
     // Tech Section
     tech: {
-      badge: '开发者友好',
-      title: '零配置，开箱即用',
-      description: '无需修改代码，开启本地路由即可获得格式转换、热切换、故障转移和请求日志。',
+      badge: '设计原则',
+      title: '帮你管好工具，而不是取代它们',
+      description: '配置写进各工具自己的文件，切换只动该动的几个字段，其余一切照旧。',
+      principles: ['稳定', '合规', '低侵入', '原生优先'],
+      codeNote: '高亮的是切换供应商时改动的行，其余设置原样保留。',
       features: [
         {
-          title: '本地优先，可选云同步',
-          description: '配置和 API Key 默认保存在本地 SQLite 数据库，支持完整的 Schema 迁移；开启 WebDAV / S3 云同步后可在多台设备间同步，数据只上传到你自己配置的存储。',
+          title: '稳定可靠',
+          description: '先写临时文件再原子替换，首次改动前自动备份；文件解析失败就停下，绝不从空白重写。Rust 后端，三个平台持续集成测试。',
         },
         {
-          title: 'Rust 后端 + React 前端',
-          description: '基于 Tauri 2.x 构建，结合 Rust 的性能和 React 的灵活性。',
+          title: '合规透明',
+          description: '写入的都是各工具官方的标准配置项，不修改客户端程序、不注入代码。配置和 API Key 只存在本机，云同步只上传到你自己配置的 WebDAV / S3；MIT 协议开源，每行代码都可审计。',
         },
         {
-          title: '智能用量追踪',
-          description: '实时监控 Token、缓存、订阅额度和费用，按应用与 Provider 分类统计分析。',
+          title: '低侵入，随时可退',
+          description: '不装 hook，也不往 shell 配置里写东西。即使停用或卸载 CC Switch，工具照常使用；命令行工具开着本地路由时，退出 CC Switch 会自动写回直连配置。',
+        },
+        {
+          title: '原生优先',
+          description: '默认直连：工具像手动配置过一样直接请求供应商，中间不经过任何服务。只有需要格式转换、故障转移或聚合时，才按需开启本地路由。',
         },
       ],
     },
@@ -820,21 +826,27 @@ export const translations = {
     },
     // Tech Section
     tech: {
-      badge: 'Developer Friendly',
-      title: 'Zero Configuration, Ready to Use',
-      description: 'No code changes required. Enable Local Routing to get format conversion, hot switching, failover, and request logs.',
+      badge: 'Design Principles',
+      title: 'Manages Your Tools, Never Replaces Them',
+      description: 'Settings go into each tool\'s own files, and a switch changes only the few fields it has to. Everything else stays as it was.',
+      principles: ['Stable', 'Compliant', 'Low-Intrusion', 'Native-First'],
+      codeNote: 'Highlighted lines are what a provider switch changes. All other settings stay untouched.',
       features: [
         {
-          title: 'Local-First, Optional Cloud Sync',
-          description: 'Configurations and API keys stay in a local SQLite database by default, with full schema migration support. Turn on WebDAV / S3 cloud sync to share them across devices — uploaded only to storage you configure.',
+          title: 'Stable',
+          description: 'Every write goes to a temp file first and is swapped in atomically, with a backup before the first change. If a file can\'t be parsed, CC Switch stops instead of rewriting it from scratch. Rust backend, tested in CI on all three platforms.',
         },
         {
-          title: 'Rust Backend + React Frontend',
-          description: 'Built on Tauri 2.x, combining Rust performance with React flexibility.',
+          title: 'Compliant & Transparent',
+          description: 'Only each tool\'s official, documented settings are written. No patched clients, no injected code. Configs and API keys stay on your machine, and cloud sync uploads only to WebDAV / S3 storage you configure. MIT-licensed, every line open to audit.',
         },
         {
-          title: 'Smart Usage Tracking',
-          description: 'Real-time monitoring for tokens, cache, subscription quota, and costs across apps and providers.',
+          title: 'Low-Intrusion, Easy to Leave',
+          description: 'No hooks, nothing added to your shell profile. Stop or uninstall CC Switch and your tools keep working; if a command-line tool is using Local Routing, quitting CC Switch writes its direct config back automatically.',
+        },
+        {
+          title: 'Native-First',
+          description: 'Direct by default: each tool talks to the provider just as if you had configured it by hand, with no service in between. Local Routing turns on only when you need format conversion, failover, or aggregation.',
         },
       ],
     },
@@ -1572,21 +1584,27 @@ export const translations = {
     },
     // Tech Section
     tech: {
-      badge: '開発者フレンドリー',
-      title: 'ゼロ設定、すぐに使える',
-      description: 'コード変更不要。ローカルルーティングをオンにするだけで、形式変換、ホットスイッチ、フェイルオーバー、リクエストログを利用できます。',
+      badge: '設計方針',
+      title: 'ツールを置き換えず、うまく管理する',
+      description: '設定は各ツール自身のファイルに書き込み、切り替えでは必要な数項目だけを変更。それ以外はそのままです。',
+      principles: ['安定', 'コンプライアンス', '低侵襲', 'ネイティブ優先'],
+      codeNote: 'ハイライトはプロバイダー切り替えで変わる行です。それ以外の設定はそのまま残ります。',
       features: [
         {
-          title: 'ローカルファースト、クラウド同期は任意',
-          description: '設定と API キーはデフォルトでローカル SQLite データベースに保存され、完全なスキーママイグレーションをサポート。WebDAV / S3 クラウド同期をオンにすると複数のデバイス間で同期でき、アップロード先はご自身で設定したストレージだけです。',
+          title: '安定性',
+          description: '一時ファイルに書いてからアトミックに置き換え、初回の変更前には自動でバックアップ。ファイルを解析できなければ書き込みを止め、空から書き直すことはありません。Rust バックエンドで、3 プラットフォームの CI でテストしています。',
         },
         {
-          title: 'Rust バックエンド + React フロントエンド',
-          description: 'Tauri 2.x をベースに構築され、Rust のパフォーマンスと React の柔軟性を組み合わせ。',
+          title: 'コンプライアンスと透明性',
+          description: '書き込むのは各ツール公式の標準設定項目だけで、クライアントの改変やコードの注入はしません。設定と API キーはローカルにのみ保存され、クラウド同期のアップロード先はご自身で設定した WebDAV / S3 だけ。MIT ライセンスのオープンソースで、すべてのコードを監査できます。',
         },
         {
-          title: 'スマート使用量追跡',
-          description: 'トークン、キャッシュ、サブスクリプション枠、コストをアプリとプロバイダー別にリアルタイム監視します。',
+          title: '低侵襲、いつでもやめられる',
+          description: 'hook を仕込まず、シェルの設定ファイルにも何も書き込みません。CC Switch を止めてもアンインストールしても、ツールはそのまま使えます。コマンドラインツールがローカルルーティングを使っている場合、CC Switch の終了時に直接接続の設定へ自動で戻します。',
+        },
+        {
+          title: 'ネイティブ優先',
+          description: 'デフォルトは直接接続：手で設定したときと同じように、ツールがプロバイダーへ直接リクエストし、間に何も挟みません。形式変換、フェイルオーバー、集約が必要なときだけローカルルーティングをオンにします。',
         },
       ],
     },

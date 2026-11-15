@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, ArrowRight } from 'lucide-react';
+import { Download, ArrowRight, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/i18n/useLanguage';
@@ -88,6 +88,21 @@ export function HeroSection() {
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-muted-foreground font-medium">
                 {t.hero.slogan}
               </p>
+
+              {/* Design principles: each tag jumps to the section that backs it up */}
+              <ul className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center xl:justify-start gap-2">
+                {t.tech.principles.map((principle) => (
+                  <li key={principle}>
+                    <a
+                      href="#principles"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 py-1 text-sm text-muted-foreground backdrop-blur-sm transition-colors hover:border-primary/40 hover:text-foreground"
+                    >
+                      <Check className="h-3.5 w-3.5 text-success" />
+                      {principle}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
 
             {/* Spacer between upper and lower sections */}
