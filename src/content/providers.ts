@@ -15,7 +15,6 @@ import openRouterIcon from '@/assets/icons/openrouter.svg';
 import openRouterIconSvg from '@/assets/icons/openrouter.svg?raw';
 import packyCodeIcon from '@/assets/icons/packycode.svg';
 import packyCodeIconSvg from '@/assets/icons/packycode.svg?raw';
-import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import aicodemirrorIcon from '@/assets/icons/sponsors/aicodemirror.svg';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
@@ -64,14 +63,14 @@ export interface Provider {
 // sponsors.ts, so the two never drift apart.
 const sponsorHref = (id: string) => sponsors.find((sponsor) => sponsor.id === id)?.url;
 
-// A6API has presets for every app except MiniMax Code; it sits just before OpenRouter in each list.
-const a6api: Provider = {
-  icon: a6apiIcon,
-  iconBg: 'bg-white',
-  logoOnWhite: true,
-  name: 'A6API',
-  subtitle: 'https://www.a6api.vip',
-  href: sponsorHref('a6api'),
+// PatewayAI has presets for Claude Code, Claude Desktop, Codex, Gemini CLI and Grok Build only;
+// it sits just before OpenRouter in each of those lists.
+const pateway: Provider = {
+  icon: patewayIcon,
+  iconBg: 'bg-sky-500/15',
+  name: 'PatewayAI',
+  subtitle: 'https://pateway.ai',
+  href: sponsorHref('pateway'),
   isUrl: true,
   isSvgUrl: true,
 };
@@ -161,7 +160,7 @@ export const claudeProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
+  pateway,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -217,16 +216,7 @@ export const claudeDesktopProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  {
-    icon: patewayIcon,
-    iconBg: 'bg-sky-500/15',
-    name: 'PatewayAI',
-    subtitle: 'https://pateway.ai',
-    href: sponsorHref('pateway'),
-    isUrl: true,
-    isSvgUrl: true,
-  },
-  a6api,
+  pateway,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -301,7 +291,7 @@ export const codexProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
+  pateway,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -364,7 +354,7 @@ export const geminiProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
+  pateway,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -420,7 +410,6 @@ export const opencodeProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -476,7 +465,6 @@ export const openClawProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -531,7 +519,6 @@ export const hermesProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -579,7 +566,7 @@ export const grokBuildProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
+  pateway,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
@@ -633,7 +620,6 @@ export const piProviders: Provider[] = [
     isUrl: true,
     isSvgUrl: true,
   },
-  a6api,
   {
     icon: openRouterIcon,
     iconSvg: openRouterIconSvg,
