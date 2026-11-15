@@ -8,6 +8,12 @@ import { Btn, DemoSwitch, HelpTip, MoreMenu, PaneHeader, Pill } from './parts';
 import { TOOLS, type SampleTool } from './samples';
 import { useShell } from './shellContext';
 
+/** Desktop apps can't be installed or upgraded here; CC Switch only connects to their config. */
+const DESKTOP_HELP: Partial<Record<AppId, 'desktopHelp' | 'workbuddyHelp'>> = {
+  'claude-desktop': 'desktopHelp',
+  workbuddy: 'workbuddyHelp',
+};
+
 export function AppsPage() {
   const { t } = useLanguage();
   const { visibleApps, setAppVisible } = useShell();
@@ -46,8 +52,8 @@ export function AppsPage() {
   }, [busy]);
 
   const visibleCount = visibleApps.length;
-  // Installed first, as in the app; Claude Desktop counts as installed once it's hooked up.
-  const isInstalled = (tool: SampleTool) => tool.app === 'claude-desktop' || Boolean(tool.version);
+  // Installed first, as in the app; the desktop apps count as installed once they're hooked up.
+  const isInstalled = (tool: SampleTool) => tool.app in DESKTOP_HELP || Boolean(tool.version);
   const sections = [
     { key: 'installed', title: ap.sectionInstalled, rows: tools.filter(isInstalled) },
     { key: 'notInstalled', title: ap.sectionNotInstalled, rows: tools.filter((tool) => !isInstalled(tool)) },
@@ -59,7 +65,8 @@ export function AppsPage() {
     const app = demoAppById[tool.app];
     const visible = visibleApps.includes(tool.app);
     const isBusy = busy.includes(tool.app);
-    const desktop = tool.app === 'claude-desktop';
+    const desktopHelp = DESKTOP_HELP[tool.app];
+    const desktop = Boolean(desktopHelp);
     return (
       <div key={tool.app} className="px-4 py-3">
         <div className="flex items-center gap-4">
@@ -68,7 +75,7 @@ export function AppsPage() {
             <div className="flex min-w-0 items-center gap-1.5 text-sm font-medium text-foreground">
               <span className="truncate">{app.label}</span>
               {tool.source && <Pill>{tool.source}</Pill>}
-              {desktop && <HelpTip title={app.label} body={ap.desktopHelp} />}
+              {desktopHelp && <HelpTip title={app.label} body={ap[desktopHelp]} />}
             </div>
             {!desktop && (
               <div className="mt-0.5 flex min-w-0 items-center gap-2 text-xs text-[var(--app-fg2)]">

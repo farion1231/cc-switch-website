@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Copy, ExternalLink, KeyRound, Loader2, Plus, RefreshCw } from 'lucide-react';
+import { createContext, useContext, useEffect, useId, useRef, useState } from 'react';
+import { ChevronDown, Copy, ExternalLink, KeyRound, Link2, Loader2, Plus, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/i18n/useLanguage';
 import antigravityIcon from '@/assets/icons/antigravity.svg';
 import claudeIcon from '@/assets/icons/claude.svg';
 import copilotIconSvg from '@/assets/icons/githubcopilot.svg?raw';
+import deepseekIcon from '@/assets/icons/deepseek.svg';
 import kimiCodeIconSvg from '@/assets/icons/kimi-code.svg?raw';
 import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
+import workbuddyIcon from '@/assets/icons/workbuddy.svg';
 import { InlineSvgIcon } from '@/components/ccswitch/InlineSvgIcon';
 import { fill } from './apps';
 import { QUOTA_TONE_FILL, QUOTA_TONE_TEXT, quotaTone } from './quotaTone';
-import { Btn, Floating, HelpTip, IconBtn, MoreMenu, PaneHeader, Pill, Segmented } from './parts';
+import { Btn, DemoSwitch, Floating, HelpTip, IconBtn, MoreMenu, PaneHeader, Pill, Segmented } from './parts';
 import { ACCOUNTS, type AuthService, type SampleAccount } from './samples';
 import { useShell } from './shellContext';
 
@@ -19,8 +21,12 @@ interface ServiceDef {
   id: AuthService;
   name: string;
   icon: { svg: string } | { src: string };
-  /** Device code shown in the card (Copilot / ChatGPT / xAI / Kimi) or a browser sign-in page (Claude / Antigravity). */
-  login: 'device' | 'browser';
+  /**
+   * Device code shown in the card (Copilot / ChatGPT / xAI / Kimi), a browser sign-in page
+   * (Claude / DeepSeek / Antigravity), or WorkBuddy's: CC Switch can't sign in for it and only
+   * saves the account the desktop app is signed in with.
+   */
+  login: 'device' | 'browser' | 'import';
   /** Picked before signing in: Copilot's deployment, Kimi's region. */
   chooser?: 'copilot' | 'kimi';
 }
@@ -32,8 +38,13 @@ const SERVICES: ServiceDef[] = [
   { id: 'chatgpt', name: 'ChatGPT', icon: { svg: openaiIconSvg }, login: 'device' },
   { id: 'xai', name: 'xAI', icon: { svg: grokIconSvg }, login: 'device' },
   { id: 'kimi', name: 'Kimi Code', icon: { svg: kimiCodeIconSvg }, login: 'device', chooser: 'kimi' },
+  { id: 'dsh', name: 'DeepSeek Harness', icon: { src: deepseekIcon }, login: 'browser' },
   { id: 'agy', name: 'Antigravity', icon: { src: antigravityIcon }, login: 'browser' },
+  { id: 'workbuddy', name: 'WorkBuddy', icon: { src: workbuddyIcon }, login: 'import' },
 ];
+
+/** Groups with one account at a time in use ("Default", "Kimi in use", "In use by WorkBuddy"). */
+const HAS_DEFAULT: AuthService[] = ['copilot', 'chatgpt', 'xai', 'kimi', 'agy', 'workbuddy'];
 
 /** The account a finished demo sign-in adds to each group. */
 const NEW_ACCOUNT: Record<AuthService, Omit<SampleAccount, 'signedIn' | 'checkedMinutesAgo'>> = {
@@ -42,6 +53,13 @@ const NEW_ACCOUNT: Record<AuthService, Omit<SampleAccount, 'signedIn' | 'checked
   chatgpt: { login: 'me@example.com', usedBy: 0, quota: [{ tier: 'fiveHour', left: 100 }, { tier: 'weekly', left: 100 }] },
   xai: { login: 'grok-dev', usedBy: 0, quota: [{ tier: 'weekly', left: 100 }] },
   kimi: { login: 'kimi-new', region: 'mainland-cn', quota: [{ tier: 'fiveHour', left: 100 }, { tier: 'weekly', left: 100 }] },
+  dsh: {
+    login: 'DeepSeek Dev',
+    contact: 'me@example.com',
+    wallet: { balance: '¥0.00' },
+    quota: [],
+  },
+  workbuddy: { login: 'wb-new', planText: { zh: '免费版', en: 'Free', ja: '無料版' }, points: { remaining: 500, total: 500 }, quota: [] },
   agy: {
     login: 'me@gmail.com',
     quota: [
@@ -51,12 +69,25 @@ const NEW_ACCOUNT: Record<AuthService, Omit<SampleAccount, 'signedIn' | 'checked
   },
 };
 
+/** Bumped by the header's Refresh all; every account row refreshes its own quota. */
+const RefreshAllContext = createContext(0);
+
 /** What the card is waiting for: a sign-in, or the chooser that comes before it. */
 type Pending = { kind: 'add' | 'reauth'; login?: string } | { kind: 'choose' } | null;
 
 export function AuthPane() {
   const { t } = useLanguage();
   const a = t.demo.window.pages.auth;
+  const [openBrowser, setOpenBrowser] = useState(true);
+  const [refreshAll, setRefreshAll] = useState(0);
+  const [refreshingAll, setRefreshingAll] = useState(false);
+
+  useEffect(() => {
+    if (!refreshingAll) return;
+    const timer = window.setTimeout(() => setRefreshingAll(false), 900);
+    return () => window.clearTimeout(timer);
+  }, [refreshingAll]);
+
   return (
     <div className="flex h-full min-h-0 flex-col">
       <PaneHeader
@@ -70,14 +101,50 @@ export function AuthPane() {
             </span>
           </>
         }
+        actions={
+          <Btn
+            variant="quiet"
+            disabled={refreshingAll}
+            onClick={() => {
+              setRefreshingAll(true);
+              setRefreshAll((current) => current + 1);
+            }}
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <RefreshCw className={cn('h-4 w-4', refreshingAll && 'animate-spin')} strokeWidth={2} />
+              <span className="hidden sm:inline">{a.refreshAll}</span>
+            </span>
+          </Btn>
+        }
       />
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-10 pt-4 sm:px-6">
-        <div className="flex flex-col gap-3">
-          {SERVICES.map((service) => (
-            <ServiceCard key={service.id} service={service} />
-          ))}
-        </div>
+        <RefreshAllContext.Provider value={refreshAll}>
+          <div className="flex flex-col gap-3">
+            <OpenBrowserToggle checked={openBrowser} onChange={setOpenBrowser} />
+            {SERVICES.map((service) => (
+              <ServiceCard key={service.id} service={service} openBrowser={openBrowser} />
+            ))}
+          </div>
+        </RefreshAllContext.Provider>
       </div>
+    </div>
+  );
+}
+
+/** Off: sign-ins only copy the link, for people who keep accounts in separate browser profiles. */
+function OpenBrowserToggle({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
+  const { t } = useLanguage();
+  const a = t.demo.window.pages.auth;
+  const titleId = useId();
+  return (
+    <div className="flex items-center gap-4 rounded-[10px] border border-border bg-[var(--app-surface)] px-4 py-3">
+      <div className="min-w-0 flex-1 space-y-0.5">
+        <p id={titleId} className="text-sm font-medium text-foreground">
+          {a.openBrowserTitle}
+        </p>
+        <p className="text-xs text-[var(--app-fg2)]">{a.openBrowserBody}</p>
+      </div>
+      <DemoSwitch checked={checked} onChange={onChange} label={a.openBrowserTitle} />
     </div>
   );
 }
@@ -89,7 +156,7 @@ function ServiceIcon({ service }: { service: ServiceDef }) {
   return <img src={service.icon.src} alt={service.name} className="h-5 w-5 object-contain" />;
 }
 
-function ServiceCard({ service }: { service: ServiceDef }) {
+function ServiceCard({ service, openBrowser }: { service: ServiceDef; openBrowser: boolean }) {
   const { t } = useLanguage();
   const { toast } = useShell();
   const p = t.demo.window.pages;
@@ -102,13 +169,36 @@ function ServiceCard({ service }: { service: ServiceDef }) {
     chatgpt: a.chatgptHelp,
     xai: a.xaiHelp,
     kimi: a.kimiHelp,
+    dsh: a.dshHelp,
     agy: a.agyHelp,
+    workbuddy: a.workbuddyHelp,
   }[service.id];
   const emptyText = {
     claude: a.claudeEmpty,
     kimi: a.kimiEmpty,
+    dsh: a.dshEmpty,
     agy: a.agyEmpty,
-  }[service.id as 'claude' | 'kimi' | 'agy'] ?? fill(a.empty, { service: service.name });
+    workbuddy: a.workbuddyEmpty,
+  }[service.id as 'claude' | 'kimi' | 'dsh' | 'agy' | 'workbuddy'] ?? fill(a.empty, { service: service.name });
+
+  function addAccount() {
+    setAccounts((current) => [
+      // DeepSeek Harness holds one sign-in, shared by its Web and Desktop.
+      ...current.filter((account) => service.id !== 'dsh' && account.login !== NEW_ACCOUNT[service.id].login),
+      {
+        ...NEW_ACCOUNT[service.id],
+        signedIn: { zh: '今天', en: 'today', ja: '今日' },
+        // Groups with a default make the first account it.
+        isDefault: HAS_DEFAULT.includes(service.id) && current.length === 0,
+        checkedMinutesAgo: 0,
+      },
+    ]);
+    toast({ text: fill(a.toastAdded, { service: service.name }) });
+  }
+
+  // The sign-in timer reads the latest version without restarting when it changes.
+  const addAccountRef = useRef(addAccount);
+  addAccountRef.current = addAccount;
 
   // The demo "authorizes" a few seconds after the sign-in starts.
   useEffect(() => {
@@ -120,28 +210,21 @@ function ServiceCard({ service }: { service: ServiceDef }) {
         );
         toast({ text: fill(a.toastReauthed, { login: pending.login ?? '' }) });
       } else {
-        setAccounts((current) => [
-          ...current.filter((account) => account.login !== NEW_ACCOUNT[service.id].login),
-          {
-            ...NEW_ACCOUNT[service.id],
-            signedIn: { zh: '今天', en: 'today', ja: '今日' },
-            // Claude has no default account; the other groups' first account becomes it.
-            isDefault: service.id !== 'claude' && current.length === 0,
-            checkedMinutesAgo: 0,
-          },
-        ]);
-        toast({ text: fill(a.toastAdded, { service: service.name }) });
+        addAccountRef.current();
       }
       setPending(null);
     }, 3500);
     return () => window.clearTimeout(timer);
   }, [pending, service, a, toast]);
 
-  const startAdd = () => setPending(service.chooser ? { kind: 'choose' } : { kind: 'add' });
+  // WorkBuddy has nothing to wait for: the account it is signed in with is saved right away.
+  const startAdd = () =>
+    service.login === 'import' ? addAccount() : setPending(service.chooser ? { kind: 'choose' } : { kind: 'add' });
 
   const setDefault = (login: string) => {
     setAccounts((current) => current.map((other) => ({ ...other, isDefault: other.login === login })));
     if (service.id === 'agy') toast({ text: a.agySwitched });
+    if (service.id === 'workbuddy') toast({ text: fill(a.workbuddySwitched, { name: login }) });
   };
 
   return (
@@ -196,10 +279,16 @@ function ServiceCard({ service }: { service: ServiceDef }) {
           </div>
           {service.login === 'browser' ? (
             <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--app-fg2)]">
-              <span className="min-w-0 flex-1">{fill(a.browserNote, { service: service.name })}</span>
-              <Btn compact variant="quiet" icon={ExternalLink}>
-                {a.reopenPage}
-              </Btn>
+              <span className="min-w-0 flex-1">{openBrowser ? fill(a.browserNote, { service: service.name }) : a.linkNote}</span>
+              {openBrowser ? (
+                <Btn compact variant="quiet" icon={ExternalLink}>
+                  {a.reopenPage}
+                </Btn>
+              ) : (
+                <Btn compact variant="quiet" icon={Link2} onClick={() => toast({ text: a.linkCopied })}>
+                  {a.copyLink}
+                </Btn>
+              )}
             </div>
           ) : (
             <>
@@ -209,9 +298,15 @@ function ServiceCard({ service }: { service: ServiceDef }) {
                   8F2K-4QXM
                 </span>
                 <IconBtn icon={Copy} label={a.copyCode} onClick={() => toast({ text: a.codeCopied })} />
-                <IconBtn icon={ExternalLink} label={a.openPage} />
+                {openBrowser ? (
+                  <IconBtn icon={ExternalLink} label={a.openPage} />
+                ) : (
+                  <IconBtn icon={Link2} label={a.copyLink} onClick={() => toast({ text: a.linkCopied })} />
+                )}
               </div>
-              <p className="text-xs text-[var(--app-fg2)]">{fill(a.pendingNote, { service: service.name })}</p>
+              <p className="text-xs text-[var(--app-fg2)]">
+                {fill(openBrowser ? a.pendingNote : a.linkCodeNote, { service: service.name })}
+              </p>
             </>
           )}
         </div>
@@ -239,16 +334,27 @@ function AccountRow({
   const [checked, setChecked] = useState(account.checkedMinutesAgo);
   const [refreshing, setRefreshing] = useState(false);
   const timer = useRef<number>();
+  const refreshAll = useContext(RefreshAllContext);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
   const refresh = () => {
+    window.clearTimeout(timer.current);
     setRefreshing(true);
     timer.current = window.setTimeout(() => {
       setRefreshing(false);
       setChecked(0);
     }, 900);
   };
+
+  // The header's Refresh all spins every row, as the shared query cache does in the app; a row
+  // added afterwards only answers the next one.
+  const seenRefreshAll = useRef(refreshAll);
+  useEffect(() => {
+    if (refreshAll === seenRefreshAll.current) return;
+    seenRefreshAll.current = refreshAll;
+    refresh();
+  }, [refreshAll]);
 
   // Each group words its row the way its section in the app does.
   const signedIn = account.signedIn[language];
@@ -259,14 +365,28 @@ function AccountRow({
         ? [account.region === 'global' ? a.kimiGlobal : a.kimiMainland, account.primary ? a.kimiPrimary : undefined]
         : service === 'agy'
           ? [fill(a.addedOn, { date: signedIn })]
-          : [account.host, fill(a.signedInOn, { date: signedIn }), fill(a.usedBy, { count: account.usedBy ?? 0 })];
+          : service === 'dsh'
+            ? [account.contact, a.dshShared]
+            : service === 'workbuddy'
+              ? [account.planText?.[language], fill(a.workbuddyAddedOn, { date: signedIn })]
+              : [account.host, fill(a.signedInOn, { date: signedIn }), fill(a.usedBy, { count: account.usedBy ?? 0 })];
   const meta = details.filter(Boolean).join(' · ');
-  const defaultLabel = service === 'kimi' ? a.kimiCurrent : service === 'agy' ? a.agyCurrent : a.default;
-  const setDefaultLabel = service === 'kimi' ? a.kimiUseAccount : service === 'agy' ? a.agySwitchTo : a.setDefault;
-  // Claude has no default account; Copilot can't sign in again; Claude only offers it once expired.
-  const canSetDefault = service !== 'claude' && !account.isDefault && !account.needsReauth;
-  const canReauth = service !== 'copilot' && (service !== 'claude' || account.needsReauth);
-  const removeLabel = service === 'kimi' && account.primary ? a.kimiDismiss : a.removeAccount;
+  const defaultLabel = {
+    kimi: a.kimiCurrent,
+    agy: a.agyCurrent,
+    workbuddy: a.workbuddyCurrent,
+  }[service as 'kimi' | 'agy' | 'workbuddy'] ?? a.default;
+  const setDefaultLabel = {
+    kimi: a.kimiUseAccount,
+    agy: a.agySwitchTo,
+    workbuddy: a.workbuddySwitchTo,
+  }[service as 'kimi' | 'agy' | 'workbuddy'] ?? a.setDefault;
+  // Claude and DeepSeek have no default account; Copilot can't sign in again; Claude, DeepSeek and
+  // WorkBuddy only offer it once the sign-in has expired.
+  const canSetDefault = HAS_DEFAULT.includes(service) && !account.isDefault && !account.needsReauth;
+  const canReauth =
+    service !== 'copilot' && (!['claude', 'dsh', 'workbuddy'].includes(service) || Boolean(account.needsReauth));
+  const removeLabel = service === 'dsh' ? a.dshSignOut : service === 'kimi' && account.primary ? a.kimiDismiss : a.removeAccount;
 
   return (
     <div className="flex min-h-[56px] items-center gap-3 border-t border-border py-2 pe-2.5 ps-4">
@@ -308,6 +428,8 @@ function AccountRow({
             ))}
             {account.resetCredits && <ResetCreditsRow groups={account.resetCredits} />}
             {account.credits && <CreditsRow balance={account.credits} />}
+            {account.wallet && <WalletRows wallet={account.wallet} />}
+            {account.points && <PointsRow points={account.points} />}
           </div>
           <div className="hidden w-[84px] shrink-0 items-center justify-end gap-0.5 text-xs text-[var(--app-fg3)] sm:flex">
             <span className="truncate">
@@ -486,6 +608,42 @@ function CreditsRow({ balance }: { balance: number }) {
       <span className="min-w-[52px] shrink-0 whitespace-nowrap text-[var(--app-fg2)]">{a.creditsLabel}</span>
       <span className="min-w-0 flex-1 truncate text-[var(--app-fg3)]">{new Intl.NumberFormat(language).format(balance)}</span>
       <span className="w-14 shrink-0 whitespace-nowrap text-end tabular-nums text-foreground">{fill(a.creditsUsd, { usd: `$${usd}` })}</span>
+    </div>
+  );
+}
+
+/** DeepSeek's wallet in place of quota bars (DshBalance): balance, then the bonus under it. */
+function WalletRows({ wallet }: { wallet: NonNullable<SampleAccount['wallet']> }) {
+  const { t } = useLanguage();
+  const a = t.demo.window.pages.auth;
+  return (
+    <>
+      <span className="text-end text-xs tabular-nums text-foreground">{fill(a.dshBalance, { amount: wallet.balance })}</span>
+      {wallet.bonus && (
+        <span className="text-end text-xs tabular-nums text-[var(--app-fg2)]">{fill(a.dshBonus, { amount: wallet.bonus })}</span>
+      )}
+    </>
+  );
+}
+
+/** WorkBuddy credits: a bar like the quota rows, with the count left of the plan's total. */
+function PointsRow({ points }: { points: NonNullable<SampleAccount['points']> }) {
+  const { t, language } = useLanguage();
+  const a = t.demo.window.pages.auth;
+  const left = Math.round((points.remaining / points.total) * 100);
+  const number = new Intl.NumberFormat(language);
+  return (
+    <div className={QUOTA_ROW}>
+      <span className="min-w-[52px] shrink-0 whitespace-nowrap text-[var(--app-fg2)]">{a.workbuddyCredits}</span>
+      <span className="relative h-1 min-w-[24px] flex-1 rounded-full bg-[var(--app-chart-grid)]">
+        <span
+          className={cn('absolute inset-y-0 start-0 rounded-full', QUOTA_TONE_FILL[quotaTone(left)])}
+          style={{ width: `${left}%` }}
+        />
+      </span>
+      <span className={cn('shrink-0 whitespace-nowrap text-end tabular-nums', QUOTA_TONE_TEXT[quotaTone(left)])}>
+        {fill(a.workbuddyLeftOf, { remaining: number.format(points.remaining), total: number.format(points.total) })}
+      </span>
     </div>
   );
 }

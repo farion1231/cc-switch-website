@@ -1,6 +1,7 @@
 import anthropicIcon from '@/assets/icons/anthropic.svg';
 import anthropicIconSvg from '@/assets/icons/anthropic.svg?raw';
 import deepseekIcon from '@/assets/icons/deepseek.svg';
+import copilotIconSvg from '@/assets/icons/githubcopilot.svg?raw';
 import geminiIcon from '@/assets/icons/gemini-2.svg';
 import grokIcon from '@/assets/icons/grok.svg';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
@@ -21,6 +22,7 @@ import kimiIcon from '@/assets/icons/sponsors/kimi.svg';
 import kimiIconSvg from '@/assets/icons/sponsors/kimi.svg?raw';
 import patewayIcon from '@/assets/icons/sponsors/pateway.jpg';
 import zhipuIcon from '@/assets/icons/zhipu.svg';
+import workbuddyIcon from '@/assets/icons/workbuddy.svg';
 import zhipuIconSvg from '@/assets/icons/zhipu.svg?raw';
 import { sponsors, type LocalizedText } from '@/content/sponsors';
 
@@ -34,6 +36,10 @@ export interface Provider {
   subtitle: string;
   /** Where the link goes when it differs from `subtitle` (sponsor referral links). */
   href?: string | LocalizedText;
+  /** Plain second line in place of the `subtitle` link (account cards). */
+  caption?: LocalizedText;
+  /** Right-hand text in place of the quota column (a balance or credits). */
+  aside?: LocalizedText;
   time?: string;
   used?: string;
   remaining?: string;
@@ -738,5 +744,75 @@ export const agyProviders: Provider[] = geminiProviders;
 
 // Oh My Pi reuses Pi's provider form and presets.
 export const ompProviders: Provider[] = piProviders;
+
+// DeepSeek Harness takes Pi's presets. The signed-in DeepSeek account is not a provider row:
+// it shows as an official card at the top of Added, managed in the Auth Center, with no button.
+export const DSH_ACCOUNT = 'dev@example.com';
+export const dshProviders: Provider[] = [
+  {
+    icon: deepseekIcon,
+    iconBg: 'bg-white',
+    logoOnWhite: true,
+    name: DSH_ACCOUNT,
+    official: true,
+    subtitle: 'https://platform.deepseek.com',
+    caption: {
+      zh: '官方账号 · Web 和 Desktop 共用',
+      en: 'Official account · shared by Web and Desktop',
+      ja: '公式アカウント · Web と Desktop で共有',
+    },
+    aside: { zh: '余额 ¥86.40', en: 'Balance ¥86.40', ja: '残高 ¥86.40' },
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  ...piProviders,
+];
+
+// Copilot CLI: its own GitHub login is a launch card (Open Terminal only); bring-your-own-model
+// cards come from Pi's presets and are added to providers.json.
+export const COPILOT_OFFICIAL = 'GitHub Copilot';
+export const copilotProviders: Provider[] = [
+  {
+    icon: '',
+    iconSvg: copilotIconSvg,
+    iconBg: 'bg-slate-500/20',
+    iconColor: 'currentColor',
+    name: COPILOT_OFFICIAL,
+    official: true,
+    subtitle: 'https://github.com/features/copilot/cli',
+    isUrl: true,
+    isSvgUrl: true,
+  },
+  ...piProviders,
+];
+
+// WorkBuddy: one official card per saved account (only the signed-in one is in Added), then
+// model cards from Pi's presets written to models.json.
+export const WORKBUDDY_OFFICIAL = ['WorkBuddy', 'WorkBuddy · Acme'];
+const workbuddyOfficial = (name: string, caption: LocalizedText, aside: LocalizedText): Provider => ({
+  icon: workbuddyIcon,
+  iconBg: 'bg-teal-500/15',
+  name,
+  official: true,
+  // The preset has no website; the card's second line is the bound account.
+  subtitle: '',
+  caption,
+  aside,
+  isUrl: true,
+  isSvgUrl: true,
+});
+export const workbuddyProviders: Provider[] = [
+  workbuddyOfficial(
+    WORKBUDDY_OFFICIAL[0],
+    { zh: 'wb-dev · 专业版', en: 'wb-dev · Pro', ja: 'wb-dev · Pro' },
+    { zh: '积分 剩余 1,240 / 2,000', en: 'Credits 1,240 / 2,000 left', ja: 'クレジット 残り 1,240 / 2,000' },
+  ),
+  workbuddyOfficial(
+    WORKBUDDY_OFFICIAL[1],
+    { zh: 'acme-team · 团队版', en: 'acme-team · Team', ja: 'acme-team · チーム版' },
+    { zh: '积分 剩余 8,600 / 10,000', en: 'Credits 8,600 / 10,000 left', ja: 'クレジット 残り 8,600 / 10,000' },
+  ),
+  ...piProviders,
+];
 
 export const defaultProviders = claudeProviders;

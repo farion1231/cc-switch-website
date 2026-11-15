@@ -382,7 +382,14 @@ export function SkillsPane() {
                         </div>
                         <div className="ms-2 flex min-w-0 flex-1 flex-col pe-3">
                           <div className="flex min-w-0 items-center gap-1.5">
-                            <span className="truncate text-[13px] font-medium text-foreground">{skill.name}</span>
+                            {/* Clicking the name copies it (cc-switch SkillRow). */}
+                            <button
+                              type="button"
+                              onClick={() => toast({ text: fill(sk.copiedName, { name: skill.name }) })}
+                              className="min-w-0 cursor-copy truncate text-start text-[13px] font-medium text-foreground hover:underline hover:underline-offset-[3px]"
+                            >
+                              {skill.name}
+                            </button>
                             {skill.update && <Pill tone="warning">{sk.updateAvailable}</Pill>}
                             {skill.apps.length === 0 && <Pill>{p.mcp.notEnabled}</Pill>}
                           </div>
@@ -415,7 +422,9 @@ export function SkillsPane() {
                               ...(skill.update
                                 ? [{ label: sk.update, onSelect: () => update([skill.name], (s) => ({ ...s, update: false })) }]
                                 : []),
-                              { label: sk.copyDir },
+                              // Docs open the README, or the repo home when there is none; local Skills have neither.
+                              ...(skill.repo ? [{ label: sk.openDocs }] : []),
+                              { label: sk.openDir },
                               { label: sk.uninstall, danger: true, separatorBefore: true, onSelect: () => uninstall([skill.name]) },
                             ]}
                           />

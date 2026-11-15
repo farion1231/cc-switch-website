@@ -164,6 +164,8 @@ export const translations = {
           stackDefaultAfterSwitch: '切换到聚合模式后的默认供应商',
           added: '已添加 · {count}',
           available: '可添加 · {count}',
+          sharedListNote: 'Web 和 Desktop 共用这份列表',
+          sharedListHelp: '已添加的供应商会一起写进 DeepSeek Harness 的 Web 和 Desktop 配置（以及已初始化的 headless、acp），在 DeepSeek Harness 里选模型即可。',
         },
         reason: {
           noRoute: '官方订阅不经过路由，回到直连后可用。',
@@ -172,6 +174,7 @@ export const translations = {
           needsRoute: '需要路由：{reason}，不能直连。',
           openaiChat: '使用 OpenAI Chat 接口格式',
           desktopMapping: '使用模型映射（Claude Desktop 只认 Claude 模型名）',
+          workbuddyOnlyOne: 'WorkBuddy 同时只能登录一个账号，添加另一张官方卡即可切换。',
         },
         quota: {
           tierLeft: '{label}剩余 {value}%',
@@ -913,6 +916,8 @@ export const translations = {
           stackDefaultAfterSwitch: 'Default provider after switching to Aggregation',
           added: 'Added · {count}',
           available: 'Available · {count}',
+          sharedListNote: 'Shared by Web and Desktop',
+          sharedListHelp: 'Added providers are written into both the Web and Desktop configs of DeepSeek Harness (plus any initialized headless or acp profile); pick the model inside DeepSeek Harness.',
         },
         reason: {
           noRoute: "Official subscriptions don't go through routing; available again in direct mode.",
@@ -921,6 +926,7 @@ export const translations = {
           needsRoute: "Needs routing: {reason}; can't connect directly.",
           openaiChat: 'uses OpenAI Chat API format',
           desktopMapping: 'uses model mapping (Claude Desktop only accepts Claude model names)',
+          workbuddyOnlyOne: 'WorkBuddy can only be signed in to one account at a time. Add another official card to switch.',
         },
         quota: {
           tierLeft: '{label} {value}% left',
@@ -1662,6 +1668,8 @@ export const translations = {
           stackDefaultAfterSwitch: '集約に切り替えた後の既定のプロバイダー',
           added: '追加済み · {count}',
           available: '追加できるもの · {count}',
+          sharedListNote: 'Web と Desktop で共有',
+          sharedListHelp: '追加したプロバイダーは DeepSeek Harness の Web と Desktop の設定（初期化済みの headless、acp も含む）にまとめて書き込まれます。モデルは DeepSeek Harness の中で選びます。',
         },
         reason: {
           noRoute: '公式サブスクリプションはルーティングを通りません。直接接続に戻すと使えます。',
@@ -1670,6 +1678,7 @@ export const translations = {
           needsRoute: 'ルーティングが必要：{reason}。直接接続はできません。',
           openaiChat: 'OpenAI Chat API フォーマットを使用しており',
           desktopMapping: 'モデルマッピングを使っており（Claude Desktop は Claude のモデル名しか受け付けません）',
+          workbuddyOnlyOne: 'WorkBuddy は同時に 1 つのアカウントにしかログインできません。別の公式カードを追加すると切り替わります。',
         },
         quota: {
           tierLeft: '{label} 残り {value}%',

@@ -88,17 +88,27 @@ export function DemoProviderCard({ provider, current, chips = [], status, button
             </span>
           ))}
         </div>
-        <a
-          href={linkHref}
-          target="_blank"
-          rel={provider.href ? 'sponsored noopener noreferrer' : 'noopener noreferrer'}
-          className="mt-1 block truncate text-[13px] text-muted-foreground transition-colors hover:text-foreground hover:underline"
-        >
-          {provider.subtitle}
-        </a>
+        {provider.caption ? (
+          <span className="mt-1 block truncate text-[13px] text-muted-foreground">{provider.caption[language]}</span>
+        ) : (
+          <a
+            href={linkHref}
+            target="_blank"
+            rel={provider.href ? 'sponsored noopener noreferrer' : 'noopener noreferrer'}
+            className="mt-1 block truncate text-[13px] text-muted-foreground transition-colors hover:text-foreground hover:underline"
+          >
+            {provider.subtitle}
+          </a>
+        )}
       </div>
 
-      <QuotaSummary provider={provider} />
+      {provider.aside ? (
+        <span className="hidden shrink-0 whitespace-nowrap text-right text-[13px] tabular-nums text-muted-foreground md:block">
+          {provider.aside[language]}
+        </span>
+      ) : (
+        <QuotaSummary provider={provider} />
+      )}
 
       <div className="flex shrink-0 items-center gap-1">
         <div className="flex min-w-[32px] justify-end">

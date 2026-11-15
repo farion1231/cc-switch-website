@@ -353,26 +353,52 @@ function LaunchBody({ app }: { app: DemoApp }) {
 function AdditiveBody({ app, state, onChange }: ProvidersPaneProps) {
   const { t } = useLanguage();
   const w = t.demo.window;
-  const added = state.added
-    .map((name) => app.providers.find((provider) => provider.name === name))
-    .filter((provider): provider is Provider => Boolean(provider));
-  const available = app.providers.filter((provider) => !state.added.includes(provider.name));
+  const pinned = app.pinned ?? {};
+  const exclusive = app.exclusive ?? [];
+  const byName = (name: string) => app.providers.find((provider) => provider.name === name);
+  // Pinned cards lead the list in the app (DeepSeek's account card, Copilot's own login).
+  const addedNames = [...Object.keys(pinned), ...state.added.filter((name) => !(name in pinned))];
+  const added = addedNames.map(byName).filter((provider): provider is Provider => Boolean(provider));
+  const available = app.providers.filter((provider) => !addedNames.includes(provider.name));
   const addLabel = app.enableLabel ? w.action.enable : w.action.add;
+
+  const removeButton = (provider: Provider): DemoCardProps['button'] => {
+    const pin = pinned[provider.name];
+    if (pin === 'none') return undefined;
+    if (pin === 'openTerminal') return { key: 'openTerminal', label: w.action.openTerminal, onClick: () => undefined };
+    return {
+      key: 'remove',
+      label: w.action.remove,
+      onClick: () => onChange({ ...state, added: state.added.filter((name) => name !== provider.name) }),
+      // WorkBuddy stays signed in to one account; adding another official card is how to switch.
+      disabledReason: exclusive.includes(provider.name) ? w.reason.workbuddyOnlyOne : undefined,
+    };
+  };
+
+  const add = (provider: Provider) => {
+    const swapped = exclusive.includes(provider.name);
+    onChange({
+      ...state,
+      added: swapped
+        ? state.added.map((name) => (exclusive.includes(name) ? provider.name : name))
+        : [...state.added, provider.name],
+    });
+  };
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-1 sm:px-6">
-      <SectionTitle title={fill(w.section.added, { count: added.length })} />
+      <SectionTitle
+        title={fill(w.section.added, { count: added.length })}
+        help={app.sharedList ? w.section.sharedListHelp : undefined}
+        note={app.sharedList ? w.section.sharedListNote : undefined}
+      />
       <CardList>
         {added.map((provider) => (
           <DemoProviderCard
             key={provider.name}
             provider={provider}
             chips={officialChip(provider, w.chip.official)}
-            button={{
-              key: 'remove',
-              label: w.action.remove,
-              onClick: () => onChange({ ...state, added: state.added.filter((name) => name !== provider.name) }),
-            }}
+            button={removeButton(provider)}
           />
         ))}
       </CardList>
@@ -384,10 +410,11 @@ function AdditiveBody({ app, state, onChange }: ProvidersPaneProps) {
               <DemoProviderCard
                 key={provider.name}
                 provider={provider}
+                chips={officialChip(provider, w.chip.official)}
                 button={{
                   key: app.enableLabel ? 'enable' : 'add',
                   label: addLabel,
-                  onClick: () => onChange({ ...state, added: [...state.added, provider.name] }),
+                  onClick: () => add(provider),
                 }}
               />
             ))}
@@ -406,7 +433,7 @@ function CardList({ children }: { children: ReactNode }) {
   return <div className="flex flex-col gap-2.5">{children}</div>;
 }
 
-function SectionTitle({ title, help }: { title: string; help?: string }) {
+function SectionTitle({ title, help, note }: { title: string; help?: string; note?: string }) {
   const { tip } = useHoverTip();
   return (
     <div className="mb-2 mt-4 flex items-center gap-1.5 text-[13px] font-medium text-muted-foreground first:mt-1">
@@ -416,6 +443,7 @@ function SectionTitle({ title, help }: { title: string; help?: string }) {
           <CircleHelp className="h-3.5 w-3.5" strokeWidth={1.75} />
         </span>
       )}
+      {note && <span className="truncate font-normal text-[var(--app-fg3)]">{note}</span>}
     </div>
   );
 }

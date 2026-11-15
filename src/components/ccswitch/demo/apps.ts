@@ -4,6 +4,10 @@ import {
   claudeDesktopProviders,
   claudeProviders,
   codexProviders,
+  COPILOT_OFFICIAL,
+  copilotProviders,
+  DSH_ACCOUNT,
+  dshProviders,
   geminiProviders,
   grokBuildProviders,
   hermesProviders,
@@ -13,11 +17,15 @@ import {
   openClawProviders,
   opencodeProviders,
   piProviders,
+  WORKBUDDY_OFFICIAL,
+  workbuddyProviders,
   type Provider,
 } from '@/content/providers';
 
 import antigravityIcon from '@/assets/icons/antigravity.svg';
 import claudeIcon from '@/assets/icons/claude.svg';
+import copilotIconSvg from '@/assets/icons/githubcopilot.svg?raw';
+import deepseekIcon from '@/assets/icons/deepseek.svg';
 import geminiIcon from '@/assets/icons/gemini.svg';
 import grokIconSvg from '@/assets/icons/grok.svg?raw';
 import hermesIcon from '@/assets/icons/hermes.png';
@@ -28,6 +36,7 @@ import openaiIconSvg from '@/assets/icons/openai.svg?raw';
 import openClawIcon from '@/assets/icons/openclaw.svg';
 import openCodeIcon from '@/assets/icons/opencode.svg';
 import piIconSvg from '@/assets/icons/pi.svg?raw';
+import workbuddyIcon from '@/assets/icons/workbuddy.svg';
 
 export type AppId =
   | 'claude'
@@ -41,8 +50,11 @@ export type AppId =
   | 'pi'
   | 'mcode'
   | 'kimi'
+  | 'dsh'
   | 'agy'
-  | 'omp';
+  | 'omp'
+  | 'copilot'
+  | 'workbuddy';
 
 export type AppMode = 'direct' | 'route' | 'stack';
 
@@ -71,6 +83,15 @@ export interface DemoApp {
   added?: string[];
   /** Pi says Enable instead of Add. */
   enableLabel?: boolean;
+  /**
+   * Additive cards that always sit first in Added and can't be removed: DeepSeek Harness's
+   * signed-in account (no button), Copilot CLI's own login (Open Terminal).
+   */
+  pinned?: Record<string, 'none' | 'openTerminal'>;
+  /** WorkBuddy's official cards: only the signed-in account is in Added; adding another swaps it in. */
+  exclusive?: string[];
+  /** DeepSeek Harness writes one list into both its Web and Desktop configs. */
+  sharedList?: boolean;
   /** Providers that can't be used directly (format conversion, Desktop model mapping). */
   needsRoute?: string[];
 }
@@ -172,6 +193,16 @@ export const demoApps: DemoApp[] = [
     added: ['Kimi Official', 'Zhipu GLM'],
   },
   {
+    id: 'dsh',
+    label: 'DeepSeek Harness',
+    icon: deepseekIcon,
+    kind: 'additive',
+    providers: dshProviders,
+    added: [DSH_ACCOUNT, 'Kimi For Coding', 'PackyCode'],
+    pinned: { [DSH_ACCOUNT]: 'none' },
+    sharedList: true,
+  },
+  {
     id: 'agy',
     label: 'Antigravity',
     icon: antigravityIcon,
@@ -186,6 +217,25 @@ export const demoApps: DemoApp[] = [
     providers: ompProviders,
     added: ['Kimi For Coding', 'PackyCode'],
     enableLabel: true,
+  },
+  {
+    id: 'copilot',
+    label: 'Copilot CLI',
+    icon: '',
+    iconSvg: copilotIconSvg,
+    kind: 'additive',
+    providers: copilotProviders,
+    added: [COPILOT_OFFICIAL, 'Kimi For Coding'],
+    pinned: { [COPILOT_OFFICIAL]: 'openTerminal' },
+  },
+  {
+    id: 'workbuddy',
+    label: 'WorkBuddy',
+    icon: workbuddyIcon,
+    kind: 'additive',
+    providers: workbuddyProviders,
+    added: [WORKBUDDY_OFFICIAL[0], 'Kimi For Coding'],
+    exclusive: WORKBUDDY_OFFICIAL,
   },
 ];
 

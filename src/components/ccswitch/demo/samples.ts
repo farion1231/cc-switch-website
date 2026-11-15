@@ -7,7 +7,22 @@ export type L = Record<Language, string>;
 /* ---------- MCP & Skills ---------- */
 
 /** MCP and Skills have columns for these apps, in this order (Claude Desktop and OpenClaw have none). */
-export const MATRIX_APPS: AppId[] = ['claude', 'codex', 'gemini', 'grokbuild', 'opencode', 'hermes', 'pi', 'mcode', 'kimi', 'agy', 'omp'];
+export const MATRIX_APPS: AppId[] = [
+  'claude',
+  'codex',
+  'gemini',
+  'grokbuild',
+  'opencode',
+  'hermes',
+  'pi',
+  'mcode',
+  'kimi',
+  'dsh',
+  'agy',
+  'omp',
+  'copilot',
+  'workbuddy',
+];
 
 export interface SampleMcp {
   id: string;
@@ -17,10 +32,15 @@ export interface SampleMcp {
 }
 
 export const MCP_SERVERS: SampleMcp[] = [
-  { id: 'context7', transport: 'http', summary: 'mcp.context7.com/mcp', apps: ['claude', 'codex', 'grokbuild', 'opencode', 'kimi', 'omp'] },
+  {
+    id: 'context7',
+    transport: 'http',
+    summary: 'mcp.context7.com/mcp',
+    apps: ['claude', 'codex', 'grokbuild', 'opencode', 'kimi', 'dsh', 'omp', 'copilot'],
+  },
   { id: 'fetch', transport: 'stdio', summary: 'uvx mcp-server-fetch', apps: ['claude', 'codex', 'gemini', 'hermes'] },
   { id: 'figma', transport: 'http', summary: '127.0.0.1:3845/mcp', apps: ['claude'] },
-  { id: 'github', transport: 'http', summary: 'api.githubcopilot.com/mcp/', apps: ['claude', 'codex', 'opencode', 'mcode', 'agy'] },
+  { id: 'github', transport: 'http', summary: 'api.githubcopilot.com/mcp/', apps: ['claude', 'codex', 'opencode', 'mcode', 'agy', 'workbuddy'] },
   { id: 'memory', transport: 'stdio', summary: 'npx -y @modelcontextprotocol/server-memory', apps: [] },
   { id: 'playwright', transport: 'stdio', summary: 'npx -y @playwright/mcp@latest', apps: ['claude', 'codex'] },
   {
@@ -91,7 +111,7 @@ export const INSTALLED_SKILLS: SampleSkill[] = [
     name: 'team-conventions',
     description: { zh: '团队的提交与代码规范', en: "Your team's commit and code conventions", ja: 'チームのコミットとコードの規約' },
     repo: null,
-    apps: ['claude', 'codex', 'opencode', 'hermes', 'pi', 'mcode', 'kimi', 'omp'],
+    apps: ['claude', 'codex', 'opencode', 'hermes', 'pi', 'mcode', 'kimi', 'dsh', 'omp', 'copilot', 'workbuddy'],
   },
 ];
 
@@ -117,7 +137,22 @@ export const DISCOVER_SKILLS: SampleDiscoverSkill[] = [
 /* ---------- Prompts ---------- */
 
 /** Prompts have no Claude Desktop (it uses Claude Code's) and no OpenClaw (its own Workspace). */
-export const PROMPT_APPS: AppId[] = ['claude', 'codex', 'gemini', 'grokbuild', 'opencode', 'hermes', 'pi', 'mcode', 'kimi', 'agy', 'omp'];
+export const PROMPT_APPS: AppId[] = [
+  'claude',
+  'codex',
+  'gemini',
+  'grokbuild',
+  'opencode',
+  'hermes',
+  'pi',
+  'mcode',
+  'kimi',
+  'dsh',
+  'agy',
+  'omp',
+  'copilot',
+  'workbuddy',
+];
 
 export const PROMPT_TARGET: Record<string, { file: string; path: string }> = {
   claude: { file: 'CLAUDE.md', path: '~/.claude/CLAUDE.md' },
@@ -132,6 +167,10 @@ export const PROMPT_TARGET: Record<string, { file: string; path: string }> = {
   // Antigravity's own file, not Gemini CLI's GEMINI.md.
   agy: { file: 'AGENTS.md', path: '~/.gemini/config/AGENTS.md' },
   omp: { file: 'AGENTS.md', path: '~/.omp/agent/AGENTS.md' },
+  dsh: { file: 'AGENTS.md', path: '~/.dsh/AGENTS.md' },
+  copilot: { file: 'copilot-instructions.md', path: '~/.copilot/copilot-instructions.md' },
+  // The signed-in account's folder; WorkBuddy injects it as the user's instructions.
+  workbuddy: { file: 'MEMORY.md', path: '~/.workbuddy/user-1024-personal/MEMORY.md' },
 };
 
 export interface SamplePrompt {
@@ -225,6 +264,9 @@ export const PROMPTS: Record<string, { items: SamplePrompt[]; enabled: string | 
   kimi: { enabled: 'team', items: [{ id: 'team', ...P.team, size: '718 B', updated: day(10, 24, 'Oct') }] },
   agy: { enabled: null, items: [{ id: 'team', ...P.team, size: '718 B', updated: day(10, 21, 'Oct') }] },
   omp: { enabled: 'team', items: [{ id: 'team', ...P.team, size: '718 B', updated: day(10, 24, 'Oct') }] },
+  dsh: { enabled: 'team', items: [{ id: 'team', ...P.team, size: '718 B', updated: day(11, 2, 'Nov') }] },
+  copilot: { enabled: null, items: [{ id: 'team', ...P.team, size: '718 B', updated: day(11, 9, 'Nov') }] },
+  workbuddy: { enabled: 'chinese', items: [{ id: 'chinese', ...P.chinese, size: '113 B', updated: day(11, 11, 'Nov') }] },
 };
 
 /* ---------- Sessions ---------- */
@@ -242,7 +284,10 @@ export const SESSION_APPS: AppId[] = [
   'openclaw',
   'mcode',
   'kimi',
+  'dsh',
   'agy',
+  'copilot',
+  'workbuddy',
 ];
 
 export type Bucket = 'today' | 'yesterday' | 'thisWeek' | 'earlier';
@@ -561,6 +606,8 @@ export interface SampleAccount {
   usedBy?: number;
   /** Claude subscription plan shown first in the details. */
   plan?: string;
+  /** WorkBuddy plan, localized as the app does (authCenter.workbuddy.plan.*). */
+  planText?: L;
   /** Kimi sign-in region, and whether it is Kimi Code's own login. */
   region?: 'mainland-cn' | 'global';
   primary?: boolean;
@@ -573,11 +620,17 @@ export interface SampleAccount {
   resetCredits?: Array<{ date: L; inTime: string; count: number; expiringSoon?: boolean }>;
   /** Codex Credits balance bought on the ChatGPT plan. */
   credits?: number;
+  /** DeepSeek wallet: balance and bonus, shown in place of quota bars. */
+  wallet?: { balance: string; bonus?: string };
+  /** WorkBuddy credits left of the plan's total. */
+  points?: { remaining: number; total: number };
+  /** Contact shown under the DeepSeek account name. */
+  contact?: string;
   checkedMinutesAgo: number;
 }
 
 /** Auth Center groups, in the app's order (AuthCenterPanel). */
-export type AuthService = 'claude' | 'copilot' | 'chatgpt' | 'xai' | 'kimi' | 'agy';
+export type AuthService = 'claude' | 'copilot' | 'chatgpt' | 'xai' | 'kimi' | 'dsh' | 'agy' | 'workbuddy';
 
 export const ACCOUNTS: Record<AuthService, SampleAccount[]> = {
   claude: [
@@ -675,6 +728,16 @@ export const ACCOUNTS: Record<AuthService, SampleAccount[]> = {
       checkedMinutesAgo: 4,
     },
   ],
+  dsh: [
+    {
+      login: 'DeepSeek Dev',
+      contact: 'dev@example.com',
+      signedIn: { zh: '11月2日', en: 'Nov 2', ja: '11月2日' },
+      wallet: { balance: '¥86.40', bonus: '¥10.00' },
+      quota: [],
+      checkedMinutesAgo: 2,
+    },
+  ],
   agy: [
     {
       login: 'dev@gmail.com',
@@ -686,6 +749,25 @@ export const ACCOUNTS: Record<AuthService, SampleAccount[]> = {
         { tier: 'claudeGptWeekly', left: 12 },
       ],
       checkedMinutesAgo: 3,
+    },
+  ],
+  workbuddy: [
+    {
+      login: 'wb-dev',
+      planText: { zh: '专业版', en: 'Pro', ja: 'Pro' },
+      signedIn: { zh: '11月11日', en: 'Nov 11', ja: '11月11日' },
+      isDefault: true,
+      points: { remaining: 1240, total: 2000 },
+      quota: [],
+      checkedMinutesAgo: 1,
+    },
+    {
+      login: 'acme-team',
+      planText: { zh: '团队版', en: 'Team', ja: 'チーム版' },
+      signedIn: { zh: '11月12日', en: 'Nov 12', ja: '11月12日' },
+      points: { remaining: 8600, total: 10000 },
+      quota: [],
+      checkedMinutesAgo: 9,
     },
   ],
 };
@@ -724,5 +806,8 @@ export const TOOLS: SampleTool[] = [
   { app: 'mcode', installHint: 'script' },
   { app: 'kimi', path: '~/.local/bin/kimi', version: '1.6.0' },
   { app: 'agy', path: '~/.local/bin/agy', version: '0.4.2' },
+  { app: 'dsh', source: 'npm', path: '~/.npm-global/bin/dsh', version: '0.8.4' },
   { app: 'omp', source: 'npm', path: '~/.npm-global/bin/omp', version: '0.12.3' },
+  { app: 'copilot', installHint: 'npm' },
+  { app: 'workbuddy' },
 ];
