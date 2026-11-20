@@ -1150,10 +1150,11 @@ export const sponsors: Sponsor[] = ([
       ja: 'Modelflare は、性能をフルに発揮し、安定していて水増しなし。世界の SOTA モデルを低コストで利用できます。米国の LLC である Havenbyte LLC が運営し、GPT、Claude、Gemini、Grok などの主要モデルと一般的な互換プロトコルに対応するほか、40 種類以上の画像・動画モデルにも対応。中国本土での正式なビジネス提携にも対応しています。キャッシュ補償が大きな特長で、OpenAI の一部の価格優先・安定・プレミアムグループでは 1 日あたりのキャッシュヒット率をそれぞれ 65%、75%、85% で保証し、条件を満たすリクエストが目標に届かなかった場合は差額が補償されます（精算後に使用量ダッシュボードで確認可能）。',
     },
     perk: {
-      zh: '单笔充值 US$20 解锁 GPT 0.015 倍、US$50 解锁 Claude 0.03 倍特惠分组',
-      en: 'Top up US$20 for the 0.015× GPT group, US$50 for the 0.03× Claude group',
-      ja: '1 回 US$20 チャージで GPT 0.015 倍、US$50 で Claude 0.03 倍の特価グループ',
+      zh: '优惠码首充 9 折；单笔充值 US$20 / US$50 解锁 GPT 0.015 倍、Claude 0.03 倍特惠分组',
+      en: '10% off your first top-up with the code; top up US$20 / US$50 for the 0.015× GPT / 0.03× Claude groups',
+      ja: 'コードで初回チャージ 10% オフ。1 回 US$20 / US$50 チャージで GPT 0.015 倍 / Claude 0.03 倍の特価グループ',
     },
+    couponCode: 'CCSWITCH',
   },
   {
     id: 'alltokens',
