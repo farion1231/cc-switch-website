@@ -46,7 +46,7 @@ function FallbackCard() {
     <div className="mx-auto max-w-xl rounded-xl border border-border bg-card p-8 text-center">
       <h2 className="mb-2 text-xl font-semibold text-foreground">{t.downloadPage.fallback.title}</h2>
       <p className="mb-6 text-sm text-muted-foreground">{t.downloadPage.fallback.note}</p>
-      <a href={RELEASES_URL} target="_blank" rel="noopener noreferrer">
+      <a href={RELEASES_URL} target="_blank" rel="noopener">
         <Button variant="hero" className="gap-2">
           <Github className="h-5 w-5" />
           {t.downloadPage.fallback.button}
@@ -342,7 +342,7 @@ export function DownloadSection() {
           <a
             href={RELEASES_URL}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
             {t.downloadPage.history.link}

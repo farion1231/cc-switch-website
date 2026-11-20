@@ -160,7 +160,7 @@ export default function DocsPage() {
                         <a
                           href={`https://github.com/farion1231/cc-switch/edit/main/${editPath}`}
                           target="_blank"
-                          rel="noopener noreferrer"
+                          rel="noopener"
                           className="flex items-center gap-1.5 hover:text-foreground transition-colors"
                         >
                           <Edit className="w-4 h-4" />

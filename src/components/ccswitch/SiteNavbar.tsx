@@ -119,7 +119,7 @@ export function SiteNavbar() {
               <a
                 href="https://github.com/farion1231/cc-switch"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener"
                 aria-label="GitHub repository (opens in new tab)"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
@@ -205,7 +205,7 @@ export function SiteNavbar() {
                 <a
                   href="https://github.com/farion1231/cc-switch"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener"
                   aria-label="GitHub repository (opens in new tab)"
                   className="flex items-center justify-center gap-2 text-muted-foreground"
                 >

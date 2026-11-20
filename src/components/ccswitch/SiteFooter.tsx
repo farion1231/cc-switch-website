@@ -70,7 +70,7 @@ export function SiteFooter() {
                   key={social.label}
                   href={social.href}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label={social.label}
                 >
@@ -98,7 +98,7 @@ export function SiteFooter() {
                       <a
                         href={link.href}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener"
                         className="text-muted-foreground hover:text-foreground transition-colors text-sm"
                       >
                         {link.label}

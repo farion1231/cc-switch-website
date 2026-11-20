@@ -214,7 +214,7 @@ export default function TutorialDetailPage() {
                     <a
                       href={`${GITHUB_EDIT_BASE}/${language}/${tutorial.slug}.md`}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noopener"
                       className="flex items-center gap-1.5 hover:text-foreground transition-colors"
                     >
                       <Edit className="h-4 w-4" />

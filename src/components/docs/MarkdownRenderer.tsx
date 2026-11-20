@@ -4,6 +4,14 @@ import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
 import { rehypeHeadingIds } from '@/lib/headings';
 import { Copy, Check } from 'lucide-react';
+import { GITHUB_REPO_URL } from '@/lib/seo';
+
+// Keep the referrer on links to our own repo so GitHub traffic credits
+// ccswitch.io; third-party links still get noreferrer.
+function linkRel(href: string | undefined) {
+  if (!href?.startsWith('http')) return undefined;
+  return href.startsWith(GITHUB_REPO_URL) ? 'noopener' : 'noopener noreferrer';
+}
 
 interface MarkdownRendererProps {
   content: string;
@@ -175,7 +183,7 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
               href={href}
               className="text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
               target={href?.startsWith('http') ? '_blank' : undefined}
-              rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+              rel={linkRel(href)}
             >
               {children}
             </a>

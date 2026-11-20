@@ -60,7 +60,7 @@ export function CTASection() {
                 {t.cta.downloadBtn}
               </Button>
             </Link>
-            <a href="https://github.com/farion1231/cc-switch" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+            <a href="https://github.com/farion1231/cc-switch" target="_blank" rel="noopener" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="outline"
