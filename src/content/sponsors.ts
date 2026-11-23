@@ -31,6 +31,7 @@ import apikeyFunIcon from '@/assets/icons/sponsors/apikeyfun.png';
 import apinebulaIcon from '@/assets/icons/sponsors/apinebula_icon.png';
 import qiniuIcon from '@/assets/icons/sponsors/qiniu.png';
 import haoaiIcon from '@/assets/icons/sponsors/haoai.svg';
+import stringaiIcon from '@/assets/icons/sponsors/stringai.png';
 import fennoIcon from '@/assets/icons/sponsors/fenno-icon.webp';
 import a6apiIcon from '@/assets/icons/sponsors/a6api.png';
 import newapiIcon from '@/assets/icons/sponsors/newapi.svg';
@@ -102,6 +103,7 @@ const sponsorDisplayOrder = [
   'pateway',
   'modelflare',
   'haoai',
+  'stringai',
   'fenno',
   'openmodel',
   'grooroute',
@@ -969,6 +971,30 @@ export const sponsors: Sponsor[] = ([
       zh: '专属链接注册，首单享 5% 赠送额度',
       en: '5% bonus credit on your first order via the exclusive link',
       ja: '専用リンクから登録で初回注文に 5% のボーナスクレジット',
+    },
+  },
+  {
+    id: 'stringai',
+    name: 'StringAI',
+    icon: stringaiIcon,
+    url: 'https://www.string.ink/register?ref=661AE533A60AF110',
+    tier: 'standard',
+    category: 'aggregator',
+    iconTile: true,
+    tagline: {
+      zh: '高性价比、高效稳定的模型 API 平台',
+      en: 'Cost-effective, fast, and stable model API platform',
+      ja: '高コスパで高速・安定したモデル API プラットフォーム',
+    },
+    description: {
+      zh: '弦界 StringAI 是一个高性价比、高效稳定的模型 API 平台，一站式接入 AI 编程（Coding）、图像生成（Image）、语音合成（TTS）和视频生成（Video）四大能力。汇聚全球多款知名模型，提供自部署、云服务商及官方 API 等多种资源选择，满足高校、企业、个人开发者和创业团队的接入需求，并由专业团队提供接入指导与技术支持。',
+      en: 'StringAI is a cost-effective, fast, and stable model API platform with one-stop access to four capabilities: AI coding, image generation, text-to-speech (TTS), and video generation. It brings together many well-known models from around the world, with a choice of self-hosted, cloud-provider, and official API resources for universities, enterprises, individual developers, and startup teams, and a professional team provides onboarding guidance and technical support.',
+      ja: 'StringAI（弦界）はコストパフォーマンスに優れ、高速で安定したモデル API プラットフォームで、AI コーディング、画像生成、音声合成（TTS）、動画生成の 4 つの機能にワンストップでアクセスできます。世界の主要なモデルを幅広く集約し、セルフホスト、クラウドプロバイダー、公式 API など複数のリソースから選べるため、大学、企業、個人開発者、スタートアップのニーズに応えます。専門チームが導入支援と技術サポートを提供します。',
+    },
+    perk: {
+      zh: '专属链接注册，首充 25 元送 25 元额外奖励额度',
+      en: 'Register via the exclusive link: top up $3.74 the first time and get $3.74 extra in bonus credit',
+      ja: '専用リンクから登録で、初回チャージ $3.74 に $3.74 のボーナス額度',
     },
   },
   {
