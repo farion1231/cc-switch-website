@@ -975,7 +975,7 @@ export const sponsors: Sponsor[] = ([
   },
   {
     id: 'stringai',
-    name: 'StringAI',
+    name: { zh: '弦界StringAI', en: 'StringAI', ja: 'StringAI' },
     icon: stringaiIcon,
     url: 'https://www.string.ink/register?ref=661AE533A60AF110',
     tier: 'standard',
@@ -992,9 +992,9 @@ export const sponsors: Sponsor[] = ([
       ja: 'StringAI（弦界）はコストパフォーマンスに優れ、高速で安定したモデル API プラットフォームで、AI コーディング、画像生成、音声合成（TTS）、動画生成の 4 つの機能にワンストップでアクセスできます。世界の主要なモデルを幅広く集約し、セルフホスト、クラウドプロバイダー、公式 API など複数のリソースから選べるため、大学、企業、個人開発者、スタートアップのニーズに応えます。専門チームが導入支援と技術サポートを提供します。',
     },
     perk: {
-      zh: '专属链接注册，首充 25 元送 25 元额外奖励额度',
-      en: 'Register via the exclusive link: top up $3.74 the first time and get $3.74 extra in bonus credit',
-      ja: '専用リンクから登録で、初回チャージ $3.74 に $3.74 のボーナス額度',
+      zh: '首充 25 元送 25 元额外奖励额度',
+      en: 'First top-up of $3.74 gets $3.74 extra in bonus credit',
+      ja: '初回チャージ $3.74 に $3.74 のボーナス額度',
     },
   },
   {
