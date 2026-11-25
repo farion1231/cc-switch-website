@@ -1,6 +1,12 @@
 {
   "versions": [
     {
+      "version": "4.0.41",
+      "date": "2026-11-25",
+      "isPreRelease": false,
+      "summary": ""
+    },
+    {
       "version": "4.0.40",
       "date": "2026-11-23",
       "isPreRelease": false,
