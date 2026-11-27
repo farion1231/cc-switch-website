@@ -46,6 +46,7 @@ import alltokensSiIcon from '@/assets/icons/sponsors/alltokens-si.png';
 import ppioIcon from '@/assets/icons/sponsors/ppio.png';
 import fluxaIcon from '@/assets/icons/sponsors/fluxa.png';
 import api88Icon from '@/assets/icons/sponsors/88api.png';
+import fastaitokenIcon from '@/assets/icons/sponsors/fastaitoken.png';
 
 import kimiBannerZh from '@/assets/banners/sponsors/kimi-banner-zh.png';
 import kimiBannerEn from '@/assets/banners/sponsors/kimi-banner-en.png';
@@ -110,6 +111,7 @@ const sponsorDisplayOrder = [
   'buytoken',
   'vapi',
   'fluxa',
+  'sudocode',
   'aigocode',
   'teamorouter',
   'aicoding',
@@ -135,11 +137,11 @@ const sponsorDisplayOrder = [
   'crazyrouter',
   'dmxapi',
   'qiniu',
-  'sudocode',
   'sudocode-us',
   'xycai',
   'alltokens',
   'alltokens-si',
+  'fastaitoken',
 ] as const;
 
 const sponsorDisplayRank = new Map<string, number>(
@@ -1100,19 +1102,19 @@ export const sponsors: Sponsor[] = ([
     tier: 'standard',
     category: 'relay',
     tagline: {
-      zh: '一个 Key 统一使用 Claude Opus 5 与 GPT-5.6',
-      en: 'One key for Claude Opus 5 and GPT-5.6',
-      ja: '1つのキーで Claude Opus 5 と GPT-5.6 を利用',
+      zh: 'Claude Code 和 Codex，共用一个 API 入口',
+      en: 'One shared API endpoint for Claude Code and Codex',
+      ja: 'Claude Code と Codex で共通の API エンドポイント',
     },
     description: {
-      zh: 'SudoCode 让 Claude Code 与 Claude Desktop 接入 Claude Opus 5，Codex 接入 GPT-5.6，一个 Key 统一使用。',
-      en: 'With one SudoCode key, Claude Code and Claude Desktop use Claude Opus 5, while Codex uses GPT-5.6.',
-      ja: 'SudoCode の1つのキーで、Claude Code と Claude Desktop では Claude Opus 5、Codex では GPT-5.6 を利用できます。',
+      zh: 'SudoCode 让 Claude Code 与 Codex 共用一个 API 入口，一个 Key 即可同时接入两款工具。控制台按模型列出每次请求的 Token 用量与费用，每一笔花销都清清楚楚。',
+      en: 'SudoCode gives Claude Code and Codex one shared API endpoint, so a single key works with both tools. Its console breaks down the token usage and cost of every request by model, so you always know where your spend goes.',
+      ja: 'SudoCode は Claude Code と Codex で共通の API エンドポイントを提供し、1 つのキーで両方のツールを利用できます。コンソールではリクエストごとのトークン使用量と料金をモデル別に確認でき、支出がひと目でわかります。',
     },
     perk: {
-      zh: '注册并加入 QQ 群 726213516，联系群主领取 ¥10 试用额度',
-      en: 'Sign up, join QQ group 726213516, and contact the group owner for CNY ¥10 trial credit',
-      ja: '登録後 QQ グループ 726213516 に参加し、管理者へ連絡すると CNY ¥10 のトライアルクレジットを進呈',
+      zh: '注册后加入 QQ 群 1030742788，领取价值 ¥10 的日卡',
+      en: 'Sign up, then join QQ group 1030742788 to claim a day pass worth CNY ¥10',
+      ja: '登録後 QQ グループ 1030742788 に参加すると、CNY ¥10 相当の1日パスを進呈',
     },
   },
   {
@@ -1222,6 +1224,29 @@ export const sponsors: Sponsor[] = ([
       zh: '专为企业打造的 AI 团队协作平台：成员、密钥、用量与余额统一纳入企业控制台，以清晰的权限与额度配置，让团队协作有据可查、安心可控。一个 API Key 即可调用 GPT、Claude、Gemini、Grok 等主流模型，兼容 OpenAI 与 Anthropic 接口。',
       en: 'An AI collaboration platform built for companies: members, keys, usage, and balance all live in one company console, and clear permissions and spending limits keep team usage traceable and under control. One API key reaches GPT, Claude, Gemini, Grok, and other leading models over OpenAI- and Anthropic-compatible APIs.',
       ja: '企業向けに設計された AI チーム協業プラットフォームです。メンバー、キー、使用量、残高を企業コンソールで一元管理し、明確な権限と利用上限の設定により、チームの利用を追跡可能で安心して管理できます。1 つの API キーで GPT、Claude、Gemini、Grok などの主要モデルを利用でき、OpenAI 互換と Anthropic 互換の API に対応します。',
+    },
+  },
+  {
+    id: 'fastaitoken',
+    name: 'FastAIToken',
+    icon: fastaitokenIcon,
+    url: 'https://www.fastaitoken.com',
+    tier: 'standard',
+    category: 'aggregator',
+    tagline: {
+      zh: 'Claude / GPT / DeepSeek 一站式接入方案',
+      en: 'One-stop access to Claude, GPT, and DeepSeek',
+      ja: 'Claude / GPT / DeepSeek をワンストップで接続',
+    },
+    description: {
+      zh: 'FastAIToken 为 Claude、GPT、DeepSeek 等主流模型提供一站式接入，统一鉴权、智能路由、会话保持、用量计量与团队配额管理一应俱全，一个 API 即可接入各家 AI 模型。',
+      en: 'FastAIToken offers one-stop access to Claude, GPT, DeepSeek, and other leading models, with unified authentication, smart routing, session persistence, usage metering, and team quota management, so one API reaches every AI model.',
+      ja: 'FastAIToken は Claude、GPT、DeepSeek などの主要モデルへのワンストップ接続を提供します。統合認証、スマートルーティング、セッション維持、使用量の計測、チームのクォータ管理を備え、1 つの API であらゆる AI モデルに接続できます。',
+    },
+    perk: {
+      zh: '最低 0.6 折，支持对公开票',
+      en: 'As low as 6% of list price, with corporate invoicing',
+      ja: '最安で定価の 6%、法人向けの請求書発行に対応',
     },
   },
 ] satisfies Sponsor[]).sort(
